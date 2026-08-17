@@ -1,5 +1,5 @@
 {%- liquid
-  assign raw_text = section.settings.marquee_text | default: 'BIS & EN71 CERTIFIED ★ 100% ORGANIC COTTON ★ NON-TOXIC INKS ★ HYPOALLERGENIC ★ AGES 4–9 ★ STORY-FIRST VALUES ★ SCREEN-FREE PLAY'
+  assign raw_text = section.settings.marquee_text | default: 'BIS CERTIFIED ★ 100% ORGANIC COTTON ★ OEKO-TEX INKS ★ HYPOALLERGENIC ★ AGES 4–12 ★ FIVE ORIGINAL CHARACTERS ★ FREE SHIPPING OVER ₹999'
   if raw_text contains '★'
     assign marquee_items = raw_text | split: '★'
   elsif raw_text contains '|'
@@ -70,7 +70,7 @@
       "type": "textarea",
       "id": "marquee_text",
       "label": "Marquee Text",
-      "default": "BIS & EN71 CERTIFIED ★ 100% ORGANIC COTTON ★ NON-TOXIC INKS ★ HYPOALLERGENIC ★ AGES 4–9 ★ STORY-FIRST VALUES ★ SCREEN-FREE PLAY"
+      "default": "BIS CERTIFIED ★ 100% ORGANIC COTTON ★ OEKO-TEX INKS ★ HYPOALLERGENIC ★ AGES 4–12 ★ FIVE ORIGINAL CHARACTERS ★ FREE SHIPPING OVER ₹999"
     },
     {
       "type": "color",

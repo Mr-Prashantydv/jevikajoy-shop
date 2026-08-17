@@ -13,28 +13,49 @@
 
   .jjw-category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 
-  @media screen and (max-width: 749px) {
+  @media screen and (min-width: 750px) {
     .jjw-category-grid {
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
     }
+  }
 
-    .jjw-cat-card {
-      padding: 24px 16px;
-    }
+  .jjw-cat-tile {
+    border-radius: var(--jjw-radius-card);
+    background: var(--tile-bg, var(--jjw-cream));
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 
-    .jjw-cat-card__icon {
-      font-size: 2.75rem;
-      margin-bottom: 12px;
-    }
+  .jjw-cat-tile__title {
+    font-family: var(--jjw-font-display);
+    font-size: clamp(18px, 1.8vw, 24px);
+    color: var(--jjw-ink);
+    margin: 0;
+  }
 
-    .jjw-cat-card__title {
-      font-size: 1.1rem;
-    }
+  .jjw-cat-tile__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .jjw-cat-tile__chips a.jjw-chip {
+    text-decoration: none;
+  }
+
+  .jjw-cat-tile__chips img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 2px;
   }
 {%- endstyle -%}
 
@@ -60,42 +81,50 @@
       {%- endif -%}
     </div>
 
-    <!-- Category Grid Cards -->
+    <!-- Shop-by Grid: Character / Gender / Age / Color -->
     <div class="jjw-category-grid">
-      <!-- 1. Character Plushies -->
-      <a href="{{ routes.collections_url }}/plushies" class="jjw-cat-card" style="background-color: #FFE5EE;">
-        <div class="jjw-cat-card__icon" aria-hidden="true">🧸</div>
-        <h3 class="jjw-cat-card__title">Character Plushies</h3>
-        <span class="jjw-cat-card__link">Shop Now &rarr;</span>
-      </a>
+      <!-- 1. Shop by Character -->
+      <div class="jjw-cat-tile" style="--tile-bg: var(--jjw-pink-bg);">
+        <h3 class="jjw-cat-tile__title">Shop by Character</h3>
+        <div class="jjw-cat-tile__chips">
+          <a href="{{ routes.collections_url }}/jevika" class="jjw-chip" style="--chip-fg: #E5377E;"><img src="{{ 'jevika-face.png' | asset_url }}" alt="" loading="lazy">Jevika</a>
+          <a href="{{ routes.collections_url }}/joy" class="jjw-chip" style="--chip-fg: #F68B1F;"><img src="{{ 'joy-face.png' | asset_url }}" alt="" loading="lazy">Joy</a>
+          <a href="{{ routes.collections_url }}/pinki" class="jjw-chip" style="--chip-fg: #0F7DAF;"><img src="{{ 'pinki-face.png' | asset_url }}" alt="" loading="lazy">Pinki</a>
+          <a href="{{ routes.collections_url }}/minku" class="jjw-chip" style="--chip-fg: #2FA85E;"><img src="{{ 'minku-face.png' | asset_url }}" alt="" loading="lazy">Minku</a>
+          <a href="{{ routes.collections_url }}/brutus" class="jjw-chip" style="--chip-fg: #6E55D6;"><img src="{{ 'brutus-face.png' | asset_url }}" alt="" loading="lazy">Brutus</a>
+        </div>
+      </div>
 
-      <!-- 2. Bedtime Storybooks -->
-      <a href="{{ routes.collections_url }}/storybooks" class="jjw-cat-card" style="background-color: #FFF2D6;">
-        <div class="jjw-cat-card__icon" aria-hidden="true">📚</div>
-        <h3 class="jjw-cat-card__title">Bedtime Storybooks</h3>
-        <span class="jjw-cat-card__link">Shop Now &rarr;</span>
-      </a>
+      <!-- 2. Shop by Gender -->
+      <div class="jjw-cat-tile" style="--tile-bg: var(--jjw-blue-bg);">
+        <h3 class="jjw-cat-tile__title">Shop by Gender</h3>
+        <div class="jjw-cat-tile__chips">
+          <a href="{{ routes.collections_url }}/boys" class="jjw-chip" style="--chip-fg: var(--jjw-blue);">Boys</a>
+          <a href="{{ routes.collections_url }}/girls" class="jjw-chip" style="--chip-fg: var(--jjw-blue);">Girls</a>
+        </div>
+      </div>
 
-      <!-- 3. Story Apparel -->
-      <a href="{{ routes.collections_url }}/apparel" class="jjw-cat-card" style="background-color: #E0F4FC;">
-        <div class="jjw-cat-card__icon" aria-hidden="true">👕</div>
-        <h3 class="jjw-cat-card__title">Story Apparel</h3>
-        <span class="jjw-cat-card__link">Shop Now &rarr;</span>
-      </a>
+      <!-- 3. Shop by Age -->
+      <div class="jjw-cat-tile" style="--tile-bg: var(--jjw-gold-bg);">
+        <h3 class="jjw-cat-tile__title">Shop by Age</h3>
+        <div class="jjw-cat-tile__chips">
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=4-5+Y" class="jjw-chip" style="--chip-fg: var(--jjw-gold);">4–5 Y</a>
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=6-7+Y" class="jjw-chip" style="--chip-fg: var(--jjw-gold);">6–7 Y</a>
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=8-9+Y" class="jjw-chip" style="--chip-fg: var(--jjw-gold);">8–9 Y</a>
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=10-12+Y" class="jjw-chip" style="--chip-fg: var(--jjw-gold);">10–12 Y</a>
+        </div>
+      </div>
 
-      <!-- 4. Activity & Stationery -->
-      <a href="{{ routes.collections_url }}/stationery" class="jjw-cat-card" style="background-color: #E4F9EC;">
-        <div class="jjw-cat-card__icon" aria-hidden="true">🎨</div>
-        <h3 class="jjw-cat-card__title">Activity &amp; Stationery</h3>
-        <span class="jjw-cat-card__link">Shop Now &rarr;</span>
-      </a>
-
-      <!-- 5. Gift Sets & Bundles -->
-      <a href="{{ routes.collections_url }}/bundles" class="jjw-cat-card" style="background-color: #EFEAFF;">
-        <div class="jjw-cat-card__icon" aria-hidden="true">🎁</div>
-        <h3 class="jjw-cat-card__title">Gift Sets &amp; Bundles</h3>
-        <span class="jjw-cat-card__link">Shop Now &rarr;</span>
-      </a>
+      <!-- 4. Shop by Color -->
+      <div class="jjw-cat-tile" style="--tile-bg: var(--jjw-purple-bg);">
+        <h3 class="jjw-cat-tile__title">Shop by Color</h3>
+        <div class="jjw-cat-tile__chips">
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=Black" class="jjw-chip" style="--chip-fg: var(--jjw-purple);">Black</a>
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=Blue" class="jjw-chip" style="--chip-fg: var(--jjw-purple);">Blue</a>
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=White" class="jjw-chip" style="--chip-fg: var(--jjw-purple);">White</a>
+          <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=Pink" class="jjw-chip" style="--chip-fg: var(--jjw-purple);">Pink</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -110,25 +139,25 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow Text",
-      "default": "PREMIUM MERCHANDISE"
+      "default": "THE JJW SHOP"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Explore Our"
+      "default": "Shop By"
     },
     {
       "type": "text",
       "id": "heading_accent",
       "label": "Heading Accent (Pink)",
-      "default": "Goodies"
+      "default": "Whatever You Love"
     },
     {
       "type": "textarea",
       "id": "subtitle",
       "label": "Subtitle",
-      "default": "Handcrafted plushies, bedtime adventures, organic apparel, and mindful stationery made for young imaginations."
+      "default": "Find your tee by character, age, color, or who it's for."
     },
     {
       "type": "range",

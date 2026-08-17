@@ -12,11 +12,11 @@
     "jjw_hero_split": {
       "type": "jjw-hero-split",
       "settings": {
-        "eyebrow": "ORIGINAL 3D HERO MERCH · AGES 4–9",
+        "eyebrow": "ORIGINAL HERO TEES · AGES 4–12",
         "heading_prefix": "Stories Everyone Can",
         "heading_accent": "Share",
         "heading_suffix": "With Confidence.",
-        "subheading": "BIS & EN71 certified, 100% organic cotton, non-toxic water-based inks. Safe for school, cherished at home — handcrafted 3D hero merchandise that replaces screen-time with imaginative play.",
+        "subheading": "BIS certified, 100% organic cotton, OEKO-TEX water-based inks. Safe for school, cherished at home — one hero per tee, five to choose from.",
         "primary_cta_text": "Shop the Squad",
         "primary_cta_link": "shopify://collections/all",
         "secondary_cta_text": "Watch the Show",
@@ -28,7 +28,7 @@
     "jjw_marquee": {
       "type": "jjw-marquee-ticker",
       "settings": {
-        "marquee_text": "BIS & EN71 CERTIFIED ★ 100% ORGANIC COTTON ★ NON-TOXIC INKS ★ HYPOALLERGENIC ★ AGES 4–9 ★ STORY-FIRST VALUES ★ SCREEN-FREE PLAY ★ PREMIUM HANDCRAFTED",
+        "marquee_text": "BIS CERTIFIED ★ 100% ORGANIC COTTON ★ OEKO-TEX INKS ★ HYPOALLERGENIC ★ AGES 4–12 ★ FIVE ORIGINAL CHARACTERS ★ FREE SHIPPING OVER ₹999",
         "bg_color": "#1A2F5E",
         "text_color": "#FFFFFF"
       }
@@ -36,10 +36,10 @@
     "jjw_category_grid": {
       "type": "jjw-category-grid",
       "settings": {
-        "eyebrow": "PREMIUM MERCHANDISE",
-        "heading": "Explore Our",
-        "heading_accent": "Goodies",
-        "subtitle": "From cuddly plushies to gold-foil storybooks — everything your little hero needs.",
+        "eyebrow": "THE JJW SHOP",
+        "heading": "Shop By",
+        "heading_accent": "Whatever You Love",
+        "subtitle": "Find your tee by character, age, color, or who it's for.",
         "padding_top": 48,
         "padding_bottom": 48
       }
@@ -82,14 +82,6 @@
         "padding_bottom": 48
       }
     },
-    "jjw_press_logos": {
-      "type": "jjw-press-logos",
-      "settings": {
-        "heading": "As Featured In",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "jjw_reviews": {
       "type": "jjw-reviews-carousel",
       "settings": {
@@ -104,7 +96,7 @@
       "type": "jjw-newsletter-signup",
       "settings": {
         "heading": "Get 10% Off Your First Order",
-        "subtitle": "Join our list for exclusive drops, bedtime story sneak peeks, and special discounts on premium 3D hero merchandise.",
+        "subtitle": "Join our list for exclusive drops, new character launches, and special discounts on premium hero tees.",
         "button_text": "Join Now",
         "padding_top": 48,
         "padding_bottom": 48
@@ -118,7 +110,6 @@
     "jjw_featured_products",
     "jjw_value_props",
     "jjw_founder_story",
-    "jjw_press_logos",
     "jjw_reviews",
     "jjw_newsletter"
   ]

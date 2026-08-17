@@ -1,0 +1,227 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #JJWFeaturedProducts-{{ section.id }} .jjw-fp-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 32px;
+  }
+
+  #JJWFeaturedProducts-{{ section.id }} .jjw-fp-tab {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 20px;
+    border: 2px solid var(--jjw-ink);
+    background: transparent;
+    color: var(--jjw-ink);
+    font-family: var(--jjw-font-cond);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: var(--jjw-radius-pill);
+    transition: background 0.15s var(--jjw-ease), color 0.15s var(--jjw-ease);
+  }
+
+  #JJWFeaturedProducts-{{ section.id }} .jjw-fp-tab[aria-selected="true"] {
+    background: var(--jjw-ink);
+    color: var(--jjw-cream);
+  }
+
+  #JJWFeaturedProducts-{{ section.id }} .jjw-fp-panel[hidden] {
+    display: none;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign fp_collection = section.settings.collection | default: collections.all
+  assign show_tabs = section.settings.show_tabs
+  assign products_to_show = section.settings.products_to_show
+
+  assign characters = 'Jevika,Joy,Pinki,Minku,Brutus' | split: ','
+-%}
+
+<section id="JJWFeaturedProducts-{{ section.id }}" class="section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="jjw-section__header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="jjw-eyebrow">{{ section.settings.eyebrow }}</div>
+      {%- endif -%}
+      <h2 class="jjw-section__title">
+        {{ section.settings.heading }}
+        {%- if section.settings.heading_accent != blank -%}
+          <span class="jjw-accent">{{ section.settings.heading_accent }}</span>
+        {%- endif -%}
+      </h2>
+    </div>
+
+    {%- if show_tabs -%}
+      <div class="jjw-fp-tabs" role="tablist" data-jjw-fp-tabs>
+        <button type="button" class="jjw-fp-tab" role="tab" aria-selected="true" aria-controls="JJWFPPanel-{{ section.id }}-all" data-jjw-fp-tab="all">All</button>
+        {%- for character in characters -%}
+          <button type="button" class="jjw-fp-tab" role="tab" aria-selected="false" aria-controls="JJWFPPanel-{{ section.id }}-{{ character | handleize }}" data-jjw-fp-tab="{{ character | handleize }}">{{ character }}</button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} "All" panel: visible by default {%- endcomment -%}
+    <div id="JJWFPPanel-{{ section.id }}-all" class="jjw-fp-panel" data-jjw-fp-panel="all">
+      <slider-component class="slider-mobile-gutter">
+        <ul id="JJWFPSlider-{{ section.id }}-all" class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down slider slider--desktop slider--tablet grid--peek" role="list">
+          {%- for product in fp_collection.products limit: products_to_show -%}
+            <li id="JJWFPSlide-{{ section.id }}-all-{{ forloop.index }}" class="grid__item slider__slide">
+              {% render 'card-product', card_product: product, media_aspect_ratio: 'square', lazy_load: false, section_id: section.id, quick_add: 'none', product_view_context: 'collection' %}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </slider-component>
+    </div>
+
+    {%- if show_tabs -%}
+      {%- for character in characters -%}
+        {%- assign panel_key = character | handleize -%}
+        {%- assign char_tag = 'character:' | append: character -%}
+        <div id="JJWFPPanel-{{ section.id }}-{{ panel_key }}" class="jjw-fp-panel" data-jjw-fp-panel="{{ panel_key }}" hidden>
+          <slider-component class="slider-mobile-gutter">
+            <ul id="JJWFPSlider-{{ section.id }}-{{ panel_key }}" class="grid product-grid contains-card contains-card--product grid--4-col-desktop grid--2-col-tablet-down slider slider--desktop slider--tablet grid--peek" role="list">
+              {%- assign char_count = 0 -%}
+              {%- for product in fp_collection.products -%}
+                {%- if product.tags contains char_tag and char_count < products_to_show -%}
+                  {%- assign char_count = char_count | plus: 1 -%}
+                  <li id="JJWFPSlide-{{ section.id }}-{{ panel_key }}-{{ forloop.index }}" class="grid__item slider__slide">
+                    {% render 'card-product', card_product: product, media_aspect_ratio: 'square', lazy_load: true, section_id: section.id, quick_add: 'none', product_view_context: 'collection' %}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </slider-component>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if section.settings.show_view_all -%}
+      <div class="center collection__view-all">
+        <a href="{{ fp_collection.url | default: routes.all_products_collection_url }}" class="jjw-link">
+          View all t-shirts <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- if show_tabs -%}
+  <script>
+    (function () {
+      var root = document.querySelector('#JJWFeaturedProducts-{{ section.id }} [data-jjw-fp-tabs]');
+      if (!root) return;
+      var section = document.getElementById('JJWFeaturedProducts-{{ section.id }}');
+      root.addEventListener('click', function (event) {
+        var tab = event.target.closest('[data-jjw-fp-tab]');
+        if (!tab) return;
+        var key = tab.getAttribute('data-jjw-fp-tab');
+        root.querySelectorAll('[data-jjw-fp-tab]').forEach(function (t) {
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        section.querySelectorAll('[data-jjw-fp-panel]').forEach(function (panel) {
+          panel.hidden = panel.getAttribute('data-jjw-fp-panel') !== key;
+        });
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "JJW Featured Products",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "SHOP JJW"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Fan"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading Accent (Pink)",
+      "default": "Favorites"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Defaults to all products if none selected"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8,
+      "label": "Products per tab"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tabs",
+      "label": "Show character tabs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' link",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "JJW Featured Products"
+    }
+  ]
+}
+{% endschema %}

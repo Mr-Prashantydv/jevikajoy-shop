@@ -56,7 +56,7 @@
         loading="lazy"
       >
       <p class="jjw-footer__mission">
-        {{ section.settings.mission_text | default: "Joyful, allergy-friendly stories, organic plushies, and certified safe essentials crafted to spark wonder and screen-free play for kids aged 4–9." | escape }}
+        {{ section.settings.mission_text | default: "Original hero tees for kids, ages 4–12. Certified safe, organic cotton, five characters to choose from." | escape }}
       </p>
 
       {%- if section.settings.show_social -%}
@@ -77,12 +77,14 @@
     <!-- Column 2: Shop -->
     <div class="jjw-footer__col">
       <h3 class="jjw-footer__col-title">Shop</h3>
-      <a href="{{ routes.collections_url }}/plushies" class="jjw-footer__link">Plushies</a>
-      <a href="{{ routes.collections_url }}/storybooks" class="jjw-footer__link">Storybooks</a>
-      <a href="{{ routes.collections_url }}/apparel" class="jjw-footer__link">Apparel</a>
-      <a href="{{ routes.collections_url }}/activity-kits" class="jjw-footer__link">Activity Kits</a>
-      <a href="{{ routes.collections_url }}/bundles" class="jjw-footer__link">Bundles</a>
-      <a href="{{ routes.collections_url }}/gift-cards" class="jjw-footer__link">Gift Cards</a>
+      <a href="{{ routes.all_products_collection_url }}" class="jjw-footer__link">All T-Shirts</a>
+      <a href="{{ routes.collections_url }}/boys" class="jjw-footer__link">Boys</a>
+      <a href="{{ routes.collections_url }}/girls" class="jjw-footer__link">Girls</a>
+      <a href="{{ routes.collections_url }}/jevika" class="jjw-footer__link">Jevika</a>
+      <a href="{{ routes.collections_url }}/joy" class="jjw-footer__link">Joy</a>
+      <a href="{{ routes.collections_url }}/pinki" class="jjw-footer__link">Pinki</a>
+      <a href="{{ routes.collections_url }}/minku" class="jjw-footer__link">Minku</a>
+      <a href="{{ routes.collections_url }}/brutus" class="jjw-footer__link">Brutus</a>
     </div>
 
     <!-- Column 3: About -->
@@ -128,7 +130,7 @@
       "type": "textarea",
       "id": "mission_text",
       "label": "Mission Statement",
-      "default": "Joyful, allergy-friendly stories, organic plushies, and certified safe essentials crafted to spark wonder and screen-free play for kids aged 4–9."
+      "default": "Original hero tees for kids, ages 4–12. Certified safe, organic cotton, five characters to choose from."
     },
     {
       "type": "checkbox",

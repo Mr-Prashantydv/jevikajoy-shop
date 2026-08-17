@@ -297,6 +297,33 @@ button:focus-visible {
   .jjw-chip { border-radius: var(--jjw-radius-pill); }
 }
 
+/* --- Shared split layout: image + content (founder-story, product-story) --- */
+
+.jjw-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+@media screen and (min-width: 990px) {
+  .jjw-split {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 5vw, 64px);
+  }
+}
+
+.jjw-split__img { min-width: 0; }
+
+.jjw-split__img img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--jjw-radius-card);
+  display: block;
+}
+
+.jjw-split__content { min-width: 0; }
+
 /* --- Stats row --- */
 
 .jjw-stats {

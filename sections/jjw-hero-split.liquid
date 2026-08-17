@@ -170,12 +170,12 @@
 
         <div class="jjw-hero-split__ctas">
           {%- if section.settings.primary_cta_text != blank -%}
-            <a href="{{ section.settings.primary_cta_link | default: routes.all_products_collection_url }}" class="jjw-btn jjw-btn--primary">
+            <a href="{{ section.settings.primary_cta_link | default: routes.all_products_collection_url }}" class="jjw-btn jjw-btn-primary">
               {{ section.settings.primary_cta_text }}
             </a>
           {%- endif -%}
           {%- if section.settings.secondary_cta_text != blank -%}
-            <a href="{{ section.settings.secondary_cta_link | default: routes.collections_url }}" class="jjw-btn jjw-btn--secondary">
+            <a href="{{ section.settings.secondary_cta_link | default: routes.collections_url }}" class="jjw-btn jjw-btn-secondary">
               {{ section.settings.secondary_cta_text }}
             </a>
           {%- endif -%}
@@ -245,7 +245,7 @@
       "type": "textarea",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Replace screen-time with handcrafted plushies, organic story apparel, and hardbound bedtime adventures built with world-class craft."
+      "default": "Certified-safe, 100% organic cotton tees starring five original characters kids actually want to wear. Sizes 4–12, five characters, one hero per tee."
     },
     {
       "type": "image_picker",
