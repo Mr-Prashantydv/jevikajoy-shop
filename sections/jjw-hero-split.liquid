@@ -1,0 +1,304 @@
+{{ 'jevikajoy-theme.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #JJWSplitHero-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    background-color: var(--jjw-bg-warm, #FFF2E0);
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    #JJWSplitHero-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .jjw-hero-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 990px) {
+    .jjw-hero-split {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 5vw, 64px);
+    }
+  }
+
+  .jjw-hero-split__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .jjw-hero-split__title {
+    font-family: var(--font-heading, 'Sofia Pro Soft', sans-serif);
+    font-size: clamp(36px, 5.5vw, 60px);
+    line-height: 1.1;
+    font-weight: 700;
+    color: var(--jjw-ink, #1A2F5E);
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .jjw-hero-split__subtitle {
+    font-family: var(--font-body, 'Quicksand', sans-serif);
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.6;
+    color: var(--jjw-ink-light, #536488);
+    margin: 0 0 28px;
+    max-width: 520px;
+    font-weight: 500;
+  }
+
+  .jjw-hero-split__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 36px;
+  }
+
+  .jjw-hero-split__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 28px;
+    align-items: center;
+    padding-top: 24px;
+    border-top: 1px solid rgba(26, 47, 94, 0.12);
+    width: 100%;
+  }
+
+  .jjw-hero-split__badge-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .jjw-hero-split__badge-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--jjw-ink, #1A2F5E);
+    background: var(--jjw-white, #FFFFFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm, 0 2px 8px rgba(26, 47, 94, 0.06));
+  }
+
+  .jjw-hero-split__badge-label {
+    font-family: var(--font-heading, 'Sofia Pro Soft', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--jjw-ink, #1A2F5E);
+    line-height: 1.25;
+  }
+
+  .jjw-hero-split__image-column {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .jjw-hero-split__image-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .jjw-hero-split__image-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    background: var(--jjw-yellow, #FCD843);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    z-index: 0;
+    opacity: 0.85;
+    transform: rotate(-2.5deg);
+    transition: transform 0.4s ease;
+  }
+
+  .jjw-hero-split__image-wrap:hover::before {
+    transform: rotate(2deg) scale(1.02);
+  }
+
+  .jjw-hero-split__image {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius-lg, 20px);
+    display: block;
+    box-shadow: var(--shadow-md, 0 4px 16px rgba(26, 47, 94, 0.08));
+  }
+{%- endstyle -%}
+
+<section id="JJWSplitHero-{{ section.id }}" class="jjw-hero-split-section">
+  <div class="page-width">
+    <div class="jjw-hero-split">
+      <!-- Left Column: Copy, CTAs & Badges -->
+      <div class="jjw-hero-split__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="jjw-eyebrow">{{ section.settings.eyebrow }}</div>
+        {%- endif -%}
+
+        <h1 class="jjw-hero-split__title">
+          {{ section.settings.heading_prefix }}
+          {%- if section.settings.heading_accent != blank -%}
+            <span class="jjw-accent">{{ section.settings.heading_accent }}</span>
+          {%- endif -%}
+          {{ section.settings.heading_suffix }}
+        </h1>
+
+        {%- if section.settings.subheading != blank -%}
+          <p class="jjw-hero-split__subtitle">
+            {{ section.settings.subheading }}
+          </p>
+        {%- endif -%}
+
+        <div class="jjw-hero-split__ctas">
+          {%- if section.settings.primary_cta_text != blank -%}
+            <a href="{{ section.settings.primary_cta_link | default: routes.all_products_collection_url }}" class="jjw-btn jjw-btn--primary">
+              {{ section.settings.primary_cta_text }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.secondary_cta_text != blank -%}
+            <a href="{{ section.settings.secondary_cta_link | default: routes.collections_url }}" class="jjw-btn jjw-btn--secondary">
+              {{ section.settings.secondary_cta_text }}
+            </a>
+          {%- endif -%}
+        </div>
+
+        <div class="jjw-hero-split__badges">
+          <div class="jjw-hero-split__badge-item">
+            <div class="jjw-hero-split__badge-circle" aria-hidden="true">🛡️</div>
+            <span class="jjw-hero-split__badge-label">BIS Certified</span>
+          </div>
+          <div class="jjw-hero-split__badge-item">
+            <div class="jjw-hero-split__badge-circle" aria-hidden="true">🌿</div>
+            <span class="jjw-hero-split__badge-label">100% Organic</span>
+          </div>
+          <div class="jjw-hero-split__badge-item">
+            <div class="jjw-hero-split__badge-circle" aria-hidden="true">🎒</div>
+            <span class="jjw-hero-split__badge-label">School Safe</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Hero Media with Organic Blob -->
+      <div class="jjw-hero-split__image-column">
+        <div class="jjw-hero-split__image-wrap">
+          {%- if section.settings.hero_image != blank -%}
+            {{ section.settings.hero_image | image_url: width: 1200 | image_tag: loading: 'eager', class: 'jjw-hero-split__image', widths: '375, 550, 750, 1100', alt: section.settings.hero_image.alt | escape }}
+          {%- else -%}
+            <img src="{{ 'cast-group.jpg' | asset_url }}" alt="Jevika &amp; Joy World Squad" class="jjw-hero-split__image" width="1066" height="1066" loading="eager">
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "JJW Split Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "ORIGINAL 3D HERO MERCH · AGES 4–9"
+    },
+    {
+      "type": "text",
+      "id": "heading_prefix",
+      "label": "Heading Prefix",
+      "default": "Stories Everyone Can"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading Accent (Pink)",
+      "default": "Share"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "Heading Suffix",
+      "default": "With Confidence."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Replace screen-time with handcrafted plushies, organic story apparel, and hardbound bedtime adventures built with world-class craft."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_text",
+      "label": "Primary CTA Label",
+      "default": "Shop the Squad"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_link",
+      "label": "Primary CTA Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary CTA Label",
+      "default": "Watch the Show"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_link",
+      "label": "Secondary CTA Link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "JJW Split Hero"
+    }
+  ]
+}
+{% endschema %}

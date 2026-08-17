@@ -1,0 +1,102 @@
+{
+  "sections": {
+    "jjw_squad_hero": {
+      "type": "jjw-hero-squad",
+      "settings": {
+        "eyebrow": "ORIGINAL 3D HERO MERCH · AGES 4–9",
+        "heading_prefix": "Stories they love,",
+        "heading_cursive": "Heroes",
+        "heading_suffix": "they can hold.",
+        "subheading": "Replace screen-time with handcrafted plushies, organic story apparel, and hardbound bedtime adventures built with world-class craft.",
+        "primary_cta_text": "Shop the Squad",
+        "primary_cta_link": "shopify://collections/all",
+        "secondary_cta_text": "Explore Storybooks",
+        "secondary_cta_link": "shopify://collections/all",
+        "padding_top": 36,
+        "padding_bottom": 48
+      }
+    },
+    "jjw_marquee": {
+      "type": "jjw-marquee",
+      "settings": {
+        "items": "SCREEN-FREE PLAY | 100% ORGANIC COTTON | BIS & EN71 CERTIFIED | 30-DAY HAPPINESS PROMISE | FREE SHIPPING OVER ₹999 | BEDTIME STORIES THAT BUILD CHARACTER",
+        "accessible_label": "Store highlights",
+        "speed": 34,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "jjw_featured_categories": {
+      "type": "jjw-featured-categories",
+      "settings": {
+        "eyebrow": "THE JJW SHOP",
+        "heading_prefix": "All the",
+        "heading_cursive": "Cuddles",
+        "heading_suffix": "None of the Screen-Time.",
+        "description": "Tactile craft, premium organic fabrics, and screen-free physical storytelling.",
+        "padding_top": 36,
+        "padding_bottom": 48
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Popular in the JJW Universe",
+        "heading_size": "h1",
+        "description": "<p>Discover the official plushies, organic tees, and storybooks adored by kids and trusted by parents.</p>",
+        "show_description": true,
+        "description_style": "body",
+        "collection": "all",
+        "products_to_show": 8,
+        "columns_desktop": 3,
+        "color_scheme": "scheme-1",
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": true,
+        "swipe_on_mobile": true,
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "padding_top": 36,
+        "padding_bottom": 48
+      }
+    },
+    "jjw_meet_heroes": {
+      "type": "jjw-meet-heroes",
+      "settings": {
+        "eyebrow": "THE JJW UNIVERSE",
+        "heading_prefix": "Meet the Five",
+        "heading_cursive": "Heroes",
+        "heading_suffix": "of JJW",
+        "description": "Every child sees themselves in one of our heroes. Handcrafted merchandise inspired by the official 3D animated series.",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "jjw_parent_trust": {
+      "type": "jjw-parent-trust",
+      "settings": {
+        "eyebrow": "PARENTOLOGY BY JJW",
+        "heading_prefix": "Made for Play.",
+        "heading_cursive": "Trusted",
+        "heading_suffix": "by Parents.",
+        "description": "We don't make cheap disposable toys. Every JJW product is engineered with the highest child-safety standards, non-toxic organic materials, and stories designed to build character.",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    }
+  },
+  "order": [
+    "jjw_squad_hero",
+    "jjw_marquee",
+    "jjw_featured_categories",
+    "featured_collection",
+    "jjw_meet_heroes",
+    "jjw_parent_trust"
+  ]
+}

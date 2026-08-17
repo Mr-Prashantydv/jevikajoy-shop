@@ -1,0 +1,175 @@
+{%- liquid
+  assign reveal = ''
+  if settings.animations_reveal_on_scroll
+    assign reveal = 'scroll-trigger animate--slide-in'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #JJWFounderStory-{{ section.id }} .jjw-founder-quote {
+    margin: 20px 0 28px;
+    padding: 0;
+    border: none;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--jjw-ink);
+    opacity: 0.9;
+    font-style: normal;
+  }
+
+  #JJWFounderStory-{{ section.id }} .jjw-founder-quote p {
+    margin: 0;
+  }
+
+  #JJWFounderStory-{{ section.id }} .jjw-founder-cta {
+    margin-top: 24px;
+  }
+{%- endstyle -%}
+
+<section id="JJWFounderStory-{{ section.id }}" class="section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="jjw-split">
+      <div class="jjw-split__img {{ reveal }}">
+        {%- if section.settings.image != blank -%}
+          {{
+            section.settings.image
+            | image_url: width: 1200
+            | image_tag:
+              loading: 'lazy',
+              widths: '375, 550, 750, 1100, 1500',
+              alt: section.settings.image.alt | default: section.settings.heading | escape
+          }}
+        {%- else -%}
+          <img
+            src="{{ 'cast-group.jpg' | asset_url }}"
+            alt="Jevika &amp; Joy World Founders"
+            loading="lazy"
+            width="800"
+            height="600"
+          >
+        {%- endif -%}
+      </div>
+
+      <div class="jjw-split__content {{ reveal }}">
+        {%- if section.settings.eyebrow != blank -%}
+          <div class="jjw-eyebrow">{{ section.settings.eyebrow }}</div>
+        {%- endif -%}
+
+        <h2 class="jjw-section__title">
+          {{ section.settings.heading }}
+          {%- if section.settings.heading_accent != blank -%}
+            <span class="jjw-accent">{{ section.settings.heading_accent }}</span>
+          {%- endif -%}
+          {{ section.settings.heading_suffix }}
+        </h2>
+
+        {%- if section.settings.quote != blank -%}
+          <blockquote class="jjw-founder-quote">
+            <p>{{ section.settings.quote }}</p>
+          </blockquote>
+        {%- endif -%}
+
+        {%- if section.settings.cta_text != blank -%}
+          <div class="jjw-founder-cta">
+            <a href="{{ section.settings.cta_link | default: routes.root_url }}" class="jjw-btn jjw-btn--secondary">
+              {{ section.settings.cta_text }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "JJW Founder Story",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Story Image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "OUR STORY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made with"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading Accent Word (Pink Cursive)",
+      "default": "Love,"
+    },
+    {
+      "type": "text",
+      "id": "heading_suffix",
+      "label": "Heading Suffix",
+      "default": "Backed by Purpose."
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Quote",
+      "default": "We founded Jevika & Joy World with a simple dream: to give Indian children original, values-driven stories and beautifully crafted playmates that replace passive screen-time with real-world wonder, empathy, and joy."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Label",
+      "default": "Read Our Story"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "JJW Founder Story"
+    }
+  ]
+}
+{% endschema %}
