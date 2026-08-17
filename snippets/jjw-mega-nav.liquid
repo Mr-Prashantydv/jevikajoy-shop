@@ -1,0 +1,68 @@
+{%- comment -%}
+  JJW mega-menu primary nav + shop-by rails.
+  Extracted from header.liquid so nav taxonomy can be edited without
+  rewriting the whole header section.
+{%- endcomment -%}
+
+<nav class="jjw-mega__categories">
+  <a href="{{ routes.all_products_collection_url }}" class="jjw-mega__cat">
+    <span class="jjw-mega__idx" aria-hidden="true">01</span>
+    <span class="jjw-mega__label">Shop Everything</span>
+    <span class="jjw-mega__arrow" aria-hidden="true">&rarr;</span>
+  </a>
+  <a href="{{ routes.collections_url }}/boys" class="jjw-mega__cat">
+    <span class="jjw-mega__idx" aria-hidden="true">02</span>
+    <span class="jjw-mega__label">Boys&#39; Tees</span>
+    <span class="jjw-mega__arrow" aria-hidden="true">&rarr;</span>
+  </a>
+  <a href="{{ routes.collections_url }}/girls" class="jjw-mega__cat">
+    <span class="jjw-mega__idx" aria-hidden="true">03</span>
+    <span class="jjw-mega__label">Girls&#39; Tees</span>
+    <span class="jjw-mega__arrow" aria-hidden="true">&rarr;</span>
+  </a>
+</nav>
+
+<aside class="jjw-mega__side">
+  <p class="jjw-mega__heading">The Cast</p>
+  <div class="jjw-mega__cast">
+    <a href="{{ routes.collections_url }}/jevika" class="jjw-mega__face" style="--face-fg: #E5377E;">
+      <img src="{{ 'jevika-face.png' | asset_url }}" alt="" width="52" height="52"><span>Jevika</span>
+    </a>
+    <a href="{{ routes.collections_url }}/joy" class="jjw-mega__face" style="--face-fg: #F68B1F;">
+      <img src="{{ 'joy-face.png' | asset_url }}" alt="" width="52" height="52"><span>Joy</span>
+    </a>
+    <a href="{{ routes.collections_url }}/pinki" class="jjw-mega__face" style="--face-fg: #0F7DAF;">
+      <img src="{{ 'pinki-face.png' | asset_url }}" alt="" width="52" height="52"><span>Pinki</span>
+    </a>
+    <a href="{{ routes.collections_url }}/minku" class="jjw-mega__face" style="--face-fg: #2FA85E;">
+      <img src="{{ 'minku-face.png' | asset_url }}" alt="" width="52" height="52"><span>Minku</span>
+    </a>
+    <a href="{{ routes.collections_url }}/brutus" class="jjw-mega__face" style="--face-fg: #6E55D6;">
+      <img src="{{ 'brutus-face.png' | asset_url }}" alt="" width="52" height="52"><span>Brutus</span>
+    </a>
+  </div>
+
+  <p class="jjw-mega__heading">Shop by Age</p>
+  <div class="jjw-mega__secondary">
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=4-5+Y">4&ndash;5 Y</a>
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=6-7+Y">6&ndash;7 Y</a>
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=8-9+Y">8&ndash;9 Y</a>
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.age=10-12+Y">10&ndash;12 Y</a>
+  </div>
+
+  <p class="jjw-mega__heading">Shop by Color</p>
+  <div class="jjw-mega__secondary">
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=Black">Black</a>
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=Blue">Blue</a>
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=White">White</a>
+    <a href="{{ routes.all_products_collection_url }}?filter.v.option.color=Pink">Pink</a>
+  </div>
+
+  <p class="jjw-mega__heading">More</p>
+  <div class="jjw-mega__secondary">
+    <a href="/pages/parentology">Parentology</a>
+    <a href="/pages/faq">FAQ</a>
+    <a href="/pages/contact">Contact</a>
+    <a href="https://www.youtube.com/@JevikaJoysWorld" target="_blank" rel="noopener">Watch the Episodes &#8599;</a>
+  </div>
+</aside>

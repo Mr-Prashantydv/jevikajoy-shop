@@ -18,6 +18,32 @@
     }
   }
 
+  #JJWFounderStory-{{ section.id }} .jjw-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 990px) {
+    #JJWFounderStory-{{ section.id }} .jjw-split {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 5vw, 64px);
+    }
+  }
+
+  #JJWFounderStory-{{ section.id }} .jjw-split__img,
+  #JJWFounderStory-{{ section.id }} .jjw-split__content {
+    min-width: 0;
+  }
+
+  #JJWFounderStory-{{ section.id }} .jjw-split__img img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--jjw-radius-card);
+    display: block;
+  }
+
   #JJWFounderStory-{{ section.id }} .jjw-founder-quote {
     margin: 20px 0 28px;
     padding: 0;
