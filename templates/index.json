@@ -84,6 +84,50 @@
     },
     "jjw_reviews": {
       "type": "jjw-reviews-carousel",
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "The organic cotton is so soft and the Jevika print hasn't faded after a dozen washes. My daughter wears hers every week.",
+            "author": "Priya M.",
+            "product_tag": "Jevika Tee"
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Finally, merch that's actually safe and certified. The organic cotton tees are buttery soft on my son's sensitive skin.",
+            "author": "Ananya R.",
+            "product_tag": "Organic Cotton"
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Sizing runs true and the print quality is fantastic — no cracking, wash after wash. Ordered three more for his cousins.",
+            "author": "Rahul K.",
+            "product_tag": "True to Size"
+          }
+        },
+        "review-4": {
+          "type": "review",
+          "settings": {
+            "stars": 5,
+            "quote": "Got tees for both my twins — one Joy, one Brutus. The colors are still bright months later and the fabric feels premium.",
+            "author": "Sneha D.",
+            "product_tag": "Twin Pack"
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3",
+        "review-4"
+      ],
       "settings": {
         "heading": "Loved by Families,",
         "heading_accent": "Trusted",

@@ -109,6 +109,38 @@
     },
     "jjw_story": {
       "type": "jjw-product-story",
+      "blocks": {
+        "chip-1": {
+          "type": "chip",
+          "settings": {
+            "text": "100% Organic Cotton"
+          }
+        },
+        "chip-2": {
+          "type": "chip",
+          "settings": {
+            "text": "BIS Certified Safe"
+          }
+        },
+        "chip-3": {
+          "type": "chip",
+          "settings": {
+            "text": "220 GSM Combed Cotton"
+          }
+        },
+        "chip-4": {
+          "type": "chip",
+          "settings": {
+            "text": "OEKO-TEX Water-Based Inks"
+          }
+        }
+      },
+      "block_order": [
+        "chip-1",
+        "chip-2",
+        "chip-3",
+        "chip-4"
+      ],
       "settings": {
         "padding_top": 36,
         "padding_bottom": 36
