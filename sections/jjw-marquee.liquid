@@ -1,0 +1,93 @@
+{%- comment -%}
+  JJW marquee — mirrors Partake's `marquee` section.
+  Content is repeated 4x so the -50% translate in jjw-partake.css loops seamlessly.
+  Reference: docs/clone/DESIGN-SYSTEM.md §5.
+{%- endcomment -%}
+
+{%- style -%}
+  #JJWMarquee-{{ section.id }} .marquee-section {
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #JJWMarquee-{{ section.id }} .marquee__text {
+    color: {{ section.settings.text_color }};
+  }
+
+  #JJWMarquee-{{ section.id }} .marquee__sep {
+    color: {{ section.settings.separator_color }};
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+{%- endstyle -%}
+
+<section id="JJWMarquee-{{ section.id }}">
+  <div class="marquee-section">
+    <div class="marquee marquee--{{ section.settings.speed }} marquee--pause-on-hover">
+      <div class="marquee__wrapper">
+        {%- comment -%} 4 identical copies — required for a seamless -50% loop {%- endcomment -%}
+        {%- for i in (1..4) -%}
+          <div class="marquee__content" {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+            {%- for block in section.blocks -%}
+              <span class="marquee__block" {{ block.shopify_attributes }}>
+                <p class="marquee__text marquee__text--{{ section.settings.text_size }}">
+                  {{- block.settings.text | escape -}}
+                </p>
+              </span>
+              <span class="marquee__sep marquee__text marquee__text--{{ section.settings.text_size }}" aria-hidden="true">
+                {{- section.settings.separator -}}
+              </span>
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "JJW marquee",
+  "tag": "section",
+  "settings": [
+    { "type": "select", "id": "text_size", "label": "Text size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "extra-large", "label": "Extra large" }
+      ],
+      "default": "medium" },
+    { "type": "select", "id": "speed", "label": "Speed",
+      "options": [
+        { "value": "slow", "label": "Slow (60s)" },
+        { "value": "normal", "label": "Normal (24s)" },
+        { "value": "fast", "label": "Fast (8s)" }
+      ],
+      "default": "normal" },
+    { "type": "text", "id": "separator", "label": "Separator", "default": "•" },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#FFD94C" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#1A2F5E" },
+    { "type": "color", "id": "separator_color", "label": "Separator", "default": "#E5377E" },
+    { "type": "range", "id": "padding_top", "label": "Padding top",
+      "min": 0, "max": 40, "step": 1, "unit": "px", "default": 4 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom",
+      "min": 0, "max": 40, "step": 1, "unit": "px", "default": 8 }
+  ],
+  "blocks": [
+    { "type": "item", "name": "Phrase", "limit": 12,
+      "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "100% Organic Cotton" } ] }
+  ],
+  "presets": [
+    { "name": "JJW marquee",
+      "blocks": [
+        { "type": "item", "settings": { "text": "BIS Certified" } },
+        { "type": "item", "settings": { "text": "100% Organic Cotton" } },
+        { "type": "item", "settings": { "text": "Ages 4–12" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

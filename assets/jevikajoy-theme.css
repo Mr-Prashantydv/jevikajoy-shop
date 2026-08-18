@@ -366,8 +366,10 @@ button:focus-visible {
 
 /* --- Header: cream, uppercase nav --- */
 
+/* Background intentionally not set here — jjw-partake.css keeps the bar
+   transparent so the hero runs under it, and turns it cream only when a
+   menu is open. Re-adding a background here will override that. */
 .header-wrapper {
-  background: var(--jjw-cream) !important;
   border-bottom: none !important;
 }
 

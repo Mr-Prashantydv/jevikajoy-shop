@@ -11,3 +11,12 @@ Thumbs.db
 node_modules
 *.zip.push-*.json
 .remote-snapshot/
+.clone/
+.push.json
+.push.json
+jjw/
+.claude-flow/
+[INFO] Recording command outcome: printf
+
+[OK] Command outcome recorded
+docs/clone/raw/
