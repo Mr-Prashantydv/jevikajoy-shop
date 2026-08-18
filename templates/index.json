@@ -1,199 +1,26 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "jjw_marquee": {
-      "type": "jjw-marquee",
-      "blocks": {
-        "m1": {
-          "type": "item",
-          "settings": {
-            "text": "BIS Certified"
-          }
-        },
-        "m2": {
-          "type": "item",
-          "settings": {
-            "text": "100% Organic Cotton"
-          }
-        },
-        "m3": {
-          "type": "item",
-          "settings": {
-            "text": "OEKO-TEX Inks"
-          }
-        },
-        "m4": {
-          "type": "item",
-          "settings": {
-            "text": "Ages 4–12"
-          }
-        }
-      },
-      "block_order": [
-        "m1",
-        "m2",
-        "m3",
-        "m4"
-      ],
-      "settings": {
-        "text_size": "medium",
-        "speed": "normal",
-        "separator": "★",
-        "bg_color": "#FFD94C",
-        "text_color": "#1A2F5E",
-        "separator_color": "#E5377E",
-        "padding_top": 4,
-        "padding_bottom": 8
-      }
-    },
-    "jjw_category_grid": {
-      "type": "jjw-category-grid",
-      "settings": {
-        "eyebrow": "THE JJW SHOP",
-        "heading": "Shop By",
-        "heading_accent": "Whatever You Love",
-        "subtitle": "Find your tee by character, age, color, or who it's for.",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "jjw_featured_products": {
-      "type": "jjw-featured-products",
-      "settings": {
-        "eyebrow": "SHOP JJW",
-        "heading": "Fan",
-        "heading_accent": "Favorites",
-        "products_to_show": 8,
-        "show_tabs": true,
-        "show_view_all": true,
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "jjw_value_props": {
-      "type": "jjw-value-props",
-      "settings": {
-        "eyebrow": "WHY PARENTS CHOOSE JJW",
-        "heading": "Made for Play.",
-        "heading_accent": "Trusted",
-        "heading_suffix": "by Parents.",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "jjw_founder_story": {
-      "type": "jjw-founder-story",
-      "settings": {
-        "eyebrow": "OUR STORY",
-        "heading": "Made with",
-        "heading_accent": "Love,",
-        "heading_suffix": "Backed by Purpose.",
-        "quote": "When we couldn't find premium, value-driven merch that gave Indian kids their own original heroes — not borrowed ones — we created Jevika & Joy's World. Five friends. Five values. Zero compromise on safety, craft, or story.",
-        "cta_text": "Read Our Story",
-        "cta_link": "",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "jjw_reviews": {
-      "type": "jjw-reviews-carousel",
-      "blocks": {
-        "review-1": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "The organic cotton is so soft and the Jevika print hasn't faded after a dozen washes. My daughter wears hers every week.",
-            "author": "Priya M.",
-            "product_tag": "Jevika Tee"
-          }
-        },
-        "review-2": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "Finally, merch that's actually safe and certified. The organic cotton tees are buttery soft on my son's sensitive skin.",
-            "author": "Ananya R.",
-            "product_tag": "Organic Cotton"
-          }
-        },
-        "review-3": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "Sizing runs true and the print quality is fantastic — no cracking, wash after wash. Ordered three more for his cousins.",
-            "author": "Rahul K.",
-            "product_tag": "True to Size"
-          }
-        },
-        "review-4": {
-          "type": "review",
-          "settings": {
-            "stars": 5,
-            "quote": "Got tees for both my twins — one Joy, one Brutus. The colors are still bright months later and the fabric feels premium.",
-            "author": "Sneha D.",
-            "product_tag": "Twin Pack"
-          }
-        }
-      },
-      "block_order": [
-        "review-1",
-        "review-2",
-        "review-3",
-        "review-4"
-      ],
-      "settings": {
-        "heading": "Loved by Families,",
-        "heading_accent": "Trusted",
-        "heading_suffix": "by Parents.",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "jjw_newsletter": {
-      "type": "jjw-newsletter-signup",
-      "settings": {
-        "heading": "Get 10% Off Your First Order",
-        "subtitle": "Join our list for exclusive drops, new character launches, and special discounts on premium hero tees.",
-        "button_text": "Join Now",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "jjw_hero": {
-      "type": "jjw-hero-banner",
-      "settings": {
-        "height": "natural",
-        "image_fit": "cover",
-        "focal_point": "center center",
-        "heading": "Tees Every Kid Can Call Their Own",
-        "content_align": "left",
-        "heading_color": "#1A2F5E",
-        "show_text_shadow": true,
-        "text_shadow_color": "#D3F3DE",
-        "show_scrim": true,
-        "scrim_strength": 70,
-        "button_label": "Shop the Squad",
-        "button_link": "shopify://collections/all",
-        "button_style": "primary"
-      }
-    }
+    "hero":                { "type": "hero",                "settings": {} },
+    "marquee_banner":      { "type": "marquee-banner",      "settings": {} },
+    "featured_collection": { "type": "featured-collection", "settings": {} },
+    "find_us":             { "type": "find-us",             "settings": {} },
+    "falling_scroll":      { "type": "falling-scroll",      "settings": {} },
+    "split_content":       { "type": "split-content",       "settings": {} },
+    "focus_carousel":      { "type": "focus-carousel",      "settings": {} },
+    "rich_text":           { "type": "rich-text",           "settings": {} },
+    "social_marquee":      { "type": "social-marquee",      "settings": {} },
+    "social_icons":        { "type": "social-icons",        "settings": {} }
   },
   "order": [
-    "jjw_hero",
-    "jjw_marquee",
-    "jjw_category_grid",
-    "jjw_featured_products",
-    "jjw_value_props",
-    "jjw_founder_story",
-    "jjw_reviews",
-    "jjw_newsletter"
+    "hero",
+    "marquee_banner",
+    "featured_collection",
+    "find_us",
+    "falling_scroll",
+    "split_content",
+    "focus_carousel",
+    "rich_text",
+    "social_marquee",
+    "social_icons"
   ]
 }

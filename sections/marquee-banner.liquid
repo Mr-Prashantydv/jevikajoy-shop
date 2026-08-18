@@ -1,0 +1,80 @@
+{%- comment -%}
+  Marquee banner — thin scrolling strip of short phrases.
+  Track is rendered twice so the shared -50% translate loops seamlessly;
+  the second copy is aria-hidden so screen readers read the phrases once.
+{%- endcomment -%}
+
+{%- style -%}
+  #MarqueeBanner-{{ section.id }} {
+    background: var(--yellow);
+    padding-top: 0.4rem;
+    padding-bottom: 0.8rem;
+  }
+
+  #MarqueeBanner-{{ section.id }} .marquee-banner__text {
+    margin: 0;
+    font-size: 3.25rem;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  @media screen and (max-width: 749px) {
+    #MarqueeBanner-{{ section.id }} {
+      padding-top: 0.3rem;
+      padding-bottom: 0.6rem;
+    }
+  }
+{%- endstyle -%}
+
+<section id="MarqueeBanner-{{ section.id }}">
+  <div class="marquee">
+    <div class="marquee__track">
+      <div class="marquee__group">
+        {%- for block in section.blocks -%}
+          <p class="accent-caps marquee-banner__text" {{ block.shopify_attributes }}>
+            {{- block.settings.text | escape -}}
+          </p>
+        {%- endfor -%}
+      </div>
+      <div class="marquee__group" aria-hidden="true">
+        {%- for block in section.blocks -%}
+          <p class="accent-caps marquee-banner__text">{{ block.settings.text | escape }}</p>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Marquee banner",
+  "max_blocks": 24,
+  "blocks": [
+    {
+      "type": "phrase",
+      "name": "Phrase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Delicious"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee banner",
+      "blocks": [
+        { "type": "phrase", "settings": { "text": "Delicious" } },
+        { "type": "phrase", "settings": { "text": "•" } },
+        { "type": "phrase", "settings": { "text": "Wholesome" } },
+        { "type": "phrase", "settings": { "text": "•" } },
+        { "type": "phrase", "settings": { "text": "Inclusive" } },
+        { "type": "phrase", "settings": { "text": "•" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,274 @@
+{%- comment -%}
+  Split content — image side + copy side on a rounded colour panel.
+  Ported from the React component src/components/site/split-content.tsx.
+
+  Notes on the port:
+  - The React copy column absolutely positions its content over a zero-height
+    box (the row is bottom-aligned), so the copy spills outside the panel.
+    Here the wrapper stays in flow (same margin rhythm:
+    141/183/386px) so the panel grows with the copy instead of overflowing.
+  - The badge "bursting" loop is gated by the theme's existing .scroll-trigger
+    observer (theme.js) rather than a second local IntersectionObserver.
+{%- endcomment -%}
+
+{%- style -%}
+  #SplitContent-{{ section.id }} {
+    padding-block: 6rem;
+  }
+
+  #SplitContent-{{ section.id }} .sc__panel {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 4rem;
+    min-height: 75vh;
+    border-radius: 2rem;
+    background: var(--pink);
+    color: var(--cream);
+  }
+
+  #SplitContent-{{ section.id }} .sc__media {
+    position: relative;
+    flex: 1 1 0%;
+    width: 100%;
+    min-height: 60vh;
+    overflow: hidden;
+  }
+
+  #SplitContent-{{ section.id }} .sc__img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  #SplitContent-{{ section.id }} .sc__badge {
+    position: absolute;
+    width: 25%;
+    height: auto;
+    transform: scale(0.3) rotate(-5deg);
+  }
+
+  #SplitContent-{{ section.id }} .sc__badge--one {
+    left: 51%;
+    bottom: 60%;
+    animation-delay: 0.15s;
+  }
+
+  #SplitContent-{{ section.id }} .sc__badge--two {
+    left: 42%;
+    bottom: 5%;
+  }
+
+  #SplitContent-{{ section.id }} .sc__badge:not(.scroll-trigger--offscreen) {
+    animation-name: jjw-sc-bursting;
+    animation-duration: 6s;
+    animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes jjw-sc-bursting {
+    0% {
+      opacity: 0;
+      transform: scale(0.3) rotate(-5deg);
+    }
+    15% {
+      opacity: 1;
+      transform: scale(1.05) rotate(2deg);
+    }
+    33.33%,
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+
+  #SplitContent-{{ section.id }} .sc__copy {
+    position: relative;
+    display: flex;
+    flex: 1 1 0%;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 1rem 2rem;
+  }
+
+  #SplitContent-{{ section.id }} .sc__copy-inner {
+    width: 100%;
+  }
+
+  #SplitContent-{{ section.id }} .sc__title {
+    margin-top: 14.1rem;
+    color: var(--cream);
+  }
+
+  #SplitContent-{{ section.id }} .sc__text {
+    margin-top: 18.3rem;
+    max-width: 62rem;
+    font-size: 2.7rem;
+    line-height: 3.51rem;
+    color: var(--cream);
+  }
+
+  #SplitContent-{{ section.id }} .sc__text > * {
+    margin: 0;
+  }
+
+  #SplitContent-{{ section.id }} .sc__btn {
+    margin-top: 38.6rem;
+    --btn-bg: var(--yellow);
+    --btn-fg: var(--ink-deep);
+    --btn-shadow-color: var(--gold);
+  }
+
+  @media screen and (max-width: 749px) {
+    #SplitContent-{{ section.id }} {
+      padding-block: 4.5rem;
+    }
+
+    #SplitContent-{{ section.id }} .sc__panel {
+      flex-direction: column-reverse;
+    }
+
+    #SplitContent-{{ section.id }} .sc__media {
+      min-height: 40vh;
+    }
+
+    #SplitContent-{{ section.id }} .sc__copy {
+      justify-content: center;
+    }
+
+    /* The desktop margin rhythm is far taller than a phone viewport. */
+    #SplitContent-{{ section.id }} .sc__title {
+      margin-top: 0;
+    }
+
+    #SplitContent-{{ section.id }} .sc__text {
+      margin-top: 2.4rem;
+    }
+
+    #SplitContent-{{ section.id }} .sc__btn {
+      margin-top: 3.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #SplitContent-{{ section.id }} .sc__badge {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+{%- endstyle -%}
+
+<section id="SplitContent-{{ section.id }}" class="split-content">
+  <div class="page-width">
+    <div class="sc__panel">
+      <div class="sc__media">
+        {%- if section.settings.image != blank -%}
+          {{
+            section.settings.image
+            | image_url: width: 1400
+            | image_tag: class: 'sc__img', loading: 'lazy', widths: '400, 600, 900, 1200, 1400', alt: section.settings.image.alt
+          }}
+        {%- else -%}
+          <img src="{{ 'cast-group.jpg' | asset_url }}" alt="" class="sc__img" loading="lazy">
+        {%- endif -%}
+
+        {%- if section.settings.badge_one != blank -%}
+          {{
+            section.settings.badge_one
+            | image_url: width: 600
+            | image_tag: class: 'sc__badge sc__badge--one scroll-trigger', loading: 'lazy', widths: '200, 400, 600', alt: ''
+          }}
+        {%- endif -%}
+
+        {%- if section.settings.badge_two != blank -%}
+          {{
+            section.settings.badge_two
+            | image_url: width: 600
+            | image_tag: class: 'sc__badge sc__badge--two scroll-trigger', loading: 'lazy', widths: '200, 400, 600', alt: ''
+          }}
+        {%- endif -%}
+      </div>
+
+      <div class="sc__copy">
+        <div class="sc__copy-inner">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="sc__title hxxl scroll-trigger animate--slide-in">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+
+          {%- if section.settings.body != blank -%}
+            <div class="sc__text">{{ section.settings.body }}</div>
+          {%- endif -%}
+
+          {%- if section.settings.button_label != blank -%}
+            <div class="sc__btn btn-wrap">
+              <span class="btn-shadow" aria-hidden="true"></span>
+              <a href="{{ section.settings.button_link | default: '#' }}" class="btn">
+                {{- section.settings.button_label | escape -}}
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Split content",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main image",
+      "info": "Defaults to cast-group.jpg when empty."
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_one",
+      "label": "Badge image 1",
+      "info": "Optional overlay. Pops in near the top of the image."
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_two",
+      "label": "Badge image 2",
+      "info": "Optional overlay. Pops in near the bottom of the image."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A Recipe For Inclusivity"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>We couldn't find premium tees that gave kids their own original heroes instead of borrowed ones, so we made them. Five friends, five values, and no compromise on safety, craft or story.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split content"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,185 @@
+{%- comment -%}
+  Find us — ported from the React FindUs component.
+  Cream page, blue rounded card, big heading, logo marquee, blob button.
+  Marquee mechanics, button and scroll reveal all come from theme.css.
+{%- endcomment -%}
+
+{%- style -%}
+  #FindUs-{{ section.id }} {
+    background: var(--cream);
+  }
+
+  #FindUs-{{ section.id }} .find-us__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 4rem;
+    background: var(--blue);
+    padding-top: 3.6rem;
+    padding-bottom: 1.6rem;
+    text-align: center;
+  }
+
+  #FindUs-{{ section.id }} .find-us__heading {
+    margin-top: 9.2rem;
+    max-width: 110rem;
+    padding-inline: 1.5rem;
+    color: var(--cream);
+    color: color-mix(in srgb, var(--cream) 75%, transparent);
+  }
+
+  #FindUs-{{ section.id }} .find-us__marquee {
+    margin-top: 6.8rem;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #FindUs-{{ section.id }} .marquee__group {
+    gap: 4rem;
+    padding-right: 4rem;
+  }
+
+  #FindUs-{{ section.id }} .find-us__logo {
+    flex-shrink: 0;
+  }
+
+  #FindUs-{{ section.id }} .find-us__logo img,
+  #FindUs-{{ section.id }} .find-us__logo svg {
+    display: block;
+    height: 8rem;
+    width: auto;
+    max-width: 24rem;
+    object-fit: contain;
+  }
+
+  #FindUs-{{ section.id }} .find-us__button {
+    margin-top: 10.9rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    #FindUs-{{ section.id }} .find-us__card {
+      border-radius: 2rem;
+      padding-top: 2.7rem;
+      padding-bottom: 1.2rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__heading {
+      margin-top: 6.7rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__logo img,
+    #FindUs-{{ section.id }} .find-us__logo svg {
+      height: 5.6rem;
+      max-width: 16rem;
+    }
+  }
+{%- endstyle -%}
+
+<section id="FindUs-{{ section.id }}">
+  <div class="page-width">
+    <div class="find-us__card">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hxxl find-us__heading scroll-trigger animate--slide-in">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="find-us__marquee">
+          <div class="marquee">
+            <div class="marquee__track">
+              {%- comment -%}
+                Four copies: the shared -50% keyframe needs an even number of
+                groups to loop seamlessly. Copies after the first are hidden
+                from assistive tech so logo names are not announced repeatedly.
+              {%- endcomment -%}
+              {%- for copy in (1..4) -%}
+                <div
+                  class="marquee__group"
+                  {% unless forloop.first %}
+                    aria-hidden="true"
+                  {% endunless %}
+                >
+                  {%- for block in section.blocks -%}
+                    <div class="find-us__logo" {{ block.shopify_attributes }}>
+                      {%- if block.settings.logo != blank -%}
+                        {{
+                          block.settings.logo
+                          | image_url: width: 480
+                          | image_tag: loading: 'lazy', widths: '120, 240, 360, 480'
+                        }}
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="find-us__button scroll-trigger animate--slide-in">
+          <div class="btn-wrap">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <a class="btn btn--primary" href="{{ section.settings.button_link | default: '/' }}">
+              {{ section.settings.button_label }}
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Find us",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "11,000+ Retailers Are Totally Sweet On Us"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Find Us In Store"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Retailer logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    {
+      "name": "Find us",
+      "blocks": [
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

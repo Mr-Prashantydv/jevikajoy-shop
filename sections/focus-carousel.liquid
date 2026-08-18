@@ -1,0 +1,638 @@
+{%- comment -%}
+  Focus carousel — ported from the React component
+  src/components/site/focus-carousel.tsx (source of truth).
+
+  Three-card stack: the centre card sits at full size, the previous and next
+  cards are translated +/-75vw and scaled to 0.7 exactly as the React version
+  does. Each review block carries its own background / hard-offset shadow /
+  text colour, chosen from the JJW palette tokens. Click driven: real <button>
+  prev/next controls plus image pagination dots, with the same 50px swipe
+  threshold as the React source.
+{%- endcomment -%}
+
+{%- assign default_faces = 'jevika-face.png,joy-face.png,brutus-face.png,minku-face.png,pinki-face.png' | split: ',' -%}
+
+{%- capture arrow_icon -%}
+<svg xmlns="http://www.w3.org/2000/svg" width="40.439" height="31.154" viewBox="0 0 40.439 31.154" aria-hidden="true" focusable="false"><g transform="translate(-1545.641 -1591.207)"><path d="M1545.641,1610.078v-6.066l38.778,1.39v2.4Z" fill="currentColor"/><g><path d="M1585.025,1607.7l-16.638-13.188,3.546-3.306,14.146,15.512Z" fill="currentColor"/><path d="M1585.025,1605.866l-16.638,13.188,3.546,3.306,14.146-15.512Z" fill="currentColor"/></g></g></svg>
+{%- endcapture -%}
+
+{%- style -%}
+  #FocusCarousel-{{ section.id }} {
+    position: relative;
+    min-height: 60rem;
+    padding-block: 6rem;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__media,
+  #FocusCarousel-{{ section.id }} .focus-carousel__overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__media {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__overlay {
+    background: var(--ink-deep);
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__heading {
+    margin: 5rem 0 3rem;
+    text-align: center;
+    color: var(--cream);
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__viewport {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    min-height: 50rem;
+    margin-inline: auto;
+    overflow: hidden;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__card {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40rem;
+    padding: 3rem 14rem;
+    border-radius: 5rem;
+    text-align: center;
+    background: var(--fc-bg, var(--ink));
+    color: var(--fc-fg, var(--cream));
+    box-shadow: 8px 8px 0 var(--fc-shadow, var(--ink-deep));
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease-out;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__card.is-active {
+    z-index: 3;
+    width: 80rem;
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__card.is-prev {
+    z-index: 2;
+    transform: translateX(-75vw) scale(0.7);
+    opacity: 1;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__card.is-next {
+    z-index: 2;
+    transform: translateX(75vw) scale(0.7);
+    opacity: 1;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__body {
+    width: 100%;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__card.is-prev .focus-carousel__body,
+  #FocusCarousel-{{ section.id }} .focus-carousel__card.is-next .focus-carousel__body {
+    transform: scale(0.7);
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__burst {
+    position: absolute;
+    z-index: 1;
+    width: 1rem;
+    height: 1rem;
+    object-fit: contain;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__burst--top {
+    top: -5%;
+    left: -5%;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__burst--bottom {
+    right: -5%;
+    bottom: -5%;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__stars {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__quote {
+    margin: 0 0 2.4rem;
+    font-family: var(--font-body);
+    font-size: 2.3rem;
+    line-height: 1.2;
+    font-style: normal;
+    color: inherit;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__author {
+    font-size: 3rem;
+    font-style: normal;
+    letter-spacing: 0.15rem;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__nav {
+    position: relative;
+    z-index: 5;
+    width: 70%;
+    margin: -8rem auto 2rem;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__arrow {
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--cream);
+    cursor: pointer;
+    transition: all 0.3s var(--ease);
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__arrow--prev {
+    left: 2rem;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__arrow--next {
+    right: 2rem;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__arrow--prev span {
+    display: flex;
+    transform: rotate(180deg);
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__dots {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__dot {
+    padding: 0;
+    cursor: pointer;
+    transform: scale(0.8);
+    transition: all 0.3s var(--ease);
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__dot.is-active {
+    transform: scale(1);
+  }
+
+  #FocusCarousel-{{ section.id }} .focus-carousel__dot img {
+    width: 20rem;
+    height: 20rem;
+    object-fit: contain;
+  }
+
+  @media screen and (max-width: 989px) {
+    #FocusCarousel-{{ section.id }} .focus-carousel__viewport {
+      width: 100%;
+      min-height: 44rem;
+    }
+
+    #FocusCarousel-{{ section.id }} .focus-carousel__card {
+      height: auto;
+      min-height: 36rem;
+      padding: 3rem 4rem;
+      border-radius: 3rem;
+    }
+
+    #FocusCarousel-{{ section.id }} .focus-carousel__card.is-active {
+      width: 100%;
+    }
+
+    #FocusCarousel-{{ section.id }} .focus-carousel__nav {
+      width: 100%;
+      margin-top: -6rem;
+    }
+
+    #FocusCarousel-{{ section.id }} .focus-carousel__stars {
+      font-size: 2.6rem;
+    }
+
+    #FocusCarousel-{{ section.id }} .focus-carousel__quote {
+      font-size: 1.75rem;
+    }
+
+    #FocusCarousel-{{ section.id }} .focus-carousel__author {
+      font-size: 2rem;
+    }
+
+    #FocusCarousel-{{ section.id }} .focus-carousel__dot img {
+      width: 8rem;
+      height: 8rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #FocusCarousel-{{ section.id }} .focus-carousel__card,
+    #FocusCarousel-{{ section.id }} .focus-carousel__arrow,
+    #FocusCarousel-{{ section.id }} .focus-carousel__dot {
+      transition: none;
+    }
+  }
+{%- endstyle -%}
+
+<section id="FocusCarousel-{{ section.id }}" class="focus-carousel">
+  {%- if section.settings.background_image != blank -%}
+    <div
+      class="focus-carousel__media"
+      aria-hidden="true"
+      style="background-image: url({{ section.settings.background_image | image_url: width: 2400 }});"
+    ></div>
+    <div class="focus-carousel__overlay" aria-hidden="true"></div>
+  {%- endif -%}
+
+  <div class="focus-carousel__inner page-width scroll-trigger animate--slide-in">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="focus-carousel__heading hxxl">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="focus-carousel__viewport" data-fc-viewport>
+      {%- for block in section.blocks -%}
+        <div
+          class="focus-carousel__card{% if forloop.first %} is-active{% endif %}"
+          data-fc-card
+          style="--fc-bg: var(--{{ block.settings.color_bg }}); --fc-shadow: var(--{{ block.settings.color_shadow }}); --fc-fg: var(--{{ block.settings.color_text }});"
+          {{ block.shopify_attributes }}
+        >
+          {%- if section.settings.burst_image_top != blank -%}
+            <img
+              class="focus-carousel__burst focus-carousel__burst--top"
+              src="{{ section.settings.burst_image_top | image_url: width: 120 }}"
+              alt=""
+              width="40"
+              height="40"
+              loading="lazy"
+              aria-hidden="true"
+            >
+          {%- endif -%}
+          {%- if section.settings.burst_image_bottom != blank -%}
+            <img
+              class="focus-carousel__burst focus-carousel__burst--bottom"
+              src="{{ section.settings.burst_image_bottom | image_url: width: 120 }}"
+              alt=""
+              width="40"
+              height="40"
+              loading="lazy"
+              aria-hidden="true"
+            >
+          {%- endif -%}
+
+          <div class="focus-carousel__body">
+            <div class="focus-carousel__stars" role="img" aria-label="{{ block.settings.rating }} / 5">
+              {%- for i in (1..block.settings.rating) -%}<span aria-hidden="true">&#9733;</span>{%- endfor -%}
+            </div>
+
+            {%- if block.settings.quote != blank -%}
+              <p class="focus-carousel__quote">{{ block.settings.quote | escape | newline_to_br }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.author != blank -%}
+              <cite class="focus-carousel__author accent-caps">{{ block.settings.author | escape }}</cite>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="focus-carousel__nav">
+      <button
+        type="button"
+        class="focus-carousel__arrow focus-carousel__arrow--prev"
+        aria-label="{{ 'accessibility.previous' | t }}"
+        data-fc-prev
+      >
+        <span>{{ arrow_icon }}</span>
+      </button>
+      <button
+        type="button"
+        class="focus-carousel__arrow focus-carousel__arrow--next"
+        aria-label="{{ 'accessibility.next' | t }}"
+        data-fc-next
+      >
+        {{ arrow_icon }}
+      </button>
+    </div>
+
+    <div class="focus-carousel__dots">
+      {%- for block in section.blocks -%}
+        {%- assign face_index = forloop.index0 | modulo: 5 -%}
+        <button
+          type="button"
+          class="focus-carousel__dot"
+          aria-label="{% if block.settings.author != blank %}{{ block.settings.author | escape }}{% else %}{{ forloop.index }}{% endif %}"
+          data-fc-dot
+        >
+          {%- if block.settings.dot_image != blank -%}
+            <img
+              src="{{ block.settings.dot_image | image_url: width: 400 }}"
+              alt=""
+              width="200"
+              height="200"
+              loading="lazy"
+            >
+          {%- else -%}
+            <img
+              src="{{ default_faces[face_index] | asset_url }}"
+              alt=""
+              width="200"
+              height="200"
+              loading="lazy"
+            >
+          {%- endif -%}
+        </button>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('FocusCarousel-{{ section.id }}');
+    if (!root || root.dataset.fcInit) return;
+    root.dataset.fcInit = '1';
+
+    var cards = Array.prototype.slice.call(root.querySelectorAll('[data-fc-card]'));
+    var dots = Array.prototype.slice.call(root.querySelectorAll('[data-fc-dot]'));
+    var viewport = root.querySelector('[data-fc-viewport]');
+    var count = cards.length;
+    if (!count) return;
+
+    var index = 0;
+
+    function render() {
+      var prev = (index + count - 1) % count;
+      var next = (index + 1) % count;
+      cards.forEach(function (card, i) {
+        var active = i === index;
+        var isPrev = !active && i === prev;
+        card.classList.toggle('is-active', active);
+        card.classList.toggle('is-prev', isPrev);
+        card.classList.toggle('is-next', !active && !isPrev && i === next);
+        card.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+      dots.forEach(function (dot, i) {
+        dot.classList.toggle('is-active', i === index);
+        dot.setAttribute('aria-current', i === index ? 'true' : 'false');
+      });
+    }
+
+    function goTo(i) {
+      index = ((i % count) + count) % count;
+      render();
+    }
+
+    var prevButton = root.querySelector('[data-fc-prev]');
+    var nextButton = root.querySelector('[data-fc-next]');
+    if (prevButton) prevButton.addEventListener('click', function () { goTo(index - 1); });
+    if (nextButton) nextButton.addEventListener('click', function () { goTo(index + 1); });
+
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { goTo(i); });
+    });
+
+    // Same 50px horizontal-dominant swipe threshold as the React component.
+    var start = null;
+    function onStart(x, y) { start = { x: x, y: y }; }
+    function onEnd(x, y) {
+      if (!start) return;
+      var dx = x - start.x;
+      var dy = y - start.y;
+      start = null;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) goTo(dx > 0 ? index - 1 : index + 1);
+    }
+    if (viewport) {
+      viewport.addEventListener('touchstart', function (e) {
+        onStart(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      viewport.addEventListener('touchend', function (e) {
+        onEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      });
+      viewport.addEventListener('mousedown', function (e) { onStart(e.clientX, e.clientY); });
+      viewport.addEventListener('mouseup', function (e) { onEnd(e.clientX, e.clientY); });
+    }
+
+    // Theme editor: focus the block the merchant just selected.
+    document.addEventListener('shopify:block:select', function (e) {
+      var i = cards.indexOf(e.target);
+      if (i > -1) goTo(i);
+    });
+
+    render();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Focus carousel",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Certified Tasty"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Background overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 30,
+      "info": "Only shown when a background image is set."
+    },
+    {
+      "type": "header",
+      "content": "Card decorations"
+    },
+    {
+      "type": "image_picker",
+      "id": "burst_image_top",
+      "label": "Top-left burst"
+    },
+    {
+      "type": "image_picker",
+      "id": "burst_image_bottom",
+      "label": "Bottom-right burst"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "“These are so good it’s insane. The perfect crunch, the right amount of sweetness, and the chocolate chunks go crazy!!! Dangerously delicious.”"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "— Ashley M."
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "image_picker",
+          "id": "dot_image",
+          "label": "Pagination dot image",
+          "info": "Leave blank to use a character face."
+        },
+        {
+          "type": "header",
+          "content": "Colours"
+        },
+        {
+          "type": "select",
+          "id": "color_bg",
+          "label": "Card background",
+          "default": "ink",
+          "options": [
+            { "value": "cream", "label": "Cream" },
+            { "value": "ink", "label": "Ink" },
+            { "value": "ink-deep", "label": "Ink deep" },
+            { "value": "pink", "label": "Pink" },
+            { "value": "pink-deep", "label": "Pink deep" },
+            { "value": "pink-bg", "label": "Pink light" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "blue-bg", "label": "Blue light" },
+            { "value": "sky", "label": "Sky" },
+            { "value": "gold", "label": "Gold" },
+            { "value": "gold-bg", "label": "Gold light" },
+            { "value": "yellow", "label": "Yellow" },
+            { "value": "green", "label": "Green" },
+            { "value": "green-bg", "label": "Green light" },
+            { "value": "purple", "label": "Purple" },
+            { "value": "purple-bg", "label": "Purple light" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "color_shadow",
+          "label": "Card shadow",
+          "default": "blue",
+          "options": [
+            { "value": "cream", "label": "Cream" },
+            { "value": "ink", "label": "Ink" },
+            { "value": "ink-deep", "label": "Ink deep" },
+            { "value": "pink", "label": "Pink" },
+            { "value": "pink-deep", "label": "Pink deep" },
+            { "value": "pink-bg", "label": "Pink light" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "blue-bg", "label": "Blue light" },
+            { "value": "sky", "label": "Sky" },
+            { "value": "gold", "label": "Gold" },
+            { "value": "gold-bg", "label": "Gold light" },
+            { "value": "yellow", "label": "Yellow" },
+            { "value": "green", "label": "Green" },
+            { "value": "green-bg", "label": "Green light" },
+            { "value": "purple", "label": "Purple" },
+            { "value": "purple-bg", "label": "Purple light" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "color_text",
+          "label": "Card text",
+          "default": "cream",
+          "options": [
+            { "value": "cream", "label": "Cream" },
+            { "value": "ink", "label": "Ink" },
+            { "value": "ink-deep", "label": "Ink deep" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Focus carousel",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "quote": "“These are so good it’s insane. The perfect crunch, the right amount of sweetness, and the chocolate chunks go crazy!!! Dangerously delicious.”",
+            "author": "— Ashley M.",
+            "rating": 5,
+            "color_bg": "ink",
+            "color_shadow": "blue",
+            "color_text": "cream"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "quote": "“I happened to come across these while shopping and now we're obsessed! my husband has every allergy you can think of (peanut, tree nuts, shellfish, etc.) and i would feel terrible when i wanted a snack he couldn't have. now we have a delicious snack we can both enjoy!”",
+            "author": "— Emily K.",
+            "rating": 5,
+            "color_bg": "gold",
+            "color_shadow": "yellow",
+            "color_text": "ink-deep"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "quote": "“These are a great allergy free version of the stuff I grew up with. Perfect for my son’s school lunches. They are quick easy to grab for a park date, play date, car snack. The flavor is good and we all eat them.”",
+            "author": "— Sarah M.",
+            "rating": 5,
+            "color_bg": "green",
+            "color_shadow": "green-bg",
+            "color_text": "cream"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

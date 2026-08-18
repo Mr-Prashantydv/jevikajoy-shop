@@ -1,27 +1,9 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
-  "name": "t:sections.footer.name",
   "type": "footer",
+  "name": "Footer",
   "sections": {
-    "footer": {
-      "type": "jjw-footer-custom",
-      "settings": {
-        "mission_text": "Original hero tees for kids, ages 4–12. Certified safe, organic cotton, five characters to choose from.",
-        "show_social": true,
-        "padding_top": 48,
-        "padding_bottom": 32
-      }
-    }
+    "footer_marquee": { "type": "footer-marquee", "settings": {} },
+    "footer": { "type": "footer", "settings": {} }
   },
-  "order": [
-    "footer"
-  ]
+  "order": ["footer_marquee", "footer"]
 }

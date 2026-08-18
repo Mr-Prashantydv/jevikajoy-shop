@@ -1,740 +1,914 @@
-<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<link
-  rel="stylesheet"
-  href="{{ 'component-cart-notification.css' | asset_url }}"
-  media="print"
-  onload="this.media='all'"
->
+{%- comment -%}
+  Header — converted from the React source at
+  src/components/site/header.tsx (that file is the source of truth).
 
-{%- if settings.predictive_search_enabled -%}
-  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
+  Reused from theme.css: .btn-wrap / .btn-shadow / .btn (blob + offset shadow),
+  .visually-hidden, tokens. The blob clip path (#jjw-blob) is declared once in
+  layout/theme.liquid and only referenced here.
 
-{%- if section.settings.menu_type_desktop == 'mega' -%}
-  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- endif -%}
+  Role mapping: their lightblue -> --blue, their blue/ink -> --ink-deep,
+  beige -> --cream, card palettes -> the JJW *-bg / solid token pairs.
+{%- endcomment -%}
 
-<style>
-  header-drawer {
-    justify-self: start;
-    margin-left: -1.2rem;
+{%- assign s = section.id -%}
+
+{%- style -%}
+  {%- comment -%}
+    React puts sticky + h-0 on the outermost element, whose parent is the page.
+    Here that outermost element is Shopify's own section wrapper, so the sticky
+    lives there — on an inner div it would have a zero-height containing block
+    and never travel. Still uniquely scoped, so nothing leaks.
+  {%- endcomment -%}
+  #shopify-section-{{ s }} {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: 0;
   }
 
-  {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
-    .scrolled-past-header .header__heading-logo-wrapper {
-      width: 75%;
-    }
-  {%- endif -%}
-
-  {%- if section.settings.menu_type_desktop != "drawer" -%}
-    @media screen and (min-width: 990px) {
-      header-drawer {
-        display: none;
-      }
-    }
-  {%- endif -%}
-
-  .menu-drawer-container {
-    display: flex;
+  #Header-{{ s }} {
+    position: relative;
   }
 
-  .list-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  #Header-{{ s }} .hdr-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    background: var(--ink-deep);
+    opacity: 0.33;
   }
 
-  .list-menu--inline {
-    display: inline-flex;
-    flex-wrap: wrap;
+  #Header-{{ s }} .hdr-bar {
+    position: relative;
+    z-index: 20;
+    background: transparent;
+    border-bottom: 1px solid var(--cream);
   }
 
-  summary.list-menu__item {
-    padding-right: 2.7rem;
+  #Header-{{ s }}[data-open='true'] .hdr-bar {
+    background: var(--cream);
   }
 
-  .list-menu__item {
-    display: flex;
+  #Header-{{ s }}[data-open='false'] .hdr-overlay,
+  #Header-{{ s }}[data-open='false'] .hdr-mega,
+  #Header-{{ s }}[data-open='false'] .hdr-drawer {
+    display: none;
+  }
+
+  /* --- Top bar ---------------------------------------------------------- */
+
+  #Header-{{ s }} .hdr-grid {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
-    line-height: calc(1 + 0.3 / var(--font-body-scale));
+    gap: 2rem;
+    padding: 1.44rem 2.16rem;
   }
 
-  .list-menu__item--link {
-    text-decoration: none;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
-    line-height: calc(1 + 0.8 / var(--font-body-scale));
+  #Header-{{ s }} .hdr-logo {
+    display: block;
+    padding-inline: 0.5rem;
+    margin-left: -0.5rem;
   }
 
-  @media screen and (min-width: 750px) {
-    .list-menu__item--link {
-      padding-bottom: 0.5rem;
-      padding-top: 0.5rem;
-    }
+  #Header-{{ s }} .hdr-logo img,
+  #Header-{{ s }} .hdr-logo svg {
+    height: 8.3rem;
+    width: {{ section.settings.logo_width | default: 300 }}px;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: left center;
   }
 
-  shopify-account.header__icon {
-    --shopify-account-font-heading: var(--font-heading-family);
-    --shopify-account-font-heading-weight: var(--font-heading-weight);
-    --shopify-account-font-body: var(--font-body-family);
-    --shopify-account-font-body-weight: var(--font-body-weight);
-    --shopify-account-radius-base: var(--popup-corner-radius);
-    --shopify-account-radius-button: var(--buttons-radius);
-    --shopify-account-radius-button-small: var(--buttons-radius);
-    --shopify-account-radius-input: var(--inputs-radius);
-    --shopify-account-color-background: rgb(var(--color-background));
-    --shopify-account-color-text: rgb(var(--color-foreground));
-    --shopify-account-color-accent: rgb(var(--color-button));
-    --shopify-account-color-accent-text: rgb(var(--color-button-text));
-    --shopify-account-dialog-position-top: var(--account-dialog-top, var(--header-height, 0px));
+  #Header-{{ s }} .hdr-menu-wrap {
+    position: relative;
+    display: block;
   }
 
-  shopify-account.header__icon:not(:defined) {
+  #Header-{{ s }} .hdr-menu-wrap .btn-shadow {
+    transform: translate(4px, 4px);
+    --btn-shadow-color: var(--ink-deep);
+  }
+
+  #Header-{{ s }} .hdr-menu {
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 4.4rem;
+    height: 7.5rem;
+    width: 8.3rem;
+    padding: 0;
+    color: var(--cream);
+    background: var(--blue);
+    clip-path: url(#jjw-blob);
+    -webkit-clip-path: url(#jjw-blob);
+  }
+
+  #Header-{{ s }} .hdr-menu .icon-burger {
+    height: 4.5rem;
+    width: 5.3rem;
+  }
+
+  #Header-{{ s }} .hdr-menu .icon-close {
+    height: 1.6rem;
+    width: 1.6rem;
+  }
+
+  #Header-{{ s }}[data-open='false'] .hdr-menu .icon-close,
+  #Header-{{ s }}[data-open='true'] .hdr-menu .icon-burger {
+    display: none;
+  }
+
+  {%- comment -%}
+    React shipped one 6.9rem icon here; this header has up to three plus the
+    CTA, which overflows the row long before phone widths (750–990px too).
+    Wrapping lets the extra pills drop to a second line instead of being
+    clipped off-screen by body { overflow-x: hidden }.
+  {%- endcomment -%}
+  #Header-{{ s }} .hdr-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    row-gap: 0.8rem;
+    justify-self: end;
+    margin-right: -1.12rem;
+  }
+
+  #Header-{{ s }} .hdr-cta {
+    position: relative;
+    z-index: 10;
+    display: block;
+    margin-right: 1.9rem;
+  }
+
+  #Header-{{ s }} .hdr-cta .btn-shadow {
+    transform: translate(4px, 4px);
+    --btn-shadow-color: var(--ink-deep);
+  }
+
+  #Header-{{ s }} .hdr-cta .btn {
+    height: 7rem;
+    max-height: 7rem;
+    min-height: 0;
+    width: 22.1rem;
+    max-width: 100%;
+    padding: 0 1.25rem;
+    font-size: 3rem;
+    line-height: 1.2;
+    letter-spacing: 0.15rem;
+    --btn-bg: var(--blue);
+    --btn-fg: var(--cream);
+  }
+
+  #Header-{{ s }} .hdr-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 7rem;
+    width: 6.9rem;
+    flex: none;
+    color: var(--cream);
+    background: var(--blue);
+    border-radius: 0.75rem;
+  }
+
+  #Header-{{ s }} .hdr-icon + .hdr-icon {
+    margin-left: 0.8rem;
+  }
+
+  #Header-{{ s }} .hdr-icon > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 4.4rem;
-  }
-</style>
-
-{%- style -%}
-  .header {
-    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+    width: 4.4rem;
   }
 
-  .section-header {
-    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
-    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  #Header-{{ s }} .hdr-icon svg {
+    height: 4rem;
+    width: 4rem;
   }
 
-  @media screen and (min-width: 750px) {
-    .section-header {
-      margin-bottom: {{ section.settings.margin_bottom }}px;
+  #Header-{{ s }} .hdr-count {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.4rem;
+    min-width: 2rem;
+    padding: 0 0.5rem;
+    border-radius: 999px;
+    background: var(--pink);
+    color: var(--cream);
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    text-align: center;
+  }
+
+  /* --- Desktop mega panel ------------------------------------------------ */
+
+  #Header-{{ s }} .hdr-mega {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 50;
+    background: var(--cream);
+    padding: 3rem 3rem 5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  #Header-{{ s }} .hdr-mega-inner {
+    display: flex;
+    min-height: 35rem;
+    gap: 4rem;
+  }
+
+  #Header-{{ s }} .hdr-mega-links {
+    width: 20rem;
+    flex-shrink: 0;
+    padding-block: 2rem;
+  }
+
+  #Header-{{ s }} .hdr-mega-links ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  #Header-{{ s }} .hdr-mega-links li {
+    margin-bottom: 1rem;
+    width: auto;
+  }
+
+  #Header-{{ s }} .hdr-mega-links .btn-wrap {
+    display: block;
+    width: 100%;
+  }
+
+  #Header-{{ s }} .hdr-mega-links .btn-shadow {
+    transform: translate(4px, 4px);
+    --btn-shadow-color: var(--ink-deep);
+  }
+
+  #Header-{{ s }} .hdr-mega-links .btn {
+    min-height: 0;
+    padding: 1rem 2.5rem;
+    font-size: 3rem;
+    line-height: 1.8;
+    letter-spacing: 0.15rem;
+    border-radius: 0.8rem;
+    --btn-bg: var(--blue);
+    --btn-fg: var(--cream);
+  }
+
+  #Header-{{ s }} .hdr-mega-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.8;
+    letter-spacing: 0.15rem;
+    text-transform: uppercase;
+    color: var(--ink);
+    transition: color 0.3s var(--ease);
+  }
+
+  #Header-{{ s }} .hdr-mega-link:hover {
+    color: var(--pink);
+  }
+
+  #Header-{{ s }} .hdr-mega-cards {
+    position: relative;
+    flex: 1;
+  }
+
+  #Header-{{ s }} .hdr-mega-spacer {
+    visibility: hidden;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  #Header-{{ s }} .hdr-mega-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 1vw;
+  }
+
+  @media screen and (min-width: 1200px) {
+    #Header-{{ s }} .hdr-mega-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
   }
 
-  @media screen and (min-width: 990px) {
-    .header {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+  #Header-{{ s }} .hdr-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    border-radius: 2rem;
+    background: var(--mc-bg, var(--sky));
+    box-shadow: 6px 6px 0 0 var(--mc-shadow, var(--ink-deep));
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  }
+
+  #Header-{{ s }} .hdr-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  #Header-{{ s }} .hdr-card-inner {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  #Header-{{ s }} .hdr-card-media {
+    margin: 0 auto 1rem;
+    aspect-ratio: 2000 / 2125;
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  #Header-{{ s }} .hdr-card-media img {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.2);
+    border-radius: 0.8rem;
+  }
+
+  #Header-{{ s }} .hdr-card-label {
+    margin-inline: auto;
+    max-width: 90%;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--mc-shadow, var(--ink-deep));
+  }
+
+  /* --- Mobile drawer ----------------------------------------------------- */
+
+  #Header-{{ s }} .hdr-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    overflow-y: auto;
+    background: var(--cream);
+    padding: 2rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-inner {
+    display: flex;
+    flex-direction: column;
+    margin-inline: auto;
+    max-width: 40rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-links .btn-wrap {
+    min-width: 12rem;
+    flex: 1;
+  }
+
+  #Header-{{ s }} .hdr-drawer-links .btn-wrap.is-active {
+    flex: 1 0 100%;
+  }
+
+  #Header-{{ s }} .hdr-drawer-links .btn-shadow {
+    transform: none;
+    opacity: 0;
+    --btn-shadow-color: var(--ink-deep);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  #Header-{{ s }} .hdr-drawer-links .is-active .btn-shadow {
+    transform: translate(4px, 4px);
+    opacity: 1;
+  }
+
+  #Header-{{ s }} .hdr-drawer-links .btn {
+    min-height: 0;
+    padding: 1rem 1.5rem;
+    font-size: max(2rem, 25px);
+    line-height: 1.2;
+    letter-spacing: 0.15rem;
+    --btn-bg: var(--blue);
+    --btn-fg: var(--cream);
+  }
+
+  #Header-{{ s }} .hdr-drawer-grid {
+    display: grid;
+    justify-items: center;
+    gap: 2rem;
+    padding-block: 1rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-card {
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
+    background: var(--mc-bg, var(--sky));
+    box-shadow: 4px 4px 0 0 var(--mc-shadow, var(--ink-deep));
+  }
+
+  #Header-{{ s }} .hdr-drawer-card img {
+    margin-inline: auto;
+    height: auto;
+    width: 80%;
+  }
+
+  #Header-{{ s }} .hdr-drawer-card-label {
+    margin-top: 0.5rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.2rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--mc-shadow, var(--ink-deep));
+  }
+
+  /* --- Card palettes ------------------------------------------------------ */
+
+  #Header-{{ s }} [data-palette='sky']    { --mc-bg: var(--sky);       --mc-shadow: var(--blue); }
+  #Header-{{ s }} [data-palette='blue']   { --mc-bg: var(--blue-bg);   --mc-shadow: var(--ink); }
+  #Header-{{ s }} [data-palette='pink']   { --mc-bg: var(--pink-bg);   --mc-shadow: var(--pink); }
+  #Header-{{ s }} [data-palette='gold']   { --mc-bg: var(--gold-bg);   --mc-shadow: var(--gold); }
+  #Header-{{ s }} [data-palette='green']  { --mc-bg: var(--green-bg);  --mc-shadow: var(--green); }
+  #Header-{{ s }} [data-palette='purple'] { --mc-bg: var(--purple-bg); --mc-shadow: var(--purple); }
+
+  /* --- Breakpoints -------------------------------------------------------- */
+
+  @media screen and (max-width: 990px) {
+    #Header-{{ s }} .hdr-mega {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 991px) {
+    #Header-{{ s }} .hdr-drawer {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #Header-{{ s }} .hdr-grid {
+      padding-inline: 1rem;
+      gap: 1rem;
+    }
+
+    #Header-{{ s }} .hdr-logo img,
+    #Header-{{ s }} .hdr-logo svg {
+      /* ponytail: React keeps the 300px width here, which squashes the mark.
+         Width follows the art instead; drop this rule to match React exactly.
+         5rem (~82px wide) leaves room for all three icon pills on one line
+         from 360px up. */
+      height: 5rem;
+      width: auto;
+    }
+
+    /* Icon pills shrink to a 44px touch target and share one gap so search,
+       account and cart all stay on-screen and tappable. */
+    #Header-{{ s }} .hdr-actions {
+      gap: 0.8rem;
+      margin-right: 0;
+    }
+
+    #Header-{{ s }} .hdr-icon {
+      height: 5.6rem;
+      width: 4.4rem;
+      justify-content: center;
+    }
+
+    #Header-{{ s }} .hdr-icon + .hdr-icon {
+      margin-left: 0;
+    }
+
+    #Header-{{ s }} .hdr-icon > span {
+      height: 3.6rem;
+      width: 3.6rem;
+    }
+
+    #Header-{{ s }} .hdr-icon svg {
+      height: 3.2rem;
+      width: 3.2rem;
+    }
+
+    #Header-{{ s }} .hdr-count {
+      top: 0.2rem;
+      right: 0.2rem;
+      min-width: 1.8rem;
+      padding: 0 0.4rem;
+      font-size: 1.3rem;
+      line-height: 1.8rem;
+    }
+
+    /* Stays visible — React keeps the CTA at every width; only the fixed
+       22.1rem width is relaxed so it fits a phone. */
+    #Header-{{ s }} .hdr-cta {
+      margin-right: 0;
+    }
+
+    #Header-{{ s }} .hdr-cta .btn {
+      width: auto;
+      min-width: 0;
+      padding-inline: 1rem;
+      font-size: 2.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #Header-{{ s }} .hdr-card,
+    #Header-{{ s }} .hdr-drawer-links .btn-shadow,
+    #Header-{{ s }} .hdr-mega-link {
+      transition: none;
+    }
+
+    #Header-{{ s }} .hdr-card:hover {
+      transform: none;
     }
   }
 {%- endstyle -%}
 
-<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+<div id="Header-{{ s }}" data-open="false">
+  <div class="hdr-overlay" data-hdr-close aria-hidden="true"></div>
 
-{%- liquid
-  for block in section.blocks
-    if block.type == '@app'
-      assign has_app_block = true
-    endif
-  endfor
--%}
-
-{% liquid
-  assign header_tag = 'div'
-
-  if section.settings.sticky_header_type != 'none'
-    assign header_tag = 'sticky-header'
-  endif
-%}
-
-<{{ header_tag }}
-  {% if header_tag == 'sticky-header' %}
-    data-sticky-type="{{ section.settings.sticky_header_type }}"
-  {% endif %}
-  class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}"
->
-  {%- liquid
-    assign social_links = false
-    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
-      assign social_links = true
-    endif
-
-    assign country_selector = false
-    if section.settings.enable_country_selector and localization.available_countries.size > 1
-      assign country_selector = true
-    endif
-
-    assign language_selector = false
-    if section.settings.enable_language_selector and localization.available_languages.size > 1
-      assign language_selector = true
-    endif
-  -%}
-  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if country_selector or language_selector %} header--has-localizations{% endif %}">
-    {%- liquid
-      assign render_search_left = false
-      if section.settings.logo_position == 'top-center' or section.settings.menu == blank or shop.customer_accounts_enabled
-        assign render_search_left = true
-      endif
-
-      if section.settings.menu != blank
-        render 'header-drawer', show_country_selector: country_selector, show_language_selector: language_selector, show_social_links: social_links
-      endif
-
-      if render_search_left
-        render 'header-search', input_id: 'Search-In-Modal-1'
-      endif
-    -%}
-
-    {%- if section.settings.logo_position != 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo motion-reduce',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
-          </div>
+  <header class="hdr-bar">
+    <div class="hdr-grid">
+      <a href="{{ routes.root_url }}" class="hdr-logo" aria-label="{{ shop.name | escape }}">
+        {%- if section.settings.logo != blank -%}
+          {{
+            section.settings.logo
+            | image_url: width: 900
+            | image_tag: alt: shop.name, width: section.settings.logo_width, loading: 'eager'
+          }}
         {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
+          <img
+            src="{{ 'jjw-logo.png' | asset_url }}"
+            alt="{{ shop.name | escape }}"
+            width="300"
+            height="83"
+          >
         {%- endif -%}
       </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
-      {%- endif -%}
-    {%- endif -%}
 
-    {%- liquid
-      if section.settings.menu != blank
-        if section.settings.menu_type_desktop == 'dropdown'
-          render 'header-dropdown-menu'
-        elsif section.settings.menu_type_desktop != 'drawer'
-          render 'header-mega-menu'
-        endif
-      endif
-    %}
+      <div class="hdr-menu-wrap btn-wrap">
+        <span class="btn-shadow" aria-hidden="true"></span>
+        <button
+          type="button"
+          class="hdr-menu"
+          data-hdr-toggle
+          aria-expanded="false"
+          aria-controls="HeaderMega-{{ s }} HeaderDrawer-{{ s }}"
+          aria-label="{{ 'sections.header.menu' | t }}"
+        >
+          <svg class="icon-burger" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M1 .5a.5.5 0 1 0 0 1h15.71a.5.5 0 0 0 0-1zM.5 8a.5.5 0 0 1 .5-.5h15.71a.5.5 0 0 1 0 1H1A.5.5 0 0 1 .5 8m0 7a.5.5 0 0 1 .5-.5h15.71a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5"/>
+          </svg>
+          <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 17" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M.865 15.978a.5.5 0 0 0 .707.707l7.433-7.431 7.579 7.282a.501.501 0 0 0 .846-.37.5.5 0 0 0-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 1 0-.707-.708L8.991 7.853 1.413.573a.5.5 0 1 0-.693.72l7.563 7.268z"/>
+          </svg>
+        </button>
+      </div>
 
-    {%- if section.settings.logo_position == 'middle-center' -%}
-      {%- if request.page_type == 'index' -%}
-        <h1 class="header__heading">
-      {%- endif -%}
-      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
-          </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
+      <div class="hdr-actions">
+        {%- if section.settings.cta_text != blank -%}
+          <a href="{{ section.settings.cta_url | default: routes.root_url }}" class="hdr-cta btn-wrap">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <span class="btn">{{ section.settings.cta_text | escape }}</span>
+          </a>
         {%- endif -%}
-      </a>
-      {%- if request.page_type == 'index' -%}
-        </h1>
-      {%- endif -%}
-    {%- endif -%}
 
-    <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
-      <div class="desktop-localization-wrapper">
-        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
-          <localization-form class="small-hide medium-hide" data-prevent-hide>
-            {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
-                {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
-        {% endif %}
+        {%- if section.settings.show_search -%}
+          <a href="{{ routes.search_url }}" class="hdr-icon" aria-label="{{ 'general.search.search' | t }}">
+            <span>
+              <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
+                <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M11.03 11.68A5.784 5.784 0 1 1 2.85 3.5a5.784 5.784 0 0 1 8.18 8.18m.26 1.12a6.78 6.78 0 1 1 .72-.7l5.4 5.4a.5.5 0 1 1-.71.7z"/>
+              </svg>
+            </span>
+          </a>
+        {%- endif -%}
 
-        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
-          <localization-form class="small-hide medium-hide" data-prevent-hide>
-            {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
-              <div>
-                <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
-                {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
-              </div>
-            {%- endform -%}
-          </localization-form>
+        {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
+          <a href="{{ routes.account_url }}" class="hdr-icon" aria-label="{{ section.settings.account_label | escape }}">
+            <span>
+              <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
+                <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M9 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5M6.25 5.25a2.75 2.75 0 1 1 5.5 0 2.75 2.75 0 0 1-5.5 0M9 10.5c-3.6 0-6.5 2.4-6.5 5.36 0 .84.7 1.52 1.55 1.52h9.9c.86 0 1.55-.68 1.55-1.52 0-2.96-2.9-5.36-6.5-5.36m-5.5 5.36c0-2.32 2.36-4.36 5.5-4.36s5.5 2.04 5.5 4.36c0 .29-.24.52-.55.52h-9.9a.54.54 0 0 1-.55-.52"/>
+              </svg>
+            </span>
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.show_cart -%}
+          <a href="{{ routes.cart_url }}" class="hdr-icon" aria-label="{{ 'sections.header.cart_count' | t }}">
+            <span>
+              <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
+                <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M9 1.5A3.25 3.25 0 0 0 5.75 4.75V5.5H3.4a1 1 0 0 0-.996.91l-.9 9.9A1.5 1.5 0 0 0 3 18h12a1.5 1.5 0 0 0 1.494-1.69l-.9-9.9A1 1 0 0 0 14.6 5.5h-2.35v-.75A3.25 3.25 0 0 0 9 1.5m2.25 5h3.35l.9 9.9a.5.5 0 0 1-.5.6H3a.5.5 0 0 1-.5-.6l.9-9.9h3.35v2a.5.5 0 0 0 1 0v-2h2.5v2a.5.5 0 0 0 1 0zm-1-1h-4.5v-.75a2.25 2.25 0 0 1 4.5 0z"/>
+              </svg>
+            </span>
+            {%- if cart.item_count > 0 -%}
+              <span class="hdr-count" aria-hidden="true">{{ cart.item_count }}</span>
+              <span class="visually-hidden">{{ cart.item_count }}</span>
+            {%- endif -%}
+          </a>
         {%- endif -%}
       </div>
-      {%- comment -%} JJW mega-menu trigger — Partake-style single Menu button {%- endcomment -%}
-      <button type="button" class="jjw-menu-toggle" id="JJWMenuToggle" aria-expanded="false" aria-controls="JJWMegaMenu">
-        <span class="jjw-menu-toggle__dot" aria-hidden="true"></span>
-        Menu
-      </button>
-      <a href="https://jevikajoy.com" class="jjw-header-link small-hide medium-hide" target="_blank" rel="noopener">Our World &#8599;</a>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
+    </div>
 
-      {%- if shop.customer_accounts_enabled -%}
-        <shopify-account
-          menu="{{ settings.customer_account_menu | default: 'customer-account-main-menu' }}"
-          class="header__icon header__icon--account link focus-inset"
-        >
-          <span slot="signed-out-avatar" class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
-          <span slot="signed-out-avatar" class="visually-hidden">{{ 'customer.log_in' | t }}</span>
-        </shopify-account>
-      {%- endif -%}
+    {%- comment -%} Desktop mega panel — hidden at 990px and below, per React. {%- endcomment -%}
+    <div
+      id="HeaderMega-{{ s }}"
+      class="hdr-mega"
+      role="navigation"
+      aria-label="{{ 'sections.header.menu' | t }}"
+    >
+      <div class="hdr-mega-inner">
+        <div class="hdr-mega-links">
+          <ul>
+            {%- for link in section.settings.menu.links -%}
+              <li>
+                {%- if link.active or link.child_active -%}
+                  <div class="btn-wrap">
+                    <span class="btn-shadow" aria-hidden="true"></span>
+                    <a href="{{ link.url }}" class="btn" aria-current="page">{{ link.title | escape }}</a>
+                  </div>
+                {%- else -%}
+                  <a href="{{ link.url }}" class="hdr-mega-link">{{ link.title | escape }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
 
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when '@app' -%}
-            {% render block %}
-        {%- endcase -%}
-      {%- endfor -%}
-
-      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
-        {% if cart == empty %}
-          <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-        {% else %}
-          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-        {% endif %}
-        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-        {%- if cart != empty -%}
-          <div class="cart-count-bubble">
-            {%- if cart.item_count < 100 -%}
-              <span aria-hidden="true">{{ cart.item_count }}</span>
-            {%- endif -%}
-            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+        <div class="hdr-mega-cards">
+          <h3 class="hdr-mega-spacer" aria-hidden="true">{{ section.settings.cards_heading | escape }}</h3>
+          <div class="hdr-mega-grid">
+            {%- for block in section.blocks -%}
+              <div class="hdr-card" data-palette="{{ block.settings.palette }}" {{ block.shopify_attributes }}>
+                <div class="hdr-card-inner">
+                  <a href="{{ block.settings.link | default: routes.root_url }}">
+                    {%- if block.settings.image != blank -%}
+                      <div class="hdr-card-media">
+                        {{
+                          block.settings.image
+                          | image_url: width: 400
+                          | image_tag: alt: block.settings.label, loading: 'lazy'
+                        }}
+                      </div>
+                    {%- endif -%}
+                    <div class="hdr-card-label">{{ block.settings.label | escape }}</div>
+                  </a>
+                </div>
+              </div>
+            {%- endfor -%}
           </div>
-        {%- endif -%}
-      </a>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Mobile drawer — hidden at 991px and above, per React. {%- endcomment -%}
+    <div
+      id="HeaderDrawer-{{ s }}"
+      class="hdr-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="{{ 'sections.header.menu' | t }}"
+    >
+      <div class="hdr-drawer-inner">
+        <div class="hdr-drawer-links">
+          {%- for link in section.settings.menu.links -%}
+            <div class="btn-wrap{% if link.active or link.child_active %} is-active{% endif %}">
+              <span class="btn-shadow" aria-hidden="true"></span>
+              <a
+                href="{{ link.url }}"
+                class="btn"
+                {% if link.active or link.child_active %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- link.title | escape -}}
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="hdr-drawer-grid">
+          {%- for block in section.blocks -%}
+            <div class="hdr-drawer-card" data-palette="{{ block.settings.palette }}" {{ block.shopify_attributes }}>
+              <a href="{{ block.settings.link | default: routes.root_url }}">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 400
+                    | image_tag: alt: block.settings.label, loading: 'lazy'
+                  }}
+                {%- endif -%}
+                <div class="hdr-drawer-card-label">{{ block.settings.label | escape }}</div>
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
     </div>
   </header>
+</div>
 
-  {%- comment -%}
-    JJW mega-menu — full-screen overlay (Partake pattern: one Menu button,
-    blob categories with sliding ink shadows, index numbers, secondary rail).
-  {%- endcomment -%}
-  <div class="jjw-mega" id="JJWMegaMenu" aria-hidden="true" role="dialog" aria-label="Main menu">
-    <div class="jjw-mega__inner page-width">
-      <button type="button" class="jjw-mega__close" id="JJWMegaClose" aria-label="Close menu">&times;</button>
+<script>
+  (function () {
+    var root = document.getElementById('Header-{{ s }}');
+    if (!root || root.dataset.bound === '1') return;
+    root.dataset.bound = '1';
 
-      <div class="jjw-mega__grid">
-        {% render 'jjw-mega-nav' %}
-      </div>
+    var toggle = root.querySelector('[data-hdr-toggle]');
 
-      <p class="jjw-mega__fine">Original hero tees &middot; Ages 4&ndash;12 &middot; BIS certified &middot; Free shipping over &#8377;999</p>
-    </div>
-  </div>
-  <div class="jjw-mega__scrim" id="JJWMegaScrim" aria-hidden="true"></div>
+    function setOpen(open) {
+      root.dataset.open = open ? 'true' : 'false';
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
 
-  <script>
-    (function() {
-      var toggle = document.getElementById('JJWMenuToggle');
-      var menu = document.getElementById('JJWMegaMenu');
-      var scrim = document.getElementById('JJWMegaScrim');
-      var closeBtn = document.getElementById('JJWMegaClose');
-      if (!toggle || !menu) return;
+    toggle.addEventListener('click', function () {
+      setOpen(root.dataset.open !== 'true');
+    });
 
-      function setOpen(open) {
-        menu.classList.toggle('is-open', open);
-        scrim.classList.toggle('is-open', open);
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        menu.setAttribute('aria-hidden', open ? 'false' : 'true');
-        document.documentElement.classList.toggle('jjw-menu-open', open);
-        document.body.style.overflow = open ? 'hidden' : '';
+    root.querySelector('[data-hdr-close]').addEventListener('click', function () {
+      setOpen(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      // Section may have been swapped out by the theme editor.
+      if (!root.isConnected) return;
+      if (e.key === 'Escape' && root.dataset.open === 'true') {
+        setOpen(false);
+        toggle.focus();
       }
-
-      toggle.addEventListener('click', function() {
-        setOpen(!menu.classList.contains('is-open'));
-      });
-      if (closeBtn) closeBtn.addEventListener('click', function() { setOpen(false); toggle.focus(); });
-      if (scrim) scrim.addEventListener('click', function() { setOpen(false); });
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && menu.classList.contains('is-open')) {
-          setOpen(false);
-          toggle.focus();
-        }
-      });
-    })();
-  </script>
-</{{ header_tag }}>
-
-{%- if settings.cart_type == 'notification' -%}
-  {%- render 'cart-notification',
-    color_scheme: section.settings.color_scheme,
-    desktop_menu_type: section.settings.menu_type_desktop
-  -%}
-{%- endif -%}
-
-{% javascript %}
-  class StickyHeader extends HTMLElement {
-    constructor() {
-      super();
-      this.setHeaderHeight = this.setHeaderHeight.bind(this);
-    }
-
-    connectedCallback() {
-      this.header = document.querySelector('.section-header');
-      this.mobileMediaQuery = window.matchMedia('(max-width: 990px)');
-      this.headerIsAlwaysSticky =
-        this.getAttribute('data-sticky-type') === 'always' ||
-        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
-      this.headerBounds = {};
-
-      this.setHeaderHeight();
-
-      this.mobileMediaQuery.addEventListener('change', this.setHeaderHeight);
-
-      if (this.headerIsAlwaysSticky) {
-        this.header.classList.add('shopify-section-header-sticky');
-      }
-
-      this.currentScrollTop = 0;
-      this.preventReveal = false;
-      this.predictiveSearches = this.querySelectorAll('predictive-search');
-
-      this.onScrollHandler = this.onScroll.bind(this);
-      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
-
-      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.addEventListener('scroll', this.onScrollHandler, false);
-
-      this.createObserver();
-    }
-
-    setHeaderHeight() {
-      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
-    }
-
-    disconnectedCallback() {
-      this.mobileMediaQuery.removeEventListener('change', this.setHeaderHeight);
-      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.removeEventListener('scroll', this.onScrollHandler);
-    }
-
-    createObserver() {
-      let observer = new IntersectionObserver((entries, observer) => {
-        this.headerBounds = entries[0].intersectionRect;
-        observer.disconnect();
-      });
-
-      observer.observe(this.header);
-    }
-
-    onScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-      if ([...this.predictiveSearches].some((predictiveSearch) => predictiveSearch.isOpen)) return;
-
-      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (this.preventHide) return;
-        requestAnimationFrame(this.hide.bind(this));
-      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
-        if (!this.preventReveal) {
-          requestAnimationFrame(this.reveal.bind(this));
-        } else {
-          window.clearTimeout(this.isScrolling);
-
-          this.isScrolling = setTimeout(() => {
-            this.preventReveal = false;
-          }, 66);
-
-          requestAnimationFrame(this.hide.bind(this));
-        }
-      } else if (scrollTop <= this.headerBounds.top) {
-        this.header.classList.remove('scrolled-past-header');
-        requestAnimationFrame(this.reset.bind(this));
-      }
-
-      this.currentScrollTop = scrollTop;
-    }
-
-    hide() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
-      this.closeMenuDisclosure();
-      this.closeSearchModal();
-    }
-
-    reveal() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.add('shopify-section-header-sticky', 'animate');
-      this.header.classList.remove('shopify-section-header-hidden');
-    }
-
-    reset() {
-      if (this.headerIsAlwaysSticky) return;
-      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
-    }
-
-    closeMenuDisclosure() {
-      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
-      this.disclosures.forEach((disclosure) => disclosure.close());
-    }
-
-    closeSearchModal() {
-      this.searchModals = this.searchModals || this.header.querySelectorAll('details-modal');
-      this.searchModals.forEach((searchModal) => searchModal.close(false));
-    }
-  }
-
-  // The account `open` event is composed but does not bubble, so listen during capture.
-  // Anchor the dialog to the bottom of the account button itself. The header group can be
-  // much taller than the button's row (for example, a top-left logo pushes the menu to a
-  // second row), so anchoring to the section bottom drops the dialog too low.
-  document.addEventListener(
-    'open',
-    (event) => {
-      if (!(event.target instanceof HTMLElement) || !event.target.matches('shopify-account')) return;
-
-      const bottom = Math.max(0, Math.round(event.target.getBoundingClientRect().bottom));
-      event.target.style.setProperty('--account-dialog-top', `${bottom}px`);
-    },
-    true
-  );
-
-  customElements.define('sticky-header', StickyHeader);
-{% endjavascript %}
-
-<script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    "name": {{ shop.name | json }},
-    {% if settings.logo %}
-      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
-    {% endif %}
-    "sameAs": [
-      {{ settings.social_twitter_link | json }},
-      {{ settings.social_facebook_link | json }},
-      {{ settings.social_pinterest_link | json }},
-      {{ settings.social_instagram_link | json }},
-      {{ settings.social_tiktok_link | json }},
-      {{ settings.social_tumblr_link | json }},
-      {{ settings.social_snapchat_link | json }},
-      {{ settings.social_youtube_link | json }},
-      {{ settings.social_vimeo_link | json }}
-    ],
-    "url": {{ request.origin | append: page.url | json }}
-  }
+    });
+  })();
 </script>
-
-{%- if request.page_type == 'index' -%}
-  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "WebSite",
-      "name": {{ shop.name | json }},
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {{ potential_action_target | json }},
-        "query-input": "required name=search_term_string"
-      },
-      "url": {{ request.origin | append: page.url | json }}
-    }
-  </script>
-{%- endif -%}
 
 {% schema %}
 {
-  "name": "t:sections.header.name",
-  "class": "section-header",
-  "max_blocks": 3,
+  "name": "Header",
+  "tag": "section",
+  "class": "jjw-header-section",
+  "enabled_on": { "groups": ["header"] },
+  "max_blocks": 10,
   "settings": [
     {
-      "type": "select",
-      "id": "logo_position",
-      "options": [
-        {
-          "value": "top-left",
-          "label": "t:sections.header.settings.logo_position.options__2.label"
-        },
-        {
-          "value": "top-center",
-          "label": "t:sections.header.settings.logo_position.options__3.label"
-        },
-        {
-          "value": "middle-left",
-          "label": "t:sections.header.settings.logo_position.options__1.label"
-        },
-        {
-          "value": "middle-center",
-          "label": "t:sections.header.settings.logo_position.options__4.label"
-        }
-      ],
-      "default": "middle-left",
-      "label": "t:sections.header.settings.logo_position.label",
-      "info": "t:sections.header.settings.logo_help.content"
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo",
+      "info": "Falls back to the built-in JJW logo."
     },
     {
-      "type": "select",
-      "id": "mobile_logo_position",
-      "options": [
-        {
-          "value": "center",
-          "label": "t:sections.header.settings.mobile_logo_position.options__1.label"
-        },
-        {
-          "value": "left",
-          "label": "t:sections.header.settings.mobile_logo_position.options__2.label"
-        }
-      ],
-      "default": "center",
-      "label": "t:sections.header.settings.mobile_logo_position.label"
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 120,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 300
     },
     {
       "type": "link_list",
       "id": "menu",
+      "label": "Menu",
       "default": "main-menu",
-      "label": "t:sections.header.settings.menu.label"
+      "info": "Shown in the mega menu and the mobile drawer."
     },
     {
-      "type": "select",
-      "id": "menu_type_desktop",
-      "options": [
-        {
-          "value": "dropdown",
-          "label": "t:sections.header.settings.menu_type_desktop.options__1.label"
-        },
-        {
-          "value": "mega",
-          "label": "t:sections.header.settings.menu_type_desktop.options__2.label"
-        },
-        {
-          "value": "drawer",
-          "label": "t:sections.header.settings.menu_type_desktop.options__3.label"
-        }
-      ],
-      "default": "dropdown",
-      "label": "t:sections.header.settings.menu_type_desktop.label"
+      "type": "header",
+      "content": "Call to action"
     },
     {
-      "type": "select",
-      "id": "sticky_header_type",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
-        },
-        {
-          "value": "on-scroll-up",
-          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
-        },
-        {
-          "value": "always",
-          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
-        },
-        {
-          "value": "reduce-logo-size",
-          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
-        }
-      ],
-      "default": "on-scroll-up",
-      "label": "t:sections.header.settings.sticky_header_type.label"
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Find In Store"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Icons"
     },
     {
       "type": "checkbox",
-      "id": "show_line_separator",
-      "default": true,
-      "label": "t:sections.header.settings.show_line_separator.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__1.content"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "color_scheme",
-      "id": "menu_color_scheme",
-      "label": "t:sections.header.settings.menu_color_scheme.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.header.settings.header__utilities.content"
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
     },
     {
       "type": "checkbox",
-      "id": "enable_country_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_country_selector.label",
-      "info": "t:sections.header.settings.enable_country_selector.info"
+      "id": "show_account",
+      "label": "Show account",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "account_label",
+      "label": "Account label",
+      "default": "Account"
     },
     {
       "type": "checkbox",
-      "id": "enable_language_selector",
-      "default": true,
-      "label": "t:sections.header.settings.enable_language_selector.label",
-      "info": "t:sections.header.settings.enable_language_selector.info"
-    },
-    {
-      "type": "paragraph",
-      "content": "t:sections.header.settings.customer_account_menu.content"
+      "id": "show_cart",
+      "label": "Show cart",
+      "default": true
     },
     {
       "type": "header",
-      "content": "t:sections.all.spacing"
+      "content": "Mega menu cards"
     },
     {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.header.settings.margin_bottom.label",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 36,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 20
+      "type": "text",
+      "id": "cards_heading",
+      "label": "Card group heading",
+      "default": "Products",
+      "info": "Reserves vertical space above the cards; not shown to sighted users."
     }
   ],
   "blocks": [
     {
-      "type": "@app"
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Characters"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "palette",
+          "label": "Colour",
+          "default": "sky",
+          "options": [
+            { "value": "sky", "label": "Sky" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "pink", "label": "Pink" },
+            { "value": "gold", "label": "Gold" },
+            { "value": "green", "label": "Green" },
+            { "value": "purple", "label": "Purple" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header",
+      "blocks": [
+        { "type": "card", "settings": { "label": "Jevika", "palette": "pink" } },
+        { "type": "card", "settings": { "label": "Joy", "palette": "sky" } },
+        { "type": "card", "settings": { "label": "Brutus", "palette": "gold" } },
+        { "type": "card", "settings": { "label": "Minku", "palette": "green" } },
+        { "type": "card", "settings": { "label": "Pinki", "palette": "purple" } }
+      ]
     }
   ]
 }

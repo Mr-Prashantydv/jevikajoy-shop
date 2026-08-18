@@ -1,0 +1,115 @@
+{%- comment -%}
+  Social marquee — ported from the React SocialMarquee component
+  (src/components/site/social-marquee.tsx). Slow-scrolling row of social
+  photos on the cream canvas. The icon row that lives in the same React file
+  is a separate section.
+
+  Marquee mechanics (track, group, duplication, pause-on-hover, reduced
+  motion) all come from the shared .marquee classes in theme.css.
+{%- endcomment -%}
+
+{%- style -%}
+  #SocialMarquee-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 3rem;
+  }
+
+  #SocialMarquee-{{ section.id }} .social-marquee__img {
+    display: block;
+    height: 50rem;
+    width: 40rem;
+    max-width: 400px;
+    border-radius: 2rem;
+    object-fit: cover;
+    transition: transform 0.2s var(--ease);
+  }
+
+  #SocialMarquee-{{ section.id }} .social-marquee__img:hover {
+    transform: rotate(5deg);
+    box-shadow: 8px 8px 0 var(--pink);
+  }
+
+  @media screen and (max-width: 749px) {
+    #SocialMarquee-{{ section.id }} {
+      padding-block: 2rem;
+    }
+
+    #SocialMarquee-{{ section.id }} .social-marquee__img {
+      height: 25rem;
+      width: 20rem;
+      max-width: 200px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #SocialMarquee-{{ section.id }} .social-marquee__img {
+      transition: none;
+    }
+
+    #SocialMarquee-{{ section.id }} .social-marquee__img:hover {
+      transform: none;
+    }
+  }
+{%- endstyle -%}
+
+{%- capture marquee_items -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.image != blank -%}
+      {{
+        block.settings.image
+        | image_url: width: 800
+        | image_tag:
+          loading: 'lazy',
+          class: 'social-marquee__img',
+          widths: '200, 400, 600, 800',
+          sizes: '(max-width: 749px) 200px, 400px'
+      }}
+    {%- elsif request.design_mode -%}
+      {{ 'image' | placeholder_svg_tag: 'social-marquee__img' }}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- if marquee_items != blank -%}
+  <section id="SocialMarquee-{{ section.id }}" class="social-marquee">
+    <div class="marquee marquee--slow">
+      <div class="marquee__track">
+        <div class="marquee__group">{{ marquee_items }}</div>
+        <div class="marquee__group" aria-hidden="true">{{ marquee_items }}</div>
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Social marquee",
+  "max_blocks": 20,
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Photo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social marquee",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

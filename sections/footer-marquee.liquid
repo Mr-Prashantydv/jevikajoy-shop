@@ -1,0 +1,79 @@
+{%- comment -%}
+  Footer marquee — thin scrolling strip that sits directly above the footer.
+  Ported from the React <FooterMarquee /> (src/components/site/footer-marquee.tsx).
+  Track is rendered twice so the shared -50% translate loops seamlessly; the
+  second copy is aria-hidden so screen readers read the phrases once.
+{%- endcomment -%}
+
+{%- style -%}
+  #FooterMarquee-{{ section.id }} {
+    background: var(--yellow);
+    padding-top: 0.4rem;
+    padding-bottom: 1.3rem;
+  }
+
+  #FooterMarquee-{{ section.id }} .footer-marquee__text {
+    margin: 0;
+    font-size: 3.25rem;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  @media screen and (max-width: 749px) {
+    #FooterMarquee-{{ section.id }} {
+      padding-top: 0.3rem;
+      padding-bottom: 0.6rem;
+    }
+  }
+{%- endstyle -%}
+
+<section id="FooterMarquee-{{ section.id }}">
+  <div class="marquee">
+    <div class="marquee__track">
+      <div class="marquee__group">
+        {%- for block in section.blocks -%}
+          <p class="accent-caps footer-marquee__text" {{ block.shopify_attributes }}>
+            {{- block.settings.text | escape -}}
+          </p>
+        {%- endfor -%}
+      </div>
+      <div class="marquee__group" aria-hidden="true">
+        {%- for block in section.blocks -%}
+          <p class="accent-caps footer-marquee__text">{{ block.settings.text | escape }}</p>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Footer marquee",
+  "max_blocks": 24,
+  "blocks": [
+    {
+      "type": "phrase",
+      "name": "Phrase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Sweet Treat"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer marquee",
+      "blocks": [
+        { "type": "phrase", "settings": { "text": "Sweet Treat" } },
+        { "type": "phrase", "settings": { "text": "•" } },
+        { "type": "phrase", "settings": { "text": "Sweeter Mission" } },
+        { "type": "phrase", "settings": { "text": "•" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

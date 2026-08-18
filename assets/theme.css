@@ -1,0 +1,386 @@
+/* ==========================================================================
+   JJW — theme foundation
+   Converted from the React codebase at test opencode (src/app/globals.css),
+   which is the source of truth. Values cross-checked against measurements in
+   docs/clone/DESIGN-SYSTEM.md; where they disagreed the React values won.
+
+   Written from scratch — no framework base underneath, so nothing here is
+   fighting inherited rules.
+   ========================================================================== */
+
+/* --- Fonts ------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@400;500;600;700;800;900&display=swap');
+
+@font-face {
+  font-family: 'Sofia Pro Soft';
+  src: url('SofiaProSoft-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sofia Pro Soft';
+  src: url('SofiaProSoft-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sofia Pro Soft';
+  src: url('SofiaProSoft-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Tokens ------------------------------------------------------------
+   Role structure mirrors the React theme; hex values are the JJW palette.
+   Reference role → our value is tabulated in docs/clone/DESIGN-SYSTEM.md §1. */
+
+:root {
+  /* Canvas + ink */
+  --cream: #fff6eb;
+  --ink: #1a2f5e;
+  --ink-soft: rgba(26, 47, 94, 0.75);
+  --ink-deep: #0e1b3a;
+
+  /* Accents */
+  --pink: #e5377e;
+  --pink-deep: #7a1240;
+  --pink-bg: #ffd7e6;
+  --blue: #0f7daf;
+  --blue-bg: #c9e8f7;
+  --sky: #9fdbff;
+  --gold: #f6a313;
+  --gold-bg: #ffe9c2;
+  --yellow: #ffd94c;
+  --green: #2fa85e;
+  --green-bg: #d3f3de;
+  --purple: #6e55d6;
+  --purple-bg: #e4dcff;
+
+  /* Type */
+  --font-heading: 'Baloo 2', system-ui, sans-serif;
+  --font-accent: 'Big Shoulders Display', system-ui, sans-serif;
+  --font-body: 'Sofia Pro Soft', system-ui, sans-serif;
+
+  /* Shape + motion */
+  --radius: 1.6rem;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-slow: cubic-bezier(0, 0, 0.3, 1);
+}
+
+/* --- Base ---------------------------------------------------------------
+   62.5% makes 1rem = 10px, matching the React codebase's rem arithmetic. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.6rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  background: var(--cream);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--pink);
+  color: var(--cream);
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* --- Layout ------------------------------------------------------------ */
+
+.page-width {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 2.16rem;
+}
+
+@media screen and (max-width: 749px) {
+  .page-width {
+    padding-inline: 1.5rem;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Type -------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  color: var(--ink);
+  margin: 0;
+}
+
+.hxxl {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 8.64rem;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .hxxl {
+    font-size: 4rem;
+    text-wrap: pretty;
+  }
+}
+
+.accent-caps {
+  font-family: var(--font-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* --- Button -------------------------------------------------------------
+   Two stacked layers on one clip path; the shadow layer slides to zero on
+   hover. Offset is 6px on buttons, 4px on the smaller header controls. */
+
+.btn-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.btn-shadow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--btn-shadow-color, var(--ink-deep));
+  transform: translate(6px, 6px);
+  clip-path: url(#jjw-blob);
+  -webkit-clip-path: url(#jjw-blob);
+  transition: transform 0.3s var(--ease);
+  pointer-events: none;
+}
+
+.btn {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 6rem;
+  padding: 2rem;
+  font-family: var(--font-accent);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4.2vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  background: var(--btn-bg, var(--pink));
+  color: var(--btn-fg, var(--cream));
+  clip-path: url(#jjw-blob);
+  -webkit-clip-path: url(#jjw-blob);
+  transition: transform 0.2s var(--ease);
+}
+
+.btn-wrap:hover .btn-shadow {
+  transform: translate(0, 0);
+}
+
+.btn--primary {
+  --btn-bg: var(--pink);
+  --btn-fg: var(--cream);
+}
+
+.btn-wrap:has(.btn--primary) .btn-shadow {
+  --btn-shadow-color: var(--pink-deep);
+}
+
+.btn--secondary {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--cream);
+}
+
+.btn-wrap:has(.btn--secondary) .btn-shadow {
+  --btn-shadow-color: var(--ink-deep);
+}
+
+@supports not (clip-path: url(#jjw-blob)) {
+  .btn,
+  .btn-shadow {
+    clip-path: none;
+    -webkit-clip-path: none;
+    border-radius: 999px;
+  }
+}
+
+/* --- Marquee ------------------------------------------------------------
+   Track is repeated so the -50% translate loops with no visible seam. */
+
+.marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+
+.marquee__group {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-shrink: 0;
+  padding-right: 3rem;
+  white-space: nowrap;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+.marquee--slow .marquee__track {
+  animation-duration: 60s;
+}
+
+.marquee--fast .marquee__track {
+  animation-duration: 8s;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* --- Scroll reveal ------------------------------------------------------
+   Mirrors the React ScrollReveal behaviour: elements start hidden and are
+   revealed when an IntersectionObserver removes the offscreen class. */
+
+.scroll-trigger {
+  opacity: 0.01;
+}
+
+.scroll-trigger.animate--fade-in:not(.scroll-trigger--offscreen) {
+  animation: fadeIn 0.75s var(--ease-out-slow) forwards;
+}
+
+.scroll-trigger.animate--slide-in {
+  transform: translateY(2rem);
+}
+
+.scroll-trigger.animate--slide-in:not(.scroll-trigger--offscreen) {
+  animation: slideIn 0.75s var(--ease-out-slow) forwards;
+  animation-delay: calc(var(--animation-order, 0) * 75ms);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Motion preferences ------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .marquee__track {
+    animation: none !important;
+  }
+
+  .scroll-trigger {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Focus -------------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}

@@ -1,0 +1,380 @@
+{%- comment -%}
+  Falling scroll — ported from the React FallingCookies component
+  (test opencode/src/components/site/falling-cookies.tsx).
+
+  The React version drives the drop with GSAP ScrollTrigger + a pinned section.
+  GSAP is not available here, so the pin is a plain position:sticky and the
+  progress is one scroll listener that writes a --p custom property; all the
+  interpolation happens in CSS calc(). No JS = every item renders in its landed
+  position, which is also the reduced-motion state.
+{%- endcomment -%}
+
+{%- style -%}
+  #FallingScroll-{{ section.id }} {
+    --p: 1;
+    position: relative;
+    height: {{ section.settings.scroll_length }}vh;
+    margin-bottom: 10rem;
+    background: var(--cream);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__sticky {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    {%- if section.settings.background_image != blank %}
+    background-image: url({{ section.settings.background_image | image_url: width: 2400 }});
+    background-size: contain;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    {%- endif %}
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--cream) 0%,
+      color-mix(in srgb, var(--cream) 40%, transparent) 20%,
+      transparent 40%
+    );
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__copy {
+    position: absolute;
+    top: 3%;
+    left: 50%;
+    z-index: 40;
+    width: 50%;
+    max-width: 80%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__title,
+  #FallingScroll-{{ section.id }} .falling-scroll__sub {
+    color: var(--gold);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__sub {
+    margin: 1rem 0 0;
+    font-family: var(--font-accent);
+    font-size: max(2vw, 3.4rem);
+    line-height: 6.12rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__pile {
+    position: absolute;
+    top: {{ section.settings.pile_y }}%;
+    left: 50%;
+    z-index: 2;
+    width: {{ section.settings.pile_width }}vw;
+    height: auto;
+    transform: translate(-50%, -50%);
+    opacity: clamp(0, calc(var(--p) * 6), 1);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__item {
+    position: absolute;
+    left: var(--x);
+    width: var(--w);
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Drop: top runs from -45vh to the block's landing point, scale 0.85 -> 1. */
+  #FallingScroll-{{ section.id }} .falling-scroll__item--fall {
+    top: calc(var(--y) * var(--p) - 45vh * (1 - var(--p)));
+    transform: translate(-50%, -50%) scale(calc(0.85 + 0.15 * var(--p)));
+    animation: fs-bob-{{ section.id }} 3.4s var(--ease) infinite alternate;
+    animation-delay: calc(var(--i, 0) * -0.7s);
+    will-change: top, transform;
+  }
+
+  /* Badges sit still, settle 2.4rem upward and drift with a light parallax. */
+  #FallingScroll-{{ section.id }} .falling-scroll__item--badge {
+    top: var(--y);
+    transform: translate(-50%, -50%) translateY(calc(2.4rem - 2.4rem * var(--p)))
+      translateY(calc(-10% * var(--p)));
+  }
+
+  /* Idle bob uses the independent `translate` property so it composes with the
+     scroll-driven `transform` instead of fighting it. */
+  @keyframes fs-bob-{{ section.id }} {
+    from {
+      translate: 0 -0.6rem;
+    }
+    to {
+      translate: 0 0.6rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #FallingScroll-{{ section.id }} .falling-scroll__copy {
+      width: 86%;
+      max-width: 86%;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__sub {
+      font-size: 2.2rem;
+      line-height: 1.2;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #FallingScroll-{{ section.id }} {
+      height: 100vh;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__sticky {
+      position: static;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__item--fall {
+      animation: none;
+    }
+  }
+{%- endstyle -%}
+
+<div id="FallingScroll-{{ section.id }}" class="falling-scroll">
+  <div class="falling-scroll__sticky">
+    <div class="falling-scroll__stage">
+      <div class="falling-scroll__veil" aria-hidden="true"></div>
+
+      <div class="falling-scroll__copy">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="hxxl falling-scroll__title">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="falling-scroll__sub">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.pile_image != blank -%}
+        <img
+          class="falling-scroll__pile"
+          src="{{ section.settings.pile_image | image_url: width: 2000 }}"
+          alt="{{ section.settings.pile_image.alt | escape }}"
+          width="{{ section.settings.pile_image.width }}"
+          height="{{ section.settings.pile_image.height }}"
+          loading="lazy"
+        >
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- if block.settings.image != blank -%}
+          {%- assign delay = forloop.index0 | times: 6 | at_most: 30 | divided_by: 100.0 -%}
+          <img
+            class="falling-scroll__item falling-scroll__item--{{ block.settings.behavior }}"
+            src="{{ block.settings.image | image_url: width: 1400 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+            loading="lazy"
+            {% if block.settings.behavior == 'fall' %}data-fall="{{ delay }}"{% endif %}
+            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}vw; --i: {{ forloop.index0 }}; z-index: {% if block.settings.behavior == 'badge' %}30{% else %}{{ 20 | minus: forloop.index }}{% endif %};"
+            {{ block.shopify_attributes }}
+          >
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('FallingScroll-{{ section.id }}');
+    if (!root || root.dataset.fsInit) return;
+    root.dataset.fsInit = '1';
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var stage = root.querySelector('.falling-scroll__sticky');
+    var items = root.querySelectorAll('[data-fall]');
+    var ticking = false;
+
+    // power3.inOut, the ease the React timeline used for the drop.
+    function ease(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function clamp(n) {
+      return n < 0 ? 0 : n > 1 ? 1 : n;
+    }
+
+    function paint() {
+      ticking = false;
+      // Section replaced by the theme editor: drop the listeners with it.
+      if (!root.isConnected) {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+        return;
+      }
+      var rect = root.getBoundingClientRect();
+      var travel = rect.height - stage.offsetHeight;
+      var p = travel > 0 ? clamp(-rect.top / travel) : rect.top < 0 ? 1 : 0;
+      root.style.setProperty('--p', p.toFixed(4));
+      for (var i = 0; i < items.length; i++) {
+        var d = parseFloat(items[i].getAttribute('data-fall')) || 0;
+        items[i].style.setProperty('--p', ease(clamp((p - d) / 0.7)).toFixed(4));
+      }
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(paint);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    paint();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Falling scroll",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Leave No Taste Buds Behind"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "NOW MORE MOUTHS THAN EVER CAN PARTAKE"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Backdrop image",
+      "info": "Sits along the bottom of the stage."
+    },
+    {
+      "type": "image_picker",
+      "id": "pile_image",
+      "label": "Foreground pile image",
+      "info": "Fades in as the items land. Leave empty to hide."
+    },
+    {
+      "type": "range",
+      "id": "pile_width",
+      "label": "Pile width",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "vw",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "pile_y",
+      "label": "Pile vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 83
+    },
+    {
+      "type": "range",
+      "id": "scroll_length",
+      "label": "Scroll length",
+      "info": "How much scrolling the pinned stage takes up.",
+      "min": 100,
+      "max": 250,
+      "step": 10,
+      "unit": "vh",
+      "default": 150
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Falling item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Nothing renders until an image is chosen."
+        },
+        {
+          "type": "select",
+          "id": "behavior",
+          "label": "Motion",
+          "options": [
+            { "value": "fall", "label": "Falls in on scroll" },
+            { "value": "badge", "label": "Stays put (badge)" }
+          ],
+          "default": "fall"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "label": "Width",
+          "min": 4,
+          "max": 40,
+          "step": 1,
+          "unit": "vw",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "Horizontal position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Vertical position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 55
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Falling scroll",
+      "blocks": [
+        { "type": "item", "settings": { "behavior": "fall", "size": 24, "x": 50, "y": 36 } },
+        { "type": "item", "settings": { "behavior": "fall", "size": 24, "x": 50, "y": 55 } },
+        { "type": "item", "settings": { "behavior": "fall", "size": 26, "x": 50, "y": 77 } },
+        { "type": "item", "settings": { "behavior": "badge", "size": 18, "x": 28, "y": 26 } },
+        { "type": "item", "settings": { "behavior": "badge", "size": 17, "x": 70, "y": 26 } },
+        { "type": "item", "settings": { "behavior": "badge", "size": 16, "x": 28, "y": 60 } },
+        { "type": "item", "settings": { "behavior": "badge", "size": 17, "x": 70, "y": 60 } }
+      ]
+    }
+  ]
+}
+{% endschema %}
