@@ -26,6 +26,22 @@
     height: 0;
   }
 
+  {%- comment -%}
+    height: 0 only works where the section beneath is drawn to sit under the
+    bar — that is the homepage hero and nothing else. Everywhere else the bar
+    landed on top of the content (PDP h1, and again on the sticky info column,
+    which parked at its own top: 3rem underneath it). Reference does the same
+    split: its header is position: relative and in flow, so main starts below.
+  {%- endcomment -%}
+  body:not(.template--index) #shopify-section-{{ s }} {
+    position: relative;
+    height: auto;
+  }
+
+  body:not(.template--index) #Header-{{ s }} .hdr-bar {
+    background: var(--cream);
+  }
+
   #Header-{{ s }} {
     position: relative;
   }
@@ -45,19 +61,53 @@
     border-bottom: 1px solid var(--cream);
   }
 
-  #Header-{{ s }}[data-open='true'] .hdr-bar {
+  {%- comment -%}
+    While the menu is open the bar is pinned to the viewport. On interior
+    templates the section is position: relative, so the bar scrolls away with
+    the page — open the drawer after scrolling and the close button, logo and
+    search were simply off-screen above it. Fixed + z 60 keeps all three
+    reachable on every template; the drawer's padding-top clears this height.
+  {%- endcomment -%}
+  #Header-{{ s }}[data-open='true'] .hdr-bar,
+  #Header-{{ s }}[data-search='true'] .hdr-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
     background: var(--cream);
   }
 
-  #Header-{{ s }}[data-open='false'] .hdr-overlay,
   #Header-{{ s }}[data-open='false'] .hdr-mega,
-  #Header-{{ s }}[data-open='false'] .hdr-drawer {
+  #Header-{{ s }}[data-open='false'] .hdr-drawer,
+  #Header-{{ s }}[data-search='false'] .hdr-search {
+    display: none;
+  }
+
+  {%- comment -%}
+    The menu and the search panel are separate states and close each other,
+    but only the menu draws the scrim. The reference leaves the page bright
+    behind its search drop-down; .hdr-search covers the viewport transparently
+    and closes on an outside click instead.
+  {%- endcomment -%}
+  #Header-{{ s }}[data-open='false'] .hdr-overlay {
     display: none;
   }
 
   /* --- Top bar ---------------------------------------------------------- */
 
+  {%- comment -%}
+    The drawer and the mega panel are children of .hdr-bar, not siblings. Once
+    the bar becomes a stacking context (it takes z-index 60 while open), any
+    positioned descendant with a positive z-index paints above this row —
+    which is unpositioned. That buried the logo, close button and search under
+    the open drawer. Giving the row its own layer above the drawer's 15 keeps
+    the controls on top; the mega panel's 50 still sits above the row, which
+    is right since it drops below the bar rather than over it.
+  {%- endcomment -%}
   #Header-{{ s }} .hdr-grid {
+    position: relative;
+    z-index: 30;
     display: grid;
     grid-template-columns: auto auto 1fr;
     align-items: center;
@@ -73,9 +123,11 @@
 
   #Header-{{ s }} .hdr-logo img,
   #Header-{{ s }} .hdr-logo svg {
+    /* Size by height and let width follow the artwork's own ratio, so a logo of
+       any proportion sits flush instead of being letterboxed inside a fixed track. */
     height: 8.3rem;
-    width: {{ section.settings.logo_width | default: 300 }}px;
-    max-width: 100%;
+    width: auto;
+    max-width: {{ section.settings.logo_width | default: 220 }}px;
     object-fit: contain;
     object-position: left center;
   }
@@ -122,9 +174,10 @@
 
   {%- comment -%}
     React shipped one 6.9rem icon here; this header has up to three plus the
-    CTA, which overflows the row long before phone widths (750–990px too).
-    Wrapping lets the extra pills drop to a second line instead of being
-    clipped off-screen by body { overflow-x: hidden }.
+    CTA. The breakpoints below drop controls until what is left fits, so this
+    should never wrap in practice — but a merchant can add a long CTA label
+    or a fourth control, and wrapping is the graceful failure. Without it the
+    overflow is clipped off-screen by body { overflow-x: hidden }.
   {%- endcomment -%}
   #Header-{{ s }} .hdr-actions {
     display: flex;
@@ -188,6 +241,125 @@
   }
 
   #Header-{{ s }} .hdr-icon svg {
+    height: 4rem;
+    width: 4rem;
+  }
+
+  {%- comment -%}
+    Account component. Shopify renders the avatar and the sign-in sheet inside
+    a shadow root, so the only handles are these custom properties — they
+    inherit through the shadow boundary, which is why our own tokens resolve.
+    Everything here maps a JJW token onto one of Shopify's roles.
+
+    Accent is Adventure Blue rather than Heart Pink: the sheet sets ordinary
+    14-16px button text, where pink on cream measures about 2.9:1 and misses
+    AA. Blue with white clears it at 4.6:1.
+  {%- endcomment -%}
+  #Header-{{ s }} shopify-account {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    --shopify-account-avatar-size: 4.4rem;
+    --shopify-account-color-accent: var(--blue);
+    --shopify-account-color-accent-text: var(--white);
+    --shopify-account-color-background: var(--cream);
+    --shopify-account-color-background-subdued: var(--warm-white);
+    --shopify-account-color-border: var(--sky);
+    --shopify-account-color-card-background: var(--white);
+    --shopify-account-color-card-text: var(--ink);
+    --shopify-account-color-control-background: var(--white);
+    --shopify-account-color-control-text: var(--ink);
+    --shopify-account-color-text: var(--ink);
+    --shopify-account-color-text-subdued: var(--ink-soft);
+    --shopify-account-font-body: var(--font-body);
+    --shopify-account-font-heading: var(--font-heading);
+    --shopify-account-font-heading-weight: 800;
+    --shopify-account-radius-base: 0.8rem;
+    --shopify-account-radius-button: 0.8rem;
+    --shopify-account-radius-dialog: 2rem;
+    --shopify-account-radius-input: 0.8rem;
+
+    /* Signed in, the avatar becomes the customer's initial — pink on cream
+       is fine here because it is a single large glyph, not body copy. */
+    --shopify-account-signed-in-avatar-size: 4.4rem;
+    --shopify-account-signed-in-avatar-color-background: var(--pink);
+    --shopify-account-signed-in-avatar-color-text: var(--cream);
+
+    /* Clear the bar so the sheet does not open underneath it. */
+    --shopify-account-dialog-position-top: 9rem;
+  }
+
+  #Header-{{ s }} .hdr-icon--account {
+    justify-content: center;
+  }
+
+  #Header-{{ s }} .hdr-account-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4.4rem;
+    width: 4.4rem;
+    color: var(--cream);
+  }
+
+  {%- comment -%}
+    Drawer copy of the component. Hidden above the drawer breakpoint so only
+    one of the two instances is ever interactive. The avatar keeps the blue
+    pill so it reads as the same control as the one in the bar.
+  {%- endcomment -%}
+  #Header-{{ s }} .hdr-drawer-account {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    margin-top: 2.4rem;
+    padding-top: 2.4rem;
+    border-top: 2px solid var(--sky);
+  }
+
+  #Header-{{ s }} .hdr-drawer-account shopify-account {
+    flex: none;
+    height: 5rem;
+    width: 5rem;
+    color: var(--cream);
+    background: var(--blue);
+    border-radius: 0.75rem;
+    --shopify-account-avatar-size: 3.4rem;
+    --shopify-account-signed-in-avatar-size: 3.4rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-account .hdr-account-avatar {
+    height: 3.4rem;
+    width: 3.4rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-account .hdr-account-avatar svg {
+    height: 3rem;
+    width: 3rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-account-label {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.2rem;
+    line-height: 1.2;
+    letter-spacing: 0.11rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  {%- comment -%}
+    Exact complement of the 749px rule that hides the bar pill, so precisely
+    one of the two instances is visible at any width — never both, never none.
+    No later rule touches this selector, so its position here is safe.
+  {%- endcomment -%}
+  @media screen and (min-width: 750px) {
+    #Header-{{ s }} .hdr-drawer-account {
+      display: none;
+    }
+  }
+
+  #Header-{{ s }} .hdr-account-avatar svg {
     height: 4rem;
     width: 4rem;
   }
@@ -261,9 +433,10 @@
   #Header-{{ s }} .hdr-mega-links .btn {
     min-height: 0;
     padding: 1rem 2.5rem;
-    font-size: 3rem;
+    /* Reference mega nav: 27px condensed caps, letter-spacing 1.35px. */
+    font-size: 2.7rem;
     line-height: 1.8;
-    letter-spacing: 0.15rem;
+    letter-spacing: 0.135rem;
     border-radius: 0.8rem;
     --btn-bg: var(--blue);
     --btn-fg: var(--cream);
@@ -275,9 +448,9 @@
     text-align: center;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 3rem;
+    font-size: 2.7rem;
     line-height: 1.8;
-    letter-spacing: 0.15rem;
+    letter-spacing: 0.135rem;
     text-transform: uppercase;
     color: var(--ink);
     transition: color 0.3s var(--ease);
@@ -333,7 +506,8 @@
     box-shadow: 0 0 0 0 transparent;
   }
 
-  #Header-{{ s }} .hdr-card-inner {
+  /* Padding lives on the link so the whole card is one hit target. */
+  #Header-{{ s }} .hdr-card > a {
     display: block;
     width: 100%;
     overflow: hidden;
@@ -343,19 +517,20 @@
 
   #Header-{{ s }} .hdr-card-media {
     margin: 0 auto 1rem;
-    aspect-ratio: 2000 / 2125;
+    aspect-ratio: 1 / 1;
     width: 100%;
     max-width: 20rem;
   }
 
+  {%- comment -%}
+    Character art is a cut-out sticker on transparency. cover + scale(1.2)
+    would crop the head; contain keeps the whole character inside the card.
+  {%- endcomment -%}
   #Header-{{ s }} .hdr-card-media img {
-    aspect-ratio: 1 / 1;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
-    transform: scale(1.2);
-    border-radius: 0.8rem;
   }
 
   #Header-{{ s }} .hdr-card-label {
@@ -363,28 +538,41 @@
     max-width: 90%;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 3rem;
+    /* Reference card label: 27px condensed caps, letter-spacing 1.35px. */
+    font-size: 2.7rem;
     line-height: 1.3;
+    letter-spacing: 0.135rem;
     text-transform: uppercase;
-    color: var(--mc-shadow, var(--ink-deep));
+    {%- comment -%}
+      Navy, not the card's own solid. --mc-bg now holds a brand-sheet colour
+      rather than a pale tint, so Heart Pink on Candy Pink measured 1.1:1 and
+      the label was invisible; gold and green were 1.5. --mc-shadow still
+      drives the offset shadow, where contrast does not apply.
+    {%- endcomment -%}
+    color: var(--ink);
   }
 
   /* --- Mobile drawer ----------------------------------------------------- */
 
+  {%- comment -%}
+    Sits under the bar (z 20), not over it, so the close button, logo and
+    search stay reachable while the drawer is open — the reference keeps all
+    three visible. padding-top clears the bar's own height.
+  {%- endcomment -%}
   #Header-{{ s }} .hdr-drawer {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 15;
     overflow-y: auto;
     background: var(--cream);
-    padding: 2rem;
+    padding: 12rem 2rem 4rem;
   }
 
   #Header-{{ s }} .hdr-drawer-inner {
     display: flex;
     flex-direction: column;
     margin-inline: auto;
-    max-width: 40rem;
+    max-width: 76rem;
   }
 
   #Header-{{ s }} .hdr-drawer-links {
@@ -399,20 +587,26 @@
     flex: 1;
   }
 
-  #Header-{{ s }} .hdr-drawer-links .btn-wrap.is-active {
+  {%- comment -%}
+    Reference features the first entry across the full width with the rest
+    sharing the row beneath. Keyed to position, not to the active link, so
+    the block keeps that shape on every page — on a product page no menu
+    link is active and all four collapsed into one cramped row.
+  {%- endcomment -%}
+  #Header-{{ s }} .hdr-drawer-links .btn-wrap:first-child {
     flex: 1 0 100%;
   }
 
+  {%- comment -%}
+    Every drawer button carries the offset shadow, as the reference does.
+    Previously only the active one did, so on any page without an active menu
+    link the whole block rendered flat.
+  {%- endcomment -%}
   #Header-{{ s }} .hdr-drawer-links .btn-shadow {
-    transform: none;
-    opacity: 0;
-    --btn-shadow-color: var(--ink-deep);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  #Header-{{ s }} .hdr-drawer-links .is-active .btn-shadow {
     transform: translate(4px, 4px);
     opacity: 1;
+    --btn-shadow-color: var(--ink-deep);
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
 
   #Header-{{ s }} .hdr-drawer-links .btn {
@@ -425,36 +619,62 @@
     --btn-fg: var(--cream);
   }
 
+  {%- comment -%}
+    Reference drawer runs the cards as a wrapping grid, not a single column:
+    two up on a phone, four from tablet width.
+  {%- endcomment -%}
   #Header-{{ s }} .hdr-drawer-grid {
     display: grid;
-    justify-items: center;
-    gap: 2rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.6rem;
     padding-block: 1rem;
   }
 
-  #Header-{{ s }} .hdr-drawer-card {
-    width: 100%;
-    border-radius: 1rem;
-    padding: 1rem;
-    text-align: center;
-    background: var(--mc-bg, var(--sky));
-    box-shadow: 4px 4px 0 0 var(--mc-shadow, var(--ink-deep));
+  @media screen and (min-width: 600px) {
+    #Header-{{ s }} .hdr-drawer-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
-  #Header-{{ s }} .hdr-drawer-card img {
-    margin-inline: auto;
-    height: auto;
-    width: 80%;
+  #Header-{{ s }} .hdr-drawer-card {
+    border-radius: 1.2rem;
+    background: var(--mc-bg, var(--sky));
+    box-shadow: 6px 6px 0 0 var(--mc-shadow, var(--ink-deep));
+  }
+
+  #Header-{{ s }} .hdr-drawer-card > a {
+    display: block;
+    padding: 1.4rem 1rem;
+    text-align: center;
+  }
+
+  #Header-{{ s }} .hdr-drawer-card-media {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 12rem;
+    margin: 0 auto 0.6rem;
+  }
+
+  #Header-{{ s }} .hdr-drawer-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   #Header-{{ s }} .hdr-drawer-card-label {
-    margin-top: 0.5rem;
     font-family: var(--font-accent);
     font-weight: 700;
     font-size: 2.2rem;
     line-height: 1.2;
+    letter-spacing: 0.11rem;
     text-transform: uppercase;
-    color: var(--mc-shadow, var(--ink-deep));
+    {%- comment -%}
+      Navy, not the card's own solid. --mc-bg now holds a brand-sheet colour
+      rather than a pale tint, so Heart Pink on Candy Pink measured 1.1:1 and
+      the label was invisible; gold and green were 1.5. --mc-shadow still
+      drives the offset shadow, where contrast does not apply.
+    {%- endcomment -%}
+    color: var(--ink);
   }
 
   /* --- Card palettes ------------------------------------------------------ */
@@ -466,10 +686,312 @@
   #Header-{{ s }} [data-palette='green']  { --mc-bg: var(--green-bg);  --mc-shadow: var(--green); }
   #Header-{{ s }} [data-palette='purple'] { --mc-bg: var(--purple-bg); --mc-shadow: var(--purple); }
 
+  /* --- Search panel -------------------------------------------------------
+     A drop-down, not a full sheet: the page stays visible behind it, as the
+     reference does. The fixed layer spans the viewport but is transparent —
+     it exists to catch outside clicks and to let the panel scroll on a short
+     screen. padding-top clears the bar's own height. */
+
+  #Header-{{ s }} .hdr-search {
+    position: fixed;
+    inset: 0;
+    z-index: 15;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 10.4rem 2rem 4rem;
+  }
+
+  #Header-{{ s }} .hdr-search-inner {
+    margin-inline: auto;
+    max-width: 92rem;
+  }
+
+  {%- comment -%}
+    Field box: label stacked over the input, with the clear and submit
+    controls sharing the same border. Not .btn — the reference keeps the field
+    quiet so the results below carry the weight.
+  {%- endcomment -%}
+  #Header-{{ s }} .hdr-search-form {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1.2rem 0.8rem 1.6rem;
+    background: var(--white);
+    border: 2px solid var(--sky);
+    border-radius: 0.8rem;
+  }
+
+  #Header-{{ s }} .hdr-search-field {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  #Header-{{ s }} .hdr-search-label {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 1.4;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  #Header-{{ s }} .hdr-search-input {
+    width: 100%;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: 1.8rem;
+    line-height: 1.5;
+    color: var(--ink);
+    background: none;
+    border: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  #Header-{{ s }} .hdr-search-input:focus {
+    outline: none;
+  }
+
+  #Header-{{ s }} .hdr-search-input::placeholder {
+    color: var(--ink-soft);
+  }
+
+  /* The UA's own clear affordance would sit beside ours. */
+  #Header-{{ s }} .hdr-search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  #Header-{{ s }} .hdr-search-clear,
+  #Header-{{ s }} .hdr-search-go {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    height: 4.4rem;
+    width: 4.4rem;
+    padding: 0;
+    color: var(--ink);
+    background: none;
+    border: 0;
+    border-radius: 0.6rem;
+    cursor: pointer;
+  }
+
+  #Header-{{ s }} .hdr-search-clear[hidden] {
+    display: none;
+  }
+
+  #Header-{{ s }} .hdr-search-clear svg {
+    height: 1.6rem;
+    width: 1.6rem;
+  }
+
+  #Header-{{ s }} .hdr-search-go {
+    border-left: 2px solid var(--sky);
+    border-radius: 0;
+    color: var(--blue);
+  }
+
+  #Header-{{ s }} .hdr-search-go svg {
+    height: 2.2rem;
+    width: 2.2rem;
+  }
+
+  #Header-{{ s }} .hdr-search-clear:hover,
+  #Header-{{ s }} .hdr-search-go:hover {
+    color: var(--pink);
+  }
+
+  {%- comment -%}
+    Results arrive from sections/predictive-search.liquid, which ships markup
+    only — everything below is its stylesheet. Empty until the first fetch,
+    so the box only draws once it has something in it.
+  {%- endcomment -%}
+  #Header-{{ s }} .hdr-search-results:not(:empty) {
+    margin-top: 1.2rem;
+    background: var(--white);
+    border: 2px solid var(--sky);
+    border-radius: 1.2rem;
+    overflow: hidden;
+  }
+
+  #Header-{{ s }} .psearch-cols {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 0 4rem;
+    padding: 2.4rem 2.4rem 0.8rem;
+  }
+
+  #Header-{{ s }} .psearch-head {
+    margin: 0 0 1.2rem;
+    padding-bottom: 1rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1.4;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 2px solid var(--sky);
+  }
+
+  #Header-{{ s }} .psearch-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #Header-{{ s }} .psearch-item,
+  #Header-{{ s }} .psearch-product {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding-block: 1rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  {%- comment -%}
+    styled_text marks the part that matched what was typed. Lightening it
+    leaves the completion reading bold, which is the cue the reference gives.
+  {%- endcomment -%}
+  #Header-{{ s }} .psearch-item span {
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+
+  #Header-{{ s }} .psearch-item:hover,
+  #Header-{{ s }} .psearch-product:hover {
+    color: var(--blue);
+  }
+
+  #Header-{{ s }} .psearch-item:hover span {
+    color: var(--blue);
+  }
+
+  #Header-{{ s }} .psearch-thumb {
+    display: grid;
+    place-items: center;
+    flex: none;
+    height: 6.2rem;
+    width: 6.2rem;
+    overflow: hidden;
+    background: var(--blue-bg);
+    border-radius: 0.6rem;
+  }
+
+  #Header-{{ s }} .psearch-thumb img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  {%- comment -%}
+    Half the catalogue has no photography, so an empty thumb has to read as
+    deliberate. It falls back to the product's character colour, the same cue
+    the collection cards use.
+  {%- endcomment -%}
+  #Header-{{ s }} .psearch-thumb[data-pair='pink']   { background: var(--pink-bg); }
+  #Header-{{ s }} .psearch-thumb[data-pair='blue']   { background: var(--blue-bg); }
+  #Header-{{ s }} .psearch-thumb[data-pair='gold']   { background: var(--gold-bg); }
+  #Header-{{ s }} .psearch-thumb[data-pair='green']  { background: var(--green-bg); }
+  #Header-{{ s }} .psearch-thumb[data-pair='purple'] { background: var(--purple-bg); }
+
+  #Header-{{ s }} .psearch-all {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.8rem 2.4rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink);
+    border-top: 2px solid var(--sky);
+  }
+
+  #Header-{{ s }} .psearch-all svg {
+    flex: none;
+    height: 1.4rem;
+    width: 2rem;
+  }
+
+  #Header-{{ s }} .psearch-all:hover {
+    color: var(--blue);
+  }
+
+  #Header-{{ s }} .psearch-empty {
+    margin: 0;
+    padding: 2.4rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
   /* --- Breakpoints -------------------------------------------------------- */
 
   @media screen and (max-width: 990px) {
     #Header-{{ s }} .hdr-mega {
+      display: none;
+    }
+
+    {%- comment -%}
+      Wherever the drawer is the nav mode, the bar takes the reference's
+      phone arrangement: menu / logo / search with the logo centred. Tied to
+      the same 990px breakpoint as the drawer so the two never disagree.
+      Source order stays logo-first for the skip link; only columns reorder.
+    {%- endcomment -%}
+    #Header-{{ s }} .hdr-grid {
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    #Header-{{ s }} .hdr-menu-wrap {
+      order: 1;
+      justify-self: start;
+    }
+
+    #Header-{{ s }} .hdr-logo {
+      order: 2;
+      justify-self: center;
+      margin-left: 0;
+    }
+
+    #Header-{{ s }} .hdr-actions {
+      order: 3;
+    }
+
+    {%- comment -%}
+      The CTA leaves the bar at the same breakpoint as the mega nav, for the
+      same reason the pills do at 749: 1fr auto 1fr makes the two side tracks
+      equal, so the actions column only ever gets half of what is left after
+      the 176px logo. That is 245px at 750 and 365px at 990, against the
+      452px the CTA and three pills want — the row wrapped to 177px tall
+      across the whole range. Three pills alone need 223px and clear 245.
+
+      Shrinking rather than hiding does not work here: at 750, pills held at
+      the 44px touch-target floor leave the CTA 97px including its margin,
+      and 'Find In Store' does not survive a 78px button.
+
+      The drawer lists section.settings.menu, not this CTA, so below 991px
+      the destination is only reachable if that menu carries it too. Worth a
+      drawer copy of the CTA if it ever points somewhere the menu does not.
+    {%- endcomment -%}
+    #Header-{{ s }} .hdr-cta {
       display: none;
     }
   }
@@ -481,9 +1003,55 @@
   }
 
   @media screen and (max-width: 749px) {
+    {%- comment -%}
+      Column order is set at the 990px drawer breakpoint above.
+
+      The gap is 0.6rem here, not 1rem, because 1fr auto 1fr splits the space
+      left over after the logo evenly: at 360px that left the actions column
+      106px to hold two 5rem pills and their gap, which need 108px, and the
+      row wrapped to 137px tall. Two pixels. Trimming both gaps buys the
+      column 110px and keeps the logo centred, which shrinking the pills to
+      fit would not — they are already at the 44px touch-target floor.
+
+      Below ~340px the sums stop working whatever the gap; the logo would have
+      to shrink. Not chased, since the design already assumed 360 as the floor.
+    {%- endcomment -%}
     #Header-{{ s }} .hdr-grid {
       padding-inline: 1rem;
-      gap: 1rem;
+      gap: 0.6rem;
+    }
+
+    {%- comment -%}
+      At 12rem minimum only two buttons fit a phone row, which stranded the
+      fourth link alone on a full-width row. 9rem lets the three that follow
+      the featured link share one row, as the reference does.
+    {%- endcomment -%}
+    #Header-{{ s }} .hdr-drawer-links .btn-wrap {
+      min-width: 9rem;
+    }
+
+    #Header-{{ s }} .hdr-drawer-links .btn {
+      padding: 1rem 0.8rem;
+      font-size: 2rem;
+    }
+
+    {%- comment -%}
+      Reference mobile header carries three controls: menu, logo, search.
+      The CTA already left at 990; the account pill drops out here as well,
+      so the bar keeps menu / logo / search + cart. Cart stays, it is commerce.
+
+      A third icon genuinely does not fit. .hdr-grid is 1fr auto 1fr, and those
+      two 1fr tracks are equal, so the menu column reserves whatever the
+      actions column needs — three 5rem pills demand 150px a side, which with
+      the 110px logo is 430px of appetite inside 342px of room, and the row
+      wraps to 195px tall. Shrinking the pills does not rescue it: even at the
+      44px touch-target floor the two tracks still want 264px of the 342.
+
+      So the account component moves into the drawer at this width instead,
+      which is where .hdr-drawer-account renders it.
+    {%- endcomment -%}
+    #Header-{{ s }} .hdr-icon--account {
+      display: none;
     }
 
     #Header-{{ s }} .hdr-logo img,
@@ -496,16 +1064,36 @@
       width: auto;
     }
 
-    /* Icon pills shrink to a 44px touch target and share one gap so search,
-       account and cart all stay on-screen and tappable. */
+    {%- comment -%}
+      The logo drops to 5rem here but the menu blob and icon pills keep their
+      desktop heights, leaving the burger half again taller than the mark.
+      Everything in the row is pinned to the logo's 5rem so the three read as
+      one line. The blob keeps its 83:75 ratio; the pills stay square.
+      5rem is still a 50px touch target, above the 44px minimum.
+    {%- endcomment -%}
+    #Header-{{ s }} .hdr-menu {
+      height: 5rem;
+      width: 5.5rem;
+    }
+
+    #Header-{{ s }} .hdr-menu .icon-burger {
+      height: 2.8rem;
+      width: 3.3rem;
+    }
+
+    #Header-{{ s }} .hdr-menu .icon-close {
+      height: 1.4rem;
+      width: 1.4rem;
+    }
+
     #Header-{{ s }} .hdr-actions {
-      gap: 0.8rem;
+      gap: 0.6rem;
       margin-right: 0;
     }
 
     #Header-{{ s }} .hdr-icon {
-      height: 5.6rem;
-      width: 4.4rem;
+      height: 5rem;
+      width: 5rem;
       justify-content: center;
     }
 
@@ -514,13 +1102,13 @@
     }
 
     #Header-{{ s }} .hdr-icon > span {
-      height: 3.6rem;
-      width: 3.6rem;
+      height: 3.2rem;
+      width: 3.2rem;
     }
 
     #Header-{{ s }} .hdr-icon svg {
-      height: 3.2rem;
-      width: 3.2rem;
+      height: 2.8rem;
+      width: 2.8rem;
     }
 
     #Header-{{ s }} .hdr-count {
@@ -532,17 +1120,27 @@
       line-height: 1.8rem;
     }
 
-    /* Stays visible — React keeps the CTA at every width; only the fixed
-       22.1rem width is relaxed so it fits a phone. */
-    #Header-{{ s }} .hdr-cta {
-      margin-right: 0;
+    /* The bar is shorter here (5rem controls), so the panel needs less clearance. */
+    #Header-{{ s }} .hdr-search {
+      padding: 8.4rem 1.5rem 4rem;
     }
 
-    #Header-{{ s }} .hdr-cta .btn {
-      width: auto;
-      min-width: 0;
-      padding-inline: 1rem;
-      font-size: 2.2rem;
+    {%- comment -%}
+      Columns stack, so the products list needs a rule above it to stay
+      readable as a separate group once it is no longer beside the other.
+    {%- endcomment -%}
+    #Header-{{ s }} .psearch-cols {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 2rem 1.6rem 0.4rem;
+    }
+
+    #Header-{{ s }} .psearch-col + .psearch-col {
+      margin-top: 2rem;
+    }
+
+    #Header-{{ s }} .psearch-all {
+      padding: 1.6rem;
     }
   }
 
@@ -559,7 +1157,7 @@
   }
 {%- endstyle -%}
 
-<div id="Header-{{ s }}" data-open="false">
+<div id="Header-{{ s }}" data-open="false" data-search="false">
   <div class="hdr-overlay" data-hdr-close aria-hidden="true"></div>
 
   <header class="hdr-bar">
@@ -575,8 +1173,8 @@
           <img
             src="{{ 'jjw-logo.png' | asset_url }}"
             alt="{{ shop.name | escape }}"
-            width="300"
-            height="83"
+            width="1774"
+            height="887"
           >
         {%- endif -%}
       </a>
@@ -608,8 +1206,20 @@
           </a>
         {%- endif -%}
 
+        {%- comment -%}
+          Still an anchor, not a button: with JS off it navigates to /search,
+          which is a real page. The script cancels the navigation and opens
+          the panel instead.
+        {%- endcomment -%}
         {%- if section.settings.show_search -%}
-          <a href="{{ routes.search_url }}" class="hdr-icon" aria-label="{{ 'general.search.search' | t }}">
+          <a
+            href="{{ routes.search_url }}"
+            class="hdr-icon"
+            data-hdr-search-toggle
+            aria-controls="HeaderSearch-{{ s }}"
+            aria-expanded="false"
+            aria-label="{{ 'general.search.search' | t }}"
+          >
             <span>
               <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
                 <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M11.03 11.68A5.784 5.784 0 1 1 2.85 3.5a5.784 5.784 0 0 1 8.18 8.18m.26 1.12a6.78 6.78 0 1 1 .72-.7l5.4 5.4a.5.5 0 1 1-.71.7z"/>
@@ -618,14 +1228,29 @@
           </a>
         {%- endif -%}
 
+        {%- comment -%}
+          Shopify's own account component, not a link to /account. The store
+          runs new customer accounts, so a plain link 302s the shopper off to
+          shopify.com/authentication — an unbranded page we cannot touch below
+          the Plus plan. This opens a sign-in sheet on the storefront instead,
+          so they never leave JJW. Passwordless, Sign in with Shop and social
+          providers all come with it.
+
+          The signed-out-avatar slot takes our own person icon, so the control
+          keeps the same blue pill as search and cart. Shopify owns the sheet
+          and can change it independently of the theme; the CSS variables above
+          are the whole extent of what we control.
+        {%- endcomment -%}
         {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
-          <a href="{{ routes.account_url }}" class="hdr-icon" aria-label="{{ section.settings.account_label | escape }}">
-            <span>
-              <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
-                <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M9 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5M6.25 5.25a2.75 2.75 0 1 1 5.5 0 2.75 2.75 0 0 1-5.5 0M9 10.5c-3.6 0-6.5 2.4-6.5 5.36 0 .84.7 1.52 1.55 1.52h9.9c.86 0 1.55-.68 1.55-1.52 0-2.96-2.9-5.36-6.5-5.36m-5.5 5.36c0-2.32 2.36-4.36 5.5-4.36s5.5 2.04 5.5 4.36c0 .29-.24.52-.55.52h-9.9a.54.54 0 0 1-.55-.52"/>
-              </svg>
-            </span>
-          </a>
+          <span class="hdr-icon hdr-icon--account">
+            <shopify-account menu="customer-account-main-menu">
+              <span slot="signed-out-avatar" class="hdr-account-avatar">
+                <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M9 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5M6.25 5.25a2.75 2.75 0 1 1 5.5 0 2.75 2.75 0 0 1-5.5 0M9 10.5c-3.6 0-6.5 2.4-6.5 5.36 0 .84.7 1.52 1.55 1.52h9.9c.86 0 1.55-.68 1.55-1.52 0-2.96-2.9-5.36-6.5-5.36m-5.5 5.36c0-2.32 2.36-4.36 5.5-4.36s5.5 2.04 5.5 4.36c0 .29-.24.52-.55.52h-9.9a.54.54 0 0 1-.55-.52"/>
+                </svg>
+              </span>
+            </shopify-account>
+          </span>
         {%- endif -%}
 
         {%- if section.settings.show_cart -%}
@@ -673,22 +1298,7 @@
           <h3 class="hdr-mega-spacer" aria-hidden="true">{{ section.settings.cards_heading | escape }}</h3>
           <div class="hdr-mega-grid">
             {%- for block in section.blocks -%}
-              <div class="hdr-card" data-palette="{{ block.settings.palette }}" {{ block.shopify_attributes }}>
-                <div class="hdr-card-inner">
-                  <a href="{{ block.settings.link | default: routes.root_url }}">
-                    {%- if block.settings.image != blank -%}
-                      <div class="hdr-card-media">
-                        {{
-                          block.settings.image
-                          | image_url: width: 400
-                          | image_tag: alt: block.settings.label, loading: 'lazy'
-                        }}
-                      </div>
-                    {%- endif -%}
-                    <div class="hdr-card-label">{{ block.settings.label | escape }}</div>
-                  </a>
-                </div>
-              </div>
+              {%- render 'header-card', block: block -%}
             {%- endfor -%}
           </div>
         </div>
@@ -723,22 +1333,104 @@
 
         <div class="hdr-drawer-grid">
           {%- for block in section.blocks -%}
-            <div class="hdr-drawer-card" data-palette="{{ block.settings.palette }}" {{ block.shopify_attributes }}>
-              <a href="{{ block.settings.link | default: routes.root_url }}">
-                {%- if block.settings.image != blank -%}
-                  {{
-                    block.settings.image
-                    | image_url: width: 400
-                    | image_tag: alt: block.settings.label, loading: 'lazy'
-                  }}
-                {%- endif -%}
-                <div class="hdr-drawer-card-label">{{ block.settings.label | escape }}</div>
-              </a>
-            </div>
+            {%- render 'header-card', block: block, style: 'drawer' -%}
           {%- endfor -%}
         </div>
+
+        {%- comment -%}
+          The account pill cannot fit the phone bar (see the 749px block), so
+          the component renders here as well. Two instances of it exist on the
+          page and CSS hides whichever does not belong at the current width —
+          the ordinary responsive-header pattern, and the component tolerates
+          it because each keeps its own shadow root.
+        {%- endcomment -%}
+        {%- if section.settings.show_account and shop.customer_accounts_enabled -%}
+          <div class="hdr-drawer-account">
+            <shopify-account menu="customer-account-main-menu">
+              <span slot="signed-out-avatar" class="hdr-account-avatar">
+                <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M9 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5M6.25 5.25a2.75 2.75 0 1 1 5.5 0 2.75 2.75 0 0 1-5.5 0M9 10.5c-3.6 0-6.5 2.4-6.5 5.36 0 .84.7 1.52 1.55 1.52h9.9c.86 0 1.55-.68 1.55-1.52 0-2.96-2.9-5.36-6.5-5.36m-5.5 5.36c0-2.32 2.36-4.36 5.5-4.36s5.5 2.04 5.5 4.36c0 .29-.24.52-.55.52h-9.9a.54.54 0 0 1-.55-.52"/>
+                </svg>
+              </span>
+            </shopify-account>
+            <span class="hdr-drawer-account-label">{{ section.settings.account_label | escape }}</span>
+          </div>
+        {%- endif -%}
       </div>
     </div>
+
+    {%- comment -%}
+      Search panel. A child of .hdr-bar like the drawer and the mega panel, so
+      the bar's stacking context governs all three the same way.
+    {%- endcomment -%}
+    {%- if section.settings.show_search -%}
+      <div
+        id="HeaderSearch-{{ s }}"
+        class="hdr-search"
+        role="dialog"
+        aria-modal="true"
+        aria-label="{{ 'general.search.search' | t }}"
+      >
+        <div class="hdr-search-inner">
+          {%- comment -%}
+            Prefix matching is applied by theme.js on submit — see the note
+            there on why options[prefix] is not used.
+
+            The label sits above the field inside the same bordered box, as
+            the reference does, so it is visible type rather than a
+            placeholder that vanishes the moment anyone types.
+          {%- endcomment -%}
+          <form action="{{ routes.search_url }}" method="get" role="search" class="hdr-search-form">
+            <input type="hidden" name="type" value="product">
+
+            <span class="hdr-search-field">
+              <label class="hdr-search-label" for="HeaderSearchInput-{{ s }}">
+                {{- 'general.search.search' | t -}}
+              </label>
+              <input
+                id="HeaderSearchInput-{{ s }}"
+                class="hdr-search-input"
+                type="search"
+                name="q"
+                placeholder="{{ section.settings.search_placeholder | escape }}"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck="false"
+                data-hdr-search-input
+              >
+            </span>
+
+            <button
+              type="button"
+              class="hdr-search-clear"
+              data-hdr-search-clear
+              hidden
+              aria-label="{{ 'general.search.clear' | t }}"
+            >
+              <svg viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+                <path
+                  fill="currentColor"
+                  d="M.65 13.35a.5.5 0 0 0 .7 0L7 7.71l5.65 5.64a.5.5 0 0 0 .7-.7L7.71 7l5.64-5.65a.5.5 0 1 0-.7-.7L7 6.29 1.35.65a.5.5 0 1 0-.7.7L6.29 7 .65 12.65a.5.5 0 0 0 0 .7"
+                />
+              </svg>
+            </button>
+
+            <button type="submit" class="hdr-search-go" aria-label="{{ 'general.search.search' | t }}">
+              <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
+                <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M11.03 11.68A5.784 5.784 0 1 1 2.85 3.5a5.784 5.784 0 0 1 8.18 8.18m.26 1.12a6.78 6.78 0 1 1 .72-.7l5.4 5.4a.5.5 0 1 1-.71.7z"/>
+              </svg>
+            </button>
+          </form>
+
+          {%- comment -%}
+            The live region is this container, which survives every fetch.
+            Declaring it on the injected markup instead would insert a region
+            that is already populated, which is not reliably announced.
+          {%- endcomment -%}
+          <div class="hdr-search-results" data-hdr-search-results aria-live="polite"></div>
+        </div>
+      </div>
+    {%- endif -%}
   </header>
 </div>
 
@@ -749,11 +1441,33 @@
     root.dataset.bound = '1';
 
     var toggle = root.querySelector('[data-hdr-toggle]');
+    var searchToggle = root.querySelector('[data-hdr-search-toggle]');
+    var searchInput = root.querySelector('[data-hdr-search-input]');
+    var searchResults = root.querySelector('[data-hdr-search-results]');
+
+    function lockScroll() {
+      var any = root.dataset.open === 'true' || root.dataset.search === 'true';
+      document.body.style.overflow = any ? 'hidden' : '';
+    }
 
     function setOpen(open) {
       root.dataset.open = open ? 'true' : 'false';
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) setSearch(false);
+      lockScroll();
+    }
+
+    function setSearch(open) {
+      if (!searchToggle) return;
+      root.dataset.search = open ? 'true' : 'false';
+      searchToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) {
+        setOpen(false);
+        // iOS will not focus an input from a handler that also ran a fetch,
+        // so focus first and let the query fire on the next keystroke.
+        searchInput.focus();
+      }
+      lockScroll();
     }
 
     toggle.addEventListener('click', function () {
@@ -762,15 +1476,106 @@
 
     root.querySelector('[data-hdr-close]').addEventListener('click', function () {
       setOpen(false);
+      setSearch(false);
     });
 
     document.addEventListener('keydown', function (e) {
       // Section may have been swapped out by the theme editor.
       if (!root.isConnected) return;
-      if (e.key === 'Escape' && root.dataset.open === 'true') {
+      if (e.key !== 'Escape') return;
+      if (root.dataset.search === 'true') {
+        setSearch(false);
+        searchToggle.focus();
+      } else if (root.dataset.open === 'true') {
         setOpen(false);
         toggle.focus();
       }
+    });
+
+    if (!searchToggle) return;
+
+    searchToggle.addEventListener('click', function (e) {
+      // The href is the no-JS fallback to /search; here we open the panel.
+      e.preventDefault();
+      setSearch(root.dataset.search !== 'true');
+    });
+
+    /* Predictive search. Shopify renders sections/predictive-search.liquid for
+       us, so the character colour logic stays in Liquid instead of being
+       reimplemented here. */
+    var controller = null;
+    var timer = null;
+    var lastTerm = '';
+
+    function render(term) {
+      if (term === lastTerm) return;
+      lastTerm = term;
+
+      if (controller) controller.abort();
+
+      if (term.length < 2) {
+        searchResults.innerHTML = '';
+        return;
+      }
+
+      controller = new AbortController();
+      // Trailing * is what actually gives prefix matching here — "adven"
+      // returns nothing, "adven*" finds the Adventure Tee. See theme.js.
+      var query = term.slice(-1) === '*' ? term : term + '*';
+      fetch(
+        '{{ routes.predictive_search_url }}?q=' +
+          encodeURIComponent(query) +
+          '&resources[type]=query,product,collection&resources[limit]=5' +
+          '&section_id=predictive-search',
+        { signal: controller.signal }
+      )
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.status);
+          return res.text();
+        })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var section = doc.getElementById('shopify-section-predictive-search');
+          searchResults.innerHTML = section ? section.innerHTML : '';
+        })
+        .catch(function (err) {
+          // An aborted request is the expected outcome of typing quickly.
+          if (err.name === 'AbortError') return;
+          searchResults.innerHTML = '';
+        });
+    }
+
+    var searchPanel = root.querySelector('.hdr-search');
+    var searchInner = root.querySelector('.hdr-search-inner');
+    var searchClear = root.querySelector('[data-hdr-search-clear]');
+
+    function syncClear() {
+      searchClear.hidden = searchInput.value === '';
+    }
+
+    searchInput.addEventListener('input', function () {
+      var term = searchInput.value.trim();
+      syncClear();
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        render(term);
+      }, 250);
+    });
+
+    searchClear.addEventListener('click', function () {
+      searchInput.value = '';
+      syncClear();
+      lastTerm = '';
+      if (controller) controller.abort();
+      searchResults.innerHTML = '';
+      searchInput.focus();
+    });
+
+    // No scrim to click, so the transparent layer itself dismisses.
+    searchPanel.addEventListener('click', function (e) {
+      if (searchInner.contains(e.target)) return;
+      setSearch(false);
+      searchToggle.focus();
     });
   })();
 </script>
@@ -832,6 +1637,12 @@
       "default": true
     },
     {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Try a character, colour or age"
+    },
+    {
       "type": "checkbox",
       "id": "show_account",
       "label": "Show account",
@@ -878,9 +1689,25 @@
           "label": "Link"
         },
         {
+          "type": "select",
+          "id": "character",
+          "label": "Character",
+          "info": "Supplies the card artwork from the theme's built-in face stickers when no image is uploaded.",
+          "default": "jevika",
+          "options": [
+            { "value": "jevika", "label": "Jevika" },
+            { "value": "joy", "label": "Joy" },
+            { "value": "brutus", "label": "Brutus" },
+            { "value": "minku", "label": "Minku" },
+            { "value": "pinki", "label": "Pinki" },
+            { "value": "", "label": "None" }
+          ]
+        },
+        {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image",
+          "info": "Optional. Overrides the built-in character sticker."
         },
         {
           "type": "select",

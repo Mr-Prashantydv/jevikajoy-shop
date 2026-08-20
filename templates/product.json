@@ -1,0 +1,215 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "badge_joy_1": {
+          "type": "badge",
+          "settings": {
+            "text": "Next Gen Energy",
+            "character": "joy"
+          }
+        },
+        "badge_joy_2": {
+          "type": "badge",
+          "settings": {
+            "text": "Built Different",
+            "character": "joy"
+          }
+        },
+        "badge_joy_3": {
+          "type": "badge",
+          "settings": {
+            "text": "Own Your Game",
+            "character": "joy"
+          }
+        },
+        "badge_all_1": {
+          "type": "badge",
+          "settings": {
+            "text": "100% Soft Cotton",
+            "character": ""
+          }
+        },
+        "badge_all_2": {
+          "type": "badge",
+          "settings": {
+            "text": "Skin Friendly Inks",
+            "character": ""
+          }
+        },
+        "badge_all_3": {
+          "type": "badge",
+          "settings": {
+            "text": "Built For Play",
+            "character": ""
+          }
+        },
+        "tab_jevika": {
+          "type": "tab",
+          "settings": {
+            "label": "Jevika",
+            "collection": "jevika"
+          }
+        },
+        "tab_joy": {
+          "type": "tab",
+          "settings": {
+            "label": "Joy",
+            "collection": "joy"
+          }
+        },
+        "tab_brutus": {
+          "type": "tab",
+          "settings": {
+            "label": "Brutus",
+            "collection": "brutus"
+          }
+        },
+        "tab_minku": {
+          "type": "tab",
+          "settings": {
+            "label": "Minku",
+            "collection": "minku"
+          }
+        },
+        "tab_pinki": {
+          "type": "tab",
+          "settings": {
+            "label": "Pinki",
+            "collection": "pinki"
+          }
+        }
+      },
+      "block_order": [
+        "badge_joy_1",
+        "badge_joy_2",
+        "badge_joy_3",
+        "badge_all_1",
+        "badge_all_2",
+        "badge_all_3",
+        "tab_jevika",
+        "tab_joy",
+        "tab_brutus",
+        "tab_minku",
+        "tab_pinki"
+      ],
+      "settings": {
+        "add_label": "Add to Cart",
+        "sold_out_label": "Sold Out",
+        "unavailable_label": "Unavailable",
+        "trust_line": "Soft cotton, kind to skin. Easy 7-day exchanges.",
+        "tabs_label": "Shop by character",
+        "coming_soon_label": "Coming Soon",
+        "fallback_title": "Our Tee"
+      }
+    },
+    "fabric_story": {
+      "type": "fabric-story",
+      "blocks": {
+        "d1": {
+          "type": "detail",
+          "settings": {
+            "photo": "jjw-fabric-weave.jpg",
+            "title": "Soft cotton jersey",
+            "text": "knitted to move, and pre-shrunk so it still fits after the wash",
+            "tone": "pink"
+          }
+        },
+        "d2": {
+          "type": "detail",
+          "settings": {
+            "photo": "jjw-fabric-collar.jpg",
+            "title": "Ribbed collar",
+            "text": "stretches over a head in a hurry, then pulls back to shape",
+            "tone": "blue"
+          }
+        },
+        "d3": {
+          "type": "detail",
+          "settings": {
+            "photo": "jjw-fabric-shoulder.jpg",
+            "title": "Taped shoulders",
+            "text": "a strip of tape keeps the seam from stretching out",
+            "tone": "gold"
+          }
+        },
+        "d4": {
+          "type": "detail",
+          "settings": {
+            "photo": "jjw-fabric-hem.jpg",
+            "title": "Double-needle hems",
+            "text": "two rows of stitching, so nothing unravels on a fence",
+            "tone": "green"
+          }
+        },
+        "s1": {
+          "type": "spec",
+          "settings": {
+            "label": "Fabric",
+            "value": "100% cotton jersey"
+          }
+        },
+        "s2": {
+          "type": "spec",
+          "settings": {
+            "label": "Finish",
+            "value": "Pre-shrunk"
+          }
+        },
+        "s3": {
+          "type": "spec",
+          "settings": {
+            "label": "Wash",
+            "value": "Cold, like colours"
+          }
+        },
+        "s4": {
+          "type": "spec",
+          "settings": {
+            "label": "Dry",
+            "value": "Tumble low"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2",
+        "d3",
+        "d4",
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "settings": {
+        "heading": "Made to Survive Recess",
+        "intro": "<p>The details that decide whether a tee lasts one term or three</p>"
+      }
+    },
+    "feature": {
+      "type": "split-content",
+      "settings": {
+        "heading": "Built to Be Worn Out",
+        "image_position": "left",
+        "tag_one_name": "Brutus",
+        "tag_one_role": "Chief Good Boy",
+        "tag_two_name": "",
+        "button_label": "Meet the Squad"
+      }
+    },
+    "related": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "More From the Squad",
+        "products_to_show": 12
+      }
+    }
+  },
+  "order": [
+    "main",
+    "fabric_story",
+    "feature",
+    "related"
+  ]
+}

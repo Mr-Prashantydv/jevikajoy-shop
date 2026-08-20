@@ -1,0 +1,396 @@
+{%- comment -%}
+  Search results page. Same furniture as the collection page — pills, .hxxl
+  heading, product grid — so a shopper arriving from the header drawer
+  recognises where they are.
+
+  Filtering is Shopify's own. Liquid cannot read arbitrary query parameters,
+  so the only honest way to filter is through `search.filters`, which the
+  Search & Discovery app populates; this store already has availability, Size,
+  Colour and product tag configured. Shopify does the filtering, the counts are
+  real and pagination stays correct.
+
+  Only list filters are drawn. A price range needs two number inputs and is
+  skipped rather than half-rendered — add it here if a price filter is ever
+  turned on in admin.
+
+  Tag values arrive as `character:Joy` / `gender:Boys`, so the prefix is cut
+  for display. The tag itself is the taxonomy and must not be renamed: the
+  character collections are smart collections keyed on it.
+{%- endcomment -%}
+
+{%- liquid
+  comment
+    Searches carry a trailing wildcard, because that is what actually gives
+    prefix matching on this store — theme.js adds it on submit and explains
+    why. Echo the terms back without it.
+  endcomment
+  assign shown_terms = search.terms | remove_last: '*'
+
+  assign has_products = false
+  assign has_other = false
+  for item in search.results
+    if item.object_type == 'product'
+      assign has_products = true
+    else
+      assign has_other = true
+    endif
+  endfor
+
+  assign active_filters = 0
+  for filter in search.filters
+    assign active_filters = active_filters | plus: filter.active_values.size
+  endfor
+-%}
+
+{%- style -%}
+  #MainSearch-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 4rem 8rem;
+  }
+
+  #MainSearch-{{ section.id }} .ms__heading {
+    text-align: center;
+    /* .hxxl tracks 0.01em, which is 0.86px here; reference is a flat 0.6px. */
+    letter-spacing: 0.06rem;
+    color: var(--ink);
+  }
+
+  /* --- Search field ------------------------------------------------------ */
+
+  #MainSearch-{{ section.id }} .ms__form {
+    display: flex;
+    gap: 1rem;
+    max-width: 64rem;
+    margin: 3.2rem auto 0;
+  }
+
+  #MainSearch-{{ section.id }} .ms__input {
+    flex: 1;
+    min-width: 0;
+    min-height: 5.4rem;
+    padding: 1rem 2rem;
+    font-family: var(--font-body);
+    font-size: 1.8rem;
+    color: var(--ink);
+    background: var(--white);
+    border: 2px solid var(--sky);
+    border-radius: 0.8rem;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  #MainSearch-{{ section.id }} .ms__input::placeholder {
+    color: var(--ink-soft);
+  }
+
+  #MainSearch-{{ section.id }} .ms__submit .btn {
+    min-height: 0;
+    padding: 1rem 2.4rem;
+    font-size: 2.2rem;
+  }
+
+  /* --- Filters ----------------------------------------------------------- */
+
+  #MainSearch-{{ section.id }} .ms__filters {
+    margin: 4rem 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  #MainSearch-{{ section.id }} .ms__filter + .ms__filter {
+    margin-top: 2.4rem;
+  }
+
+  #MainSearch-{{ section.id }} .ms__filter-label {
+    margin: 0 0 1.2rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  #MainSearch-{{ section.id }} .ms__clear {
+    display: block;
+    margin: 2.4rem 0 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.4rem;
+  }
+
+  #MainSearch-{{ section.id }} .ms__clear:hover {
+    color: var(--blue);
+  }
+
+  #MainSearch-{{ section.id }} .ms__count {
+    margin: 4rem 0 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.4rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  /* --- Results ----------------------------------------------------------- */
+
+  #MainSearch-{{ section.id }} .ms__grid {
+    margin-top: 4rem;
+  }
+
+  #MainSearch-{{ section.id }} .ms__other {
+    max-width: 76rem;
+    margin: 4rem auto 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainSearch-{{ section.id }} .ms__other li + li {
+    border-block-start: 2px solid var(--sky);
+  }
+
+  #MainSearch-{{ section.id }} .ms__other a {
+    display: block;
+    padding-block: 2rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.4rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  #MainSearch-{{ section.id }} .ms__other a:hover {
+    color: var(--blue);
+  }
+
+  #MainSearch-{{ section.id }} .ms__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 5rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.2rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  #MainSearch-{{ section.id }} .ms__pagination a {
+    color: var(--ink);
+  }
+
+  #MainSearch-{{ section.id }} .ms__pagination a:hover {
+    color: var(--blue);
+  }
+
+  @media screen and (max-width: 749px) {
+    #MainSearch-{{ section.id }} {
+      padding-block: 2rem 5rem;
+    }
+
+    #MainSearch-{{ section.id }} .ms__form {
+      margin-top: 2.4rem;
+    }
+
+    #MainSearch-{{ section.id }} .ms__submit .btn {
+      padding: 1rem 1.6rem;
+      font-size: 1.8rem;
+    }
+
+    #MainSearch-{{ section.id }} .ms__filters {
+      margin-top: 3rem;
+    }
+
+    #MainSearch-{{ section.id }} .ms__grid {
+      margin-top: 3rem;
+    }
+  }
+{%- endstyle -%}
+
+<section id="MainSearch-{{ section.id }}">
+  <div class="page-width">
+    <h1 class="hxxl ms__heading">
+      {%- if search.performed -%}
+        {{ section.settings.results_heading | escape }}
+      {%- else -%}
+        {{ section.settings.heading | escape }}
+      {%- endif -%}
+    </h1>
+
+    {%- comment -%}
+      theme.js appends the wildcard on submit; see the note there.
+    {%- endcomment -%}
+    <form action="{{ routes.search_url }}" method="get" role="search" class="ms__form">
+      <input type="hidden" name="type" value="product">
+
+      <label class="visually-hidden" for="MainSearchInput-{{ section.id }}">
+        {{ 'general.search.search' | t }}
+      </label>
+      <input
+        id="MainSearchInput-{{ section.id }}"
+        class="ms__input"
+        type="search"
+        name="q"
+        value="{{ shown_terms | escape }}"
+        placeholder="{{ section.settings.placeholder | escape }}"
+        autocomplete="off"
+      >
+
+      <span class="ms__submit btn-wrap">
+        <span class="btn-shadow" aria-hidden="true"></span>
+        <button type="submit" class="btn">{{ 'general.search.search' | t }}</button>
+      </span>
+    </form>
+
+    {%- if search.filters.size > 0 -%}
+      <div class="ms__filters">
+        {%- for filter in search.filters -%}
+          {%- if filter.type == 'list' and filter.values.size > 0 -%}
+            <div class="ms__filter">
+              <h2 class="ms__filter-label" id="Filter-{{ section.id }}-{{ forloop.index }}">
+                {{- filter.label | escape -}}
+              </h2>
+              <ul class="jjw-pills" aria-labelledby="Filter-{{ section.id }}-{{ forloop.index }}">
+                {%- for value in filter.values -%}
+                  {%- liquid
+                    comment
+                      Tag values read `character:Joy`; only the part after the
+                      colon is shown. The tag itself stays as it is — the
+                      character collections are smart collections keyed on it.
+                    endcomment
+                    assign value_label = value.label
+                    if value_label contains ':'
+                      assign value_label = value_label | split: ':' | last | strip
+                    endif
+                  -%}
+                  <li>
+                    <a
+                      class="jjw-pill"
+                      href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                      {% if value.active %}aria-current="page"{% endif %}
+                    >
+                      {{- value_label | escape -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if active_filters > 0 -%}
+          <a class="ms__clear" href="{{ routes.search_url }}?q={{ search.terms | url_encode }}&type=product">
+            {{- section.settings.clear_text | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 24 -%}
+        {%- if search.results_count > 0 -%}
+          <p class="ms__count">
+            {{-
+              'general.search.results_with_count'
+              | t: count: search.results_count, terms: shown_terms
+            -}}
+          </p>
+
+          {%- if has_products -%}
+            <ul class="jjw-grid ms__grid">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  <li
+                    class="scroll-trigger animate--slide-in"
+                    style="--animation-order: {{ forloop.index0 }};"
+                  >
+                    {% render 'product-card', product: item %}
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if has_other -%}
+            <ul class="ms__other">
+              {%- for item in search.results -%}
+                {%- unless item.object_type == 'product' -%}
+                  <li><a href="{{ item.url }}">{{ item.title | escape }}</a></li>
+                {%- endunless -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            <nav
+              class="ms__pagination"
+              aria-label="{{ 'general.meta.page' | t: page: paginate.current_page }}"
+            >
+              {%- if paginate.previous -%}
+                <a href="{{ paginate.previous.url }}">{{ 'accessibility.previous' | t }}</a>
+              {%- endif -%}
+              <span>{{ 'general.meta.page' | t: page: paginate.current_page }} / {{ paginate.pages }}</span>
+              {%- if paginate.next -%}
+                <a href="{{ paginate.next.url }}">{{ 'accessibility.next' | t }}</a>
+              {%- endif -%}
+            </nav>
+          {%- endif -%}
+        {%- else -%}
+          <p class="ms__count">
+            {{- 'general.search.no_results' | t: terms: shown_terms -}}
+          </p>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find Your Tee"
+    },
+    {
+      "type": "text",
+      "id": "results_heading",
+      "label": "Heading with results",
+      "default": "Search Results"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Field placeholder",
+      "default": "Try a character, colour or age"
+    },
+    {
+      "type": "text",
+      "id": "clear_text",
+      "label": "Clear filters link",
+      "default": "Clear all filters"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search"
+    }
+  ]
+}
+{% endschema %}

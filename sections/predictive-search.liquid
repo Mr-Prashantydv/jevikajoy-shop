@@ -1,0 +1,138 @@
+{%- comment -%}
+  Predictive search results, fetched by the header search drawer as
+    /search/suggest?q=…&resources[type]=query,product,collection&section_id=predictive-search
+  and injected into [data-hdr-search-results]. Never rendered by a template, so
+  it carries no schema and cannot be added in the theme editor.
+
+  Two columns, suggestions then products, matching the reference.
+
+  The suggestions column shows Shopify's own `queries` first. That corpus is
+  built from what shoppers have actually searched, so on this store it is
+  nearly empty — only "tee", "smart tech" and "boxer tee" exist today, and
+  "adven" or "bru" return none. Collections follow in the same column so it is
+  never blank; as the query corpus grows they simply drop below the queries.
+
+  Markup only: the .psearch-* rules live in sections/header.liquid, scoped to
+  the header. Putting a {% style %} block here would inject a fresh <style>
+  into the drawer on every keystroke.
+{%- endcomment -%}
+
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign queries = predictive_search.resources.queries
+    assign products = predictive_search.resources.products
+    assign collections = predictive_search.resources.collections
+
+    assign suggestion_count = queries.size | plus: collections.size
+    assign found = suggestion_count | plus: products.size
+
+    comment
+      The drawer sends "adven*" because that is what gives prefix matching.
+      Show the visitor what they typed, not the wildcard.
+    endcomment
+    assign shown_terms = predictive_search.terms | remove_last: '*'
+  -%}
+
+  {%- if found == 0 -%}
+    <p class="psearch-empty">{{ 'general.search.no_results' | t: terms: shown_terms }}</p>
+  {%- else -%}
+    <div class="psearch-cols">
+      {%- if suggestion_count > 0 -%}
+        <div class="psearch-col">
+          <h2 class="psearch-head" id="PsearchSuggestions">
+            {{- 'general.search.suggestions' | t -}}
+          </h2>
+          <ul class="psearch-list" aria-labelledby="PsearchSuggestions">
+            {%- for item in queries -%}
+              <li>
+                {%- comment -%}
+                  styled_text wraps the part that matched what was typed, so
+                  the completion is what reads bold. Shopify's own markup, not
+                  ours — hence no escape filter.
+                {%- endcomment -%}
+                <a
+                  class="psearch-item"
+                  href="{{ routes.search_url }}?q={{ item.text | url_encode }}&type=product"
+                >
+                  {{- item.styled_text -}}
+                </a>
+              </li>
+            {%- endfor -%}
+
+            {%- comment -%}
+              Looped as `item`, not `collection` — that name would shadow the
+              global object.
+            {%- endcomment -%}
+            {%- for item in collections -%}
+              <li>
+                <a class="psearch-item" href="{{ item.url }}">{{ item.title | escape }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if products.size > 0 -%}
+        <div class="psearch-col">
+          <h2 class="psearch-head" id="PsearchProducts">
+            {{- 'general.search.products' | t -}}
+          </h2>
+          <ul class="psearch-list" aria-labelledby="PsearchProducts">
+            {%- for item in products -%}
+              {%- capture pair -%}
+                {%- render 'character-pair', product: item -%}
+              {%- endcapture -%}
+              <li>
+                <a class="psearch-product" href="{{ item.url }}">
+                  <span class="psearch-thumb" data-pair="{{ pair | strip }}">
+                    {%- if item.featured_media != blank -%}
+                      {{
+                        item.featured_media
+                        | image_url: width: 160
+                        | image_tag:
+                          loading: 'lazy',
+                          alt: item.featured_media.alt | default: item.title,
+                          widths: '80, 120, 160',
+                          sizes: '62px'
+                      }}
+                    {%- endif -%}
+                  </span>
+                  <span class="psearch-name">{{ item.title | escape }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%}
+      Href keeps the wildcard so the results page finds the same set; the
+      label shows the plain terms.
+    {%- endcomment -%}
+    <a
+      class="psearch-all"
+      href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&type=product"
+    >
+      <span>{{ 'general.search.search_for' | t: terms: shown_terms }}</span>
+      <svg viewBox="0 0 20 14" fill="none" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M12.79.15a.5.5 0 0 0-.7.71L16.23 6H.5a.5.5 0 0 0 0 1h15.73l-4.14 5.14a.5.5 0 0 0 .78.62l4.9-6.08a.5.5 0 0 0 0-.63z"
+        />
+      </svg>
+    </a>
+  {%- endif -%}
+
+  {%- comment -%}
+    The live region is [data-hdr-search-results] in header.liquid, which
+    persists across fetches. A role="status" declared here would be inserted
+    along with its own contents, and a region that appears already-populated
+    is not reliably announced.
+  {%- endcomment -%}
+  <span class="visually-hidden">
+    {%- if found > 0 -%}
+      {{- 'general.search.results_with_count' | t: count: found, terms: shown_terms -}}
+    {%- endif -%}
+  </span>
+{%- endif -%}

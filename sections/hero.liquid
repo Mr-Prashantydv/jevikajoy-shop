@@ -14,10 +14,19 @@
     position: relative;
   }
 
+  /* Keep the hero within one screen. 16/10 alone overflows on most viewports
+     (1920x1080 would compute to 1200px), so cap it and let the image crop.
+     dvh follows mobile browser chrome; the vh line is the fallback. */
+  #Hero-{{ section.id }} {
+    background: {{ section.settings.backdrop_color }};
+  }
+
   #Hero-{{ section.id }} .hero__media {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 10;
+    max-height: 100vh;
+    max-height: 100dvh;
   }
 
   #Hero-{{ section.id }} .hero__image {
@@ -42,16 +51,23 @@
   #Hero-{{ section.id }} .hero__text {
     max-width: 67rem;
     padding-block: 4rem;
-    padding-left: 3.6rem;
+    padding-left: 8rem;
   }
 
+  /* The hero art is a #034CA2 royal-blue field. Navy measured 1.59:1 against it
+     (invisible); cream measures 7.67:1. The hard shadow goes to a deeper blue so
+     it reads as depth on the field rather than as a second colour. */
   #Hero-{{ section.id }} .hero__heading {
-    color: var(--ink);
-    text-shadow: 4px 4px 0 var(--green-bg);
+    color: {{ section.settings.heading_color }};
+    text-shadow: 5px 5px 0 {{ section.settings.heading_shadow }};
   }
 
   #Hero-{{ section.id }} .hero__cta {
-    margin-top: 2rem;
+    margin-top: 2.4rem;
+  }
+
+  #Hero-{{ section.id }} .hero__cta .btn {
+    padding-inline: 3.6rem;
   }
 
   #Hero-{{ section.id }} .hero__stickers {
@@ -83,9 +99,73 @@
     height: 30rem;
   }
 
+  /* Text stickers: tilted tags pinned over the artwork, no PNG required. */
+  #Hero-{{ section.id }} .hero__tag {
+    position: absolute;
+    z-index: 101;
+    left: var(--tag-x, 78%);
+    top: var(--tag-y, 42%);
+    display: block;
+    padding: 1.1rem 2rem 1rem;
+    border-radius: 0.4rem;
+    background: var(--tag-bg, var(--pink));
+    color: var(--tag-fg, var(--cream));
+    box-shadow: 5px 5px 0 0 var(--tag-shadow, rgba(0, 0, 0, 0.18));
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.6rem;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    text-wrap: balance;
+    max-width: 22rem;
+    transform: rotate(var(--rot, -8deg));
+    transform-origin: center;
+    animation: jjw-hero-tag 7s ease-in-out infinite;
+    animation-delay: var(--tag-delay, 0s);
+    pointer-events: none;
+  }
+
+  @keyframes jjw-hero-tag {
+    0%   { transform: rotate(var(--rot, -8deg)) translateY(-12px) scale(0.92); }
+    5%   { transform: rotate(var(--rot, -8deg)) translateY(0) scale(1.05); }
+    9%   { transform: rotate(var(--rot, -8deg)) translateY(-7px) scale(1); }
+    13%  { transform: rotate(var(--rot, -8deg)) translateY(0) scale(1.02); }
+    17%  { transform: rotate(var(--rot, -8deg)) translateY(-3px) scale(1); }
+    21%, 100% { transform: rotate(var(--rot, -8deg)) translateY(0) scale(1); }
+  }
+
+  @media screen and (max-width: 749px) {
+    #Hero-{{ section.id }} .hero__tag {
+      font-size: 1.5rem;
+      padding: 0.7rem 1.2rem 0.6rem;
+      max-width: 13rem;
+      box-shadow: 3px 3px 0 0 var(--tag-shadow, rgba(0, 0, 0, 0.18));
+    }
+  }
+
   @media screen and (max-width: 749px) {
     #Hero-{{ section.id }} .hero__media {
-      aspect-ratio: 16 / 9;
+      /* 16/9 collapsed the hero to ~314px on a phone. The reference fills most
+         of the screen, so switch to a portrait ratio with a viewport floor. */
+      aspect-ratio: 3 / 4;
+      min-height: 86vh;
+      min-height: 86dvh;
+      max-height: 100dvh;
+    }
+
+    #Hero-{{ section.id }} .hero__text {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      /* Clear the fixed header, which overlays the hero. */
+      padding-top: 12rem;
+      padding-bottom: 4rem;
+    }
+
+    /* Reference sits the copy low in the frame rather than centred. */
+    #Hero-{{ section.id }} .hero__layer {
+      align-items: flex-end;
     }
 
     #Hero-{{ section.id }} .hero__heading {
@@ -108,6 +188,33 @@
   id="Hero-{{ section.id }}"
   class="banner-section scroll-trigger animate--fade-in"
 >
+  {%- for i in (1..2) -%}
+    {%- if i == 1 -%}
+      {%- assign tg = section.settings.tag_one_text -%}
+      {%- assign tbg = section.settings.tag_one_bg -%}
+      {%- assign tfg = section.settings.tag_one_fg -%}
+      {%- assign tx = section.settings.tag_one_x -%}
+      {%- assign ty = section.settings.tag_one_y -%}
+      {%- assign tr = section.settings.tag_one_rotate -%}
+      {%- assign td = '0s' -%}
+    {%- else -%}
+      {%- assign tg = section.settings.tag_two_text -%}
+      {%- assign tbg = section.settings.tag_two_bg -%}
+      {%- assign tfg = section.settings.tag_two_fg -%}
+      {%- assign tx = section.settings.tag_two_x -%}
+      {%- assign ty = section.settings.tag_two_y -%}
+      {%- assign tr = section.settings.tag_two_rotate -%}
+      {%- assign td = '0.5s' -%}
+    {%- endif -%}
+    {%- if tg != blank -%}
+      <span
+        class="hero__tag"
+        aria-hidden="true"
+        style="--tag-x:{{ tx }}%;--tag-y:{{ ty }}%;--rot:{{ tr }}deg;--tag-bg:{{ tbg }};--tag-fg:{{ tfg }};--tag-shadow:{{ tbg | color_darken: 18 }};--tag-delay:{{ td }};"
+      >{{ tg | escape }}</span>
+    {%- endif -%}
+  {%- endfor -%}
+
   {%- if section.settings.sticker_1 != blank or section.settings.sticker_2 != blank -%}
     <div class="hero__stickers" aria-hidden="true">
       {%- if section.settings.sticker_1 != blank -%}
@@ -174,6 +281,29 @@
   "name": "Hero",
   "settings": [
     {
+      "type": "header",
+      "content": "Colour"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#FFF6EB"
+    },
+    {
+      "type": "color",
+      "id": "heading_shadow",
+      "label": "Heading shadow",
+      "default": "#012F66"
+    },
+    {
+      "type": "color",
+      "id": "backdrop_color",
+      "label": "Backdrop behind image",
+      "default": "#034CA2",
+      "info": "Matches the artwork's field so any crop edge blends."
+    },
+    {
       "type": "image_picker",
       "id": "image",
       "label": "Hero image",
@@ -216,6 +346,110 @@
       "type": "image_picker",
       "id": "sticker_2",
       "label": "Sticker 2"
+    },
+    {
+      "type": "header",
+      "content": "Floating tags"
+    },
+    {
+      "type": "paragraph",
+      "content": "Tilted labels over the artwork. Leave text blank to hide one. Position is a percentage of the hero, from its top-left."
+    },
+    {
+      "type": "text",
+      "id": "tag_one_text",
+      "label": "Tag 1 text",
+      "default": "Soft on skin"
+    },
+    {
+      "type": "color",
+      "id": "tag_one_bg",
+      "label": "Tag 1 background",
+      "default": "#E5377E"
+    },
+    {
+      "type": "color",
+      "id": "tag_one_fg",
+      "label": "Tag 1 text colour",
+      "default": "#FFF6EB"
+    },
+    {
+      "type": "range",
+      "id": "tag_one_x",
+      "label": "Tag 1 across",
+      "min": 0,
+      "max": 92,
+      "step": 1,
+      "unit": "%",
+      "default": 78
+    },
+    {
+      "type": "range",
+      "id": "tag_one_y",
+      "label": "Tag 1 down",
+      "min": 0,
+      "max": 92,
+      "step": 1,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "tag_one_rotate",
+      "label": "Tag 1 tilt",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "deg",
+      "default": -8
+    },
+    {
+      "type": "text",
+      "id": "tag_two_text",
+      "label": "Tag 2 text",
+      "default": "Built for play"
+    },
+    {
+      "type": "color",
+      "id": "tag_two_bg",
+      "label": "Tag 2 background",
+      "default": "#59C8F6"
+    },
+    {
+      "type": "color",
+      "id": "tag_two_fg",
+      "label": "Tag 2 text colour",
+      "default": "#1A2F5E"
+    },
+    {
+      "type": "range",
+      "id": "tag_two_x",
+      "label": "Tag 2 across",
+      "min": 0,
+      "max": 92,
+      "step": 1,
+      "unit": "%",
+      "default": 74
+    },
+    {
+      "type": "range",
+      "id": "tag_two_y",
+      "label": "Tag 2 down",
+      "min": 0,
+      "max": 92,
+      "step": 1,
+      "unit": "%",
+      "default": 66
+    },
+    {
+      "type": "range",
+      "id": "tag_two_rotate",
+      "label": "Tag 2 tilt",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "deg",
+      "default": 7
     }
   ],
   "presets": [

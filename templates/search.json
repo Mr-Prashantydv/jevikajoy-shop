@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-search",
+      "settings": {
+        "heading": "Find Your Tee",
+        "results_heading": "Search Results",
+        "placeholder": "Try a character, colour or age",
+        "clear_text": "Clear all filters"
+      }
+    }
+  },
+  "order": ["main"]
+}

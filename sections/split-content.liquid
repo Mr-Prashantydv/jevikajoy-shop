@@ -21,7 +21,6 @@
     flex-direction: row;
     align-items: flex-end;
     gap: 4rem;
-    min-height: 75vh;
     border-radius: 2rem;
     background: var(--pink);
     color: var(--cream);
@@ -29,19 +28,23 @@
 
   #SplitContent-{{ section.id }} .sc__media {
     position: relative;
-    flex: 1 1 0%;
-    width: 100%;
-    min-height: 60vh;
+    flex: 0 0 45%;
+    min-width: 0;
+    align-self: flex-end;
+    display: flex;
+    align-items: flex-end;
     overflow: hidden;
+    border-radius: 0 0 0 2rem;
   }
 
+  /* Let the artwork size itself from its own ratio instead of being contained
+     inside a viewport-height box, which letterboxed it and left dead space. */
   #SplitContent-{{ section.id }} .sc__img {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    position: static;
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: contain;
+    display: block;
   }
 
   #SplitContent-{{ section.id }} .sc__badge {
@@ -49,6 +52,93 @@
     width: 25%;
     height: auto;
     transform: scale(0.3) rotate(-5deg);
+  }
+
+  /* Two overlapping tags per label, each tilted differently, with free-floating
+     spark triangles around them. Tonal orange-on-amber, as in the reference. */
+  #SplitContent-{{ section.id }} .sc__tag {
+    position: absolute;
+    z-index: 3;
+    left: var(--tag-x, 50%);
+    top: var(--tag-y, 10%);
+    transform: rotate(var(--rot, -6deg));
+    transform-origin: center;
+    animation: jjw-tag-bounce 7s ease-in-out infinite;
+    animation-delay: var(--tag-delay, 0s);
+    pointer-events: none;
+  }
+
+  #SplitContent-{{ section.id }} .sc__tag-card {
+    display: block;
+    width: max-content;
+    background: var(--yellow);
+    color: #C2410C;
+    border-radius: 0.6rem;
+    box-shadow: 3px 3px 0 0 var(--gold);
+    white-space: nowrap;
+  }
+
+  #SplitContent-{{ section.id }} .sc__tag-card--name {
+    padding: 0.7rem 1.6rem 0.6rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 2.6rem;
+    line-height: 1.05;
+    transform: rotate(-3deg);
+  }
+
+  /* The role sits on its own tag, nudged down-right and counter-rotated so the
+     two read as separate labels stuck on top of each other. */
+  #SplitContent-{{ section.id }} .sc__tag-card--role {
+    margin: -0.5rem 0 0 1.8rem;
+    padding: 0.45rem 1.3rem 0.4rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1;
+    transform: rotate(4deg);
+  }
+
+  #SplitContent-{{ section.id }} .sc__spark {
+    position: absolute;
+    width: 1.6rem;
+    height: 1.6rem;
+    background: var(--gold);
+    clip-path: polygon(0% 0%, 100% 42%, 32% 100%);
+    pointer-events: none;
+  }
+
+  #SplitContent-{{ section.id }} .sc__spark--a {
+    top: -2.2rem;
+    left: 6%;
+    transform: rotate(-35deg);
+  }
+
+  #SplitContent-{{ section.id }} .sc__spark--b {
+    bottom: -2rem;
+    right: 4%;
+    transform: rotate(145deg);
+  }
+
+  /* Bounces in over the first ~1.5s, settles, then repeats on the 7s cycle. */
+  @keyframes jjw-tag-bounce {
+    0%   { transform: rotate(var(--rot, -6deg)) translateY(-14px) scale(0.9); }
+    5%   { transform: rotate(var(--rot, -6deg)) translateY(0) scale(1.06); }
+    9%   { transform: rotate(var(--rot, -6deg)) translateY(-8px) scale(1); }
+    13%  { transform: rotate(var(--rot, -6deg)) translateY(0) scale(1.02); }
+    17%  { transform: rotate(var(--rot, -6deg)) translateY(-4px) scale(1); }
+    21%  { transform: rotate(var(--rot, -6deg)) translateY(0) scale(1); }
+    100% { transform: rotate(var(--rot, -6deg)) translateY(0) scale(1); }
+  }
+
+  @media screen and (max-width: 749px) {
+    #SplitContent-{{ section.id }} .sc__tag-card--name { font-size: 1.8rem; padding: 0.5rem 1.1rem 0.45rem; }
+    #SplitContent-{{ section.id }} .sc__tag-card--role { font-size: 1.05rem; padding: 0.35rem 0.9rem 0.3rem; margin-left: 1.2rem; }
+    #SplitContent-{{ section.id }} .sc__spark { width: 1.1rem; height: 1.1rem; }
+    #SplitContent-{{ section.id }} .sc__spark--a { top: -1.5rem; }
+    #SplitContent-{{ section.id }} .sc__spark--b { bottom: -1.4rem; }
   }
 
   #SplitContent-{{ section.id }} .sc__badge--one {
@@ -60,6 +150,25 @@
   #SplitContent-{{ section.id }} .sc__badge--two {
     left: 42%;
     bottom: 5%;
+  }
+
+  @media screen and (max-width: 749px) {
+    #SplitContent-{{ section.id }} .sc__tag {
+      padding: 0.6rem 1.1rem 0.5rem;
+      box-shadow: 3px 3px 0 0 var(--gold);
+    }
+
+    #SplitContent-{{ section.id }} .sc__tag-name { font-size: 1.7rem; }
+    #SplitContent-{{ section.id }} .sc__tag-role { font-size: 1rem; }
+
+    #SplitContent-{{ section.id }} .sc__tag::before,
+    #SplitContent-{{ section.id }} .sc__tag::after {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    #SplitContent-{{ section.id }} .sc__tag::before { top: -0.8rem; }
+    #SplitContent-{{ section.id }} .sc__tag::after { bottom: -0.8rem; }
   }
 
   #SplitContent-{{ section.id }} .sc__badge:not(.scroll-trigger--offscreen) {
@@ -85,14 +194,17 @@
     }
   }
 
+  /* The conversion turned absolute Y-offsets from the React layout into stacked
+     top margins (14.1 + 18.3 + 38.6rem = 710px), which inflated this column and
+     stranded the artwork at the bottom of the panel. Real vertical rhythm here. */
   #SplitContent-{{ section.id }} .sc__copy {
     position: relative;
     display: flex;
     flex: 1 1 0%;
-    width: 100%;
-    align-items: flex-start;
+    min-width: 0;
+    align-items: center;
     justify-content: flex-start;
-    padding: 1rem 2rem;
+    padding: 6rem 4rem 6rem 2rem;
   }
 
   #SplitContent-{{ section.id }} .sc__copy-inner {
@@ -100,15 +212,15 @@
   }
 
   #SplitContent-{{ section.id }} .sc__title {
-    margin-top: 14.1rem;
+    margin-top: 0;
     color: var(--cream);
   }
 
   #SplitContent-{{ section.id }} .sc__text {
-    margin-top: 18.3rem;
+    margin-top: 3rem;
     max-width: 62rem;
     font-size: 2.7rem;
-    line-height: 3.51rem;
+    line-height: 1.3;
     color: var(--cream);
   }
 
@@ -117,7 +229,7 @@
   }
 
   #SplitContent-{{ section.id }} .sc__btn {
-    margin-top: 38.6rem;
+    margin-top: 4rem;
     --btn-bg: var(--yellow);
     --btn-fg: var(--ink-deep);
     --btn-shadow-color: var(--gold);
@@ -133,11 +245,14 @@
     }
 
     #SplitContent-{{ section.id }} .sc__media {
-      min-height: 40vh;
+      flex: 0 0 auto;
+      align-self: auto;
+      border-radius: 0 0 2rem 2rem;
     }
 
     #SplitContent-{{ section.id }} .sc__copy {
       justify-content: center;
+      padding: 4rem 2rem;
     }
 
     /* The desktop margin rhythm is far taller than a phone viewport. */
@@ -174,7 +289,14 @@
             | image_tag: class: 'sc__img', loading: 'lazy', widths: '400, 600, 900, 1200, 1400', alt: section.settings.image.alt
           }}
         {%- else -%}
-          <img src="{{ 'cast-group.jpg' | asset_url }}" alt="" class="sc__img" loading="lazy">
+          <img
+            src="{{ 'jjw-about.png' | asset_url }}"
+            alt=""
+            class="sc__img"
+            width="1536"
+            height="1024"
+            loading="lazy"
+          >
         {%- endif -%}
 
         {%- if section.settings.badge_one != blank -%}
@@ -192,6 +314,37 @@
             | image_tag: class: 'sc__badge sc__badge--two scroll-trigger', loading: 'lazy', widths: '200, 400, 600', alt: ''
           }}
         {%- endif -%}
+
+        {%- for i in (1..2) -%}
+          {%- if i == 1 -%}
+            {%- assign tag_name = section.settings.tag_one_name -%}
+            {%- assign tag_role = section.settings.tag_one_role -%}
+            {%- assign tag_x = section.settings.tag_one_x -%}
+            {%- assign tag_y = section.settings.tag_one_y -%}
+            {%- assign tag_rot = section.settings.tag_one_rotate -%}
+            {%- assign tag_delay = '0s' -%}
+          {%- else -%}
+            {%- assign tag_name = section.settings.tag_two_name -%}
+            {%- assign tag_role = section.settings.tag_two_role -%}
+            {%- assign tag_x = section.settings.tag_two_x -%}
+            {%- assign tag_y = section.settings.tag_two_y -%}
+            {%- assign tag_rot = section.settings.tag_two_rotate -%}
+            {%- assign tag_delay = '0.4s' -%}
+          {%- endif -%}
+          {%- if tag_name != blank -%}
+            <span
+              class="sc__tag"
+              style="--tag-x:{{ tag_x }}%;--tag-y:{{ tag_y }}%;--rot:{{ tag_rot }}deg;--tag-delay:{{ tag_delay }};"
+            >
+              <span class="sc__tag-card sc__tag-card--name">{{ tag_name | escape }}</span>
+              {%- if tag_role != blank -%}
+                <span class="sc__tag-card sc__tag-card--role">{{ tag_role | escape }}</span>
+              {%- endif -%}
+              <i class="sc__spark sc__spark--a" aria-hidden="true"></i>
+              <i class="sc__spark sc__spark--b" aria-hidden="true"></i>
+            </span>
+          {%- endif -%}
+        {%- endfor -%}
       </div>
 
       <div class="sc__copy">
@@ -227,7 +380,7 @@
       "type": "image_picker",
       "id": "image",
       "label": "Main image",
-      "info": "Defaults to cast-group.jpg when empty."
+      "info": "Defaults to jjw-about.png when empty."
     },
     {
       "type": "image_picker",
@@ -241,11 +394,27 @@
       "label": "Badge image 2",
       "info": "Optional overlay. Pops in near the bottom of the image."
     },
+    { "type": "header", "content": "Photo labels" },
+    {
+      "type": "paragraph",
+      "content": "Tilted tags pinned over the photo. Leave a name blank to hide that tag. Positions are a percentage of the photo, measured from its top-left."
+    },
+    { "type": "text", "id": "tag_one_name", "label": "Tag 1 name", "default": "Founder" },
+    { "type": "text", "id": "tag_one_role", "label": "Tag 1 role", "default": "Chief Dreamer" },
+    { "type": "range", "id": "tag_one_x", "label": "Tag 1 across", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 52 },
+    { "type": "range", "id": "tag_one_y", "label": "Tag 1 down", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 9 },
+    { "type": "range", "id": "tag_one_rotate", "label": "Tag 1 tilt", "min": -15, "max": 15, "step": 1, "unit": "deg", "default": -6 },
+    { "type": "text", "id": "tag_two_name", "label": "Tag 2 name", "default": "Brutus" },
+    { "type": "text", "id": "tag_two_role", "label": "Tag 2 role", "default": "Chief Good Boy" },
+    { "type": "range", "id": "tag_two_x", "label": "Tag 2 across", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 70 },
+    { "type": "range", "id": "tag_two_y", "label": "Tag 2 down", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 47 },
+    { "type": "range", "id": "tag_two_rotate", "label": "Tag 2 tilt", "min": -15, "max": 15, "step": 1, "unit": "deg", "default": 5 },
+
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "A Recipe For Inclusivity"
+      "default": "Heroes Made for Every Kid"
     },
     {
       "type": "richtext",

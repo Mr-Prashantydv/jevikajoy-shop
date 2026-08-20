@@ -1,0 +1,64 @@
+{%- comment -%}
+  One character card, used by both the desktop mega panel and the mobile
+  drawer.
+
+  Usage:
+    {% render 'header-card', block: block %}            -> mega panel
+    {% render 'header-card', block: block, style: 'drawer' %}
+
+  Art resolution order:
+    1. the block's own image_picker, if the merchant set one
+    2. <character>-face.png from theme assets, keyed off the character select
+
+  The face PNGs are cut-out stickers on transparency and ship with the theme,
+  so the cards populate without anyone uploading to Files first. A card whose
+  character has no matching asset renders label-only — never a broken <img>.
+{%- endcomment -%}
+
+{%- liquid
+  assign hc_character = block.settings.character | downcase | strip
+  assign hc_label = block.settings.label | default: hc_character | capitalize
+
+  assign hc_known = 'jevika,joy,brutus,minku,pinki' | split: ','
+  assign hc_asset = ''
+  for name in hc_known
+    if name == hc_character
+      assign hc_asset = name | append: '-face.png'
+    endif
+  endfor
+
+  if style == 'drawer'
+    assign hc_root = 'hdr-drawer-card'
+    assign hc_media = 'hdr-drawer-card-media'
+    assign hc_text = 'hdr-drawer-card-label'
+  else
+    assign hc_root = 'hdr-card'
+    assign hc_media = 'hdr-card-media'
+    assign hc_text = 'hdr-card-label'
+  endif
+-%}
+
+<div class="{{ hc_root }}" data-palette="{{ block.settings.palette }}" {{ block.shopify_attributes }}>
+  <a href="{{ block.settings.link | default: routes.root_url }}">
+    {%- if block.settings.image != blank -%}
+      <div class="{{ hc_media }}">
+        {{
+          block.settings.image
+          | image_url: width: 400
+          | image_tag: alt: hc_label, loading: 'lazy', widths: '200, 300, 400'
+        }}
+      </div>
+    {%- elsif hc_asset != blank -%}
+      <div class="{{ hc_media }}">
+        <img
+          src="{{ hc_asset | asset_url }}"
+          alt="{{ hc_label | escape }}"
+          width="800"
+          height="800"
+          loading="lazy"
+        >
+      </div>
+    {%- endif -%}
+    <div class="{{ hc_text }}">{{ hc_label | escape }}</div>
+  </a>
+</div>

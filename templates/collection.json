@@ -1,0 +1,99 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "pill_all": {
+          "type": "filter",
+          "settings": {
+            "label": "All Tees"
+          }
+        },
+        "pill_jevika": {
+          "type": "filter",
+          "settings": {
+            "label": "Jevika",
+            "collection": "jevika"
+          }
+        },
+        "pill_joy": {
+          "type": "filter",
+          "settings": {
+            "label": "Joy",
+            "collection": "joy"
+          }
+        },
+        "pill_brutus": {
+          "type": "filter",
+          "settings": {
+            "label": "Brutus",
+            "collection": "brutus"
+          }
+        },
+        "pill_minku": {
+          "type": "filter",
+          "settings": {
+            "label": "Minku",
+            "collection": "minku"
+          }
+        },
+        "pill_pinki": {
+          "type": "filter",
+          "settings": {
+            "label": "Pinki",
+            "collection": "pinki"
+          }
+        },
+        "pill_boys": {
+          "type": "filter",
+          "settings": {
+            "label": "Boys",
+            "collection": "boys"
+          }
+        },
+        "pill_girls": {
+          "type": "filter",
+          "settings": {
+            "label": "Girls",
+            "collection": "girls"
+          }
+        }
+      },
+      "block_order": [
+        "pill_all",
+        "pill_jevika",
+        "pill_joy",
+        "pill_brutus",
+        "pill_minku",
+        "pill_pinki",
+        "pill_boys",
+        "pill_girls"
+      ],
+      "settings": {
+        "fallback_title": "The Full Squad",
+        "show_price": true,
+        "empty_text": "Nothing here yet — check back soon"
+      }
+    },
+    "trust": {
+      "type": "product-trust",
+      "blocks": {
+        "b1": { "type": "badge", "settings": { "label": "No Itch", "tone": "pink" } },
+        "b2": { "type": "badge", "settings": { "label": "No Azo Dyes", "tone": "blue" } },
+        "b3": { "type": "badge", "settings": { "label": "No Shrink", "tone": "gold" } },
+        "b4": { "type": "badge", "settings": { "label": "No Fade", "tone": "purple" } },
+        "b5": { "type": "badge", "settings": { "label": "No Plastic", "tone": "green" } },
+        "b6": { "type": "badge", "settings": { "label": "No Nickel", "tone": "blue" } },
+        "b7": { "type": "badge", "settings": { "label": "No Bleach", "tone": "pink" } },
+        "b8": { "type": "badge", "settings": { "label": "No Tags", "tone": "gold" } },
+        "b9": { "type": "badge", "settings": { "label": "No Rash", "tone": "purple" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9"],
+      "settings": {
+        "heading": "Skin Kind, Play Proof",
+        "reassurance": "Every JJW tee is free of the nine things parents ask us about."
+      }
+    }
+  },
+  "order": ["main", "trust"]
+}

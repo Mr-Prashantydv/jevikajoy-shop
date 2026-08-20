@@ -2,8 +2,91 @@
   "type": "footer",
   "name": "Footer",
   "sections": {
-    "footer_marquee": { "type": "footer-marquee", "settings": {} },
-    "footer": { "type": "footer", "settings": {} }
+    "footer_marquee": {
+      "type": "footer-marquee",
+      "blocks": {
+        "p1": {
+          "type": "phrase",
+          "settings": {
+            "text": "100% Organic Cotton"
+          }
+        },
+        "s1": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p2": {
+          "type": "phrase",
+          "settings": {
+            "text": "BIS Certified"
+          }
+        },
+        "s2": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p3": {
+          "type": "phrase",
+          "settings": {
+            "text": "OEKO-TEX Inks"
+          }
+        },
+        "s3": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p4": {
+          "type": "phrase",
+          "settings": {
+            "text": "Ages 4-12"
+          }
+        },
+        "s4": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p5": {
+          "type": "phrase",
+          "settings": {
+            "text": "Free Shipping Over Rs999"
+          }
+        },
+        "s5": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "s1",
+        "p2",
+        "s2",
+        "p3",
+        "s3",
+        "p4",
+        "s4",
+        "p5",
+        "s5"
+      ],
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
   },
-  "order": ["footer_marquee", "footer"]
+  "order": [
+    "footer_marquee",
+    "footer"
+  ]
 }

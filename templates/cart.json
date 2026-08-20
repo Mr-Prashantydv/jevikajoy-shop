@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "main": { "type": "main-cart", "settings": {} },
+    "recommendations": {
+      "type": "featured-collection",
+      "settings": { "heading": "Add Another Hero", "products_to_show": 12 }
+    }
+  },
+  "order": ["main", "recommendations"]
+}

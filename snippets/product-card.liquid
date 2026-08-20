@@ -1,0 +1,49 @@
+{%- comment -%}
+  One product card, rendered by predictive search and by the search results
+  page. Classes are the shared .jjw-card set in assets/theme.css rather than
+  section-scoped rules, because the same markup has to render inside the
+  header drawer and on /search.
+
+  Usage:
+    {% render 'product-card', product: product %}
+    {% render 'product-card', product: product, prefer: 'joy', sizes: '30vw' %}
+
+  Params:
+    product  required
+    prefer   character handle that wins when the product carries several
+    sizes    sizes attribute for the image; defaults to the search grid
+    show_price  defaults to true
+
+  Colour comes from 'character-pair', which is the one place that mapping
+  lives.
+{%- endcomment -%}
+
+{%- capture pair -%}{%- render 'character-pair', product: product, prefer: prefer -%}{%- endcapture -%}
+{%- liquid
+  assign pair = pair | strip
+  assign card_sizes = sizes | default: '(max-width: 749px) 46vw, (max-width: 989px) 30vw, 23vw'
+-%}
+
+<a class="jjw-card" data-pair="{{ pair }}" href="{{ product.url }}">
+  <div class="jjw-card__media">
+    {%- if product.featured_media != blank -%}
+      {{
+        product.featured_media
+        | image_url: width: 700
+        | image_tag:
+          loading: 'lazy',
+          alt: product.featured_media.alt | default: product.title,
+          widths: '250, 400, 550, 700',
+          sizes: card_sizes
+      }}
+    {%- else -%}
+      <div class="jjw-card__fallback"><span>{{ product.title | escape }}</span></div>
+    {%- endif -%}
+  </div>
+  <h3 class="jjw-card__title">
+    {{- product.title | escape -}}
+    {%- unless show_price == false -%}
+      <span class="jjw-card__price">{{ product.price | money }}</span>
+    {%- endunless -%}
+  </h3>
+</a>

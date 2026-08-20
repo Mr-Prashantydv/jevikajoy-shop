@@ -1,0 +1,12 @@
+# Shopify rejects any subfolder under assets/, so tooling that writes state
+# there fails the whole push. Keep non-theme files out of the upload set.
+.claude-flow/
+assets/.claude-flow/
+.claude/
+.graphify_*
+.graphify_python
+graphify-out/
+product-images/
+docs/
+*.md
+!templates/*.md

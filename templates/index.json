@@ -1,15 +1,319 @@
 {
   "sections": {
-    "hero":                { "type": "hero",                "settings": {} },
-    "marquee_banner":      { "type": "marquee-banner",      "settings": {} },
-    "featured_collection": { "type": "featured-collection", "settings": {} },
-    "find_us":             { "type": "find-us",             "settings": {} },
-    "falling_scroll":      { "type": "falling-scroll",      "settings": {} },
-    "split_content":       { "type": "split-content",       "settings": {} },
-    "focus_carousel":      { "type": "focus-carousel",      "settings": {} },
-    "rich_text":           { "type": "rich-text",           "settings": {} },
-    "social_marquee":      { "type": "social-marquee",      "settings": {} },
-    "social_icons":        { "type": "social-icons",        "settings": {} }
+    "hero": {
+      "type": "hero",
+      "settings": {}
+    },
+    "marquee_banner": {
+      "type": "marquee-banner",
+      "blocks": {
+        "p1": {
+          "type": "phrase",
+          "settings": {
+            "text": "100% Organic Cotton"
+          }
+        },
+        "s1": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p2": {
+          "type": "phrase",
+          "settings": {
+            "text": "BIS Certified"
+          }
+        },
+        "s2": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p3": {
+          "type": "phrase",
+          "settings": {
+            "text": "OEKO-TEX Inks"
+          }
+        },
+        "s3": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p4": {
+          "type": "phrase",
+          "settings": {
+            "text": "Ages 4-12"
+          }
+        },
+        "s4": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p5": {
+          "type": "phrase",
+          "settings": {
+            "text": "Free Shipping Over Rs999"
+          }
+        },
+        "s5": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "s1",
+        "p2",
+        "s2",
+        "p3",
+        "s3",
+        "p4",
+        "s4",
+        "p5",
+        "s5"
+      ],
+      "settings": {}
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Every Hero Has a Tee",
+        "products_to_show": 12
+      }
+    },
+    "find_us": {
+      "type": "find-us",
+      "settings": {}
+    },
+    "falling_scroll": {
+      "type": "falling-scroll",
+      "blocks": {
+        "c_jevika": {
+          "type": "item",
+          "settings": {
+            "character": "jevika",
+            "behavior": "fall",
+            "x": 44,
+            "y": 56,
+            "size": 17,
+            "depth": 10
+          }
+        },
+        "c_joy": {
+          "type": "item",
+          "settings": {
+            "character": "joy",
+            "behavior": "fall",
+            "x": 55,
+            "y": 57,
+            "size": 16,
+            "depth": 11
+          }
+        },
+        "c_pinki": {
+          "type": "item",
+          "settings": {
+            "character": "pinki",
+            "behavior": "fall",
+            "x": 38,
+            "y": 71,
+            "size": 13,
+            "depth": 20
+          }
+        },
+        "c_minku": {
+          "type": "item",
+          "settings": {
+            "character": "minku",
+            "behavior": "fall",
+            "x": 48,
+            "y": 74,
+            "size": 12,
+            "depth": 21
+          }
+        },
+        "c_brutus": {
+          "type": "item",
+          "settings": {
+            "character": "brutus",
+            "behavior": "fall",
+            "x": 60,
+            "y": 71,
+            "size": 15,
+            "depth": 22
+          }
+        },
+        "a1": {
+          "type": "accent",
+          "settings": {
+            "text": "100% Organic Cotton",
+            "color": "#0F7DAF",
+            "text_color": "#FFF6EB",
+            "x": 27,
+            "y": 43,
+            "rotate": -8,
+            "depth": 3,
+            "shape": "circle",
+            "size": 4
+          }
+        },
+        "a2": {
+          "type": "accent",
+          "settings": {
+            "text": "BIS Certified",
+            "color": "#E5377E",
+            "text_color": "#FFF6EB",
+            "x": 72,
+            "y": 45,
+            "rotate": 7,
+            "depth": 3,
+            "shape": "circle",
+            "size": 4
+          }
+        },
+        "a3": {
+          "type": "accent",
+          "settings": {
+            "text": "OEKO-TEX Inks",
+            "color": "#F6A313",
+            "text_color": "#1A2F5E",
+            "x": 75,
+            "y": 72,
+            "rotate": 5,
+            "depth": 3,
+            "shape": "circle",
+            "size": 4
+          }
+        },
+        "a4": {
+          "type": "accent",
+          "settings": {
+            "text": "Safe for School",
+            "color": "#2FA85E",
+            "text_color": "#FFF6EB",
+            "x": 24,
+            "y": 68,
+            "rotate": -6,
+            "depth": 3,
+            "shape": "circle",
+            "size": 4
+          }
+        }
+      },
+      "block_order": [
+        "c_jevika",
+        "c_joy",
+        "c_pinki",
+        "c_minku",
+        "c_brutus",
+        "a1",
+        "a2",
+        "a3",
+        "a4"
+      ],
+      "settings": {
+        "heading": "Room for Every Kind of Kid",
+        "subheading": "FIVE FRIENDS, ONE WARDROBE",
+        "scroll_length": 120,
+        "start_y": 10
+      }
+    },
+    "split_content": {
+      "type": "split-content",
+      "settings": {}
+    },
+    "focus_carousel": {
+      "type": "focus-carousel",
+      "blocks": {
+        "r1": {
+          "type": "review",
+          "settings": {
+            "quote": "The cotton is genuinely soft and the print has not cracked after a dozen washes. She asks for it every week.",
+            "author": "— Priya M.",
+            "rating": 5,
+            "color_bg": "ink",
+            "color_shadow": "blue",
+            "color_text": "cream"
+          }
+        },
+        "r2": {
+          "type": "review",
+          "settings": {
+            "quote": "Sizing runs true and the colours stayed bright. I ordered two more for my nephews the same month.",
+            "author": "— Rahul K.",
+            "rating": 5,
+            "color_bg": "pink",
+            "color_shadow": "ink",
+            "color_text": "cream"
+          }
+        },
+        "r3": {
+          "type": "review",
+          "settings": {
+            "quote": "Finally tees my son can wear all day without fussing. The characters are his, not some cartoon he half recognises.",
+            "author": "— Ananya R.",
+            "rating": 5,
+            "color_bg": "blue",
+            "color_shadow": "ink",
+            "color_text": "cream"
+          }
+        },
+        "r4": {
+          "type": "review",
+          "settings": {
+            "quote": "Bought one for each twin. Months on they still look new, and the paw print is the first thing their friends notice.",
+            "author": "— Sneha D.",
+            "rating": 5,
+            "color_bg": "green",
+            "color_shadow": "ink",
+            "color_text": "cream"
+          }
+        },
+        "r5": {
+          "type": "review",
+          "settings": {
+            "quote": "Ordered on a whim before a birthday and it arrived early. The fabric feels far better than the price suggests.",
+            "author": "— Meera T.",
+            "rating": 5,
+            "color_bg": "gold",
+            "color_shadow": "ink",
+            "color_text": "cream"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+      ],
+      "settings": {
+        "heading": "Loved by Little Humans",
+        "background_asset": "jjw-hero.png",
+        "overlay_opacity": 45
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "settings": {}
+    },
+    "social_marquee": {
+      "type": "social-marquee",
+      "settings": {}
+    },
+    "social_icons": {
+      "type": "social-icons",
+      "settings": {}
+    }
   },
   "order": [
     "hero",

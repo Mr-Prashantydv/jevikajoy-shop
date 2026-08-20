@@ -1,0 +1,595 @@
+{%- comment -%}
+  Fabric and construction — the craft story on the PDP, replacing the nine
+  trust badges that sat here.
+
+  Layout follows the iGel feature carousel: heading left, arrow pair opposite
+  it on the same line, then a horizontal track of tall cards showing three at a
+  time. Each caption is a white box floating inside the bottom of its own
+  image, inset from the edges, reading "Label: benefit".
+
+  Colour is JJW's, not the reference's: cream canvas, navy type, white boxes.
+  The reference tints its heading light blue on white; ours is navy on cream,
+  which is 12.2:1 rather than its ~2.5:1.
+
+  Photography is the JJW _universal set: weave, collar, shoulder seam, hem.
+  Shot on undyed cotton, so it shares the cream family with the page — the
+  white caption box is what separates the two.
+
+  Every claim has to match snippets/product-accordions.liquid, which already
+  says "100% cotton jersey, pre-shrunk and skin-friendly". Nothing here invents
+  a number — no GSM, no thread count — because none is established anywhere.
+{%- endcomment -%}
+
+{%- liquid
+  assign detail_blocks = section.blocks | where: 'type', 'detail'
+  assign spec_blocks = section.blocks | where: 'type', 'spec'
+-%}
+
+{%- style -%}
+  #FabricStory-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 8rem;
+  }
+
+  /* --- Head row: heading left, arrows right ------------------------------ */
+
+  #FabricStory-{{ section.id }} .fs__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  #FabricStory-{{ section.id }} .fs__heading {
+    max-width: 20ch;
+    letter-spacing: 0.06rem;
+    color: var(--ink);
+  }
+
+  #FabricStory-{{ section.id }} .fs__intro {
+    max-width: 56ch;
+    margin: 2rem 0 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.4rem;
+    line-height: 1.3;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  #FabricStory-{{ section.id }} .fs__intro :where(p) {
+    margin: 0;
+  }
+
+  #FabricStory-{{ section.id }} .fs__arrows {
+    display: flex;
+    flex: none;
+    gap: 1.6rem;
+    padding-bottom: 1rem;
+  }
+
+  {%- comment -%}
+    Solid navy discs, matching the related-products carousel further down the
+    same page — an outlined pair read as a different component sitting on the
+    same template.
+  {%- endcomment -%}
+  #FabricStory-{{ section.id }} .fs__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5.6rem;
+    width: 5.6rem;
+    padding: 0;
+    color: var(--cream);
+    background: var(--ink);
+    border: 0;
+    border-radius: 999px;
+    transition: background 0.2s var(--ease), opacity 0.2s var(--ease);
+  }
+
+  #FabricStory-{{ section.id }} .fs__arrow svg {
+    height: 1.8rem;
+    width: 2.2rem;
+  }
+
+  #FabricStory-{{ section.id }} .fs__arrow:hover {
+    background: var(--blue);
+  }
+
+  {%- comment -%}
+    Disabled rather than hidden at the ends, as the reference does — the pair
+    keeps its position so the head row does not reflow mid-scroll.
+  {%- endcomment -%}
+  #FabricStory-{{ section.id }} .fs__arrow[disabled] {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  #FabricStory-{{ section.id }} .fs__arrow[disabled]:hover {
+    background: var(--ink);
+  }
+
+  /* --- Track ------------------------------------------------------------- */
+
+  {%- comment -%}
+    A scroll container, not a transform carousel: swipe works for free on
+    touch, the arrows just drive scrollLeft, and with JS off it is still a
+    scrollable row rather than a dead frame.
+  {%- endcomment -%}
+  #FabricStory-{{ section.id }} .fs__track {
+    display: flex;
+    gap: 2.4rem;
+    margin: 5rem 0 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    {%- comment -%}
+      proximity, not mandatory. Snap points sit at each card's start — 0, 474,
+      948 — but with four cards and three in view the track only scrolls 473px
+      total. Every point except 0 was out of reach, so mandatory snapped it
+      straight back and the arrows moved nothing at all. The same trap waits at
+      phone width, where the last card starts past the end of the scroll range.
+    {%- endcomment -%}
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #FabricStory-{{ section.id }} .fs__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  {%- comment -%}
+    Each card carries a brand tint. The photography is all undyed cotton, so
+    without it four cream squares sat on a cream canvas and the section read
+    as the only colourless band on the page. The tint shows as the frame
+    around the inset photo, and again behind the caption.
+  {%- endcomment -%}
+  #FabricStory-{{ section.id }} .fs__card {
+    position: relative;
+    flex: 0 0 calc((100% - 4.8rem) / 3);
+    aspect-ratio: 1 / 1;
+    padding: 1.2rem;
+    overflow: hidden;
+    background: var(--tone-bg, var(--blue-bg));
+    border-radius: 2.4rem;
+    scroll-snap-align: start;
+  }
+
+  #FabricStory-{{ section.id }} [data-tone='pink'] { --tone-bg: var(--pink-bg); }
+  #FabricStory-{{ section.id }} [data-tone='blue'] { --tone-bg: var(--blue-bg); }
+  #FabricStory-{{ section.id }} [data-tone='gold'] { --tone-bg: var(--gold-bg); }
+  #FabricStory-{{ section.id }} [data-tone='green'] { --tone-bg: var(--green-bg); }
+  #FabricStory-{{ section.id }} [data-tone='purple'] { --tone-bg: var(--purple-bg); }
+
+  /* Gives the end of the track a reachable snap point, since the last card's
+     own start lies beyond the maximum scroll offset. */
+  #FabricStory-{{ section.id }} .fs__card:last-child {
+    scroll-snap-align: end;
+  }
+
+  {%- comment -%}
+    cover, not contain: these are macro textures with no subject to protect,
+    so filling the frame reads better than floating them on the card.
+  {%- endcomment -%}
+  #FabricStory-{{ section.id }} .fs__card img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 1.6rem;
+  }
+
+  {%- comment -%}
+    Navy on the card's own tint, not on white. That pairing is 9.9:1 at the
+    lightest tint we use, where tinting the type instead would have failed —
+    Heart Pink on white is 3.1:1 and Sunshine Gold 2.1:1. Same rule the
+    collection card titles follow: the colour lives in the fill.
+  {%- endcomment -%}
+  #FabricStory-{{ section.id }} .fs__caption {
+    position: absolute;
+    inset-inline: 2.4rem;
+    bottom: 2.4rem;
+    /* A <p> keeps its 1em margin even when absolutely positioned, which pushed
+       the box 17px above the 2.4rem inset and broke the even frame. */
+    margin: 0;
+    padding: 1.8rem 2rem;
+    background: var(--tone-bg, var(--blue-bg));
+    border-radius: 1.6rem;
+    font-size: 1.7rem;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  #FabricStory-{{ section.id }} .fs__caption strong {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* --- Spec strip -------------------------------------------------------- */
+
+  #FabricStory-{{ section.id }} .fs__specs {
+    display: grid;
+    grid-template-columns: repeat({{ spec_blocks.size | at_least: 1 }}, minmax(0, 1fr));
+    gap: 0;
+    margin: 4rem 0 0;
+    padding: 0;
+    overflow: hidden;
+    background: var(--white);
+    border-radius: 2rem;
+  }
+
+  #FabricStory-{{ section.id }} .fs__spec {
+    padding: 2.4rem 2rem;
+    text-align: center;
+  }
+
+  #FabricStory-{{ section.id }} .fs__spec + .fs__spec {
+    border-inline-start: 2px solid var(--sky);
+  }
+
+  #FabricStory-{{ section.id }} .fs__spec dt {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  #FabricStory-{{ section.id }} .fs__spec dd {
+    margin: 0.6rem 0 0;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 2rem;
+    line-height: 1.2;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #FabricStory-{{ section.id }} .fs__track {
+      scroll-behavior: auto;
+    }
+
+    #FabricStory-{{ section.id }} .fs__arrow {
+      transition: none;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    #FabricStory-{{ section.id }} .fs__card {
+      flex-basis: calc((100% - 2.4rem) / 2);
+    }
+
+    #FabricStory-{{ section.id }} .fs__specs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    {%- comment -%}
+      Wrapping to two rows makes the inline dividers land in the wrong place —
+      the third cell would keep a left border while starting a row. Reset, then
+      draw the rules the two-column shape actually needs.
+    {%- endcomment -%}
+    #FabricStory-{{ section.id }} .fs__spec + .fs__spec {
+      border-inline-start: 0;
+    }
+
+    #FabricStory-{{ section.id }} .fs__spec:nth-child(even) {
+      border-inline-start: 2px solid var(--sky);
+    }
+
+    #FabricStory-{{ section.id }} .fs__spec:nth-child(n + 3) {
+      border-block-start: 2px solid var(--sky);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #FabricStory-{{ section.id }} {
+      padding-block: 5rem;
+    }
+
+    #FabricStory-{{ section.id }} .fs__heading {
+      max-width: none;
+    }
+
+    #FabricStory-{{ section.id }} .fs__intro {
+      font-size: 1.8rem;
+    }
+
+    {%- comment -%}
+      Arrows go at phone width — the track is swiped, and a 5.6rem pair beside
+      a 4rem heading crowds the row. The peeking second card is the affordance.
+    {%- endcomment -%}
+    #FabricStory-{{ section.id }} .fs__arrows {
+      display: none;
+    }
+
+    #FabricStory-{{ section.id }} .fs__track {
+      gap: 1.6rem;
+      margin-top: 3.2rem;
+    }
+
+    #FabricStory-{{ section.id }} .fs__card {
+      flex-basis: 84%;
+    }
+
+    #FabricStory-{{ section.id }} .fs__caption {
+      inset-inline: 1.6rem;
+      bottom: 1.6rem;
+      padding: 1.4rem 1.6rem;
+      font-size: 1.5rem;
+    }
+
+    #FabricStory-{{ section.id }} .fs__spec {
+      padding: 1.8rem 1.2rem;
+    }
+
+    #FabricStory-{{ section.id }} .fs__spec dd {
+      font-size: 1.7rem;
+    }
+  }
+{%- endstyle -%}
+
+<section id="FabricStory-{{ section.id }}">
+  <div class="page-width">
+    <div class="fs__head">
+      <div>
+        {%- if section.settings.heading != blank -%}
+          <h2 class="hxxl fs__heading scroll-trigger animate--fade-in">
+            {{- section.settings.heading | escape -}}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.intro != blank -%}
+          <div class="fs__intro scroll-trigger animate--fade-in">{{ section.settings.intro }}</div>
+        {%- endif -%}
+      </div>
+
+      {%- if detail_blocks.size > 0 -%}
+        <div class="fs__arrows">
+          <button
+            type="button"
+            class="fs__arrow"
+            data-fs-prev
+            aria-label="{{ 'accessibility.previous' | t }}"
+            aria-controls="FabricTrack-{{ section.id }}"
+          >
+            <svg viewBox="0 0 20 14" fill="none" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M7.21.15a.5.5 0 0 1 .7.71L3.77 6H19.5a.5.5 0 0 1 0 1H3.77l4.14 5.14a.5.5 0 0 1-.78.62l-4.9-6.08a.5.5 0 0 1 0-.63z"/>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="fs__arrow"
+            data-fs-next
+            aria-label="{{ 'accessibility.next' | t }}"
+            aria-controls="FabricTrack-{{ section.id }}"
+          >
+            <svg viewBox="0 0 20 14" fill="none" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M12.79.15a.5.5 0 0 0-.7.71L16.23 6H.5a.5.5 0 0 0 0 1h15.73l-4.14 5.14a.5.5 0 0 0 .78.62l4.9-6.08a.5.5 0 0 0 0-.63z"/>
+            </svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if detail_blocks.size > 0 -%}
+      <ul class="fs__track" id="FabricTrack-{{ section.id }}" tabindex="0">
+        {%- for block in detail_blocks -%}
+          <li class="fs__card" data-tone="{{ block.settings.tone }}" {{ block.shopify_attributes }}>
+            {%- comment -%}
+              Merchant upload wins; otherwise one of the four photos that ship
+              with the theme. The select means a card can never point at an
+              asset that is not there, so this degrades to no media rather
+              than to a broken <img>.
+            {%- endcomment -%}
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  alt: block.settings.title,
+                  widths: '400, 650, 900',
+                  sizes: '(max-width: 749px) 84vw, (max-width: 989px) 46vw, 30vw'
+              }}
+            {%- elsif block.settings.photo != blank -%}
+              <img
+                src="{{ block.settings.photo | asset_img_url: '900x' }}"
+                srcset="
+                  {{ block.settings.photo | asset_img_url: '400x' }} 400w,
+                  {{ block.settings.photo | asset_img_url: '650x' }} 650w,
+                  {{ block.settings.photo | asset_img_url: '900x' }} 900w
+                "
+                sizes="(max-width: 749px) 84vw, (max-width: 989px) 46vw, 30vw"
+                alt="{{ block.settings.title | escape }}"
+                width="1000"
+                height="1000"
+                loading="lazy"
+              >
+            {%- endif -%}
+
+            {%- if block.settings.title != blank or block.settings.text != blank -%}
+              {%- comment -%}
+                The space before {% endif %} is load-bearing — it is the gap
+                after the colon. A dash on that tag would strip it and the
+                caption would read "jersey:knitted".
+              {%- endcomment -%}
+              <p class="fs__caption">
+                {%- if block.settings.title != blank %}<strong>{{ block.settings.title | escape }}:</strong> {% endif -%}
+                {{- block.settings.text | escape -}}
+              </p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if spec_blocks.size > 0 -%}
+      <dl class="fs__specs scroll-trigger animate--fade-in">
+        {%- for block in spec_blocks -%}
+          <div class="fs__spec" {{ block.shopify_attributes }}>
+            <dt>{{ block.settings.label | escape }}</dt>
+            <dd>{{ block.settings.value | escape }}</dd>
+          </div>
+        {%- endfor -%}
+      </dl>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('FabricStory-{{ section.id }}');
+    if (!root || root.dataset.fsInit) return;
+    root.dataset.fsInit = '1';
+
+    var track = root.querySelector('.fs__track');
+    var prev = root.querySelector('[data-fs-prev]');
+    var next = root.querySelector('[data-fs-next]');
+    if (!track || !prev || !next) return;
+
+    function step() {
+      var card = track.querySelector('.fs__card');
+      if (!card) return track.clientWidth;
+      // One card plus the gap, read from layout rather than hardcoded, so the
+      // breakpoints stay the single source of how many are in view.
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
+
+    function sync() {
+      // 1px of slack: fractional widths mean scrollLeft rarely lands exactly.
+      var max = track.scrollWidth - track.clientWidth;
+      prev.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= max - 1;
+    }
+
+    {%- comment -%}
+      sync() hung entirely off the scroll event, so a single missed event left
+      a button disabled — and a disabled button swallows the next click, which
+      strands the track at one end for good. The timer re-reads the real
+      scrollLeft after the move regardless of what fired.
+    {%- endcomment -%}
+    var pending;
+    function move(direction) {
+      // No explicit behavior: an options-object 'smooth' overrides the
+      // element's scroll-behavior and would ignore the reduced-motion rule.
+      track.scrollBy({ left: direction * step() });
+      clearTimeout(pending);
+      pending = setTimeout(sync, 450);
+    }
+
+    prev.addEventListener('click', function () {
+      move(-1);
+    });
+
+    next.addEventListener('click', function () {
+      move(1);
+    });
+
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Fabric story",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made to Survive Recess"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>The details that decide whether a tee lasts one term or three</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "detail",
+      "name": "Detail",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Overrides the built-in photo below."
+        },
+        {
+          "type": "select",
+          "id": "photo",
+          "label": "Built-in photo",
+          "options": [
+            { "value": "", "label": "None" },
+            { "value": "jjw-fabric-weave.jpg", "label": "Fabric weave" },
+            { "value": "jjw-fabric-collar.jpg", "label": "Collar stretch" },
+            { "value": "jjw-fabric-shoulder.jpg", "label": "Shoulder seam" },
+            { "value": "jjw-fabric-hem.jpg", "label": "Sleeve hem" }
+          ],
+          "default": ""
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Label",
+          "info": "Shown bold, followed by a colon."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Card colour",
+          "options": [
+            { "value": "pink", "label": "Heart Pink" },
+            { "value": "blue", "label": "Adventure Blue" },
+            { "value": "gold", "label": "Sunshine Gold" },
+            { "value": "green", "label": "Outdoor Green" },
+            { "value": "purple", "label": "Space Purple" }
+          ],
+          "default": "blue"
+        }
+      ]
+    },
+    {
+      "type": "spec",
+      "name": "Spec",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fabric story"
+    }
+  ]
+}
+{% endschema %}

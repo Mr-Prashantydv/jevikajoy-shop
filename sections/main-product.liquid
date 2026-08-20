@@ -1,0 +1,1339 @@
+{%- comment -%}
+  Main product — rebuilt to the partakefoods.com PDP layout, measured at 1440:
+
+  Media column (677px):            Info column (576px, sticky):
+    [badges 200px | packshot 457]    h1 70px condensed
+    [wide image 677x338 (2:1)]       category tabs + product cards
+    [square 328] [square 328]        accordions
+                                     price + pickers + ATC (stacked buttons row)
+
+  Their tabs are pack formats; ours are characters, driven by tab blocks that
+  point at the character collections. Their left-hand badges are PNGs; ours are
+  text ribbons (hard rule: convert image text to real type), tilted in CSS.
+
+  Media is grouped per colour by the alt text's FIRST word — a substring match
+  read the background out of "flat lay on yellow" and filed a navy tee under
+  Yellow. Untagged media appears in every colour's gallery. Within a colour,
+  alt containing "packshot" takes the featured slot, "banner" the wide slot,
+  the rest go two-up. Products with no media fall back to a character-colour
+  block; never a broken img.
+{%- endcomment -%}
+
+{%- liquid
+  assign character = ''
+  for tag in product.tags
+    if tag contains 'character:'
+      assign character = tag | split: ':' | last | strip | downcase
+    endif
+  endfor
+
+  case character
+    when 'jevika'
+      assign pair = 'pink'
+    when 'joy'
+      assign pair = 'blue'
+    when 'brutus'
+      assign pair = 'gold'
+    when 'minku'
+      assign pair = 'green'
+    when 'pinki'
+      assign pair = 'purple'
+    else
+      assign pair = 'blue'
+  endcase
+
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign colour_option = nil
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname == 'color' or oname == 'colour'
+      assign colour_option = option
+    endif
+  endfor
+
+  assign selected_colour = ''
+  if colour_option
+    assign selected_colour = colour_option.selected_value
+  endif
+-%}
+
+{%- style -%}
+  #MainProduct-{{ section.id }} {
+    --char-bg: var(--{{ pair }}-bg);
+    --char-fg: var(--{{ pair }});
+    background: var(--cream);
+    padding-block: 4rem 6rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__grid {
+    /* Reference at 1440: media 765px, info 576px, 50px gap — 1.33 : 1. */
+    display: grid;
+    grid-template-columns: minmax(0, 1.33fr) minmax(0, 1fr);
+    gap: 5rem;
+    align-items: start;
+  }
+
+  /* --- Media: stacked gallery ------------------------------------------- */
+
+  #MainProduct-{{ section.id }} .pdp__gallery[hidden] {
+    display: none;
+  }
+
+  /* Row 1 — badge rail + featured packshot, 200px : rest. */
+  #MainProduct-{{ section.id }} .pdp__featured-row {
+    display: grid;
+    grid-template-columns: 20rem minmax(0, 1fr);
+    gap: 2rem;
+    align-items: center;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__badges {
+    display: grid;
+    gap: 3.6rem;
+    justify-items: start;
+    align-content: center;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__badge {
+    max-width: 18rem;
+    padding: 1.2rem 1.6rem;
+    border-radius: 0.8rem;
+    background: var(--char-fg);
+    color: var(--cream);
+    font-family: var(--font-accent);
+    font-weight: 800;
+    font-size: 1.8rem;
+    line-height: 1.15;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    box-shadow: 3px 3px 0 0 var(--ink-deep);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__badge:nth-child(3n + 1) { transform: rotate(-7deg); }
+  #MainProduct-{{ section.id }} .pdp__badge:nth-child(3n + 2) { transform: rotate(5deg); }
+  #MainProduct-{{ section.id }} .pdp__badge:nth-child(3n) { transform: rotate(-4deg); }
+
+  #MainProduct-{{ section.id }} .pdp__featured {
+    aspect-ratio: 1 / 1;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    background: var(--char-bg);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__featured img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* No media at all: the title sits on the character colour. */
+  #MainProduct-{{ section.id }} .pdp__fallback {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding: 3rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__fallback span {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(3.2rem, 5vw, 5.6rem);
+    line-height: 1;
+    text-align: center;
+    text-wrap: balance;
+    /* --char-fg fails contrast on gold (1.73:1) and green (2.57:1) against
+       its own tint; ink clears every pair. */
+    color: var(--ink);
+  }
+
+  /* Row 2 — the wide shot, reference 677x338 = 2:1. */
+  #MainProduct-{{ section.id }} .pdp__wide {
+    margin-top: 2rem;
+    aspect-ratio: 2 / 1;
+    border-radius: 1.6rem;
+    overflow: hidden;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__wide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Row 3+ — squares, two-up with the reference's 20px gutter. */
+  #MainProduct-{{ section.id }} .pdp__squares {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__square {
+    aspect-ratio: 1 / 1;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    background: var(--char-bg);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__square img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* --- Info -------------------------------------------------------------- */
+
+  #MainProduct-{{ section.id }} .pdp__info {
+    position: sticky;
+    top: 3rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__title {
+    /* Reference PDP h1: 70px heavy condensed, line-height 1, ls 0.6px. */
+    font-family: var(--font-accent);
+    font-weight: 900;
+    font-size: clamp(3.6rem, 5vw, 7rem);
+    line-height: 1;
+    letter-spacing: 0.06rem;
+    color: var(--ink);
+    margin: 0 0 1.5rem;
+  }
+
+  /* Mobile-order duplicate of the h1 — shown only when the grid stacks. */
+  #MainProduct-{{ section.id }} .pdp__title--mob {
+    display: none;
+  }
+
+  /* Carousel dots, built by JS; desktop never shows them. */
+  #MainProduct-{{ section.id }} .pdp__dots {
+    display: none;
+  }
+
+  /* --- Category tabs — reference .product-variant-tabs ------------------- */
+
+  #MainProduct-{{ section.id }} .pdp__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 0 0 2rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__tab {
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.44rem;
+    /* Reference tab is 39px tall at 14.4px/10px padding. Big Shoulders runs
+       taller than Toroka, so the line box is pinned rather than left to the
+       font's own metrics, which gave 42px. */
+    line-height: 1.3;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--blue-bg);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__tab[aria-selected='true'] {
+    background: var(--blue);
+    color: var(--cream);
+    box-shadow: 4px 4px 0 0 var(--ink-deep);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__tab-panel {
+    margin: 0 0 2.4rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__tab-panel[hidden] {
+    display: none;
+  }
+
+  /* Reference grid: 4 cards across, ~15px gutters, wrapping to a second row. */
+  #MainProduct-{{ section.id }} .pdp__cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__card {
+    text-align: center;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__card-thumb {
+    /* Spans are inline; without this the aspect-ratio is ignored and the
+       whole thumb collapses to its 2px border. */
+    display: block;
+    aspect-ratio: 1 / 1;
+    border: 2px solid var(--blue);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--card-bg, var(--blue-bg));
+  }
+
+  /* The product being viewed — reference outlines its own card in the grid. */
+  #MainProduct-{{ section.id }} .pdp__card[aria-current='page'] .pdp__card-thumb {
+    border: 3px solid var(--pink);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__card-thumb span {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding: 1rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__card-label {
+    display: block;
+    margin-top: 0.8rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  /* --- Purchase block ---------------------------------------------------- */
+
+  #MainProduct-{{ section.id }} .pdp__buy {
+    margin-top: 2.4rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__price {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.4rem;
+    letter-spacing: 0.1rem;
+    color: var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__compare {
+    font-size: 1.8rem;
+    color: var(--ink-soft);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__compare:empty {
+    display: none;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__group {
+    margin: 2.4rem 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__group-name {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    color: var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__group-name b {
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__values input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Size pills */
+  #MainProduct-{{ section.id }} .pdp__pill {
+    display: inline-block;
+    padding: 1rem 1.5rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.44rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    background: var(--blue-bg);
+    color: var(--ink);
+    border-radius: 0.5rem;
+    clip-path: url(#jjw-blob);
+    -webkit-clip-path: url(#jjw-blob);
+    transition: background 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+
+  #MainProduct-{{ section.id }} input:checked + .pdp__pill {
+    background: var(--ink);
+    color: var(--cream);
+    box-shadow: 4px 4px 0 0 var(--ink-deep);
+  }
+
+  /* Colour swatches */
+  #MainProduct-{{ section.id }} .pdp__swatch {
+    display: block;
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    background: var(--swatch, var(--ink-soft));
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+
+  #MainProduct-{{ section.id }} input:checked + .pdp__swatch {
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 0 3px var(--cream), 0 0 0 6px var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} [data-swatch='black'] { --swatch: #1a1a1a; }
+  #MainProduct-{{ section.id }} [data-swatch='blue'] { --swatch: #2563eb; }
+  #MainProduct-{{ section.id }} [data-swatch='white'] { --swatch: #ffffff; }
+  #MainProduct-{{ section.id }} [data-swatch='pink'] { --swatch: #f9a8d4; }
+  #MainProduct-{{ section.id }} [data-swatch='peach'] { --swatch: #ffcba4; }
+  #MainProduct-{{ section.id }} [data-swatch='sand'] { --swatch: #e3d0ac; }
+  #MainProduct-{{ section.id }} [data-swatch='yellow'] { --swatch: #fde047; }
+
+  /* Sold-out combinations stay reachable but never read as available. */
+  #MainProduct-{{ section.id }} .pdp__value[data-unavailable] .pdp__pill {
+    opacity: 0.4;
+    text-decoration: line-through;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__value[data-unavailable] .pdp__swatch {
+    opacity: 0.4;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__values input:focus-visible + .pdp__pill,
+  #MainProduct-{{ section.id }} .pdp__values input:focus-visible + .pdp__swatch {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* ATC — full-width like the reference's stacked retailer buttons (576x68). */
+  #MainProduct-{{ section.id }} .pdp__atc {
+    display: block;
+    width: 100%;
+    margin-top: 2.4rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__atc .btn-wrap {
+    display: block;
+    width: 100%;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__atc .btn {
+    min-height: 6.8rem;
+    font-size: 3rem;
+    letter-spacing: 0.15rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__atc .btn[disabled] {
+    cursor: not-allowed;
+    --btn-bg: var(--ink-soft);
+    /* Dark fill, so the navy .btn--primary text has to go back to cream: 5.82:1. */
+    --btn-fg: var(--cream);
+  }
+
+  #MainProduct-{{ section.id }} .btn-wrap:has(.btn[disabled]) .btn-shadow {
+    transform: translate(6px, 6px);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__trust {
+    margin: 1.6rem 0 0;
+    font-size: 1.4rem;
+    color: var(--ink-soft);
+  }
+
+  {%- comment -%}
+    Stacked layout — the reference's own phone PDP: h1 first, then the gallery
+    as an edge-to-edge swipe carousel with dots, no badge rail, cards 3-up.
+    Reference shows this already at 800px, so it lives at the 989 stack point.
+  {%- endcomment -%}
+  @media screen and (max-width: 989px) {
+    #MainProduct-{{ section.id }} .pdp__grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__info {
+      position: static;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__title {
+      font-size: 3.6rem;
+    }
+
+    /* Title order swap: mobile node in, desktop node out. */
+    #MainProduct-{{ section.id }} .pdp__title--mob {
+      display: block;
+      margin: 0 0 0.5rem;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__info > .pdp__title {
+      display: none;
+    }
+
+    /* Gallery becomes a scroll-snap carousel, one image per swipe. */
+    #MainProduct-{{ section.id }} .pdp__gallery {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__gallery::-webkit-scrollbar {
+      display: none;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__featured-row,
+    #MainProduct-{{ section.id }} .pdp__wide,
+    #MainProduct-{{ section.id }} .pdp__square {
+      flex: 0 0 100%;
+      scroll-snap-align: center;
+      margin: 0;
+    }
+
+    /* Slides share the packshot's square footprint; the 2:1 banner crops. */
+    #MainProduct-{{ section.id }} .pdp__featured-row {
+      display: block;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__wide {
+      aspect-ratio: 1 / 1;
+    }
+
+    /* Lifts the two squares out of their wrapper into the carousel row. */
+    #MainProduct-{{ section.id }} .pdp__squares {
+      display: contents;
+    }
+
+    /* Reference mobile shows no badge rail. */
+    #MainProduct-{{ section.id }} .pdp__badges {
+      display: none;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__dots {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.6rem;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__dots[hidden] {
+      display: none;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__dot {
+      width: 1rem;
+      height: 1rem;
+      padding: 0;
+      border-radius: 50%;
+      background: var(--blue-bg);
+      transition: background 0.2s var(--ease);
+    }
+
+    #MainProduct-{{ section.id }} .pdp__dot[aria-current='true'] {
+      background: var(--ink);
+    }
+
+    /* Reference phone cards run three across. */
+    #MainProduct-{{ section.id }} .pdp__cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #MainProduct-{{ section.id }} .pdp__tab,
+    #MainProduct-{{ section.id }} .pdp__pill,
+    #MainProduct-{{ section.id }} .pdp__swatch {
+      transition: none;
+    }
+  }
+{%- endstyle -%}
+
+<section id="MainProduct-{{ section.id }}">
+  <div class="page-width pdp__grid">
+    {%- comment -%}
+      Reference mobile order is title, then carousel. Two h1 nodes exist but a
+      breakpoint always display:nones one of them, so assistive tech only ever
+      sees a single h1.
+    {%- endcomment -%}
+    <h1 class="pdp__title pdp__title--mob">{{ product.title | default: section.settings.fallback_title }}</h1>
+
+    {%- comment -%} ---- Media ---- {%- endcomment -%}
+    <div class="pdp__media scroll-trigger animate--fade-in">
+      {%- liquid
+        assign badge_blocks = section.blocks | where: 'type', 'badge'
+        assign tab_blocks = section.blocks | where: 'type', 'tab'
+      -%}
+
+      {%- comment -%}
+        Badges are per-character: a badge with no character set shows on every
+        product, one naming a character shows only there. Three is the cap the
+        rail is sized for, so the shown ones are counted, not the blocks.
+
+        ponytail: this rail is emitted once per colour gallery, so it repeats
+        in the DOM (4 colours = 4 copies, 3 of them inside hidden containers
+        and therefore out of the a11y tree). It is ~600 bytes and identical
+        every time. Hoisting it out means splitting the per-colour toggle
+        across three separate places in the media column; not worth it unless
+        badges ever need to differ by colour.
+      {%- endcomment -%}
+      {%- capture badge_rail -%}
+        {%- assign badges_shown = 0 -%}
+        {%- capture badge_items -%}
+          {%- for block in badge_blocks -%}
+            {%- assign want = block.settings.character | downcase | strip -%}
+            {%- if badges_shown < 3 and block.settings.text != blank -%}
+              {%- if want == blank or want == character -%}
+                {%- assign badges_shown = badges_shown | plus: 1 -%}
+                <span class="pdp__badge" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</span>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- if badges_shown > 0 -%}
+          <div class="pdp__badges">{{ badge_items }}</div>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- if product.media.size == 0 -%}
+        <div class="pdp__gallery">
+          <div class="pdp__featured-row">
+            {{ badge_rail }}
+            <div class="pdp__featured">
+              <div class="pdp__fallback">
+                <span>{{ product.title | default: section.settings.fallback_title }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {%- elsif colour_option -%}
+        {%- comment -%}
+          One gallery per colour. A shot belongs to a colour when its alt's
+          first word is that colour; untagged shots appear in all galleries.
+        {%- endcomment -%}
+        {%- for value in colour_option.values -%}
+          {%- liquid
+            assign vdown = value | downcase
+            assign featured_id = 0
+            assign wide_id = 0
+
+            comment
+              Pass 1 - featured: first owned-or-untagged media whose alt says
+              "packshot"; failing that, the first owned-or-untagged non-banner.
+            endcomment
+          -%}
+          {%- for media in product.media -%}
+            {%- liquid
+              assign adown = media.alt | downcase
+              assign first_word = adown | split: ' ' | first
+              assign untagged = true
+              for v2 in colour_option.values
+                assign v2d = v2 | downcase
+                if first_word == v2d
+                  assign untagged = false
+                endif
+              endfor
+              assign member = false
+              if first_word == vdown or untagged
+                assign member = true
+              endif
+            -%}
+            {%- if member and featured_id == 0 and adown contains 'packshot' -%}
+              {%- assign featured_id = media.id -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if featured_id == 0 -%}
+            {%- for media in product.media -%}
+              {%- liquid
+                assign adown = media.alt | downcase
+                assign first_word = adown | split: ' ' | first
+                assign untagged = true
+                for v2 in colour_option.values
+                  assign v2d = v2 | downcase
+                  if first_word == v2d
+                    assign untagged = false
+                  endif
+                endfor
+                assign member = false
+                if first_word == vdown or untagged
+                  assign member = true
+                endif
+              -%}
+              {%- unless adown contains 'banner' -%}
+                {%- if member and featured_id == 0 -%}
+                  {%- assign featured_id = media.id -%}
+                {%- endif -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
+
+          <div
+            class="pdp__gallery"
+            data-gallery="{{ value | escape }}"
+            {% unless value == selected_colour %}hidden{% endunless %}
+          >
+            <div class="pdp__featured-row">
+              {{ badge_rail }}
+              <div class="pdp__featured">
+                {%- for media in product.media -%}
+                  {%- if media.id == featured_id and media.preview_image != blank -%}
+                    {{
+                      media.preview_image
+                      | image_url: width: 1000
+                      | image_tag:
+                        loading: 'eager',
+                        alt: media.alt,
+                        widths: '400, 600, 800, 1000',
+                        sizes: '(max-width: 989px) 96vw, 32vw'
+                    }}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if featured_id == 0 -%}
+                  <div class="pdp__fallback">
+                    <span>{{ product.title | default: section.settings.fallback_title }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+
+            {%- comment -%} Pass 2 - the wide slot: first member banner. {%- endcomment -%}
+            {%- for media in product.media -%}
+              {%- liquid
+                assign adown = media.alt | downcase
+                assign first_word = adown | split: ' ' | first
+                assign untagged = true
+                for v2 in colour_option.values
+                  assign v2d = v2 | downcase
+                  if first_word == v2d
+                    assign untagged = false
+                  endif
+                endfor
+                assign member = false
+                if first_word == vdown or untagged
+                  assign member = true
+                endif
+              -%}
+              {%- if member and wide_id == 0 and adown contains 'banner' and media.id != featured_id and media.preview_image != blank -%}
+                {%- assign wide_id = media.id -%}
+                <div class="pdp__wide">
+                  {{
+                    media.preview_image
+                    | image_url: width: 1400
+                    | image_tag:
+                      loading: 'lazy',
+                      alt: media.alt,
+                      widths: '600, 800, 1000, 1400',
+                      sizes: '(max-width: 989px) 96vw, 47vw'
+                  }}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- comment -%} Pass 3 - everything else, two-up. {%- endcomment -%}
+            {%- capture squares -%}
+              {%- for media in product.media -%}
+                {%- liquid
+                  assign adown = media.alt | downcase
+                  assign first_word = adown | split: ' ' | first
+                  assign untagged = true
+                  for v2 in colour_option.values
+                    assign v2d = v2 | downcase
+                    if first_word == v2d
+                      assign untagged = false
+                    endif
+                  endfor
+                  assign member = false
+                  if first_word == vdown or untagged
+                    assign member = true
+                  endif
+                -%}
+                {%- if member and media.id != featured_id and media.id != wide_id and media.preview_image != blank -%}
+                  <div class="pdp__square">
+                    {{
+                      media.preview_image
+                      | image_url: width: 700
+                      | image_tag:
+                        loading: 'lazy',
+                        alt: media.alt,
+                        widths: '350, 500, 700',
+                        sizes: '(max-width: 989px) 48vw, 23vw'
+                    }}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endcapture -%}
+            {%- if squares contains 'pdp__square' -%}
+              <div class="pdp__squares">{{ squares }}</div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} No colour option: one gallery, first shot featured. {%- endcomment -%}
+        <div class="pdp__gallery">
+          <div class="pdp__featured-row">
+            {{ badge_rail }}
+            <div class="pdp__featured">
+              {%- assign first_media = product.media | first -%}
+              {%- if first_media.preview_image != blank -%}
+                {{ first_media.preview_image | image_url: width: 1000 | image_tag: loading: 'eager', alt: first_media.alt }}
+              {%- endif -%}
+            </div>
+          </div>
+          {%- if product.media.size > 1 -%}
+            <div class="pdp__squares">
+              {%- for media in product.media offset: 1 -%}
+                {%- if media.preview_image != blank -%}
+                  <div class="pdp__square">
+                    {{ media.preview_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: media.alt }}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ---- Info ---- {%- endcomment -%}
+    <div class="pdp__info">
+      <h1 class="pdp__title">{{ product.title | default: section.settings.fallback_title }}</h1>
+
+      {%- comment -%} Character tabs — reference's pack-format tabs. {%- endcomment -%}
+      {%- if tab_blocks.size > 0 -%}
+        {%- liquid
+          assign active_tab = ''
+          for block in tab_blocks
+            assign tag_probe = 'character:' | append: block.settings.label
+            assign tag_probe = tag_probe | downcase
+            for tag in product.tags
+              assign tdown = tag | downcase
+              if tdown == tag_probe and active_tab == ''
+                assign active_tab = block.id
+              endif
+            endfor
+          endfor
+          if active_tab == ''
+            assign active_tab = tab_blocks.first.id
+          endif
+        -%}
+        <div class="pdp__tabs" role="tablist" aria-label="{{ section.settings.tabs_label | escape }}">
+          {%- for block in tab_blocks -%}
+            <button
+              type="button"
+              class="pdp__tab"
+              role="tab"
+              id="Tab-{{ block.id }}"
+              aria-controls="TabPanel-{{ block.id }}"
+              aria-selected="{% if block.id == active_tab %}true{% else %}false{% endif %}"
+              data-pdp-tab="{{ block.id }}"
+              {{ block.shopify_attributes }}
+            >
+              {{- block.settings.label | escape -}}
+            </button>
+          {%- endfor -%}
+        </div>
+
+        {%- for block in tab_blocks -%}
+          <div
+            class="pdp__tab-panel"
+            role="tabpanel"
+            id="TabPanel-{{ block.id }}"
+            aria-labelledby="Tab-{{ block.id }}"
+            data-pdp-panel="{{ block.id }}"
+            {% unless block.id == active_tab %}hidden{% endunless %}
+          >
+            <div class="pdp__cards">
+              {%- liquid
+                assign shown = 0
+                assign tab_char = block.settings.label | downcase
+                case tab_char
+                  when 'jevika'
+                    assign card_pair = 'pink'
+                  when 'joy'
+                    assign card_pair = 'blue'
+                  when 'brutus'
+                    assign card_pair = 'gold'
+                  when 'minku'
+                    assign card_pair = 'green'
+                  when 'pinki'
+                    assign card_pair = 'purple'
+                  else
+                    assign card_pair = 'blue'
+                endcase
+              -%}
+              {%- if block.settings.collection != blank -%}
+                {%- comment -%}
+                  8 = two full grid rows. limit: 3 hid the viewed product from
+                  its own tab whenever it sat 4th or later in the collection.
+                {%- endcomment -%}
+                {%- for card_product in block.settings.collection.products limit: 8 -%}
+                  {%- assign shown = shown | plus: 1 -%}
+                  <a
+                    href="{{ card_product.url }}"
+                    class="pdp__card"
+                    style="--card-bg: var(--{{ card_pair }}-bg)"
+                    {% if card_product.id == product.id %}aria-current="page"{% endif %}
+                  >
+                    <span class="pdp__card-thumb">
+                      {%- if card_product.featured_image != blank -%}
+                        {{ card_product.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: card_product.title }}
+                      {%- else -%}
+                        <span>{{ card_product.title | escape }}</span>
+                      {%- endif -%}
+                    </span>
+                    <span class="pdp__card-label">{{ card_product.title | escape }}</span>
+                  </a>
+                {%- endfor -%}
+              {%- endif -%}
+              {%- if shown == 0 -%}
+                <span class="pdp__card" style="--card-bg: var(--{{ card_pair }}-bg)">
+                  <span class="pdp__card-thumb"><span>{{ block.settings.label | escape }}</span></span>
+                  <span class="pdp__card-label">{{ section.settings.coming_soon_label | escape }}</span>
+                </span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- comment -%} Accordions sit above the purchase block, per reference. {%- endcomment -%}
+      {%- render 'product-accordions', product: product, description: product.description -%}
+
+      {%- comment -%} ---- Purchase ---- {%- endcomment -%}
+      <div class="pdp__buy">
+        <div class="pdp__price">
+          <span data-pdp-price>{{ current_variant.price | default: product.price | money }}</span>
+          <s class="pdp__compare" data-pdp-compare>
+            {%- if current_variant.compare_at_price > current_variant.price -%}
+              {{- current_variant.compare_at_price | money -}}
+            {%- endif -%}
+          </s>
+        </div>
+
+        {%- if product.variants.size > 0 -%}
+          <script type="application/json" data-pdp-variants>
+            [
+              {%- for variant in product.variants -%}
+                {
+                  "id": {{ variant.id }},
+                  "options": {{ variant.options | json }},
+                  "available": {{ variant.available | json }},
+                  "price": {{ variant.price | money | json }},
+                  "compare_at": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %}
+                }{%- unless forloop.last -%},{%- endunless -%}
+              {%- endfor -%}
+            ]
+          </script>
+
+          {%- comment -%}
+            Picker sits outside the form so its radios are never posted to
+            /cart/add — the hidden id input is the only thing that matters.
+          {%- endcomment -%}
+          <div data-pdp-picker>
+            {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign option_name = option.name | downcase -%}
+              {%- if option_name == 'color' or option_name == 'colour' -%}
+                {%- assign is_colour = true -%}
+              {%- else -%}
+                {%- assign is_colour = false -%}
+              {%- endif -%}
+
+              <fieldset class="pdp__group" data-option-index="{{ forloop.index0 }}">
+                <legend class="visually-hidden">{{ option.name | escape }}</legend>
+                <span class="pdp__group-name accent-caps" aria-hidden="true">
+                  {{- option.name | escape }} <b data-selected-for="{{ forloop.index0 }}">{{ option.selected_value | escape }}</b>
+                </span>
+                <div class="pdp__values">
+                  {%- for value in option.values -%}
+                    {%- assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index0 -%}
+                    <div class="pdp__value" data-value="{{ value | escape }}">
+                      <input
+                        type="radio"
+                        id="{{ input_id }}"
+                        name="{{ section.id }}-option-{{ option.position }}"
+                        value="{{ value | escape }}"
+                        data-option-input
+                        {% if value == option.selected_value %}checked{% endif %}
+                      >
+                      {%- if is_colour -%}
+                        <label
+                          class="pdp__swatch"
+                          for="{{ input_id }}"
+                          data-swatch="{{ value | handle }}"
+                          title="{{ value | escape }}"
+                        >
+                          <span class="visually-hidden">{{ value | escape }}</span>
+                        </label>
+                      {%- else -%}
+                        <label class="pdp__pill" for="{{ input_id }}">{{ value | escape }}</label>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </fieldset>
+            {%- endfor -%}
+            {%- endunless -%}
+          </div>
+        {%- endif -%}
+
+        <form
+          action="{{ routes.cart_add_url }}"
+          method="post"
+          enctype="multipart/form-data"
+          class="pdp__atc"
+          data-pdp-form
+        >
+          <input type="hidden" name="id" value="{{ current_variant.id }}" data-pdp-variant-id>
+          <input type="hidden" name="quantity" value="1">
+          <span class="btn-wrap">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <button
+              type="submit"
+              name="add"
+              class="btn btn--primary"
+              data-pdp-submit
+              {% unless current_variant.available %}disabled{% endunless %}
+            >
+              <span data-pdp-submit-text>
+                {%- if current_variant == nil -%}
+                  {{ section.settings.unavailable_label | escape }}
+                {%- elsif current_variant.available -%}
+                  {{ section.settings.add_label | escape }}
+                {%- else -%}
+                  {{ section.settings.sold_out_label | escape }}
+                {%- endif -%}
+              </span>
+            </button>
+          </span>
+        </form>
+
+        {%- if section.settings.trust_line != blank -%}
+          <p class="pdp__trust">{{ section.settings.trust_line | escape }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('MainProduct-{{ section.id }}');
+    if (!root || root.dataset.pdpInit) return;
+    root.dataset.pdpInit = '1';
+
+    // --- Category tabs.
+    var tabs = root.querySelectorAll('[data-pdp-tab]');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) {
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        root.querySelectorAll('[data-pdp-panel]').forEach(function (p) {
+          p.hidden = p.dataset.pdpPanel !== tab.dataset.pdpTab;
+        });
+      });
+    });
+
+    // --- Gallery: one panel per colour, toggled by the swatch picker.
+    var galleries = root.querySelectorAll('[data-gallery]');
+
+    // Dots for the stacked-layout carousel. Built for every gallery; CSS
+    // keeps them display:none on desktop.
+    galleries.forEach(function (g) {
+      var slides = g.querySelectorAll('.pdp__featured-row, .pdp__wide, .pdp__square');
+      if (slides.length < 2) return;
+
+      var nav = document.createElement('div');
+      nav.className = 'pdp__dots';
+      nav.setAttribute('role', 'tablist');
+      slides.forEach(function (slide, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'pdp__dot';
+        dot.setAttribute('aria-label', {{ section.settings.thumb_label | default: 'Show image' | json }} + ' ' + (i + 1));
+        if (i === 0) dot.setAttribute('aria-current', 'true');
+        dot.addEventListener('click', function () {
+          g.scrollTo({ left: slide.offsetLeft - g.offsetLeft, behavior: 'smooth' });
+        });
+        nav.appendChild(dot);
+      });
+      g.after(nav);
+      g.jjwDots = nav;
+      nav.hidden = g.hidden;
+
+      g.addEventListener('scroll', function () {
+        // Slides are full-width, so the nearest index is a plain division.
+        var i = Math.round(g.scrollLeft / g.clientWidth);
+        nav.querySelectorAll('.pdp__dot').forEach(function (d, j) {
+          if (j === i) d.setAttribute('aria-current', 'true');
+          else d.removeAttribute('aria-current');
+        });
+      }, { passive: true });
+    });
+
+    function showGallery(colour) {
+      if (!galleries.length) return;
+      var hit = false;
+      galleries.forEach(function (g) {
+        var match = g.dataset.gallery === colour;
+        g.hidden = !match;
+        if (g.jjwDots) g.jjwDots.hidden = !match;
+        if (match) hit = true;
+      });
+      if (!hit) galleries.forEach(function (g, i) {
+        g.hidden = i !== 0;
+        if (g.jjwDots) g.jjwDots.hidden = i !== 0;
+      });
+    }
+
+    // --- Variant picker.
+    var source = root.querySelector('[data-pdp-variants]');
+    var picker = root.querySelector('[data-pdp-picker]');
+    if (!source || !picker) return;
+
+    var variants;
+    try {
+      variants = JSON.parse(source.textContent);
+    } catch (e) {
+      return;
+    }
+
+    var idInput = root.querySelector('[data-pdp-variant-id]');
+    var priceEl = root.querySelector('[data-pdp-price]');
+    var compareEl = root.querySelector('[data-pdp-compare]');
+    var submit = root.querySelector('[data-pdp-submit]');
+    var submitText = root.querySelector('[data-pdp-submit-text]');
+    var labels = {
+      add: {{ section.settings.add_label | default: 'Add to Cart' | json }},
+      soldOut: {{ section.settings.sold_out_label | default: 'Sold Out' | json }},
+      unavailable: {{ section.settings.unavailable_label | default: 'Unavailable' | json }}
+    };
+
+    function selection() {
+      return Array.prototype.map.call(picker.querySelectorAll('[data-option-index]'), function (group) {
+        var checked = group.querySelector('input:checked');
+        return checked ? checked.value : null;
+      });
+    }
+
+    function matches(chosen) {
+      for (var i = 0; i < variants.length; i++) {
+        var v = variants[i];
+        var hit = true;
+        for (var j = 0; j < chosen.length; j++) {
+          if (chosen[j] !== null && v.options[j] !== chosen[j]) { hit = false; break; }
+        }
+        if (hit) return v;
+      }
+      return null;
+    }
+
+    // A value is unavailable when no available variant exists with that value
+    // held against the current choice for every other option.
+    function markAvailability(chosen) {
+      picker.querySelectorAll('[data-option-index]').forEach(function (group) {
+        var index = parseInt(group.dataset.optionIndex, 10);
+        group.querySelectorAll('.pdp__value').forEach(function (wrap) {
+          var probe = chosen.slice();
+          probe[index] = wrap.dataset.value;
+          var found = variants.some(function (v) {
+            if (!v.available) return false;
+            return probe.every(function (val, j) {
+              return val === null || v.options[j] === val;
+            });
+          });
+          if (found) wrap.removeAttribute('data-unavailable');
+          else wrap.setAttribute('data-unavailable', '');
+        });
+      });
+    }
+
+    // The colour group is the one rendered as swatches.
+    var colourGroup = null;
+    picker.querySelectorAll('[data-option-index]').forEach(function (g) {
+      if (g.querySelector('.pdp__swatch')) colourGroup = g;
+    });
+
+    function update() {
+      var chosen = selection();
+      var variant = matches(chosen);
+
+      picker.querySelectorAll('[data-selected-for]').forEach(function (el) {
+        el.textContent = chosen[parseInt(el.dataset.selectedFor, 10)] || '';
+      });
+
+      markAvailability(chosen);
+
+      if (colourGroup) {
+        var picked = colourGroup.querySelector('input:checked');
+        showGallery(picked ? picked.value : '');
+      }
+
+      if (variant && idInput) idInput.value = variant.id;
+      if (variant && priceEl) priceEl.innerHTML = variant.price;
+      if (compareEl) compareEl.innerHTML = variant && variant.compare_at ? variant.compare_at : '';
+
+      if (submit) {
+        var buyable = !!(variant && variant.available);
+        submit.disabled = !buyable;
+        if (submitText) {
+          submitText.textContent = !variant ? labels.unavailable : variant.available ? labels.add : labels.soldOut;
+        }
+      }
+    }
+
+    picker.addEventListener('change', function (event) {
+      if (event.target.matches('[data-option-input]')) update();
+    });
+
+    update();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "max_blocks": 24,
+  "settings": [
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Add to cart label",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Sold out label",
+      "default": "Sold Out"
+    },
+    {
+      "type": "text",
+      "id": "unavailable_label",
+      "label": "Unavailable label",
+      "info": "Shown when the chosen size and colour is not a real combination.",
+      "default": "Unavailable"
+    },
+    {
+      "type": "text",
+      "id": "trust_line",
+      "label": "Trust line",
+      "info": "Short reassurance under the button.",
+      "default": "Soft cotton, kind to skin. Easy 7-day exchanges."
+    },
+    {
+      "type": "text",
+      "id": "tabs_label",
+      "label": "Tabs accessible label",
+      "default": "Shop by character"
+    },
+    {
+      "type": "text",
+      "id": "coming_soon_label",
+      "label": "Empty tab label",
+      "info": "Shown in a tab whose collection has no products yet.",
+      "default": "Coming Soon"
+    },
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Fallback title",
+      "info": "Shown if the product has no title.",
+      "default": "Our Tee"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Character tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Character name",
+          "info": "Matched against the product's character: tag to pick the active tab.",
+          "default": "Joy"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Products shown as cards inside this tab."
+        }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "100% Soft Cotton"
+        },
+        {
+          "type": "select",
+          "id": "character",
+          "label": "Show for character",
+          "info": "Leave on All to show this badge on every product.",
+          "default": "",
+          "options": [
+            { "value": "", "label": "All products" },
+            { "value": "jevika", "label": "Jevika" },
+            { "value": "joy", "label": "Joy" },
+            { "value": "brutus", "label": "Brutus" },
+            { "value": "minku", "label": "Minku" },
+            { "value": "pinki", "label": "Pinki" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product",
+      "blocks": [
+        { "type": "badge", "settings": { "text": "100% Soft Cotton" } },
+        { "type": "badge", "settings": { "text": "Certified Safe Inks" } },
+        { "type": "badge", "settings": { "text": "Made For Play" } },
+        { "type": "tab", "settings": { "label": "Jevika" } },
+        { "type": "tab", "settings": { "label": "Joy" } },
+        { "type": "tab", "settings": { "label": "Brutus" } },
+        { "type": "tab", "settings": { "label": "Minku" } },
+        { "type": "tab", "settings": { "label": "Pinki" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

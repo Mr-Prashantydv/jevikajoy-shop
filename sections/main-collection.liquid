@@ -1,0 +1,381 @@
+{%- comment -%}
+  Main collection — character filter pills, heading, and the product grid.
+
+  Measured against the reference collection page at 1440:
+    pills   27px condensed caps, ls 1.35px, 54px tall, 10px gap, centred
+    heading 86.4px display, line-height 1, ls 0.6px, centred  (= .hxxl)
+    card    276x569, 20px radius, pastel fill
+    media   276x345 (4:5), object-fit: contain so the square shot floats
+    title   27px condensed caps, ls 1.35px, centred
+
+  Colour roles are JJW's: each card takes the pair of the product's
+  "character:" tag, exactly as the PDP gallery and cart thumbnails do.
+
+  Reality this is built for: most products still have no images, so the media
+  slot degrades to the character colour block rather than a broken <img>.
+{%- endcomment -%}
+
+{%- liquid
+  assign pill_blocks = section.blocks | where: 'type', 'filter'
+-%}
+
+{%- style -%}
+  #MainCollection-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 4rem 8rem;
+  }
+
+  /* --- Filter pills -----------------------------------------------------
+     Shape and states are the shared .jjw-pill in theme.css; only the gap
+     below the row is this section's own. */
+
+  #MainCollection-{{ section.id }} .mc__pills {
+    margin-bottom: 6rem;
+  }
+
+  /* --- Heading ---------------------------------------------------------- */
+
+  #MainCollection-{{ section.id }} .mc__heading {
+    text-align: center;
+    /* .hxxl tracks 0.01em, which is 0.86px here; reference is a flat 0.6px. */
+    letter-spacing: 0.06rem;
+    color: var(--ink);
+  }
+
+  #MainCollection-{{ section.id }} .mc__sub {
+    max-width: 90rem;
+    margin: 1.6rem auto 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.4rem;
+    line-height: 1.3;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink);
+  }
+
+  #MainCollection-{{ section.id }} .mc__sub :where(p) {
+    margin: 0;
+  }
+
+  /* --- Grid ------------------------------------------------------------- */
+
+  #MainCollection-{{ section.id }} .mc__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3rem 2.4rem;
+    margin: 6rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainCollection-{{ section.id }} .mc__card {
+    --card-bg: var(--blue-bg);
+    --card-fg: var(--blue);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 2rem;
+    overflow: hidden;
+    background: var(--card-bg);
+    transition: transform 0.3s var(--ease);
+  }
+
+  #MainCollection-{{ section.id }} .mc__card a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  {%- comment -%}
+    4:5 media box with contain, so a square packshot floats on the card's own
+    colour the way the reference's product boxes do — never cropped.
+  {%- endcomment -%}
+  #MainCollection-{{ section.id }} .mc__media {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+  }
+
+  #MainCollection-{{ section.id }} .mc__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* No media: the character colour carries the card on its own. */
+  #MainCollection-{{ section.id }} .mc__fallback {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding: 2rem;
+  }
+
+  #MainCollection-{{ section.id }} .mc__fallback span {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 3.2rem;
+    line-height: 1;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  {%- comment -%}
+    Reference tints the title with each card's own solid, which on its pale
+    yellow measures about 1.5:1. Navy is a brand colour and clears every tint,
+    so the colour coding lives in the fill and the type stays readable.
+  {%- endcomment -%}
+  #MainCollection-{{ section.id }} .mc__title {
+    margin: 0;
+    padding: 0 1.6rem 2.4rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.7rem;
+    line-height: 1.3;
+    letter-spacing: 0.135rem;
+    text-transform: uppercase;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  #MainCollection-{{ section.id }} .mc__price {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    color: var(--ink-soft);
+  }
+
+  #MainCollection-{{ section.id }} [data-pair='pink'] { --card-bg: var(--pink-bg); --card-fg: var(--pink); }
+  #MainCollection-{{ section.id }} [data-pair='blue'] { --card-bg: var(--blue-bg); --card-fg: var(--blue); }
+  #MainCollection-{{ section.id }} [data-pair='gold'] { --card-bg: var(--gold-bg); --card-fg: var(--gold); }
+  #MainCollection-{{ section.id }} [data-pair='green'] { --card-bg: var(--green-bg); --card-fg: var(--green); }
+  #MainCollection-{{ section.id }} [data-pair='purple'] { --card-bg: var(--purple-bg); --card-fg: var(--purple); }
+
+  /* --- Empty state ------------------------------------------------------- */
+
+  #MainCollection-{{ section.id }} .mc__empty {
+    margin: 6rem 0 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.4rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    #MainCollection-{{ section.id }} .mc__card:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    #MainCollection-{{ section.id }} .mc__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #MainCollection-{{ section.id }} {
+      padding-block: 2rem 5rem;
+    }
+
+    #MainCollection-{{ section.id }} .mc__pills {
+      margin-bottom: 3.6rem;
+    }
+
+    #MainCollection-{{ section.id }} .mc__sub {
+      font-size: 1.8rem;
+    }
+
+    #MainCollection-{{ section.id }} .mc__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.6rem;
+      margin-top: 3.6rem;
+    }
+
+    #MainCollection-{{ section.id }} .mc__title {
+      padding: 0 1rem 1.6rem;
+      font-size: 1.9rem;
+    }
+  }
+{%- endstyle -%}
+
+<section id="MainCollection-{{ section.id }}">
+  <div class="page-width">
+    {%- if pill_blocks.size > 0 -%}
+      <ul class="jjw-pills mc__pills">
+        {%- for block in pill_blocks -%}
+          {%- liquid
+            assign pill_target = block.settings.collection
+            assign pill_label = block.settings.label | default: pill_target.title
+            assign is_here = false
+            if pill_target != blank and pill_target.handle == collection.handle
+              assign is_here = true
+            endif
+          -%}
+          {%- if pill_label != blank -%}
+            <li {{ block.shopify_attributes }}>
+              <a
+                class="jjw-pill"
+                href="{% if pill_target != blank %}{{ pill_target.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
+                {% if is_here %}aria-current="page"{% endif %}
+              >
+                {{- pill_label | escape -}}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <h1 class="hxxl mc__heading scroll-trigger animate--fade-in">
+      {{- collection.title | default: section.settings.fallback_title | escape -}}
+    </h1>
+
+    {%- assign blurb = collection.description | default: section.settings.fallback_description -%}
+    {%- if blurb != blank -%}
+      <div class="mc__sub scroll-trigger animate--fade-in">{{ blurb }}</div>
+    {%- endif -%}
+
+    {%- if collection.products.size > 0 -%}
+      <ul class="mc__grid">
+        {%- for product in collection.products -%}
+          {%- liquid
+            comment
+              A product can carry more than one character — Brutus Boxer Tee is
+              tagged Brutus and Joy. Take the first as the default, but prefer
+              whichever matches the collection being viewed, so the same tee
+              reads gold on Brutus and blue on Joy instead of always the last
+              tag alphabetically.
+            endcomment
+            assign character = ''
+            assign here = collection.handle | downcase
+            for tag in product.tags
+              if tag contains 'character:'
+                assign tag_name = tag | split: ':' | last | strip | downcase
+                if character == blank
+                  assign character = tag_name
+                endif
+                if tag_name == here
+                  assign character = tag_name
+                endif
+              endif
+            endfor
+
+            case character
+              when 'jevika'
+                assign pair = 'pink'
+              when 'joy'
+                assign pair = 'blue'
+              when 'brutus'
+                assign pair = 'gold'
+              when 'minku'
+                assign pair = 'green'
+              when 'pinki'
+                assign pair = 'purple'
+              else
+                assign pair = 'blue'
+            endcase
+          -%}
+          <li
+            class="mc__card scroll-trigger animate--slide-in"
+            data-pair="{{ pair }}"
+            style="--animation-order: {{ forloop.index0 }};"
+          >
+            <a href="{{ product.url }}">
+              <div class="mc__media">
+                {%- if product.featured_media != blank -%}
+                  {{
+                    product.featured_media
+                    | image_url: width: 700
+                    | image_tag:
+                      loading: 'lazy',
+                      alt: product.featured_media.alt | default: product.title,
+                      widths: '250, 400, 550, 700',
+                      sizes: '(max-width: 749px) 46vw, (max-width: 989px) 30vw, 23vw'
+                  }}
+                {%- else -%}
+                  <div class="mc__fallback"><span>{{ product.title | escape }}</span></div>
+                {%- endif -%}
+              </div>
+              <h2 class="mc__title">
+                {{- product.title | escape -}}
+                {%- if section.settings.show_price -%}
+                  <span class="mc__price">{{ product.price | money }}</span>
+                {%- endif -%}
+              </h2>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p class="mc__empty">{{ section.settings.empty_text | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Fallback heading",
+      "info": "Shown if the collection has no title.",
+      "default": "The Full Squad"
+    },
+    {
+      "type": "richtext",
+      "id": "fallback_description",
+      "label": "Fallback description",
+      "info": "Used only when the collection has no description of its own.",
+      "default": "<p>Character tees built for playgrounds, art class and everything after</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price on cards",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty collection text",
+      "default": "Nothing here yet — check back soon"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter",
+      "name": "Filter pill",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Falls back to the collection's own title."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Leave blank to link to all products."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection"
+    }
+  ]
+}
+{% endschema %}

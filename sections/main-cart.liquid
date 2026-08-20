@@ -1,0 +1,455 @@
+{%- comment -%}
+  Cart — line items, quantities, subtotal and checkout, plus an empty state.
+  Mirrors the reference cart's shape: items block, then a footer bar, with a
+  product carousel underneath supplied by a separate section.
+
+  Commerce notes:
+  - The whole thing is one <form action="{{ routes.cart_url }}" method="post">
+    so quantity edits submit via `updates[]` and checkout via name="checkout".
+    That means it works with JS disabled; the JS below only removes the need to
+    press "Update".
+  - Products currently have no images, so every thumbnail falls back to a
+    character-coloured block rather than a broken <img>.
+{%- endcomment -%}
+
+{%- style -%}
+  #MainCart-{{ section.id }} {
+    background: var(--cream);
+  }
+
+  #MainCart-{{ section.id }} .cart__inner {
+    padding-block: {{ section.settings.padding_top }}px {{ section.settings.padding_bottom }}px;
+  }
+
+  #MainCart-{{ section.id }} .cart__heading {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: min(6vw, 8.6rem);
+    line-height: 1;
+    letter-spacing: 0.06rem;
+    color: var(--ink);
+    margin: 0 0 3.2rem;
+  }
+
+  /* ---------- Empty state ---------- */
+
+  #MainCart-{{ section.id }} .cart__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    padding-block: 4rem 6rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__empty-text {
+    font-size: 2.2rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    max-width: 46rem;
+    margin: 0;
+  }
+
+  /* ---------- Line items ---------- */
+
+  #MainCart-{{ section.id }} .cart__items {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  #MainCart-{{ section.id }} .cart__row {
+    display: grid;
+    grid-template-columns: 12rem 1fr auto;
+    gap: 2.4rem;
+    align-items: center;
+    padding-block: 2.4rem;
+    border-block-end: 1px solid rgba(26, 47, 94, 0.16);
+    border-block-end: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  #MainCart-{{ section.id }} .cart__media {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 1.6rem;
+    overflow: hidden;
+    background: var(--item-bg, var(--blue-bg));
+    display: grid;
+    place-items: center;
+  }
+
+  #MainCart-{{ section.id }} .cart__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  #MainCart-{{ section.id }} .cart__media-fallback {
+    font-family: var(--font-accent);
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--ink);
+    padding: 0.8rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__name {
+    font-family: var(--font-accent);
+    font-weight: 900;
+    font-size: 2.6rem;
+    line-height: 1.1;
+    color: var(--ink);
+    text-decoration: none;
+    display: block;
+  }
+
+  #MainCart-{{ section.id }} .cart__variant {
+    margin: 0.6rem 0 0;
+    font-size: 1.5rem;
+    color: var(--ink-soft);
+  }
+
+  #MainCart-{{ section.id }} .cart__unit {
+    margin: 0.4rem 0 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+
+  #MainCart-{{ section.id }} .cart__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.2rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  #MainCart-{{ section.id }} .cart__qty button {
+    width: 3.6rem;
+    height: 3.6rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--ink);
+    background: transparent;
+  }
+
+  #MainCart-{{ section.id }} .cart__qty button:hover {
+    background: var(--blue-bg);
+  }
+
+  #MainCart-{{ section.id }} .cart__qty input {
+    width: 4.4rem;
+    height: 3.6rem;
+    border: 0;
+    text-align: center;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--ink);
+    background: transparent;
+    -moz-appearance: textfield;
+  }
+
+  #MainCart-{{ section.id }} .cart__qty input::-webkit-outer-spin-button,
+  #MainCart-{{ section.id }} .cart__qty input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  #MainCart-{{ section.id }} .cart__line-total {
+    font-family: var(--font-accent);
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--ink);
+  }
+
+  #MainCart-{{ section.id }} .cart__remove {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: underline;
+  }
+
+  #MainCart-{{ section.id }} .cart__remove:hover {
+    color: var(--pink);
+  }
+
+  /* ---------- Footer / totals ---------- */
+
+  #MainCart-{{ section.id }} .cart__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.6rem;
+    padding-block: 3.2rem 0;
+  }
+
+  #MainCart-{{ section.id }} .cart__subtotal {
+    display: flex;
+    align-items: baseline;
+    gap: 1.6rem;
+    font-family: var(--font-accent);
+    font-weight: 900;
+    font-size: 3rem;
+    color: var(--ink);
+  }
+
+  #MainCart-{{ section.id }} .cart__subtotal-label {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  #MainCart-{{ section.id }} .cart__note {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  #MainCart-{{ section.id }} .cart__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 1.2rem;
+    margin-top: 0.8rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__actions .btn {
+    min-height: 6.4rem;
+    font-size: 2.4rem;
+    padding-inline: 3.2rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__update {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: underline;
+    background: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    #MainCart-{{ section.id }} .cart__row {
+      grid-template-columns: 8rem 1fr;
+      gap: 1.6rem;
+    }
+
+    #MainCart-{{ section.id }} .cart__media {
+      width: 8rem;
+      height: 8rem;
+    }
+
+    #MainCart-{{ section.id }} .cart__right {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #MainCart-{{ section.id }} .cart__name {
+      font-size: 2rem;
+    }
+
+    #MainCart-{{ section.id }} .cart__footer {
+      align-items: stretch;
+    }
+
+    #MainCart-{{ section.id }} .cart__actions {
+      justify-content: stretch;
+    }
+
+    #MainCart-{{ section.id }} .cart__actions .btn-wrap {
+      flex: 1 1 100%;
+    }
+  }
+{%- endstyle -%}
+
+<section id="MainCart-{{ section.id }}">
+  <div class="page-width cart__inner">
+    <h1 class="cart__heading">{{ section.settings.heading | escape }}</h1>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="cart__empty">
+        <p class="cart__empty-text">{{ section.settings.empty_text | escape }}</p>
+        <div class="btn-wrap">
+          <span class="btn-shadow" aria-hidden="true"></span>
+          <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">
+            {{ section.settings.empty_cta | escape }}
+          </a>
+        </div>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" novalidate data-cart-form>
+        <div class="cart__items">
+          {%- for line in cart.items -%}
+            {%- liquid
+              assign pair = 'blue'
+              for tag in line.product.tags
+                if tag contains 'character:'
+                  assign character = tag | remove: 'character:' | downcase
+                  case character
+                    when 'jevika'
+                      assign pair = 'pink'
+                    when 'joy'
+                      assign pair = 'blue'
+                    when 'brutus'
+                      assign pair = 'gold'
+                    when 'minku'
+                      assign pair = 'green'
+                    when 'pinki'
+                      assign pair = 'purple'
+                  endcase
+                endif
+              endfor
+            -%}
+            <div class="cart__row" style="--item-bg: var(--{{ pair }}-bg);">
+              <div class="cart__media">
+                {%- if line.image != blank -%}
+                  {{
+                    line.image
+                    | image_url: width: 300
+                    | image_tag: loading: 'lazy', alt: line.title, widths: '120, 240, 300'
+                  }}
+                {%- else -%}
+                  <span class="cart__media-fallback">{{ line.product.title | truncatewords: 3, '' | escape }}</span>
+                {%- endif -%}
+              </div>
+
+              <div>
+                <a class="cart__name" href="{{ line.url }}">{{ line.product.title | escape }}</a>
+                {%- unless line.product.has_only_default_variant -%}
+                  <p class="cart__variant">{{ line.variant.title | escape }}</p>
+                {%- endunless -%}
+                <p class="cart__unit">{{ line.original_price | money }}</p>
+              </div>
+
+              <div class="cart__right">
+                <div class="cart__qty">
+                  <button
+                    type="button"
+                    data-qty-down
+                    aria-label="{{ 'Decrease quantity for ' | append: line.product.title | escape }}"
+                  >&minus;</button>
+                  <input
+                    type="number"
+                    name="updates[]"
+                    value="{{ line.quantity }}"
+                    min="0"
+                    inputmode="numeric"
+                    aria-label="{{ 'Quantity for ' | append: line.product.title | escape }}"
+                    data-qty-input
+                  >
+                  <button
+                    type="button"
+                    data-qty-up
+                    aria-label="{{ 'Increase quantity for ' | append: line.product.title | escape }}"
+                  >+</button>
+                </div>
+                <span class="cart__line-total">{{ line.final_line_price | money }}</span>
+                <a class="cart__remove" href="{{ line.url_to_remove }}">{{ section.settings.remove_label | escape }}</a>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="cart__footer">
+          <div class="cart__subtotal">
+            <span class="cart__subtotal-label">{{ section.settings.subtotal_label | escape }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+
+          {%- if section.settings.footer_note != blank -%}
+            <p class="cart__note">{{ section.settings.footer_note | escape }}</p>
+          {%- endif -%}
+
+          <div class="cart__actions">
+            {%- comment -%} Visible only without JS; the script auto-submits instead. {%- endcomment -%}
+            <noscript>
+              <button type="submit" name="update" class="cart__update">
+                {{ section.settings.update_label | escape }}
+              </button>
+            </noscript>
+
+            <div class="btn-wrap">
+              <span class="btn-shadow" aria-hidden="true"></span>
+              <button type="submit" name="checkout" class="btn btn--primary">
+                {{ section.settings.checkout_label | escape }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('MainCart-{{ section.id }}');
+    if (!root || root.dataset.cartInit) return;
+    root.dataset.cartInit = '1';
+
+    var form = root.querySelector('[data-cart-form]');
+    if (!form) return;
+
+    // Stepper buttons edit the number input, then submit so Shopify recalculates.
+    root.addEventListener('click', function (e) {
+      var down = e.target.closest('[data-qty-down]');
+      var up = e.target.closest('[data-qty-up]');
+      if (!down && !up) return;
+      var wrap = (down || up).closest('.cart__qty');
+      var input = wrap && wrap.querySelector('[data-qty-input]');
+      if (!input) return;
+      var v = parseInt(input.value, 10);
+      if (isNaN(v)) v = 0;
+      v = up ? v + 1 : Math.max(0, v - 1);
+      input.value = v;
+      form.submit();
+    });
+
+    // Typing a quantity submits on change, so "Update" is not needed with JS on.
+    root.addEventListener('change', function (e) {
+      if (e.target.matches('[data-qty-input]')) form.submit();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cart",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Your Cart" },
+    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
+    { "type": "text", "id": "checkout_label", "label": "Checkout button", "default": "Checkout" },
+    { "type": "text", "id": "update_label", "label": "Update button (no-JS)", "default": "Update cart" },
+    { "type": "text", "id": "remove_label", "label": "Remove link", "default": "Remove" },
+    { "type": "text", "id": "footer_note", "label": "Note under subtotal", "default": "Taxes and shipping calculated at checkout." },
+    { "type": "header", "content": "Empty state" },
+    { "type": "text", "id": "empty_text", "label": "Empty message", "default": "Nothing here yet. Pick a hero and their tee comes with them." },
+    { "type": "text", "id": "empty_cta", "label": "Empty button", "default": "Shop All Tees" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 }
+  ]
+}
+{% endschema %}

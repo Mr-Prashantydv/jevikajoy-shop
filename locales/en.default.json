@@ -1,7 +1,18 @@
 {
   "general": {
     "meta": { "tags": "Tagged \"{{ tags }}\"", "page": "Page {{ page }}" },
-    "search": { "search": "Search" }
+    "search": {
+      "search": "Search",
+      "no_results": "Nothing matches “{{ terms }}” — try a character name",
+      "results_with_count": {
+        "one": "{{ count }} result for “{{ terms }}”",
+        "other": "{{ count }} results for “{{ terms }}”"
+      },
+      "clear": "Clear",
+      "suggestions": "Suggestions",
+      "products": "Products",
+      "search_for": "Search for “{{ terms }}”"
+    }
   },
   "accessibility": {
     "skip_to_text": "Skip to content",

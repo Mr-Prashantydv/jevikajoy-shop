@@ -39,8 +39,34 @@
     });
   }
 
+  /* Prefix matching for every search form on the site.
+
+     Shopify's documented `options[prefix]=last` measurably does nothing on
+     this store — /search?q=adven&options[prefix]=last returns 0 while
+     /search?q=adven* returns 4. So the wildcard goes on at submit time
+     instead. Sections echo the terms back through `remove_last: '*'`, so the
+     star never shows up in the heading or the field.
+
+     Bound to form[role="search"] rather than to a specific form, so the
+     header drawer and the results page share the one rule. */
+  function initSearchPrefix() {
+    document.querySelectorAll('form[role="search"]').forEach(function (form) {
+      if (form.dataset.prefixBound === '1') return;
+      form.dataset.prefixBound = '1';
+
+      form.addEventListener('submit', function () {
+        var field = form.querySelector('input[name="q"]');
+        if (!field) return;
+        var term = field.value.trim();
+        if (term === '' || term.slice(-1) === '*') return;
+        field.value = term + '*';
+      });
+    });
+  }
+
   function init() {
     initScrollReveal();
+    initSearchPrefix();
   }
 
   if (document.readyState === 'loading') {

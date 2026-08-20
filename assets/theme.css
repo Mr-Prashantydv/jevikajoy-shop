@@ -10,62 +10,62 @@
 
 /* --- Fonts ------------------------------------------------------------- */
 
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@400;500;600;700;800;900&display=swap');
-
-@font-face {
-  font-family: 'Sofia Pro Soft';
-  src: url('SofiaProSoft-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Sofia Pro Soft';
-  src: url('SofiaProSoft-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Sofia Pro Soft';
-  src: url('SofiaProSoft-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+/* Body face was SofiaProSoft-*.otf. Those files are Fontspring DEMO builds:
+   96 glyphs, of which 29 — including & ' - " ! / 4 @ ( ) — share the .notdef
+   outline, so they rendered as tofu boxes in live copy. Demo licence also
+   forbids web embedding. Nunito is the nearest OFL geometric-rounded match. */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap');
 
 /* --- Tokens ------------------------------------------------------------
    Role structure mirrors the React theme; hex values are the JJW palette.
    Reference role → our value is tabulated in docs/clone/DESIGN-SYSTEM.md §1. */
 
 :root {
+  /* Values come from the JJW brand sheet (WhatsApp, 30 Jul 2026) — the only
+     colour authority. Reference sites contribute layout and structure, never
+     colour. The *-bg pastels are our tints of the brand anchors; the sheet
+     defines no tint ramp. */
+
   /* Canvas + ink */
-  --cream: #fff6eb;
-  --ink: #1a2f5e;
+  --cream: #fff7e8; /* Indoor background */
+  --white: #ffffff; /* Pure White — cards on the cream canvas */
+  --warm-white: #f8f8f6; /* Warm White */
+  --ink: #1a2f5e; /* Navy Blue */
   --ink-soft: rgba(26, 47, 94, 0.75);
-  --ink-deep: #0e1b3a;
+  --ink-deep: #10244a; /* Night navy — shadow layer under every button */
 
   /* Accents */
-  --pink: #e5377e;
-  --pink-deep: #7a1240;
-  --pink-bg: #ffd7e6;
-  --blue: #0f7daf;
-  --blue-bg: #c9e8f7;
-  --sky: #9fdbff;
-  --gold: #f6a313;
-  --gold-bg: #ffe9c2;
-  --yellow: #ffd94c;
-  --green: #2fa85e;
-  --green-bg: #d3f3de;
-  --purple: #6e55d6;
-  --purple-bg: #e4dcff;
+  --pink: #ff4f8b; /* Heart Pink — emphasis, buttons */
+  --pink-deep: #10244a; /* sheet has no pink shadow; reference shadows all buttons navy */
+  --blue: #0f7daf; /* Adventure Blue */
+  --sky: #59c8f6; /* Sky Blue */
+  --gold: #f6a313; /* Sunshine Gold */
+  --yellow: #ffd94c; /* Star Yellow */
+  --green: #4faf4b; /* Outdoor green — Mint #73D78D is too light to carry text */
+  --candy: #ff5fa2; /* Candy Pink */
+  --mint: #73d78d; /* Mint Green */
+  --lavender: #a88bff; /* Lavender */
+  --purple: #7259ff; /* Space Purple */
+
+  /* Character card fills.
+     These were #ffd7e6 / #c9e8f7 / #ffe9c2 / #d3f3de / #e4dcff — five pastels
+     we mixed ourselves. The brand sheet has no tint ramp, so they were the one
+     standing invention in the palette. Every value below is now a colour the
+     sheet names outright, which is why two of them are plain aliases.
+
+     All five carry --ink at 4.55:1 or better, so card titles must be navy.
+     Tinting a title with its own card's solid puts Heart Pink on Candy Pink at
+     about 1:1 — see the note on featured-collection. */
+  --pink-bg: var(--candy); /* Candy Pink   — ink 4.55:1 */
+  --blue-bg: var(--sky); /* Sky Blue     — ink 6.77:1 */
+  --gold-bg: var(--yellow); /* Star Yellow  — ink 9.39:1 */
+  --green-bg: var(--mint); /* Mint Green   — ink 7.27:1 */
+  --purple-bg: var(--lavender); /* Lavender     — ink 4.79:1 */
 
   /* Type */
   --font-heading: 'Baloo 2', system-ui, sans-serif;
   --font-accent: 'Big Shoulders Display', system-ui, sans-serif;
-  --font-body: 'Sofia Pro Soft', system-ui, sans-serif;
+  --font-body: 'Nunito', system-ui, sans-serif;
 
   /* Shape + motion */
   --radius: 1.6rem;
@@ -237,7 +237,11 @@ a {
   letter-spacing: 0.1rem;
   text-transform: uppercase;
   background: var(--btn-bg, var(--pink));
-  color: var(--btn-fg, var(--cream));
+  /* Night navy, not cream: pink+cream is 2.92:1 and the clamp floor (16px bold)
+     is below the 18.66px large-text cutoff, so this needs 4.5:1. Night navy on
+     Heart Pink is 4.91:1 — passes at every step of the clamp. Any override that
+     swaps --btn-bg for a dark fill must swap --btn-fg back to cream. */
+  color: var(--btn-fg, var(--ink-deep));
   clip-path: url(#jjw-blob);
   -webkit-clip-path: url(#jjw-blob);
   transition: transform 0.2s var(--ease);
@@ -249,7 +253,7 @@ a {
 
 .btn--primary {
   --btn-bg: var(--pink);
-  --btn-fg: var(--cream);
+  --btn-fg: var(--ink-deep);
 }
 
 .btn-wrap:has(.btn--primary) .btn-shadow {
@@ -271,6 +275,185 @@ a {
     clip-path: none;
     -webkit-clip-path: none;
     border-radius: 999px;
+  }
+}
+
+/* --- Filter pill --------------------------------------------------------
+   27px condensed caps, 54px tall, 10px gap, measured off the reference
+   collection page. Shared by the collection grid and the search page. */
+
+.jjw-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.jjw-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.4rem;
+  padding: 1rem 2rem;
+  font-family: var(--font-accent);
+  font-weight: 700;
+  font-size: 2.7rem;
+  line-height: 1.3;
+  letter-spacing: 0.135rem;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--ink);
+  background: var(--blue-bg);
+  border-radius: 0.8rem;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.jjw-pill[aria-current='page'] {
+  background: var(--ink);
+  color: var(--cream);
+  box-shadow: 6px 6px 0 0 var(--ink-deep);
+}
+
+.jjw-pill:hover {
+  background: var(--blue);
+  color: var(--cream);
+}
+
+.jjw-pill[aria-current='page']:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+@media screen and (max-width: 749px) {
+  .jjw-pills {
+    gap: 0.8rem;
+  }
+
+  .jjw-pill {
+    min-height: 4.4rem;
+    padding: 0.8rem 1.4rem;
+    font-size: 1.8rem;
+  }
+}
+
+/* --- Product card -------------------------------------------------------
+   Shared by predictive search and the search results page via
+   snippets/product-card.liquid. Unscoped on purpose: the same markup renders
+   inside the header drawer and on /search, so section-scoped rules would not
+   reach both. Measurements come from the reference collection card —
+   276x569, 20px radius, 4:5 media, 27px condensed caps title.
+
+   main-collection.liquid still carries its own copy of these rules; it is
+   left alone until there is a reason to touch it. */
+
+/* Counted, not auto-fill: inside .page-width a 26rem floor resolved to five
+   columns, which read as a different page from the collection grid's four. */
+.jjw-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 3rem 2.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media screen and (max-width: 989px) {
+  .jjw-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.jjw-card {
+  --card-bg: var(--blue-bg);
+  --card-fg: var(--blue);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 2rem;
+  overflow: hidden;
+  background: var(--card-bg);
+  transition: transform 0.3s var(--ease);
+}
+
+.jjw-card__media {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+}
+
+.jjw-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* No media: the character colour carries the card on its own, rather than a
+   broken <img>. Half the catalogue still has no photography. */
+.jjw-card__fallback {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 2rem;
+}
+
+.jjw-card__fallback span {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 3.2rem;
+  line-height: 1;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+/* Navy, not the card's own solid: gold on the pale-yellow tint measures about
+   1.5:1. The colour coding lives in the fill and the type stays readable. */
+.jjw-card__title {
+  margin: 0;
+  padding: 0 1.6rem 2.4rem;
+  font-family: var(--font-accent);
+  font-weight: 700;
+  font-size: 2.7rem;
+  line-height: 1.3;
+  letter-spacing: 0.135rem;
+  text-transform: uppercase;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+.jjw-card__price {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 2rem;
+  letter-spacing: 0.1rem;
+  color: var(--ink-soft);
+}
+
+.jjw-card[data-pair='pink'] { --card-bg: var(--pink-bg); --card-fg: var(--pink); }
+.jjw-card[data-pair='blue'] { --card-bg: var(--blue-bg); --card-fg: var(--blue); }
+.jjw-card[data-pair='gold'] { --card-bg: var(--gold-bg); --card-fg: var(--gold); }
+.jjw-card[data-pair='green'] { --card-bg: var(--green-bg); --card-fg: var(--green); }
+.jjw-card[data-pair='purple'] { --card-bg: var(--purple-bg); --card-fg: var(--purple); }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .jjw-card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .jjw-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.6rem;
+  }
+
+  .jjw-card__title {
+    padding: 0 1rem 1.6rem;
+    font-size: 1.9rem;
   }
 }
 

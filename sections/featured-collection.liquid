@@ -8,7 +8,14 @@
   loop index, which is what the React data file hardcodes per product.
 {%- endcomment -%}
 
+{%- comment -%}
+  Fall back to every published product when no collection is chosen, so the
+  carousel is never an empty band on a fresh install.
+{%- endcomment -%}
 {%- assign collection = section.settings.collection -%}
+{%- if collection == blank -%}
+  {%- assign collection = collections.all -%}
+{%- endif -%}
 {%- assign palette = 'pink,blue,gold,green,purple' | split: ',' -%}
 
 {%- style -%}
@@ -53,21 +60,52 @@
 
   #FeaturedCollection-{{ section.id }} .fc__card {
     display: block;
+    /* The colour field wraps the whole card, image and text, as in the reference.
+       The media only rounds its top corners so the two read as one surface. */
+    background: var(--card-bg, var(--pink-bg));
+    border-radius: 2rem;
+    overflow: hidden;
   }
 
+  {%- comment -%}
+    Square box, and the artwork inset 2.6rem inside it on all four sides.
+
+    It used to be 7/6 with no inset. The packshots are square, so contain
+    fitted them by height: the artwork sat flush against the top and bottom
+    while the sides picked up 26px of incidental letterboxing. That gap was an
+    accident of the ratio mismatch, not a frame — which is why only two sides
+    had it.
+
+    The inset lives on .fc__img, not as padding here. Padding would do nothing:
+    an absolutely positioned child resolves inset against its containing
+    block's *padding box*, which already includes the padding, so the image
+    would still have reached the card's edges. Squaring the box and insetting
+    the image is what makes all four gaps equal for a square shot.
+  {%- endcomment -%}
   #FeaturedCollection-{{ section.id }} .fc__media {
+    --media-inset: 2.6rem;
     position: relative;
     overflow: hidden;
-    border-radius: 2rem;
-    aspect-ratio: 4 / 5;
+    border-radius: 2rem 2rem 0 0;
+    aspect-ratio: 1 / 1;
     background: var(--card-bg, var(--pink-bg));
   }
 
+  {%- comment -%}
+    The inset is padding on the image, not offsets. An absolutely positioned
+    *replaced* element resolves width: auto to its intrinsic width and then
+    ignores the opposing offset, so inset: 2.6rem left the picture 360px wide
+    starting 26px in — hanging 26px past the card on the right and the same
+    below. object-fit honours the content box, so padding both shrinks the
+    drawing area and keeps it centred. box-sizing: border-box is global, so
+    the element still measures 100% of the frame.
+  {%- endcomment -%}
   #FeaturedCollection-{{ section.id }} .fc__img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
+    padding: var(--media-inset);
     transition: opacity 0.3s var(--ease);
   }
 
@@ -80,6 +118,20 @@
     opacity: 0;
   }
 
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    #FeaturedCollection-{{ section.id }} .fc__card {
+      transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    }
+
+    #FeaturedCollection-{{ section.id }} .fc__card:hover {
+      transform: translateY(-8px) rotate(3deg);
+      /* Night navy, as every other offset shadow in the theme. The card's own
+         solid used to read against a pale tint; against the saturated fill it
+         is nearly the same hue and the lift disappeared. */
+      box-shadow: 6px 6px 0 var(--ink-deep);
+    }
+  }
+
   #FeaturedCollection-{{ section.id }} .fc__card:hover .fc__img--back {
     opacity: 1;
   }
@@ -88,11 +140,19 @@
     opacity: 0;
   }
 
+  {%- comment -%}
+    Height was a fixed 21.9rem, parking a 40px title inside 219px of box — 89px
+    of dead space above it and 90px below. Sized to its content now, but the
+    title still wants room to breathe, so this aims for ~4.4rem of clear space
+    on each side of it rather than closing the gap up entirely.
+
+    Top only needs 1.8rem: the image's own 2.6rem inset already sits above it,
+    and the two add up to the same 4.4rem as the bottom.
+  {%- endcomment -%}
   #FeaturedCollection-{{ section.id }} .fc__label {
     display: grid;
     place-items: center;
-    height: 21.9rem;
-    padding: 1rem 2rem;
+    padding: 1.8rem 2rem 4.4rem;
   }
 
   #FeaturedCollection-{{ section.id }} .fc__title {
@@ -103,7 +163,15 @@
     letter-spacing: -0.02rem;
     text-align: center;
     text-wrap: balance;
-    color: var(--card-fg, var(--pink));
+    {%- comment -%}
+      Navy, not the card's own solid. The card fills are brand-sheet colours
+      now rather than pale tints, so Heart Pink type on a Candy Pink card
+      measured about 1:1 — the title vanished. Same rule the collection grid
+      already follows: the colour coding lives in the fill, the type stays
+      readable. --card-fg still drives the hover shadow, where contrast is
+      not a concern.
+    {%- endcomment -%}
+    color: var(--ink);
   }
 
   #FeaturedCollection-{{ section.id }} [data-pair='pink'] {
@@ -139,13 +207,17 @@
     pointer-events: none;
   }
 
+  #FeaturedCollection-{{ section.id }} .fc__count {
+    display: {% if section.settings.show_counter %}block{% else %}none{% endif %};
+  }
+
   #FeaturedCollection-{{ section.id }} .fc__arrow {
     pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 5rem;
-    height: 5rem;
+    width: 5.6rem;
+    height: 5.6rem;
     padding: 0;
     border-radius: 50%;
     background: var(--ink);
@@ -199,8 +271,15 @@
       width: calc((100vw - 3.5rem) / 2);
     }
 
+    /* Tighter frame at phone width, where the card is roughly half as wide.
+       Keeps the same shape: 1.6rem inset, and matching space either side of
+       the title (1.6 + 1.2 above, 2.8 below). */
+    #FeaturedCollection-{{ section.id }} .fc__media {
+      --media-inset: 1.6rem;
+    }
+
     #FeaturedCollection-{{ section.id }} .fc__label {
-      height: auto;
+      padding: 1.2rem 1.2rem 2.8rem;
     }
   }
 {%- endstyle -%}
@@ -397,12 +476,18 @@
       "type": "text",
       "id": "button_label",
       "label": "Button label",
-      "default": "Shop Your Daily Snack Rotation"
+      "default": "Shop All Tees"
     },
     {
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_counter",
+      "label": "Show slide counter",
+      "default": false
     }
   ],
   "presets": [

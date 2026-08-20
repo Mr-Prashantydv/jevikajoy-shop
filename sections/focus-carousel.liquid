@@ -264,11 +264,19 @@
 {%- endstyle -%}
 
 <section id="FocusCarousel-{{ section.id }}" class="focus-carousel">
-  {%- if section.settings.background_image != blank -%}
+  {%- liquid
+    assign bg_src = ''
+    if section.settings.background_image != blank
+      assign bg_src = section.settings.background_image | image_url: width: 2400
+    elsif section.settings.background_asset != blank and section.settings.background_asset != 'none'
+      assign bg_src = section.settings.background_asset | asset_img_url: '2400x'
+    endif
+  -%}
+  {%- if bg_src != blank -%}
     <div
       class="focus-carousel__media"
       aria-hidden="true"
-      style="background-image: url({{ section.settings.background_image | image_url: width: 2400 }});"
+      style="background-image: url({{ bg_src }});"
     ></div>
     <div class="focus-carousel__overlay" aria-hidden="true"></div>
   {%- endif -%}
@@ -463,12 +471,41 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Certified Tasty"
+      "default": "Loved by Little Humans"
     },
     {
       "type": "image_picker",
       "id": "background_image",
       "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "background_asset",
+      "label": "Background (bundled)",
+      "info": "Used when no image is chosen above.",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "jjw-hero.png",
+          "label": "Hero tees"
+        },
+        {
+          "value": "jjw-desktop.jpg",
+          "label": "Desktop scene"
+        },
+        {
+          "value": "kids-sky.jpg",
+          "label": "Kids sky"
+        },
+        {
+          "value": "cast-group.jpg",
+          "label": "Cast group"
+        }
+      ],
+      "default": "none"
     },
     {
       "type": "range",
@@ -505,7 +542,7 @@
           "type": "textarea",
           "id": "quote",
           "label": "Quote",
-          "default": "“These are so good it’s insane. The perfect crunch, the right amount of sweetness, and the chocolate chunks go crazy!!! Dangerously delicious.”"
+          "default": "“The cotton is genuinely soft and the print has not cracked after a dozen washes. She asks for it every week.”"
         },
         {
           "type": "text",
@@ -538,22 +575,70 @@
           "label": "Card background",
           "default": "ink",
           "options": [
-            { "value": "cream", "label": "Cream" },
-            { "value": "ink", "label": "Ink" },
-            { "value": "ink-deep", "label": "Ink deep" },
-            { "value": "pink", "label": "Pink" },
-            { "value": "pink-deep", "label": "Pink deep" },
-            { "value": "pink-bg", "label": "Pink light" },
-            { "value": "blue", "label": "Blue" },
-            { "value": "blue-bg", "label": "Blue light" },
-            { "value": "sky", "label": "Sky" },
-            { "value": "gold", "label": "Gold" },
-            { "value": "gold-bg", "label": "Gold light" },
-            { "value": "yellow", "label": "Yellow" },
-            { "value": "green", "label": "Green" },
-            { "value": "green-bg", "label": "Green light" },
-            { "value": "purple", "label": "Purple" },
-            { "value": "purple-bg", "label": "Purple light" }
+            {
+              "value": "cream",
+              "label": "Cream"
+            },
+            {
+              "value": "ink",
+              "label": "Ink"
+            },
+            {
+              "value": "ink-deep",
+              "label": "Ink deep"
+            },
+            {
+              "value": "pink",
+              "label": "Pink"
+            },
+            {
+              "value": "pink-deep",
+              "label": "Pink deep"
+            },
+            {
+              "value": "pink-bg",
+              "label": "Pink light"
+            },
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "blue-bg",
+              "label": "Blue light"
+            },
+            {
+              "value": "sky",
+              "label": "Sky"
+            },
+            {
+              "value": "gold",
+              "label": "Gold"
+            },
+            {
+              "value": "gold-bg",
+              "label": "Gold light"
+            },
+            {
+              "value": "yellow",
+              "label": "Yellow"
+            },
+            {
+              "value": "green",
+              "label": "Green"
+            },
+            {
+              "value": "green-bg",
+              "label": "Green light"
+            },
+            {
+              "value": "purple",
+              "label": "Purple"
+            },
+            {
+              "value": "purple-bg",
+              "label": "Purple light"
+            }
           ]
         },
         {
@@ -562,22 +647,70 @@
           "label": "Card shadow",
           "default": "blue",
           "options": [
-            { "value": "cream", "label": "Cream" },
-            { "value": "ink", "label": "Ink" },
-            { "value": "ink-deep", "label": "Ink deep" },
-            { "value": "pink", "label": "Pink" },
-            { "value": "pink-deep", "label": "Pink deep" },
-            { "value": "pink-bg", "label": "Pink light" },
-            { "value": "blue", "label": "Blue" },
-            { "value": "blue-bg", "label": "Blue light" },
-            { "value": "sky", "label": "Sky" },
-            { "value": "gold", "label": "Gold" },
-            { "value": "gold-bg", "label": "Gold light" },
-            { "value": "yellow", "label": "Yellow" },
-            { "value": "green", "label": "Green" },
-            { "value": "green-bg", "label": "Green light" },
-            { "value": "purple", "label": "Purple" },
-            { "value": "purple-bg", "label": "Purple light" }
+            {
+              "value": "cream",
+              "label": "Cream"
+            },
+            {
+              "value": "ink",
+              "label": "Ink"
+            },
+            {
+              "value": "ink-deep",
+              "label": "Ink deep"
+            },
+            {
+              "value": "pink",
+              "label": "Pink"
+            },
+            {
+              "value": "pink-deep",
+              "label": "Pink deep"
+            },
+            {
+              "value": "pink-bg",
+              "label": "Pink light"
+            },
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "blue-bg",
+              "label": "Blue light"
+            },
+            {
+              "value": "sky",
+              "label": "Sky"
+            },
+            {
+              "value": "gold",
+              "label": "Gold"
+            },
+            {
+              "value": "gold-bg",
+              "label": "Gold light"
+            },
+            {
+              "value": "yellow",
+              "label": "Yellow"
+            },
+            {
+              "value": "green",
+              "label": "Green"
+            },
+            {
+              "value": "green-bg",
+              "label": "Green light"
+            },
+            {
+              "value": "purple",
+              "label": "Purple"
+            },
+            {
+              "value": "purple-bg",
+              "label": "Purple light"
+            }
           ]
         },
         {
@@ -586,9 +719,18 @@
           "label": "Card text",
           "default": "cream",
           "options": [
-            { "value": "cream", "label": "Cream" },
-            { "value": "ink", "label": "Ink" },
-            { "value": "ink-deep", "label": "Ink deep" }
+            {
+              "value": "cream",
+              "label": "Cream"
+            },
+            {
+              "value": "ink",
+              "label": "Ink"
+            },
+            {
+              "value": "ink-deep",
+              "label": "Ink deep"
+            }
           ]
         }
       ]
@@ -601,7 +743,7 @@
         {
           "type": "review",
           "settings": {
-            "quote": "“These are so good it’s insane. The perfect crunch, the right amount of sweetness, and the chocolate chunks go crazy!!! Dangerously delicious.”",
+            "quote": "“Sizing runs true and the colours stayed bright. I ordered two more for my nephews the same month.”",
             "author": "— Ashley M.",
             "rating": 5,
             "color_bg": "ink",
@@ -612,7 +754,7 @@
         {
           "type": "review",
           "settings": {
-            "quote": "“I happened to come across these while shopping and now we're obsessed! my husband has every allergy you can think of (peanut, tree nuts, shellfish, etc.) and i would feel terrible when i wanted a snack he couldn't have. now we have a delicious snack we can both enjoy!”",
+            "quote": "“Finally tees my son can wear all day without fussing. The characters are his, not some cartoon he half recognises.”",
             "author": "— Emily K.",
             "rating": 5,
             "color_bg": "gold",
@@ -623,7 +765,7 @@
         {
           "type": "review",
           "settings": {
-            "quote": "“These are a great allergy free version of the stuff I grew up with. Perfect for my son’s school lunches. They are quick easy to grab for a park date, play date, car snack. The flavor is good and we all eat them.”",
+            "quote": "“The cotton is genuinely soft and the print has not cracked after a dozen washes. She asks for it every week.”",
             "author": "— Sarah M.",
             "rating": 5,
             "color_bg": "green",

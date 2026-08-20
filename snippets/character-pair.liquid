@@ -1,0 +1,46 @@
+{%- comment -%}
+  Resolves a product's character colour pair. Outputs one word — pink, blue,
+  gold, green or purple — and nothing else, so it is meant to be captured:
+
+    {%- capture pair -%}{%- render 'character-pair', product: product -%}{%- endcapture -%}
+    {%- assign pair = pair | strip -%}
+
+  Optional `prefer` is the character handle that wins when a product carries
+  several `character:` tags — brutus-boxer-tee is both Brutus and Joy, so the
+  same tee reads gold on /collections/brutus and blue on /collections/joy.
+  Without it the first tag wins; taking the last instead makes every such
+  product blue, since tags arrive alphabetically.
+
+  Blue is the default, which is what an untagged product gets.
+{%- endcomment -%}
+{%- liquid
+  assign cp_prefer = prefer | default: '' | downcase
+  assign cp_character = ''
+
+  for tag in product.tags
+    if tag contains 'character:'
+      assign cp_name = tag | split: ':' | last | strip | downcase
+      if cp_character == blank
+        assign cp_character = cp_name
+      endif
+      if cp_name == cp_prefer
+        assign cp_character = cp_name
+      endif
+    endif
+  endfor
+
+  case cp_character
+    when 'jevika'
+      echo 'pink'
+    when 'joy'
+      echo 'blue'
+    when 'brutus'
+      echo 'gold'
+    when 'minku'
+      echo 'green'
+    when 'pinki'
+      echo 'purple'
+    else
+      echo 'blue'
+  endcase
+-%}

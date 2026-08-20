@@ -2,7 +2,70 @@
   "type": "header",
   "name": "Header",
   "sections": {
-    "header": { "type": "header", "settings": {} }
+    "header": {
+      "type": "header",
+      "blocks": {
+        "card_jevika": {
+          "type": "card",
+          "settings": {
+            "label": "Jevika",
+            "character": "jevika",
+            "link": "shopify://collections/jevika",
+            "palette": "pink"
+          }
+        },
+        "card_joy": {
+          "type": "card",
+          "settings": {
+            "label": "Joy",
+            "character": "joy",
+            "link": "shopify://collections/joy",
+            "palette": "blue"
+          }
+        },
+        "card_brutus": {
+          "type": "card",
+          "settings": {
+            "label": "Brutus",
+            "character": "brutus",
+            "link": "shopify://collections/brutus",
+            "palette": "gold"
+          }
+        },
+        "card_minku": {
+          "type": "card",
+          "settings": {
+            "label": "Minku",
+            "character": "minku",
+            "link": "shopify://collections/minku",
+            "palette": "green"
+          }
+        },
+        "card_pinki": {
+          "type": "card",
+          "settings": {
+            "label": "Pinki",
+            "character": "pinki",
+            "link": "shopify://collections/pinki",
+            "palette": "purple"
+          }
+        }
+      },
+      "block_order": [
+        "card_jevika",
+        "card_joy",
+        "card_brutus",
+        "card_minku",
+        "card_pinki"
+      ],
+      "settings": {
+        "cta_text": "Find In Store",
+        "cards_heading": "Characters",
+        "show_search": true,
+        "show_account": true,
+        "show_cart": true
+      }
+    }
   },
   "order": ["header"]
 }

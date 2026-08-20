@@ -14,7 +14,7 @@
     --p: 1;
     position: relative;
     height: {{ section.settings.scroll_length }}vh;
-    margin-bottom: 10rem;
+    margin-bottom: 1.5rem;
     background: var(--cream);
   }
 
@@ -27,35 +27,49 @@
     justify-content: center;
     height: 100vh;
     overflow: hidden;
+    {%- comment -%}
+      The ground always renders: a merchant upload wins, otherwise the artwork
+      that ships with the theme. There is no branch here that leaves the stage
+      bare, so the cast always has something to land on.
+
+      100% auto, not cover: cover scales to fill the taller axis and crops the
+      sides off, which cut the mushrooms and the outer grass clumps away on a
+      wide viewport. This uses the artwork's full width and lets its height
+      fall where it may, anchored to the bottom of the stage.
+    {%- endcomment -%}
+    {%- if section.settings.ground_image != blank %}
+    background-image: url({{ section.settings.ground_image | image_url: width: 2400 }});
+    {%- else %}
+    background-image: url({{ 'jjw-ground.png' | asset_url }});
+    {%- endif %}
+    background-size: 100% auto;
+    background-position: bottom center;
+    background-repeat: no-repeat;
   }
 
   #FallingScroll-{{ section.id }} .falling-scroll__stage {
     position: relative;
     width: 100%;
     height: 100%;
-    {%- if section.settings.background_image != blank %}
-    background-image: url({{ section.settings.background_image | image_url: width: 2400 }});
-    background-size: contain;
-    background-position: bottom center;
-    background-repeat: no-repeat;
-    {%- endif %}
   }
 
-  #FallingScroll-{{ section.id }} .falling-scroll__veil {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      var(--cream) 0%,
-      color-mix(in srgb, var(--cream) 40%, transparent) 20%,
-      transparent 40%
-    );
-  }
+  {%- comment -%}
+    Offset in rem, not a percentage of the stage.
 
+    On the homepage the bar is a sticky height: 0 overlay that floats above
+    whatever scrolls under it, and this section pins a stage with copy at its
+    top. At 3% the heading ran straight into it: at 1311px the Find In Store
+    button (x 838-1059) landed on top of the heading's first line (x 328-983),
+    printing the button across the word "Every".
+
+    The bar is a fixed pixel height — about 112px here, 79px on a phone — so a
+    percentage of viewport height is the wrong unit: it drifts with window
+    height while the thing it has to clear does not. 13rem clears the desktop
+    bar with ~18px to spare, 10rem the phone one with ~21px.
+  {%- endcomment -%}
   #FallingScroll-{{ section.id }} .falling-scroll__copy {
     position: absolute;
-    top: 3%;
+    top: 13rem;
     left: 50%;
     z-index: 40;
     width: 50%;
@@ -66,7 +80,7 @@
 
   #FallingScroll-{{ section.id }} .falling-scroll__title,
   #FallingScroll-{{ section.id }} .falling-scroll__sub {
-    color: var(--gold);
+    color: var(--ink);
   }
 
   #FallingScroll-{{ section.id }} .falling-scroll__sub {
@@ -89,18 +103,86 @@
     opacity: clamp(0, calc(var(--p) * 6), 1);
   }
 
+  /* Floating accents: drift in and bob, standing in for real art later. */
+  #FallingScroll-{{ section.id }} .falling-scroll__accent {
+    position: absolute;
+    left: calc(50% + (var(--x) - 50%) * var(--p, 0));
+    top: calc(50% + (var(--y) - 50%) * var(--p, 0));
+    width: var(--w);
+    aspect-ratio: 1 / 1;
+    background: var(--accent-color);
+    transform: translate(-50%, -50%) scale(calc(0.4 + 0.6 * var(--p, 0)));
+    opacity: var(--p, 0);
+    animation: fs-float-{{ section.id }} 4.5s var(--ease) infinite alternate;
+    animation-delay: calc(var(--i, 0) * -0.9s);
+    pointer-events: none;
+  }
+
+  /* Lettered tag variant, matching the hero and about-section labels. */
+  #FallingScroll-{{ section.id }} .falling-scroll__tag {
+    position: absolute;
+    left: calc(50% + (var(--x) - 50%) * var(--p, 0));
+    top: calc(50% + (var(--y) - 50%) * var(--p, 0));
+    display: block;
+    max-width: 20rem;
+    padding: 0.9rem 1.6rem 0.8rem;
+    border-radius: 0.5rem;
+    background: var(--accent-color);
+    color: var(--tag-fg, var(--cream));
+    box-shadow: 4px 4px 0 0 var(--tag-shadow, rgba(0, 0, 0, 0.2));
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    text-wrap: balance;
+    transform: translate(-50%, -50%) rotate(var(--rot, -6deg))
+               scale(calc(0.5 + 0.5 * var(--p, 0)));
+    opacity: var(--p, 0);
+    animation: fs-float-{{ section.id }} 4.5s var(--ease) infinite alternate;
+    animation-delay: calc(var(--i, 0) * -0.9s);
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    #FallingScroll-{{ section.id }} .falling-scroll__tag {
+      font-size: 1.1rem;
+      max-width: 11rem;
+      padding: 0.5rem 0.9rem 0.45rem;
+    }
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--circle { border-radius: 50%; }
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--star {
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--blob {
+    border-radius: 60% 40% 55% 45% / 45% 55% 45% 55%;
+  }
+
+  @keyframes fs-float-{{ section.id }} {
+    from { translate: 0 0; }
+    to   { translate: 0 -1.4rem; }
+  }
+
+  /* The cast falls from above. Each character holds its own x and travels down
+     to its landing point in the group formation, so the arrangement assembles
+     as they arrive rather than expanding out of a pile. */
   #FallingScroll-{{ section.id }} .falling-scroll__item {
+    --start-y: {{ section.settings.start_y | default: 10 }}%;
     position: absolute;
     left: var(--x);
     width: var(--w);
     height: auto;
+    aspect-ratio: 2 / 3;
     object-fit: contain;
   }
 
-  /* Drop: top runs from -45vh to the block's landing point, scale 0.85 -> 1. */
   #FallingScroll-{{ section.id }} .falling-scroll__item--fall {
-    top: calc(var(--y) * var(--p) - 45vh * (1 - var(--p)));
-    transform: translate(-50%, -50%) scale(calc(0.85 + 0.15 * var(--p)));
+    top: calc(var(--y) * var(--p, 0) + var(--start-y, 10%) * (1 - var(--p, 0)));
+    transform: translate(-50%, -50%) scale(calc(0.88 + 0.12 * var(--p, 0)));
     animation: fs-bob-{{ section.id }} 3.4s var(--ease) infinite alternate;
     animation-delay: calc(var(--i, 0) * -0.7s);
     will-change: top, transform;
@@ -125,7 +207,12 @@
   }
 
   @media screen and (max-width: 749px) {
+    {%- comment -%}
+      The bar is shorter here (5rem controls), so the copy needs less clearance
+      than the 13rem the base rule uses. See the note there.
+    {%- endcomment -%}
     #FallingScroll-{{ section.id }} .falling-scroll__copy {
+      top: 10rem;
       width: 86%;
       max-width: 86%;
     }
@@ -133,6 +220,20 @@
     #FallingScroll-{{ section.id }} .falling-scroll__sub {
       font-size: 2.2rem;
       line-height: 1.2;
+    }
+
+    {%- comment -%}
+      Scale the ground by height at phone width, not by width.
+
+      The artwork is a 2080x627 strip — 3.3:1. At 100% width that resolves to
+      118px on a 390px screen, about 14% of the stage, and the two tallest
+      characters landed at 73% with nothing under them. Pinning the band to a
+      share of the stage keeps it reading as a floor, and the sides crop
+      instead — which is what the reference does with its tiled floor, since a
+      floor has to stay a floor whatever the screen.
+    {%- endcomment -%}
+    #FallingScroll-{{ section.id }} .falling-scroll__sticky {
+      background-size: auto 34%;
     }
   }
 
@@ -149,13 +250,34 @@
       animation: none;
     }
   }
+  /* Narrow viewports: the cast reads tiny at desktop vw sizes, so scale it up to
+     fill the stage. Applied below 990px so narrow desktop windows get it too,
+     not just phones. */
+  @media screen and (max-width: 989px) {
+    #FallingScroll-{{ section.id }} .falling-scroll__item {
+      width: calc(var(--w) * {{ section.settings.mobile_scale | default: 270 | divided_by: 100.0 }});
+      /* Cast and badges spread independently: the badges are already near the
+         screen edge, so pushing the characters apart must not move them too. */
+      left: calc(50% + (var(--x) - 50%) * {{ section.settings.mobile_spread | default: 170 | divided_by: 100.0 }});
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__item--fall {
+      top: calc(
+        (50% + (var(--y) - 50%) * {{ section.settings.mobile_spread_y | default: 125 | divided_by: 100.0 }}) * var(--p, 0)
+        + var(--start-y, 10%) * (1 - var(--p, 0))
+      );
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__tag {
+      left: calc(50% + (var(--x) - 50%) * var(--p, 0) * {{ section.settings.mobile_spread_tags | default: 130 | divided_by: 100.0 }});
+    }
+  }
+
 {%- endstyle -%}
 
 <div id="FallingScroll-{{ section.id }}" class="falling-scroll">
   <div class="falling-scroll__sticky">
     <div class="falling-scroll__stage">
-      <div class="falling-scroll__veil" aria-hidden="true"></div>
-
       <div class="falling-scroll__copy">
         {%- if section.settings.heading != blank -%}
           <h2 class="hxxl falling-scroll__title">{{ section.settings.heading | escape }}</h2>
@@ -176,8 +298,57 @@
         >
       {%- endif -%}
 
+      {%- comment -%}
+        Ground image is now the CSS background of .falling-scroll__sticky.
+      {%- endcomment -%}
+
       {%- for block in section.blocks -%}
-        {%- if block.settings.image != blank -%}
+        {%- if block.type == 'accent' and block.settings.text != blank -%}
+          <span
+            class="falling-scroll__tag"
+            aria-hidden="true"
+            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --accent-color: {{ block.settings.color }}; --tag-fg: {{ block.settings.text_color }}; --tag-shadow: {{ block.settings.color | color_darken: 20 }}; --rot: {{ block.settings.rotate }}deg; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 2 }};"
+            {{ block.shopify_attributes }}
+          >{{ block.settings.text | escape }}</span>
+        {%- elsif block.type == 'accent' -%}
+          <span
+            class="falling-scroll__accent falling-scroll__accent--{{ block.settings.shape }}"
+            aria-hidden="true"
+            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}rem; --accent-color: {{ block.settings.color }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 2 }};"
+            {{ block.shopify_attributes }}
+          ></span>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'accent' -%}{%- continue -%}{%- endif -%}
+        {%- comment -%}
+          image_picker only accepts Shopify Files, so a character fallback lets the
+          section work with the faces already bundled in assets/.
+        {%- endcomment -%}
+        {%- assign fallback_src = '' -%}
+        {%- if block.settings.image == blank and block.settings.character != 'none' -%}
+          {%- comment -%}
+            asset_img_url resizes theme assets on Shopify's CDN, so the ~1.7MB
+            source art is not shipped at full weight to every visitor.
+          {%- endcomment -%}
+          {%- assign fallback_file = 'jjw-pose-' | append: block.settings.character | append: '.png' -%}
+          {%- assign fallback_src = fallback_file | asset_img_url: '900x' -%}
+        {%- endif -%}
+        {%- if block.settings.image == blank and fallback_src != blank -%}
+          {%- assign delay = forloop.index0 | times: 6 | at_most: 30 | divided_by: 100.0 -%}
+          <img
+            class="falling-scroll__item falling-scroll__item--{{ block.settings.behavior }}"
+            src="{{ fallback_src }}"
+            alt=""
+            width="1024"
+            height="1536"
+            loading="lazy"
+            {% if block.settings.behavior == 'fall' %}data-fall="{{ delay }}"{% endif %}
+            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}vw; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
+            {{ block.shopify_attributes }}
+          >
+        {%- elsif block.settings.image != blank -%}
           {%- assign delay = forloop.index0 | times: 6 | at_most: 30 | divided_by: 100.0 -%}
           <img
             class="falling-scroll__item falling-scroll__item--{{ block.settings.behavior }}"
@@ -187,7 +358,7 @@
             height="{{ block.settings.image.height }}"
             loading="lazy"
             {% if block.settings.behavior == 'fall' %}data-fall="{{ delay }}"{% endif %}
-            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}vw; --i: {{ forloop.index0 }}; z-index: {% if block.settings.behavior == 'badge' %}30{% else %}{{ 20 | minus: forloop.index }}{% endif %};"
+            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}vw; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
             {{ block.shopify_attributes }}
           >
         {%- endif -%}
@@ -241,6 +412,33 @@
       requestAnimationFrame(paint);
     }
 
+    // Scroll events are unreliable here: some embedded/preview contexts and
+    // smooth-scroll libraries never dispatch them. An rAF loop gated by an
+    // IntersectionObserver is immune to that, and idles when off-screen.
+    var running = false;
+
+    function loop() {
+      if (!root.isConnected) { running = false; return; }
+      paint();
+      if (running) requestAnimationFrame(loop);
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      requestAnimationFrame(loop);
+    }
+
+    function stop() { running = false; }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries[0].isIntersecting ? start() : stop();
+      }, { rootMargin: '100px 0px' }).observe(root);
+    } else {
+      start();
+    }
+
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     paint();
@@ -250,25 +448,53 @@
 {% schema %}
 {
   "name": "Falling scroll",
-  "max_blocks": 16,
+  "max_blocks": 20,
   "settings": [
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Leave No Taste Buds Behind"
+      "default": "Room for Every Kind of Kid"
     },
     {
       "type": "text",
       "id": "subheading",
       "label": "Subheading",
-      "default": "NOW MORE MOUTHS THAN EVER CAN PARTAKE"
+      "default": "FIVE FRIENDS, ONE WARDROBE"
     },
     {
       "type": "image_picker",
       "id": "background_image",
       "label": "Backdrop image",
       "info": "Sits along the bottom of the stage."
+    },
+    {
+      "type": "image_picker",
+      "id": "ground_image",
+      "label": "Ground image",
+      "info": "The surface the cast lands on. Falls back to the built-in clearing."
+    },
+    {
+      "type": "range",
+      "id": "ground_height",
+      "label": "Ground height",
+      "info": "Share of the stage height. Larger pushes the grass line down.",
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "ground_offset",
+      "label": "Ground vertical position",
+      "info": "Distance from the bottom of the stage. Raise it to bring the grass line up to the cast's feet.",
+      "min": -20,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "default": 21
     },
     {
       "type": "image_picker",
@@ -306,6 +532,59 @@
       "step": 10,
       "unit": "vh",
       "default": 150
+    },
+    {
+      "type": "range",
+      "id": "start_y",
+      "label": "Start height",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 10,
+      "info": "How far down the stage the cast begins before falling."
+    },
+    {
+      "type": "range",
+      "id": "mobile_scale",
+      "label": "Cast size on narrow screens",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "%",
+      "default": 270,
+      "info": "Applied below 990px wide."
+    },
+    {
+      "type": "range",
+      "id": "mobile_spread",
+      "label": "Cast spread on narrow screens",
+      "min": 100,
+      "max": 250,
+      "step": 5,
+      "unit": "%",
+      "default": 170,
+      "info": "Applied below 990px wide."
+    },
+    {
+      "type": "range",
+      "id": "mobile_spread_y",
+      "label": "Cast vertical spread (narrow)",
+      "min": 100,
+      "max": 180,
+      "step": 5,
+      "unit": "%",
+      "default": 125
+    },
+    {
+      "type": "range",
+      "id": "mobile_spread_tags",
+      "label": "Badge spread (narrow)",
+      "min": 100,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 130
     }
   ],
   "blocks": [
@@ -321,11 +600,49 @@
         },
         {
           "type": "select",
+          "id": "character",
+          "label": "Character (used if no image picked)",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "jevika",
+              "label": "Jevika"
+            },
+            {
+              "value": "joy",
+              "label": "Joy"
+            },
+            {
+              "value": "brutus",
+              "label": "Brutus"
+            },
+            {
+              "value": "minku",
+              "label": "Minku"
+            },
+            {
+              "value": "pinki",
+              "label": "Pinki"
+            }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "select",
           "id": "behavior",
           "label": "Motion",
           "options": [
-            { "value": "fall", "label": "Falls in on scroll" },
-            { "value": "badge", "label": "Stays put (badge)" }
+            {
+              "value": "fall",
+              "label": "Falls in on scroll"
+            },
+            {
+              "value": "badge",
+              "label": "Stays put (badge)"
+            }
           ],
           "default": "fall"
         },
@@ -358,6 +675,108 @@
           "step": 1,
           "unit": "%",
           "default": 55
+        },
+        {
+          "type": "range",
+          "id": "depth",
+          "label": "Layer (higher sits in front)",
+          "min": 1,
+          "max": 30,
+          "step": 1,
+          "default": 10
+        }
+      ]
+    },
+    {
+      "type": "accent",
+      "name": "Floating accent",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Label text",
+          "info": "Leave blank to show a plain shape instead."
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text colour",
+          "default": "#FFF6EB"
+        },
+        {
+          "type": "range",
+          "id": "rotate",
+          "label": "Tilt",
+          "min": -20,
+          "max": 20,
+          "step": 1,
+          "unit": "deg",
+          "default": -6
+        },
+        {
+          "type": "select",
+          "id": "shape",
+          "label": "Shape",
+          "options": [
+            {
+              "value": "circle",
+              "label": "Circle"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "blob",
+              "label": "Blob"
+            }
+          ],
+          "default": "circle"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Colour",
+          "default": "#FFD94C"
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "Across",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Down",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "label": "Size",
+          "min": 1,
+          "max": 12,
+          "step": 0.5,
+          "unit": "rem",
+          "default": 4
+        },
+        {
+          "type": "range",
+          "id": "depth",
+          "label": "Layer",
+          "min": 1,
+          "max": 30,
+          "step": 1,
+          "default": 2
         }
       ]
     }
@@ -366,13 +785,69 @@
     {
       "name": "Falling scroll",
       "blocks": [
-        { "type": "item", "settings": { "behavior": "fall", "size": 24, "x": 50, "y": 36 } },
-        { "type": "item", "settings": { "behavior": "fall", "size": 24, "x": 50, "y": 55 } },
-        { "type": "item", "settings": { "behavior": "fall", "size": 26, "x": 50, "y": 77 } },
-        { "type": "item", "settings": { "behavior": "badge", "size": 18, "x": 28, "y": 26 } },
-        { "type": "item", "settings": { "behavior": "badge", "size": 17, "x": 70, "y": 26 } },
-        { "type": "item", "settings": { "behavior": "badge", "size": 16, "x": 28, "y": 60 } },
-        { "type": "item", "settings": { "behavior": "badge", "size": 17, "x": 70, "y": 60 } }
+        {
+          "type": "item",
+          "settings": {
+            "behavior": "fall",
+            "size": 24,
+            "x": 50,
+            "y": 36
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "behavior": "fall",
+            "size": 24,
+            "x": 50,
+            "y": 55
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "behavior": "fall",
+            "size": 26,
+            "x": 50,
+            "y": 77
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "behavior": "badge",
+            "size": 18,
+            "x": 28,
+            "y": 26
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "behavior": "badge",
+            "size": 17,
+            "x": 70,
+            "y": 26
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "behavior": "badge",
+            "size": 16,
+            "x": 28,
+            "y": 60
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "behavior": "badge",
+            "size": 17,
+            "x": 70,
+            "y": 60
+          }
+        }
       ]
     }
   ]

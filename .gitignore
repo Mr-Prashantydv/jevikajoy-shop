@@ -13,10 +13,18 @@ node_modules
 .remote-snapshot/
 .clone/
 .push.json
-.push.json
 jjw/
 .claude-flow/
-[INFO] Recording command outcome: printf
-
-[OK] Command outcome recorded
 docs/clone/raw/
+
+# Agent tooling scratch space #
+################################
+.claude/
+.graphify_detect.json
+.graphify_python
+graphify-out/
+
+# Source photography — masters live outside git, theme ships only the
+# resized assets/jjw-*.{png,jpg,webp} derived from them #
+###########################################################
+product-images/
