@@ -1,0 +1,103 @@
+{
+  "provenance": "Historical snapshot; review against the intended destination settings before applying.",
+  "currency": "INR",
+  "customerAccounts": "NEW_CUSTOMER_ACCOUNTS",
+  "discounts": [
+    {
+      "kind": "automatic",
+      "terms": "15% off any 3 tees, minimum quantity 3"
+    }
+  ],
+  "shipping": {
+    "profile": "General profile",
+    "zones": [
+      {
+        "zone": "Domestic",
+        "countries": [
+          "IN"
+        ],
+        "rates": [
+          {
+            "name": "Standard",
+            "price": 99,
+            "currency": "INR",
+            "conditions": "none"
+          },
+          {
+            "name": "Standard",
+            "price": 0,
+            "currency": "INR",
+            "conditions": "TOTAL_PRICE >= 999 INR"
+          },
+          {
+            "name": "Express",
+            "price": 349,
+            "currency": "INR",
+            "conditions": "none"
+          }
+        ]
+      },
+      {
+        "zone": "International",
+        "countryCount": 28,
+        "countries": [
+          "AE",
+          "AT",
+          "AU",
+          "BE",
+          "CA",
+          "CH",
+          "CZ",
+          "DE",
+          "DK",
+          "ES",
+          "FI",
+          "FR",
+          "GB",
+          "HK",
+          "IE",
+          "IL",
+          "IT",
+          "JP",
+          "KR",
+          "MY",
+          "NL",
+          "NO",
+          "NZ",
+          "PL",
+          "PT",
+          "SE",
+          "SG",
+          "US"
+        ],
+        "rates": [
+          {
+            "name": "Standard",
+            "price": 1800,
+            "currency": "INR"
+          },
+          {
+            "name": "Express",
+            "price": 3600,
+            "currency": "INR"
+          }
+        ]
+      }
+    ],
+    "themeCoupling": "The free-shipping threshold is duplicated in the cart drawer's free_shipping_threshold setting and in the footer marquee copy. Both must match this rate."
+  },
+  "notCaptured": [
+    "Product image binaries — but local masters exist in product-images/JJW-{04,05,06,08,12}/ for the 5 photographed products; the other 5 products have no images at all, so nothing is lost",
+    "Product image alt text — only samples captured, see products[].mediaAltSamples",
+    "Metafield DEFINITIONS (namespace/key/type/validations) were never listed, only values on specific products",
+    "URL redirects — never queried",
+    "Markets / taxes / duties configuration — never queried",
+    "Notification email templates — never queried",
+    "Customer records — never queried (store reports zero real orders)",
+    "Files (Content > Files) — never queried",
+    "Blog + articles — 'News' blog exists with 0 articles, nothing to lose",
+    "App subscription/billing state for Judge.me"
+  ],
+  "policyDrafts": "docs/policies/ (merchant commitments require review)",
+  "paymentSetup": "Configure in destination admin; account credentials do not migrate with the theme."
+}

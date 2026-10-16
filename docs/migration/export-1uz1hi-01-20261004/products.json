@@ -1,0 +1,3982 @@
+[
+  {
+    "handle": "tech-builder-tee",
+    "title": "Tech Builder Tee",
+    "descriptionHtml": "<p>Joy's tee, and Joy is the one always halfway through the next idea. The print runs on gaming energy: LEVEL UP, NEXT GEN ENERGY and OWN YOUR GAME, scattered with sticker-style doodles. LEVEL UP turns up across the back as well. Four colourways in all.</p><p>The cotton is 100% organic, the inks OEKO-TEX certified, the tee BIS certified. Sized for ages four to twelve. It handles a controller, a football and whatever gets spilled at lunch.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "character:Joy",
+      "gender:Boys",
+      "Tech & Smart"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Blue"
+          },
+          {
+            "name": "Yellow"
+          },
+          {
+            "name": "Black"
+          },
+          {
+            "name": "White"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BL-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-YE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BL-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-YE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BL-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-YE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BK-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-WH-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BL-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-YE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-BK-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-TB-WH-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "smart-tech-tee",
+    "title": "Smart Tech Tee",
+    "descriptionHtml": "<p>This one belongs to Jevika and Joy, the two children the shop is named after. It is a tee for a curious sort of day: questions, experiments, and the quiet stretch where a child is busy figuring something out. Boys and girls, ages 4 to 12, in five colours, from black and blue to peach.</p><p>The cotton is 100% organic, the inks are OEKO-TEX certified, and the tee is BIS certified. Soft enough to live in, and steady through a school day and the sprawl on the floor after it.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "character:Jevika",
+      "character:Joy",
+      "gender:Boys",
+      "gender:Girls",
+      "Tech & Smart"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Black"
+          },
+          {
+            "name": "Blue"
+          },
+          {
+            "name": "White"
+          },
+          {
+            "name": "Pink"
+          },
+          {
+            "name": "Peach"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BL-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PI-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BL-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PI-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BK-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BL-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-WH-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PI-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BK-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-BL-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-WH-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PI-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-ST-PE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "curious-girl-tee",
+    "title": "Curious Girl Tee",
+    "descriptionHtml": "<p>The Curious Girl Tee belongs to Jevika, the girl with dark pigtails and red bows. It is an everyday tee for a child who asks questions, and then asks better ones. Four colourways, so there is one for most moods.</p><p>The cotton is 100% organic and the inks are OEKO-TEX certified, with BIS certification behind the make. Sizes run from age four to twelve. It takes a school day, a scooter in the park and a long afternoon indoors without complaint.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "character:Jevika",
+      "gender:Girls",
+      "Tech & Smart"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Yellow"
+          },
+          {
+            "name": "Pink"
+          },
+          {
+            "name": "Peach"
+          },
+          {
+            "name": "White"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-YE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PI-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-YE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PI-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-YE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PI-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-WH-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-YE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PI-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-PE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-CG-WH-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "adventure-tee",
+    "title": "Adventure Tee",
+    "descriptionHtml": "<p>Pinki asks why, then asks again. She is the squirrel in the round glasses, and this is her tee: a compass on the front with STAY CURIOUS in sticker lettering beside it. Four colourways, pink through to black.</p><p>The cotton is 100% organic and BIS certified, the inks OEKO-TEX certified. Sizes run 4 to 12. It is made for the kind of day that starts tidy and ends with grass stains, a pocketful of pebbles and a question you cannot answer.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "Adventure Squad",
+      "character:Pinki",
+      "gender:Girls"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Pink"
+          },
+          {
+            "name": "Sand"
+          },
+          {
+            "name": "White"
+          },
+          {
+            "name": "Black"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-PI-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Sand"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-SA-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-PI-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Sand"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-SA-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-PI-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Sand"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-SA-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-WH-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-BK-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-PI-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Sand"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-SA-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-WH-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-A-BK-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "skate-life-tee",
+    "title": "Skate Life Tee",
+    "descriptionHtml": "<p>This one belongs to Joy, the boy of the Jevika &amp; Joy's World cast and an Adventure Squad regular, usually found where there is a bit of speed to be had. An everyday tee for boys aged 4 to 12, in three colourways.</p><p>The cotton is 100% organic, the inks are OEKO-TEX certified, and the tee is BIS certified. Soft from the first wear, and dressed for a park afternoon, a kerb, and a long sit on the front step afterwards.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "Adventure Squad",
+      "character:Joy",
+      "gender:Boys"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Blue"
+          },
+          {
+            "name": "Yellow"
+          },
+          {
+            "name": "Black"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BL-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-YE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BL-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-YE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BL-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-YE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BK-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BL-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-YE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-SL-BK-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "title": "Brutus Boxer Tee",
+    "descriptionHtml": "<p>A soft everyday tee from Jevika &amp; Joy's World, printed with Joy and Brutus the boxer dog, plus Adventure Squad in sticker lettering. The two of them go everywhere together, which is roughly the arrangement most children already have with a best friend. It comes in four colourways.</p><p>The cotton is 100% organic, the inks are OEKO-TEX certified, and the tee is BIS certified. Sizes run age four to twelve. Built for park mornings, muddy knees and the long walk home.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "Adventure Squad",
+      "character:Brutus",
+      "character:Joy",
+      "gender:Boys"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "White"
+          },
+          {
+            "name": "Blue"
+          },
+          {
+            "name": "Yellow"
+          },
+          {
+            "name": "Black"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BL-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-YE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BL-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-YE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-WH-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BL-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-YE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BK-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-WH-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BL-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-YE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-BB-BK-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "street-tee",
+    "title": "Street Tee",
+    "descriptionHtml": "<p>A Jevika &amp; Joy's World tee, and this one belongs to Joy. Street games, park football, the stretch between school and dinner when nobody is sitting down. It suits a child who is always halfway out of the door.</p><p>The cotton is 100% organic, the inks are OEKO-TEX certified, and the tee carries BIS certification. It comes in three colourways and in sizes for ages 4 to 12. Black is there for the days that end muddy.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "character:Joy",
+      "gender:Boys",
+      "Street & Sports"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Blue"
+          },
+          {
+            "name": "Yellow"
+          },
+          {
+            "name": "Black"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BL-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-YE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BL-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-YE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BL-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-YE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BK-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BL-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-YE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-S-BK-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "friends-tee",
+    "title": "Friends Tee",
+    "descriptionHtml": "<p>A tee from Jevika and Joy's World for the outdoor half of the day. It belongs to Jevika and Joy, the two at the centre of every street game and stray football. Made for running about, cycling and whatever the park turns into by evening.</p><p>Cut from 100% organic cotton and printed with OEKO-TEX certified inks, in three colourways from pink through to white. BIS certified, sized for ages 4 to 12, and made for the kind of day that runs from the school gate to dinner.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "character:Jevika",
+      "character:Joy",
+      "gender:Girls",
+      "Street & Sports"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Pink"
+          },
+          {
+            "name": "Peach"
+          },
+          {
+            "name": "White"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PI-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PI-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PI-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-WH-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PI-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-PE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-F-WH-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "giggles-tee",
+    "title": "Giggles Tee",
+    "descriptionHtml": "<p>WILD AT HEART sits across the front, with Minku's sticker doodles scattered around it. Minku is the monkey of the Jevika &amp; Joy's World cast, and this one is his. Made for boys and girls.</p><p>100% organic cotton, BIS certified, printed with OEKO-TEX certified inks. Sizes run 4 to 12 years across six overlapping ranges, and there are six colourways. It is a tee for monkey bars, sports day and the week it becomes the only shirt they will wear.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "character:Minku",
+      "gender:Boys",
+      "gender:Girls"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "5-6 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "7-8 Y"
+          },
+          {
+            "name": "9-10 Y"
+          },
+          {
+            "name": "11-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Black"
+          },
+          {
+            "name": "Blue"
+          },
+          {
+            "name": "White"
+          },
+          {
+            "name": "Pink"
+          },
+          {
+            "name": "Peach"
+          },
+          {
+            "name": "Yellow"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BL-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PI-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-YE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "5-6 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BK-5",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "5-6 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BL-5",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "5-6 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-WH-5",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "5-6 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PI-5",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "5-6 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PE-5",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "5-6 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-YE-5",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BL-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PI-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-YE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "7-8 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BK-7",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "7-8 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BL-7",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "7-8 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-WH-7",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "7-8 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PI-7",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "7-8 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PE-7",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "7-8 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-YE-7",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "9-10 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BK-9",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "9-10 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BL-9",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "9-10 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-WH-9",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "9-10 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PI-9",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "9-10 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PE-9",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "9-10 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-YE-9",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "11-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BK-11",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "11-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Blue"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-BL-11",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "11-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-WH-11",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "11-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PI-11",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "11-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-PE-11",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "11-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Yellow"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-G-YE-11",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "handle": "wander-tee",
+    "title": "Wander Tee",
+    "descriptionHtml": "<p>A soft everyday tee from Jevika &amp; Joy's World, printed with a compass, mountains and the reminder that not all who wander are lost. Built for playgrounds, art class and everything after.</p>",
+    "vendor": "Jevika and Joy's World",
+    "productType": "Kids T-Shirt",
+    "tags": [
+      "Adventure Squad",
+      "character:Jevika",
+      "gender:Girls"
+    ],
+    "status": "DRAFT",
+    "productOptions": [
+      {
+        "name": "Size",
+        "position": 1,
+        "values": [
+          {
+            "name": "4-5 Y"
+          },
+          {
+            "name": "6-7 Y"
+          },
+          {
+            "name": "8-9 Y"
+          },
+          {
+            "name": "10-12 Y"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "position": 2,
+        "values": [
+          {
+            "name": "Black"
+          },
+          {
+            "name": "Peach"
+          },
+          {
+            "name": "Pink"
+          },
+          {
+            "name": "White"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-BK-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PE-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PI-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "4-5 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-WH-4",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-BK-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PE-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PI-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "6-7 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-WH-6",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-BK-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PE-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PI-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "8-9 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-WH-8",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Black"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-BK-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Peach"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PE-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "Pink"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-PI-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      },
+      {
+        "optionValues": [
+          {
+            "optionName": "Size",
+            "name": "10-12 Y"
+          },
+          {
+            "optionName": "Color",
+            "name": "White"
+          }
+        ],
+        "price": "599.00",
+        "sku": "JJW-W-WH-10",
+        "inventoryPolicy": "DENY",
+        "inventoryQuantities": [
+          {
+            "quantity": 5
+          }
+        ]
+      }
+    ]
+  }
+]

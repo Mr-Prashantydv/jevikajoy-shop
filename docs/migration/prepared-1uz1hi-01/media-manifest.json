@@ -1,0 +1,722 @@
+[
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-08/black/JJW-08-black-02-back-lifestyle.png",
+    "alt": "Black Tech Builder Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 5160686,
+    "sha256": "369aa2098753ae1d1c68a39c839edbe9da3514f1e51f38e0b107888e6583eb97"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-08/black/JJW-08-black-03-print-detail.png",
+    "alt": "Black Tech Builder Tee print detail",
+    "featuredForColour": false,
+    "bytes": 4311115,
+    "sha256": "53a09f4bcd9b33052f0762c8dfcb3089a2bd5a112f9946b9781a56958dfd7d75"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-08/black/JJW-08-black-04-packshot-stickers.png",
+    "alt": "Black Tech Builder Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4783741,
+    "sha256": "f2bc449719d2ddfc88513cb6aeb6c378420426ad4b00b174d4319b3ea4a4e60d"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-08/black/JJW-08-black-05-hero-banner-16x9.png",
+    "alt": "Black Tech Builder Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5624950,
+    "sha256": "ebd707311ad61a8534760d647f6d664809c995cfb3974120ce7bd4e9b2a29b3e"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-08/mustard/JJW-08-mustard-02-back-lifestyle.png",
+    "alt": "Yellow Tech Builder Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 5620224,
+    "sha256": "587d4bda101e00d37187455e78cdeacf3f35e27bd39e6e58a1214ed964b03aa3"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-08/mustard/JJW-08-mustard-03-print-detail.png",
+    "alt": "Yellow Tech Builder Tee print detail",
+    "featuredForColour": false,
+    "bytes": 7447957,
+    "sha256": "374f89941a5f5324bed5031a45a5287521d448e67ace70befc98cd96b7c28a37"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-08/mustard/JJW-08-mustard-04-packshot-stickers.png",
+    "alt": "Yellow Tech Builder Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 6160845,
+    "sha256": "6f8de340def1f71e6618591a4da1244e7e5873ad2e0db34ab30f4f8665cad40a"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-08/mustard/JJW-08-mustard-05-hero-banner-16x9.png",
+    "alt": "Yellow Tech Builder Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6136107,
+    "sha256": "e3a9de1bed4122e5a5e38ac996095977915321538862f4be1ef66dc911449158"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-08/navy/JJW-08-navy-02-back-lifestyle.png",
+    "alt": "Blue Tech Builder Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 5786777,
+    "sha256": "d945c285aacad12663888ead343bed26157bdc9ec1143f2c83c2e78223b8ef47"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-08/navy/JJW-08-navy-03-print-detail.png",
+    "alt": "Blue Tech Builder Tee print detail",
+    "featuredForColour": false,
+    "bytes": 6414235,
+    "sha256": "7a6f9e2ae5df6e201b156bccebd3a4fdb0e7dc65182ef60667e74d08f0ede260"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-08/navy/JJW-08-navy-04-packshot-stickers.png",
+    "alt": "Blue Tech Builder Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5322282,
+    "sha256": "01a56010d9a8da78aa2e3ef1e5f81662c1c70f445c3a7afbcfa7d3000fd0d98a"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-08/navy/JJW-08-navy-05-hero-banner-16x9.png",
+    "alt": "Blue Tech Builder Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5751479,
+    "sha256": "e0d5ddd98609b6ba2055a245b631028bc88d87178cee29b58bff989601ff65bf"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "White",
+    "path": "product-images/JJW-08/white/JJW-08-white-02-back-lifestyle.png",
+    "alt": "White Tech Builder Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 5497912,
+    "sha256": "8e73b3a542570a5a84170afb0d1a43f7cfb29f290b1469c3cf02c07876c7c720"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "White",
+    "path": "product-images/JJW-08/white/JJW-08-white-03-print-detail.png",
+    "alt": "White Tech Builder Tee print detail",
+    "featuredForColour": false,
+    "bytes": 7578981,
+    "sha256": "c5120a6ca592744d473c22c9f23aa5897c99748146114f1fc19e280af5653bed"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "White",
+    "path": "product-images/JJW-08/white/JJW-08-white-04-packshot-stickers.png",
+    "alt": "White Tech Builder Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5476085,
+    "sha256": "c3b31a7590671735018808082a48b16795468fd5c82d085c0ba4f0bd6d526bf9"
+  },
+  {
+    "handle": "tech-builder-tee",
+    "colour": "White",
+    "path": "product-images/JJW-08/white/JJW-08-white-05-hero-banner-16x9.png",
+    "alt": "White Tech Builder Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6115804,
+    "sha256": "ffe3860c3ebd818437555bfe10f8f222a19ea1c8312f192eefdd67f9bc9956db"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-06/black/JJW-06-black-01-hero-lifestyle.png",
+    "alt": "Black Adventure Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6440543,
+    "sha256": "572562a9766aa01d0b2ec5cd8073ba174245644f215ff2cea52e9f62a5f718fa"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-06/black/JJW-06-black-02-back-lifestyle.png",
+    "alt": "Black Adventure Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6486187,
+    "sha256": "12d56449f8490d1c632d09768c0c66e59f22981c4295ffcb52aebb31eca8aab6"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-06/black/JJW-06-black-03-packshot-stickers.png",
+    "alt": "Black Adventure Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4776501,
+    "sha256": "18c8061e08975f176a3413bc87c6f1829335722dc3f35614be700b52ebf6dadf"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-06/black/JJW-06-black-04-hero-banner-16x9.png",
+    "alt": "Black Adventure Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6321996,
+    "sha256": "5448a98cad6e04bedb1ecbda43fcb4db497e7d18b26259d4ad42bf1e294d1abe"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-06/pink/JJW-06-pink-01-hero-lifestyle.png",
+    "alt": "Pink Adventure Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6389190,
+    "sha256": "ba82644013347bc474614a69fd997f10f9ec5b159910ef44f215a9d684ddc133"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-06/pink/JJW-06-pink-02-back-lifestyle.png",
+    "alt": "Pink Adventure Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6375891,
+    "sha256": "858f7a83cb088dba8792df4bdaca2dcb8b34960e703835cb9476006c025e0e8b"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-06/pink/JJW-06-pink-03-packshot-stickers.png",
+    "alt": "Pink Adventure Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5291580,
+    "sha256": "6966db0a31665b51c1c6d6629fbffac0a187c4628a49caa21ea4c426b3e13419"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-06/pink/JJW-06-pink-04-hero-banner-16x9.png",
+    "alt": "Pink Adventure Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6117415,
+    "sha256": "fbf5a6d5eae283e6d123f7c397a5893f1744c90337ecd2cb0d00c0e22ff467d2"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Sand",
+    "path": "product-images/JJW-06/sand/JJW-06-sand-01-hero-lifestyle.png",
+    "alt": "Sand Adventure Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6632415,
+    "sha256": "bbae3d0e8d6e6d98ac933b69502c7ab4a43471bdf9cf3e3c40f889859cc3178c"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Sand",
+    "path": "product-images/JJW-06/sand/JJW-06-sand-02-back-lifestyle.png",
+    "alt": "Sand Adventure Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6518675,
+    "sha256": "286b402951388662265a86a95894d3bc219d567253166174051b7ee35e183db0"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Sand",
+    "path": "product-images/JJW-06/sand/JJW-06-sand-03-packshot-stickers.png",
+    "alt": "Sand Adventure Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5125267,
+    "sha256": "68b6dbfb1add5980ec039a45ddefb7b6d3bafb8570215407338c266b02f30037"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "Sand",
+    "path": "product-images/JJW-06/sand/JJW-06-sand-04-hero-banner-16x9.png",
+    "alt": "Sand Adventure Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6712503,
+    "sha256": "a01c7f85be6f2d7749c24e4121f1d5c86c4d7bd3d316b42cf17e8dee1e399ea3"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "White",
+    "path": "product-images/JJW-06/white/JJW-06-white-01-hero-lifestyle.png",
+    "alt": "White Adventure Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6579253,
+    "sha256": "b3982759146b27a599b38d309c4e50dad29db6acaa0263b12c36994aa69e3a07"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "White",
+    "path": "product-images/JJW-06/white/JJW-06-white-02-back-lifestyle.png",
+    "alt": "White Adventure Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6496071,
+    "sha256": "0b4325c96019748ae5bda9866f6eec74d6a805832ac8ceb30d6db134d1b3acee"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "White",
+    "path": "product-images/JJW-06/white/JJW-06-white-03-packshot-stickers.png",
+    "alt": "White Adventure Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4690691,
+    "sha256": "c8525ac5786279d85861668c628e19cbaba272d5c7440b2a70b46b0a83b094c0"
+  },
+  {
+    "handle": "adventure-tee",
+    "colour": "White",
+    "path": "product-images/JJW-06/white/JJW-06-white-04-hero-banner-16x9.png",
+    "alt": "White Adventure Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6011716,
+    "sha256": "3cb76af7ad2d592c3f0ca051fdc4218247dcc29f4bfa4824d906629cd57eef73"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-05/black/JJW-05-black-01-hero-lifestyle.png",
+    "alt": "Black Brutus Boxer Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 5977665,
+    "sha256": "0ebbd9ed2ff16e77c071f0e5d42bfe25c8bee1d30714d9e68cbdedecfcaf811b"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-05/black/JJW-05-black-02-back-lifestyle.png",
+    "alt": "Black Brutus Boxer Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6003135,
+    "sha256": "0c592d26f0f92dd22ded02a15db933a5c3608dd11877ceecb8d4fc9a4a288bd8"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-05/black/JJW-05-black-03-packshot-stickers.png",
+    "alt": "Black Brutus Boxer Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4458898,
+    "sha256": "f7918a9973a2d8b01624a69056ef26b8facafe533c2ea2146422fc8aeef7c7be"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-05/black/JJW-05-black-04-hero-banner-16x9.png",
+    "alt": "Black Brutus Boxer Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5601519,
+    "sha256": "a88b975b148447f756bdf68ae46dbd3a24fa54ca0e7bc1216ce211539bef3a3e"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-05/blue/JJW-05-blue-01-hero-lifestyle.png",
+    "alt": "Blue Brutus Boxer Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 5975479,
+    "sha256": "bf332a26d548b7992238e5aa41a4c15dffe81780975ebd171ea9a9a82f32dc55"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-05/blue/JJW-05-blue-02-back-lifestyle.png",
+    "alt": "Blue Brutus Boxer Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 5873683,
+    "sha256": "04a919f06fa03c15501a34ad42a84f4ca730e14ca01f71e31bb9295f0cb47fad"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-05/blue/JJW-05-blue-03-packshot-stickers.png",
+    "alt": "Blue Brutus Boxer Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5853175,
+    "sha256": "d199abac2cea51218479527b6c8c55a2678be621e23be882ed2d6c071661c83f"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-05/blue/JJW-05-blue-04-hero-banner-16x9.png",
+    "alt": "Blue Brutus Boxer Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5825612,
+    "sha256": "b3fd64665476e44dfc37a77d8f3c0ff4dce8f1857ff6b81b30beab7aaead0402"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-05/mustard/JJW-05-mustard-01-hero-lifestyle.png",
+    "alt": "Yellow Brutus Boxer Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6053009,
+    "sha256": "6929a23c7d7c4b96ff95c5caf5fe5130fefa09edcd0d2069d65a4d9f12abecc8"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-05/mustard/JJW-05-mustard-02-back-lifestyle.png",
+    "alt": "Yellow Brutus Boxer Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6065079,
+    "sha256": "f167297f46143f34c4aeb6fe34853a46428a532d7d60782112365c7083188784"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-05/mustard/JJW-05-mustard-03-packshot-stickers.png",
+    "alt": "Yellow Brutus Boxer Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5220673,
+    "sha256": "90c69b6fadc19c0c351fbc0fcc1ab46e925e03ffa2f546ef3cb35c5c7c8f3c83"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-05/mustard/JJW-05-mustard-04-hero-banner-16x9.png",
+    "alt": "Yellow Brutus Boxer Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5812196,
+    "sha256": "d757e9ac5678bf5cbe3ee3a06364501297b74b86902a4521ebfedab32b38c7fc"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "White",
+    "path": "product-images/JJW-05/white/JJW-05-white-01-hero-lifestyle.png",
+    "alt": "White Brutus Boxer Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6049726,
+    "sha256": "f7ca9cb4c18d518b7ed5a2a0183d3dac4428bb3ebfd897cc569800787329ec39"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "White",
+    "path": "product-images/JJW-05/white/JJW-05-white-02-back-lifestyle.png",
+    "alt": "White Brutus Boxer Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6011415,
+    "sha256": "d7bbc873d87e05b3fbd363faeb3c73d54b17e3efddf351b46dbad2b56944f45a"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "White",
+    "path": "product-images/JJW-05/white/JJW-05-white-03-packshot-stickers.png",
+    "alt": "White Brutus Boxer Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4508570,
+    "sha256": "8e69525c21f673484b2e16d429481f43892398d92f9ceb3c7f0f0736a8aa04da"
+  },
+  {
+    "handle": "brutus-boxer-tee",
+    "colour": "White",
+    "path": "product-images/JJW-05/white/JJW-05-white-04-hero-banner-16x9.png",
+    "alt": "White Brutus Boxer Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5649949,
+    "sha256": "7ec3dd36194c0a70ac008e6f9cc05b0da32854636e86be01d76bc97d41ca87d5"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-04/black/JJW-04-black-01-hero-lifestyle.png",
+    "alt": "Black Giggles Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6431593,
+    "sha256": "7dc8d62bc63fb550a205eb86c5a6f6999dcaab7ff28378b53bd32d925ee31ed8"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-04/black/JJW-04-black-02-back-lifestyle.png",
+    "alt": "Black Giggles Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6367058,
+    "sha256": "bb6c1f0999d5ff9efff253181c019efb5d58bf9b5ce59493bf438ecb293f5331"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-04/black/JJW-04-black-03-packshot-stickers.png",
+    "alt": "Black Giggles Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5053133,
+    "sha256": "a24d1c60f025519e93a23ece69a6f4e5588dd2142dfd8d083c7944e49d72ec1f"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-04/black/JJW-04-black-04-hero-banner-16x9.png",
+    "alt": "Black Giggles Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6273117,
+    "sha256": "6fc5cca01aef137a222b04ba779f1fa6ab00f422d6e50fc81dd1e8b33cc5758f"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-04/blue/JJW-04-blue-01-hero-lifestyle.png",
+    "alt": "Blue Giggles Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6597562,
+    "sha256": "f79ccfd0310e6cb1fd1c330d0578cfcde48a6a20259a1fdd0296b7b88268486b"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-04/blue/JJW-04-blue-02-back-lifestyle.png",
+    "alt": "Blue Giggles Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6369562,
+    "sha256": "700d5f5af0b0b3ea4400774b3fd24b1c7fbd63e5c92e0885a3f8c96881aa36bb"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-04/blue/JJW-04-blue-03-packshot-stickers.png",
+    "alt": "Blue Giggles Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5609900,
+    "sha256": "9168545e171b994b7a1dbd3969acbbb8232573488877c79937ff04985274ce21"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Blue",
+    "path": "product-images/JJW-04/blue/JJW-04-blue-04-hero-banner-16x9.png",
+    "alt": "Blue Giggles Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5997401,
+    "sha256": "b87c7501b96f864407f512136bbef014ddc40909dbe0bd1dbcc7ae47c862f890"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "White",
+    "path": "product-images/JJW-04/white/JJW-04-white-01-hero-lifestyle.png",
+    "alt": "White Giggles Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6495037,
+    "sha256": "761c9dbb9a453c465f3750def1672d0f69ed8fa2c54fd864c079d32caeb29e53"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "White",
+    "path": "product-images/JJW-04/white/JJW-04-white-02-back-lifestyle.png",
+    "alt": "White Giggles Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6443848,
+    "sha256": "5535d54a8ad7c091c3c8fcde4cbe64d80e28648dddc0d0c663f90cd5c37d8ef0"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "White",
+    "path": "product-images/JJW-04/white/JJW-04-white-03-packshot-stickers.png",
+    "alt": "White Giggles Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4985153,
+    "sha256": "8adea55f896c09095466a168b63e51bca4876a4fa100ffe0112a071e681016e1"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "White",
+    "path": "product-images/JJW-04/white/JJW-04-white-04-hero-banner-16x9.png",
+    "alt": "White Giggles Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6400283,
+    "sha256": "86ea6b6af1b5c7c4c8536148c904557d27c098eb890a9114b8be3b661c25fdd2"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-04/yellow/JJW-04-yellow-01-hero-lifestyle.png",
+    "alt": "Yellow Giggles Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6602586,
+    "sha256": "31770cd0581151dbbe7f9948ac06ee6126dadeb1f967c46d32f698c6dcd59eef"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-04/yellow/JJW-04-yellow-02-back-lifestyle.png",
+    "alt": "Yellow Giggles Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6731405,
+    "sha256": "07d42fda5756b79cbd519117e2df68079e7d9010059a22ad66018e42bc4ee34b"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-04/yellow/JJW-04-yellow-03-packshot-stickers.png",
+    "alt": "Yellow Giggles Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5370853,
+    "sha256": "3faa434ff3edfffa2512cc238d54fcb63554ec9d2e68a1cf237fbcbf75e05393"
+  },
+  {
+    "handle": "giggles-tee",
+    "colour": "Yellow",
+    "path": "product-images/JJW-04/yellow/JJW-04-yellow-04-hero-banner-16x9.png",
+    "alt": "Yellow Giggles Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6137224,
+    "sha256": "fff4712e9c88345fd303e4187c54bcd9418704e271b42a0ab4cf23efc68d364c"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-12/black/JJW-12-black-01-hero-lifestyle.png",
+    "alt": "Black Wander Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 5963462,
+    "sha256": "74d3e2d57c53f95d00576c21842a11c3a2eae5450329629f6e8802f2c11a9114"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-12/black/JJW-12-black-02-back-lifestyle.png",
+    "alt": "Black Wander Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6064656,
+    "sha256": "e413cde0bd44b49c5fc2563217b8bca8d3d3edc50e60ef6c429ad5d0ccf2733f"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-12/black/JJW-12-black-03-packshot-stickers.png",
+    "alt": "Black Wander Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4993773,
+    "sha256": "b95bdf2132d89af19cb696a74198f4b1f339a1970565fc9e3c3cca2b8d8d1ccf"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Black",
+    "path": "product-images/JJW-12/black/JJW-12-black-04-hero-banner-16x9.png",
+    "alt": "Black Wander Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 5998222,
+    "sha256": "d4d6470a6e460485c6f101b774a2e82dfd89ff3e1ee4e93173dd2df9980c5b01"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Peach",
+    "path": "product-images/JJW-12/peach/JJW-12-peach-01-hero-lifestyle.png",
+    "alt": "Peach Wander Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6237028,
+    "sha256": "ca76a7598193ce6a25459e5f3a9ea6fff568e26809c7d65d548971dd04102ef2"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Peach",
+    "path": "product-images/JJW-12/peach/JJW-12-peach-02-back-lifestyle.png",
+    "alt": "Peach Wander Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6262242,
+    "sha256": "bf7dc93894c73b2a4a41c626c4a096b9b4d73f05f31e520937250e71ecaeb809"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Peach",
+    "path": "product-images/JJW-12/peach/JJW-12-peach-03-packshot-stickers.png",
+    "alt": "Peach Wander Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5168180,
+    "sha256": "f8e66c08839b57abf97a51139d58eed90c5c419a7bce916d07f34f43ef82efe0"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Peach",
+    "path": "product-images/JJW-12/peach/JJW-12-peach-04-hero-banner-16x9.png",
+    "alt": "Peach Wander Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6109219,
+    "sha256": "66545182013b1e3d493dabfab3fce5a888238b1b688858231f40af76352f2e09"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-12/pink/JJW-12-pink-01-hero-lifestyle.png",
+    "alt": "Pink Wander Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6325016,
+    "sha256": "4f41c13f3e0507595d1027ad48405ff2952371117f51eeb53190d7fc1dfe3334"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-12/pink/JJW-12-pink-02-back-lifestyle.png",
+    "alt": "Pink Wander Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6195061,
+    "sha256": "fa87d2cfc9fb96823a53575111938cbb06b744900ffe12797e1d17fa5f256ce6"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-12/pink/JJW-12-pink-03-packshot-stickers.png",
+    "alt": "Pink Wander Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 5246069,
+    "sha256": "f4c7bedef9a59bfe21b68e9fa4ccb97c7d48eb0df4f65b8616eb70108eae4bc9"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "Pink",
+    "path": "product-images/JJW-12/pink/JJW-12-pink-04-hero-banner-16x9.png",
+    "alt": "Pink Wander Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6248006,
+    "sha256": "b36bd3456244539a20c1e23198f6f9cb89cf83a16683cafb223fae7d84f86df8"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "White",
+    "path": "product-images/JJW-12/white/JJW-12-white-01-hero-lifestyle.png",
+    "alt": "White Wander Tee hero lifestyle",
+    "featuredForColour": false,
+    "bytes": 6162364,
+    "sha256": "60cf52c71ce02f962c789be633a711c913d81d341631782ddb3c2876e2538a5a"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "White",
+    "path": "product-images/JJW-12/white/JJW-12-white-02-back-lifestyle.png",
+    "alt": "White Wander Tee back lifestyle",
+    "featuredForColour": false,
+    "bytes": 6097221,
+    "sha256": "8078f58e8ada76f1a26b877fd376e590f14034dd63fbe8fa6dbbe15257aaa7c3"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "White",
+    "path": "product-images/JJW-12/white/JJW-12-white-03-packshot-stickers.png",
+    "alt": "White Wander Tee packshot stickers",
+    "featuredForColour": true,
+    "bytes": 4545783,
+    "sha256": "7227baf5f1e14a1f7eae09047023c07070c4227c86106722ef3c666f674b9626"
+  },
+  {
+    "handle": "wander-tee",
+    "colour": "White",
+    "path": "product-images/JJW-12/white/JJW-12-white-04-hero-banner-16x9.png",
+    "alt": "White Wander Tee hero banner 16x9",
+    "featuredForColour": false,
+    "bytes": 6160320,
+    "sha256": "272db9e22aa974a5dfbe97be9e62c0d3ede13acdd0134f2b96bc874a074942f8"
+  }
+]

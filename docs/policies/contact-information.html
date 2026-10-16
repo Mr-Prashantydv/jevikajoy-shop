@@ -1,0 +1,14 @@
+<div>
+  <p>Last updated: {{ last_updated }}</p>
+
+  <h2>{{ shop_name }}</h2>
+  {% if address != blank %}<p>{{ address }}</p>{% endif %}
+
+  <h2>How to reach us</h2>
+  <p>Email: {{ email }}<br>
+  Phone: {{ phone }}</p>
+  <p>You can also use the form on our <a href="/pages/contact">Contact page</a>. Please include your order number so we can find you quickly.</p>
+
+  <h2>What to expect</h2>
+  <p>We read every message. For anything about a delivery, a size or a return, email is the fastest route &mdash; a photo of the item and your order number usually lets us resolve it in one reply.</p>
+</div>

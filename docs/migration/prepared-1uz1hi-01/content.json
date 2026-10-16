@@ -1,0 +1,128 @@
+{
+  "collections": [
+    {
+      "handle": "jevika",
+      "title": "Jevika",
+      "rule": "TAG EQUALS character:Jevika"
+    },
+    {
+      "handle": "joy",
+      "title": "Joy",
+      "rule": "TAG EQUALS character:Joy"
+    },
+    {
+      "handle": "brutus",
+      "title": "Brutus",
+      "rule": "TAG EQUALS character:Brutus"
+    },
+    {
+      "handle": "minku",
+      "title": "Minku",
+      "rule": "TAG EQUALS character:Minku"
+    },
+    {
+      "handle": "pinki",
+      "title": "Pinki",
+      "rule": "TAG EQUALS character:Pinki"
+    },
+    {
+      "handle": "boys",
+      "title": "Boys",
+      "rule": "TAG EQUALS gender:Boys"
+    },
+    {
+      "handle": "girls",
+      "title": "Girls",
+      "rule": "TAG EQUALS gender:Girls"
+    }
+  ],
+  "menus": [
+    {
+      "handle": "main-menu",
+      "title": "Main menu",
+      "items": [
+        {
+          "title": "Home",
+          "type": "FRONTPAGE",
+          "url": "/"
+        },
+        {
+          "title": "Products",
+          "type": "CATALOG",
+          "url": "/collections/all"
+        },
+        {
+          "title": "Contact",
+          "type": "PAGE",
+          "url": "/pages/contact"
+        },
+        {
+          "title": "Our Story ",
+          "type": "PAGE",
+          "url": "/pages/our-story"
+        }
+      ]
+    },
+    {
+      "handle": "footer",
+      "title": "Footer menu",
+      "items": [
+        {
+          "title": "Shop all tees",
+          "type": "CATALOG",
+          "url": "/collections/all"
+        },
+        {
+          "title": "For boys",
+          "type": "COLLECTION",
+          "url": "/collections/boys"
+        },
+        {
+          "title": "For girls",
+          "type": "COLLECTION",
+          "url": "/collections/girls"
+        },
+        {
+          "title": "Our story",
+          "type": "PAGE",
+          "url": "/pages/our-story"
+        },
+        {
+          "title": "Contact us",
+          "type": "PAGE",
+          "url": "/pages/contact"
+        },
+        {
+          "title": "Search",
+          "type": "SEARCH",
+          "url": "/search"
+        }
+      ]
+    },
+    {
+      "handle": "footer-legal",
+      "title": "Footer legal",
+      "items": [
+        {
+          "title": "Privacy policy",
+          "type": "SHOP_POLICY",
+          "url": "/policies/privacy-policy"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "handle": "contact",
+      "title": "Contact",
+      "templateSuffix": "contact",
+      "body": ""
+    },
+    {
+      "handle": "our-story",
+      "title": "Our Story",
+      "templateSuffix": null,
+      "body": ""
+    }
+  ]
+}

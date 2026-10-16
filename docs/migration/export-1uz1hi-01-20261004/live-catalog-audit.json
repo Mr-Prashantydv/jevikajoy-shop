@@ -1,0 +1,73 @@
+{
+  "url": "https://jevikajoy.shop",
+  "products": [
+    {
+      "handle": "wander-tee",
+      "variants": 16,
+      "images": 16,
+      "published": true
+    },
+    {
+      "handle": "street-tee",
+      "variants": 12,
+      "images": 0,
+      "published": true
+    },
+    {
+      "handle": "tech-builder-tee",
+      "variants": 16,
+      "images": 16,
+      "published": true
+    },
+    {
+      "handle": "giggles-tee",
+      "variants": 36,
+      "images": 16,
+      "published": true
+    },
+    {
+      "handle": "skate-life-tee",
+      "variants": 12,
+      "images": 0,
+      "published": true
+    },
+    {
+      "handle": "smart-tech-tee",
+      "variants": 20,
+      "images": 0,
+      "published": true
+    },
+    {
+      "handle": "friends-tee",
+      "variants": 12,
+      "images": 0,
+      "published": true
+    },
+    {
+      "handle": "curious-girl-tee",
+      "variants": 16,
+      "images": 0,
+      "published": true
+    },
+    {
+      "handle": "brutus-boxer-tee",
+      "variants": 16,
+      "images": 16,
+      "published": true
+    },
+    {
+      "handle": "adventure-tee",
+      "variants": 16,
+      "images": 16,
+      "published": true
+    }
+  ],
+  "product_count": 10,
+  "variant_count": 172,
+  "image_count": 80,
+  "errors": [],
+  "limitations": [
+    "Physical inventory not verified",
+    "Payments and checkout not verified"
+  ]
+}

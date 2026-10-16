@@ -1,0 +1,36 @@
+{
+  "preparedDate": "2026-10-04",
+  "destination": "1uz1hi-01.myshopify.com",
+  "sourceStore": "bnwvrc-04.myshopify.com",
+  "snapshotStore": "00d611-p1.myshopify.com",
+  "uploaded": false,
+  "themeFiles": 88,
+  "products": 10,
+  "variants": 172,
+  "images": 80,
+  "collections": 7,
+  "menus": 3,
+  "pages": 2,
+  "warnings": [
+    "Saved data is a reconstruction, not a fresh export of bnwvrc-04.",
+    "Prices and inventory quantities are historical; verify stock before publishing.",
+    "CSV contains no image URLs. Upload local media separately and assign packshots to variants.",
+    "Remote-only theme edits, orders, customers, reviews, metafields, settings and files may be absent.",
+    "smart-tech-tee: no saved photos for Black, Blue, Peach, Pink, White",
+    "curious-girl-tee: no saved photos for Peach, Pink, White, Yellow",
+    "skate-life-tee: no saved photos for Black, Blue, Yellow",
+    "street-tee: no saved photos for Black, Blue, Yellow",
+    "friends-tee: no saved photos for Peach, Pink, White",
+    "giggles-tee: no saved photos for Peach, Pink"
+  ],
+  "themeSource": "D:\\projects\\JEVIKAJOY.SHOP\\docs\\migration\\export-1uz1hi-01-20261004\\theme",
+  "files": {
+    "JJW-theme.zip": "3c058c7a5eb5e8be1d61f806c0a5456b6ea641e418a858c9663f6b10f9e8e81a",
+    "README.md": "e4a01fc2681f219db21cd998f4646d1c0e8d1dd63fac71a5860a6ec84043308b",
+    "content.json": "7b3665a02ee4fecaa0c50b6d09877a7bcf257afbf7b69aebcf85422c0c74e260",
+    "media-manifest.json": "203b53f4d57bc2e0ee26bfc540b2a13c36f650bd73e521991587552afc56b60f",
+    "products.csv": "c79ce55d62118d250392673c3ef9753d19bb3ea3d4fa0de79968a7f0153fa94f",
+    "products.json": "92cef64f1ad9725f72d3ab42edc8edf8d5fdf004ec32a9dd4c220539ec514e34",
+    "settings-reference.json": "7954744a62d6508128da4891f4f9ba17038ec4f7bc490579dd1527f9ec8ea80a"
+  }
+}

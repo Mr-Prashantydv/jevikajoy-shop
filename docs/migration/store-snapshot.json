@@ -1,0 +1,304 @@
+{
+  "_meta": {
+    "store": "00d611-p1.myshopify.com",
+    "vanityDomain": "jevikajoy.shop",
+    "capturedDuring": "session 031c0f4e — queried live via the Admin API BEFORE the store was frozen",
+    "capturedState": "storefront now returns HTTP 402 (frozen for non-payment); Admin API returns 'Unavailable Shop'; this file is the only machine-readable copy of the below outside Shopify",
+    "completeness": "Everything here was read from the live Admin API and is verbatim. It is NOT a full store export — see gaps[] for what was never captured.",
+    "gaps": [
+      "Product image binaries — but local masters exist in product-images/JJW-{04,05,06,08,12}/ for the 5 photographed products; the other 5 products have no images at all, so nothing is lost",
+      "Product image alt text — only samples captured, see products[].mediaAltSamples",
+      "Metafield DEFINITIONS (namespace/key/type/validations) were never listed, only values on specific products",
+      "URL redirects — never queried",
+      "Markets / taxes / duties configuration — never queried",
+      "Notification email templates — never queried",
+      "Customer records — never queried (store reports zero real orders)",
+      "Files (Content > Files) — never queried",
+      "Blog + articles — 'News' blog exists with 0 articles, nothing to lose",
+      "App subscription/billing state for Judge.me"
+    ]
+  },
+
+  "shop": {
+    "contactEmail": "botfit41@gmail.com",
+    "billingAddress": {
+      "address1": "Sector 63",
+      "address2": "11th floor",
+      "city": "Gurugram",
+      "province": "Haryana",
+      "zip": "122098",
+      "country": "India",
+      "phone": "+917011281878"
+    },
+    "plan": "Shopify (shopifyPlus: false)",
+    "customerAccounts": "NEW_CUSTOMER_ACCOUNTS",
+    "digitalWallets": "none configured",
+    "paymentProviders": "none configured",
+    "currency": "INR"
+  },
+
+  "theme": {
+    "id": 194587852932,
+    "name": "Development (dc85aa-Jexi)",
+    "role": "unpublished/development",
+    "source": "this git repo, branch scratch-theme — fully reproducible, no export needed",
+    "appEmbeds": "NONE enabled in config/settings_data.json — notably Judge.me is installed on the store but its embed is off in this theme"
+  },
+
+  "products": {
+    "_note": "All 10 products. Every variant is availableForSale with inventoryQuantity 5 and an inventory policy of DENY. Price is a flat Rs. 599 across the catalogue.",
+    "_skuDefect": "Blue and Black share a SKU on tech-builder-tee, smart-tech-tee, skate-life-tee, street-tee and giggles-tee — both were abbreviated 'BL'. adventure-tee, brutus-boxer-tee and wander-tee correctly use 'BK' for Black. Fix on rebuild, do not replicate.",
+    "items": [
+      {
+        "handle": "tech-builder-tee",
+        "id": "gid://shopify/Product/10382666530948",
+        "title": "Tech Builder Tee",
+        "tags": ["character:Joy", "gender:Boys", "Tech & Smart"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Blue", "Yellow", "Black", "White"] },
+        "variantCount": 16,
+        "skuPattern": "JJW-TB-{BL|YE|BL|WH}-{4|6|8|10}",
+        "hasImages": true,
+        "imageFolder": "product-images/JJW-08",
+        "mediaAltSamples": [
+          "Blue Tech Builder Tee packshot with LEVEL UP, NEXT GEN ENERGY and OWN YOUR GAME stickers",
+          "Blue Tech Builder Tee worn by a child, back view showing the LEVEL UP print"
+        ]
+      },
+      {
+        "handle": "smart-tech-tee",
+        "id": "gid://shopify/Product/10382666596484",
+        "title": "Smart Tech Tee",
+        "tags": ["character:Jevika", "character:Joy", "gender:Boys", "gender:Girls", "Tech & Smart"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Black", "Blue", "White", "Pink", "Peach"] },
+        "variantCount": 20,
+        "skuPattern": "JJW-ST-{BL|BL|WH|PI|PE}-{4|6|8|10}",
+        "hasImages": false
+      },
+      {
+        "handle": "curious-girl-tee",
+        "id": "gid://shopify/Product/10382666694788",
+        "title": "Curious Girl Tee",
+        "tags": ["character:Jevika", "gender:Girls", "Tech & Smart"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Yellow", "Pink", "Peach", "White"] },
+        "variantCount": 16,
+        "skuPattern": "JJW-CG-{YE|PI|PE|WH}-{4|6|8|10}",
+        "hasImages": false
+      },
+      {
+        "handle": "adventure-tee",
+        "id": "gid://shopify/Product/10382666793092",
+        "title": "Adventure Tee",
+        "tags": ["Adventure Squad", "character:Pinki", "gender:Girls"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Pink", "Sand", "White", "Black"] },
+        "variantCount": 16,
+        "skuPattern": "JJW-A-{PI|PE|WH|BK}-{4|6|8|10}",
+        "hasImages": true,
+        "imageFolder": "product-images/JJW-06",
+        "mediaAltSamples": [
+          "Pink Adventure Tee packshot with Pinki compass print and STAY CURIOUS stickers",
+          "Pink Adventure Tee worn by a child, front lifestyle shot"
+        ]
+      },
+      {
+        "handle": "skate-life-tee",
+        "id": "gid://shopify/Product/10382666858628",
+        "title": "Skate Life Tee",
+        "tags": ["Adventure Squad", "character:Joy", "gender:Boys"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Blue", "Yellow", "Black"] },
+        "variantCount": 12,
+        "skuPattern": "JJW-SL-{BL|YE|BL}-{4|6|8|10}",
+        "hasImages": false
+      },
+      {
+        "handle": "brutus-boxer-tee",
+        "id": "gid://shopify/Product/10382666924164",
+        "title": "Brutus Boxer Tee",
+        "tags": ["Adventure Squad", "character:Brutus", "character:Joy", "gender:Boys"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["White", "Blue", "Yellow", "Black"] },
+        "variantCount": 16,
+        "skuPattern": "JJW-BB-{WH|BL|YE|BK}-{4|6|8|10}",
+        "hasImages": true,
+        "imageFolder": "product-images/JJW-05",
+        "mediaAltSamples": [
+          "White Brutus Boxer Tee packshot with Joy and Brutus print and ADVENTURE SQUAD stickers",
+          "White Brutus Boxer Tee worn by a child, front lifestyle shot"
+        ],
+        "note": "Carries TWO character tags (Brutus and Joy). Theme code must decide which wins per surface."
+      },
+      {
+        "handle": "street-tee",
+        "id": "gid://shopify/Product/10382666989700",
+        "title": "Street Tee",
+        "tags": ["character:Joy", "gender:Boys", "Street & Sports"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Blue", "Yellow", "Black"] },
+        "variantCount": 12,
+        "skuPattern": "JJW-S-{BL|YE|BL}-{4|6|8|10}",
+        "hasImages": false
+      },
+      {
+        "handle": "friends-tee",
+        "id": "gid://shopify/Product/10382667088004",
+        "title": "Friends Tee",
+        "tags": ["character:Jevika", "character:Joy", "gender:Girls", "Street & Sports"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Pink", "Peach", "White"] },
+        "variantCount": 12,
+        "skuPattern": "JJW-F-{PI|PE|WH}-{4|6|8|10}",
+        "hasImages": false
+      },
+      {
+        "handle": "giggles-tee",
+        "id": "gid://shopify/Product/10382667153540",
+        "title": "Giggles Tee",
+        "tags": ["character:Minku", "gender:Boys", "gender:Girls"],
+        "options": {
+          "Size": ["4-5 Y", "6-7 Y", "9-10 Y", "5-6 Y", "7-8 Y", "11-12 Y"],
+          "Color": ["Black", "Blue", "White", "Pink", "Peach", "Yellow"]
+        },
+        "variantCount": 36,
+        "skuPattern": "JJW-G-{BL|BL|WH|PI|PE|YE}-{4|6|10} — the 5-6, 7-8 and 11-12 Y variants have NULL SKUs",
+        "hasImages": true,
+        "imageFolder": "product-images/JJW-04",
+        "mediaAltSamples": [
+          "Black Giggles Tee packshot with WILD AT HEART print and Minku sticker doodles",
+          "Black Giggles Tee worn by a child, front lifestyle shot"
+        ],
+        "note": "THE ODD ONE OUT. Six overlapping size ranges instead of the usual four, stored OUT OF ORDER, and no 8-9 Y. Three of the six sizes have null SKUs. Any code that assumes four sizes breaks here."
+      },
+      {
+        "handle": "wander-tee",
+        "id": "gid://shopify/Product/10448628285572",
+        "title": "Wander Tee",
+        "tags": ["Adventure Squad", "character:Jevika", "gender:Girls"],
+        "options": { "Size": ["4-5 Y", "6-7 Y", "8-9 Y", "10-12 Y"], "Color": ["Black", "Peach", "Pink", "White"] },
+        "variantCount": 16,
+        "skuPattern": "JJW-W-{BK|PE|PI|WH}-{4|6|8|10}",
+        "hasImages": true,
+        "imageFolder": "product-images/JJW-12",
+        "mediaAltSamples": [
+          "Black Wander Tee packshot with NOT ALL WHO WANDER ARE LOST print and compass stickers",
+          "Black Wander Tee worn by a child, front lifestyle shot"
+        ],
+        "note": "The only product carrying Judge.me metafields (judgeme.badge, judgeme.widget, judgeme.review_widget_data) — all reporting zero reviews."
+      }
+    ],
+    "descriptions": "All 10 written and published during Phase 2. Full HTML in docs/product-copy/descriptions.json (9 of them); wander-tee's was pre-existing."
+  },
+
+  "collections": {
+    "_note": "Character and gender collections are SMART collections keyed on tags. Adding a product to a character is a tagsAdd, never a collection edit. Recreate them as rule-based, not manual.",
+    "items": [
+      { "handle": "jevika", "title": "Jevika", "productsCount": 4, "rule": "TAG EQUALS character:Jevika" },
+      { "handle": "joy", "title": "Joy", "productsCount": 6, "rule": "TAG EQUALS character:Joy" },
+      { "handle": "brutus", "title": "Brutus", "productsCount": 1, "rule": "TAG EQUALS character:Brutus" },
+      { "handle": "minku", "title": "Minku", "productsCount": 1, "rule": "TAG EQUALS character:Minku" },
+      { "handle": "pinki", "title": "Pinki", "productsCount": 1, "rule": "TAG EQUALS character:Pinki" },
+      { "handle": "boys", "title": "Boys", "productsCount": 6, "rule": "TAG EQUALS gender:Boys" },
+      { "handle": "girls", "title": "Girls", "productsCount": 6, "rule": "TAG EQUALS gender:Girls" },
+      { "handle": "frontpage", "title": "Home page", "productsCount": 0, "rule": null, "note": "Shopify default, empty — do not recreate" },
+      { "handle": "baby-and-toddler-apparel-example-products", "title": "Baby and Toddler Apparel example products", "productsCount": 0, "rule": null, "note": "Shopify sample, empty — do not recreate" }
+    ]
+  },
+
+  "navigation": {
+    "main-menu": {
+      "id": "gid://shopify/Menu/309151760516",
+      "title": "Main menu",
+      "items": [
+        { "title": "Home", "type": "FRONTPAGE", "url": "/" },
+        { "title": "Products", "type": "CATALOG", "url": "/collections/all" },
+        { "title": "Contact", "type": "PAGE", "url": "/pages/contact" },
+        { "title": "Our Story ", "type": "PAGE", "url": "/pages/our-story", "note": "trailing space in the title, as stored" }
+      ]
+    },
+    "footer": {
+      "id": "gid://shopify/Menu/309151793284",
+      "title": "Footer menu",
+      "note": "Rebuilt during Phase 1 — was a single 'Search' link before.",
+      "items": [
+        { "title": "Shop all tees", "type": "CATALOG", "url": "/collections/all" },
+        { "title": "For boys", "type": "COLLECTION", "url": "/collections/boys" },
+        { "title": "For girls", "type": "COLLECTION", "url": "/collections/girls" },
+        { "title": "Our story", "type": "PAGE", "url": "/pages/our-story" },
+        { "title": "Contact us", "type": "PAGE", "url": "/pages/contact" },
+        { "title": "Search", "type": "SEARCH", "url": "/search" }
+      ]
+    },
+    "footer-legal": {
+      "id": "gid://shopify/Menu/315486339204",
+      "title": "Footer legal",
+      "note": "Created during Phase 1. Holds only Privacy because that is the only policy that exists.",
+      "items": [{ "title": "Privacy policy", "type": "SHOP_POLICY", "url": "/policies/privacy-policy" }]
+    },
+    "customer-account-main-menu": {
+      "id": "gid://shopify/Menu/309151826052",
+      "title": "Customer account main menu",
+      "items": [
+        { "title": "Orders", "type": "CUSTOMER_ACCOUNT_PAGE" },
+        { "title": "Profile", "type": "CUSTOMER_ACCOUNT_PAGE" }
+      ]
+    }
+  },
+
+  "pages": [
+    { "id": "gid://shopify/Page/166452101252", "handle": "contact", "title": "Contact", "body": "EMPTY", "templateSuffix": "contact", "note": "templateSuffix set during Phase 1 so it renders templates/page.contact.json" },
+    { "id": "gid://shopify/Page/168636743812", "handle": "our-story", "title": "Our Story", "body": "EMPTY", "templateSuffix": null }
+  ],
+
+  "policies": {
+    "existing": [
+      { "type": "PRIVACY_POLICY", "id": "gid://shopify/ShopPolicy/55136190596", "note": "Shopify's generated template, uses {{ shop_name }} / {{ email }} / {{ phone }} / {{ address }} / {{ last_updated }} variables" }
+    ],
+    "missing": ["REFUND_POLICY", "SHIPPING_POLICY", "TERMS_OF_SERVICE", "CONTACT_INFORMATION"],
+    "drafts": "docs/policies/*.html — written but never published; the API connection lacked write_legal_policies"
+  },
+
+  "discounts": [
+    {
+      "id": "gid://shopify/DiscountAutomaticNode/1831669891204",
+      "kind": "automatic",
+      "terms": "15% off any 3 tees, minimum quantity 3",
+      "verified": "Rs. 1,797 -> Rs. 1,527.45 on a 3-item cart",
+      "note": "Advertised by sections/bundle-banner.liquid on BOTH product.json and cart.json, and by the cart drawer's saving line. Change the discount and three places in the theme must follow."
+    }
+  ],
+
+  "shipping": {
+    "profile": "General profile",
+    "zones": [
+      {
+        "zone": "Domestic",
+        "countries": ["IN"],
+        "rates": [
+          { "name": "Standard", "price": 99, "currency": "INR", "conditions": "none" },
+          { "name": "Standard", "price": 0, "currency": "INR", "conditions": "TOTAL_PRICE >= 999 INR" },
+          { "name": "Express", "price": 349, "currency": "INR", "conditions": "none" }
+        ]
+      },
+      {
+        "zone": "International",
+        "countryCount": 28,
+        "countries": ["AE", "AT", "AU", "BE", "CA", "CH", "CZ", "DE", "DK", "ES", "FI", "FR", "GB", "HK", "IE", "IL", "IT", "JP", "KR", "MY", "NL", "NO", "NZ", "PL", "PT", "SE", "SG", "US"],
+        "rates": [
+          { "name": "Standard", "price": 1800, "currency": "INR" },
+          { "name": "Express", "price": 3600, "currency": "INR" }
+        ]
+      }
+    ],
+    "themeCoupling": "The free-shipping threshold is duplicated in the cart drawer's free_shipping_threshold setting and in the footer marquee copy. Both must match this rate."
+  },
+
+  "apps": {
+    "judgeme": {
+      "installed": true,
+      "syncing": true,
+      "evidence": "judgeme.badge / judgeme.widget / judgeme.review_widget_data metafields present on wander-tee, metafield_updated_at 2026-08-19",
+      "reviewCount": 0,
+      "themeEmbed": "NOT enabled — nothing Judge.me renders until it is switched on in the theme editor"
+    }
+  },
+
+  "orders": {
+    "real": 0,
+    "note": "One Rs. 0 sample order only. Nothing of commercial value is lost in a rebuild."
+  }
+}
