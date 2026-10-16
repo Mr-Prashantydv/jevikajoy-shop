@@ -17,6 +17,38 @@
 
 {%- liquid
   assign pill_blocks = section.blocks | where: 'type', 'filter'
+
+  comment
+    Filtering is Shopify's, exactly as on the search page — Liquid cannot read
+    arbitrary query parameters, so `collection.filters` is the only honest
+    route. Search & Discovery supplies four on this store: Availability, Size,
+    Color and one product-tag filter labelled "Character".
+
+    Size arrives already in numeric order (4-5 Y ... 11-12 Y), not alphabetical,
+    so it needs no re-sorting. Verified against the live store — do not add a
+    sort here on the assumption that "10-12 Y" would lead.
+  endcomment
+  assign active_count = 0
+  for f in collection.filters
+    assign active_count = active_count | plus: f.active_values.size
+  endfor
+
+  comment
+    Strip every space, not just the one ", " sequence. "Availability , Character"
+    left whitespace on the token, the contains test never matched, and the
+    setting silently did nothing with no error anywhere. filter_key is stripped
+    the same way below so a two-word label still compares.
+  endcomment
+  assign hidden_filters = section.settings.hidden_filters | downcase | replace: ' ', '' | split: ','
+
+  comment
+    Clearing filters must not also throw away the shopper's sort order. Keep
+    sort_by only when it is not already the collection's default.
+  endcomment
+  assign clear_url = collection.url
+  if collection.sort_by != blank and collection.sort_by != collection.default_sort_by
+    assign clear_url = collection.url | append: '?sort_by=' | append: collection.sort_by
+  endif
 -%}
 
 {%- style -%}
@@ -30,7 +62,7 @@
      below the row is this section's own. */
 
   #MainCollection-{{ section.id }} .mc__pills {
-    margin-bottom: 6rem;
+    margin-bottom: 3.2rem;
   }
 
   /* --- Heading ---------------------------------------------------------- */
@@ -43,14 +75,14 @@
   }
 
   #MainCollection-{{ section.id }} .mc__sub {
-    max-width: 90rem;
+    max-width: 65ch;
     margin: 1.6rem auto 0;
-    font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 2.4rem;
-    line-height: 1.3;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--text-lead);
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: none;
     text-align: center;
     color: var(--ink);
   }
@@ -59,13 +91,261 @@
     margin: 0;
   }
 
+  /* --- Filter + sort toolbar ---------------------------------------------
+     Sits between the heading and the grid. The character pills above it are
+     navigation between collections; this is narrowing within one. */
+
+  #MainCollection-{{ section.id }} .mc__toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2.4rem 3rem;
+    align-items: end;
+    margin-top: 4.8rem;
+    padding-bottom: 2.4rem;
+    border-bottom: 2px solid var(--sky);
+  }
+
+  #MainCollection-{{ section.id }} .mc__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem 3.2rem;
+  }
+
+  #MainCollection-{{ section.id }} .mc__filter-label {
+    display: block;
+    margin: 0 0 0.8rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* .jjw-pills centres; a filter row reads as a list and must start left. */
+  #MainCollection-{{ section.id }} .mc__filter-values {
+    justify-content: flex-start;
+    max-width: none;
+    margin: 0;
+    gap: 0.8rem;
+  }
+
+  {%- comment -%}
+    Outlined, not filled. The character pills above are navigation between
+    collections and the shared .jjw-pill gives them a solid Sky Blue; drawing
+    four more rows of filters in the same solid made one indistinguishable from
+    the other and the whole page read as a wall of blue. Filters are controls,
+    so they get the quieter treatment and fill in only when active.
+    --ink on white is 12.9:1, cream on --ink 12.2:1, --ink on Sky 7.5:1.
+  {%- endcomment -%}
+  #MainCollection-{{ section.id }} .mc__filter-values .jjw-pill {
+    min-height: 4.4rem;
+    padding-inline: 1.6rem;
+    font-size: 1.9rem;
+    letter-spacing: 0.08em;
+    background: var(--white);
+    box-shadow: inset 0 0 0 2px var(--ink);
+    color: var(--ink);
+  }
+
+  #MainCollection-{{ section.id }} .mc__filter-values .jjw-pill:hover {
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  /* The base active pill carries a 6px offset shadow sized for a 54px nav
+     pill; at 44px in a dense row it reads as a printing error. */
+  #MainCollection-{{ section.id }} .mc__filter-values .jjw-pill[aria-current] {
+    background: var(--ink);
+    color: var(--cream);
+    box-shadow: none;
+  }
+
+
+  #MainCollection-{{ section.id }} .mc__swatch {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: 0.8rem;
+    border-radius: 50%;
+    background: var(--swatch, var(--ink-soft));
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+  }
+
+  #MainCollection-{{ section.id }} .mc__filter-count {
+    margin-left: 0.6rem;
+    font-size: 0.8em;
+    opacity: 0.7;
+  }
+
+  /* --- Sort ---------------------------------------------------------------
+     A real GET form, so it still works with JavaScript off; the script below
+     only removes the need to press the button. */
+
+  #MainCollection-{{ section.id }} .mc__sort {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  #MainCollection-{{ section.id }} .mc__sort-label {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+
+  #MainCollection-{{ section.id }} .mc__sort-select {
+    min-height: 4.4rem;
+    padding: 0 3.6rem 0 1.6rem;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background-color: var(--white);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%231a2f5e' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.4rem center;
+    background-size: 1.2rem;
+    font-family: var(--font-body);
+    font-size: 1.7rem;
+    color: var(--ink);
+    appearance: none;
+    cursor: pointer;
+  }
+
+
+  #MainCollection-{{ section.id }} .mc__sort-go {
+    margin: 0;
+  }
+
+  /* --- Active filters + count --------------------------------------------- */
+
+  #MainCollection-{{ section.id }} .mc__active {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2.4rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainCollection-{{ section.id }} .mc__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 4.4rem;
+    padding: 0 1.6rem;
+    border-radius: 999px;
+    background: var(--ink);
+    font-family: var(--font-accent);
+    font-weight: 700;
+    /* 1.9rem, not 1.7: the hover swaps the navy fill for --blue, and cream on
+       --blue is 4.31:1. At 17px bold that is under the 18.66px large-text
+       cutoff and needs 4.5. At 19px the 3:1 floor applies and it passes. */
+    font-size: 1.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  #MainCollection-{{ section.id }} .mc__chip:hover {
+    background: var(--blue);
+  }
+
+  #MainCollection-{{ section.id }} .mc__chip svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  {%- comment -%}
+    Navy, not --blue. Adventure Blue on the cream canvas is 4.31:1, and at
+    17px bold this sits under the 18.66px large-text cutoff, so it needs 4.5.
+    Navy is 12.9:1 and the underline carries the link affordance on its own.
+    19px keeps the blue hover legal too, by clearing the large-text cutoff.
+  {%- endcomment -%}
+  #MainCollection-{{ section.id }} .mc__clear {
+    min-height: 4.4rem;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.4rem;
+    color: var(--ink);
+  }
+
+  #MainCollection-{{ section.id }} .mc__clear:hover {
+    color: var(--blue);
+  }
+
+  #MainCollection-{{ section.id }} .mc__empty-action {
+    margin: 1.6rem 0 0;
+    text-align: center;
+  }
+
+  #MainCollection-{{ section.id }} .mc__count-line {
+    margin: 2.4rem 0 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* --- Pagination --------------------------------------------------------- */
+
+  #MainCollection-{{ section.id }} .mc__pager {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainCollection-{{ section.id }} .mc__pager a,
+  #MainCollection-{{ section.id }} .mc__pager span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.4rem;
+    min-height: 4.4rem;
+    padding: 0 1.2rem;
+    border-radius: 999px;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--ink);
+  }
+
+  #MainCollection-{{ section.id }} .mc__pager a:hover {
+    background: var(--sky);
+  }
+
+  #MainCollection-{{ section.id }} .mc__pager [aria-current='page'] {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
   /* --- Grid ------------------------------------------------------------- */
 
+  /* 3.2rem, not the 6rem this had before the toolbar existed — the count line
+     now sits directly above and owns most of that gap. */
   #MainCollection-{{ section.id }} .mc__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 3rem 2.4rem;
-    margin: 6rem 0 0;
+    margin: 3.2rem 0 0;
     padding: 0;
     list-style: none;
   }
@@ -74,9 +354,10 @@
     --card-bg: var(--blue-bg);
     --card-fg: var(--blue);
     display: flex;
+    container-type: inline-size;
     flex-direction: column;
     height: 100%;
-    border-radius: 2rem;
+    border-radius: var(--card-radius);
     overflow: hidden;
     background: var(--card-bg);
     transition: transform 0.3s var(--ease);
@@ -103,38 +384,20 @@
     object-fit: contain;
   }
 
-  /* No media: the character colour carries the card on its own. */
-  #MainCollection-{{ section.id }} .mc__fallback {
-    display: grid;
-    place-items: center;
-    height: 100%;
-    padding: 2rem;
-  }
-
-  #MainCollection-{{ section.id }} .mc__fallback span {
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 3.2rem;
-    line-height: 1;
-    text-align: center;
-    text-wrap: balance;
-    color: var(--ink);
-  }
-
   {%- comment -%}
     Reference tints the title with each card's own solid, which on its pale
     yellow measures about 1.5:1. Navy is a brand colour and clears every tint,
     so the colour coding lives in the fill and the type stays readable.
   {%- endcomment -%}
+  /* Matches .jjw-card__title in theme.css - see the note there. */
   #MainCollection-{{ section.id }} .mc__title {
     margin: 0;
     padding: 0 1.6rem 2.4rem;
     font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 2.7rem;
-    line-height: 1.3;
-    letter-spacing: 0.135rem;
-    text-transform: uppercase;
+    font-weight: 900;
+    font-size: var(--card-title-size);
+    line-height: 1.15;
+    letter-spacing: 0;
     text-align: center;
     text-wrap: balance;
     color: var(--ink);
@@ -143,9 +406,9 @@
   #MainCollection-{{ section.id }} .mc__price {
     display: block;
     margin-top: 0.4rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
     letter-spacing: 0.1rem;
-    color: var(--ink-soft);
+    color: var(--ink);
   }
 
   #MainCollection-{{ section.id }} [data-pair='pink'] { --card-bg: var(--pink-bg); --card-fg: var(--pink); }
@@ -185,22 +448,62 @@
     }
 
     #MainCollection-{{ section.id }} .mc__pills {
-      margin-bottom: 3.6rem;
+      margin-bottom: 2.4rem;
     }
 
     #MainCollection-{{ section.id }} .mc__sub {
-      font-size: 1.8rem;
+      font-size: var(--text-lead);
     }
 
     #MainCollection-{{ section.id }} .mc__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1.6rem;
-      margin-top: 3.6rem;
+      margin-top: 2.4rem;
     }
 
     #MainCollection-{{ section.id }} .mc__title {
       padding: 0 1rem 1.6rem;
-      font-size: 1.9rem;
+    }
+
+    /* One column: at 390px the sort control and a filter row cannot share a
+       line without the select collapsing under its own label. */
+    #MainCollection-{{ section.id }} .mc__toolbar {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+      align-items: stretch;
+      margin-top: 3.2rem;
+    }
+
+    #MainCollection-{{ section.id }} .mc__filters {
+      gap: 2rem;
+    }
+
+    /* The filter rows scroll rather than wrap to four lines of pills. */
+    #MainCollection-{{ section.id }} .mc__filter-values {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 0.4rem;
+      margin-inline: -1.5rem;
+      padding-inline: 1.5rem;
+    }
+
+    #MainCollection-{{ section.id }} .mc__filter-values::-webkit-scrollbar {
+      display: none;
+    }
+
+    #MainCollection-{{ section.id }} .mc__filter-values .jjw-pill {
+      white-space: nowrap;
+      font-size: 1.7rem;
+    }
+
+    #MainCollection-{{ section.id }} .mc__filter {
+      width: 100%;
+    }
+
+    #MainCollection-{{ section.id }} .mc__sort-select {
+      flex: 1 1 auto;
+      min-width: 0;
     }
   }
 {%- endstyle -%}
@@ -213,8 +516,15 @@
           {%- liquid
             assign pill_target = block.settings.collection
             assign pill_label = block.settings.label | default: pill_target.title
+            comment
+              The All Tees pill deliberately has no collection set, so testing
+              pill_target alone meant it could never read as current — even
+              standing on /collections/all, which is exactly where it links.
+            endcomment
             assign is_here = false
             if pill_target != blank and pill_target.handle == collection.handle
+              assign is_here = true
+            elsif pill_target == blank and collection.handle == 'all'
               assign is_here = true
             endif
           -%}
@@ -242,46 +552,193 @@
       <div class="mc__sub scroll-trigger animate--fade-in">{{ blurb }}</div>
     {%- endif -%}
 
+    {%- comment -%}
+      Toolbar. Only `list` filters are drawn — a price range needs two number
+      inputs and is skipped rather than half-rendered, the same call the search
+      page makes. Values whose count is zero are skipped too, so the shopper is
+      never offered a narrowing that returns an empty grid; an active value is
+      kept regardless, or the pill you just clicked would vanish under you.
+    {%- endcomment -%}
+    {%- if collection.filters.size > 0 or collection.sort_options.size > 0 -%}
+      <div class="mc__toolbar">
+        <div class="mc__filters">
+          {%- for filter in collection.filters -%}
+            {%- liquid
+              if filter.type != 'list' or filter.values.size == 0
+                continue
+              endif
+              assign filter_key = filter.label | downcase | replace: ' ', ''
+              if hidden_filters contains filter_key
+                continue
+              endif
+              assign is_colour = false
+              if filter.param_name contains 'option.color'
+                assign is_colour = true
+              endif
+              assign group_label = filter.label
+              if filter_key == 'size' and section.settings.size_label != blank
+                assign group_label = section.settings.size_label
+              endif
+
+              comment
+                Count what will actually render before emitting the label. The
+                zero-count skip happens per value, so a group where every value
+                returns nothing would otherwise print a heading over an empty
+                list — which is what Availability becomes the day the last tee
+                sells out of one size.
+              endcomment
+              assign renderable = 0
+              for value in filter.values
+                if value.active
+                  assign renderable = renderable | plus: 1
+                elsif value.count > 0
+                  assign renderable = renderable | plus: 1
+                endif
+              endfor
+              if renderable == 0
+                continue
+              endif
+            -%}
+            <div class="mc__filter">
+              <h2 class="mc__filter-label" id="Filter-{{ section.id }}-{{ forloop.index }}">
+                {{- group_label | escape -}}
+              </h2>
+              {%- comment -%}
+                tabindex="0" because this row scrolls horizontally below 750px, and a
+                scrollable region with no focusable child cannot otherwise be
+                reached or panned by keyboard.
+              {%- endcomment -%}
+              <ul
+                class="jjw-pills mc__filter-values"
+                tabindex="0"
+                aria-labelledby="Filter-{{ section.id }}-{{ forloop.index }}"
+              >
+                {%- for value in filter.values -%}
+                  {%- liquid
+                    unless value.active
+                      if value.count == 0
+                        continue
+                      endif
+                    endunless
+
+                    comment
+                      Tag values read `character:Joy`. Only the part after the
+                      colon is shown; the tag itself is the taxonomy the smart
+                      collections are keyed on and must not be renamed.
+                    endcomment
+                    assign value_label = value.label
+                    if value_label contains ':'
+                      assign value_label = value_label | split: ':' | last | strip
+                    endif
+                  -%}
+                  <li>
+                    <a
+                      class="jjw-pill"
+                      href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                      {%- comment -%}
+                        aria-current="true", not "page". These are filters, and
+                        "page" tells a screen reader this link IS the current
+                        page — which is what the character nav pills above
+                        legitimately say, and what these must not.
+                      {%- endcomment -%}
+                      {% if value.active %}
+                        aria-current="true"
+                      {% endif %}
+                    >
+                      {%- if is_colour -%}
+                        <span class="mc__swatch" data-swatch="{{ value.label | handle }}" aria-hidden="true"></span>
+                      {%- endif -%}
+                      {{- value_label | escape -}}
+                      {%- if section.settings.show_filter_counts -%}
+                        <span class="mc__filter-count">{{ value.count }}</span>
+                      {%- endif -%}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if collection.sort_options.size > 0 -%}
+          {%- assign sort_now = collection.sort_by | default: collection.default_sort_by -%}
+          <form class="mc__sort" method="get" action="{{ collection.url }}">
+            {%- comment -%}
+              Active filters ride along as hidden inputs. Without them a GET
+              submit rebuilds the query string from this form alone and every
+              filter the shopper had applied is silently dropped.
+            {%- endcomment -%}
+            {%- for f in collection.filters -%}
+              {%- for v in f.active_values -%}
+                <input type="hidden" name="{{ v.param_name }}" value="{{ v.value | escape }}">
+              {%- endfor -%}
+            {%- endfor -%}
+
+            <label class="mc__sort-label" for="Sort-{{ section.id }}">
+              {{- section.settings.sort_label | escape -}}
+            </label>
+            <select class="mc__sort-select" name="sort_by" id="Sort-{{ section.id }}">
+              {%- for option in collection.sort_options -%}
+                <option
+                  value="{{ option.value }}"
+                  {% if option.value == sort_now %}
+                    selected
+                  {% endif %}
+                >
+                  {{- option.name | escape -}}
+                </option>
+              {%- endfor -%}
+            </select>
+            <noscript>
+              <span class="btn-wrap mc__sort-go">
+                <span class="btn-shadow" aria-hidden="true"></span>
+                <button class="btn" type="submit">{{ section.settings.sort_label | escape }}</button>
+              </span>
+            </noscript>
+          </form>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if active_count > 0 -%}
+      <ul class="mc__active" aria-label="{{ section.settings.active_label | escape }}">
+        {%- for filter in collection.filters -%}
+          {%- for value in filter.active_values -%}
+            {%- liquid
+              assign chip_label = value.label
+              if chip_label contains ':'
+                assign chip_label = chip_label | split: ':' | last | strip
+              endif
+            -%}
+            <li>
+              <a class="mc__chip" href="{{ value.url_to_remove }}">
+                {{- chip_label | escape }}
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                  <path d="M1 1l10 10M11 1L1 11" stroke-linecap="round"/>
+                </svg>
+                <span class="visually-hidden">{{ section.settings.remove_label | escape }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        {%- endfor -%}
+        <li><a class="mc__clear" href="{{ clear_url }}">{{ section.settings.clear_text | escape }}</a></li>
+      </ul>
+    {%- endif -%}
+
+    {%- paginate collection.products by section.settings.per_page -%}
     {%- if collection.products.size > 0 -%}
+      <p class="mc__count-line">
+        {{- collection.products_count }}
+        {% if collection.products_count == 1 %}
+          {{- section.settings.count_singular -}}
+        {% else %}
+          {{- section.settings.count_plural -}}
+        {% endif -%}
+      </p>
       <ul class="mc__grid">
         {%- for product in collection.products -%}
-          {%- liquid
-            comment
-              A product can carry more than one character — Brutus Boxer Tee is
-              tagged Brutus and Joy. Take the first as the default, but prefer
-              whichever matches the collection being viewed, so the same tee
-              reads gold on Brutus and blue on Joy instead of always the last
-              tag alphabetically.
-            endcomment
-            assign character = ''
-            assign here = collection.handle | downcase
-            for tag in product.tags
-              if tag contains 'character:'
-                assign tag_name = tag | split: ':' | last | strip | downcase
-                if character == blank
-                  assign character = tag_name
-                endif
-                if tag_name == here
-                  assign character = tag_name
-                endif
-              endif
-            endfor
-
-            case character
-              when 'jevika'
-                assign pair = 'pink'
-              when 'joy'
-                assign pair = 'blue'
-              when 'brutus'
-                assign pair = 'gold'
-              when 'minku'
-                assign pair = 'green'
-              when 'pinki'
-                assign pair = 'purple'
-              else
-                assign pair = 'blue'
-            endcase
-          -%}
+          {%- capture pair -%}{%- render 'character-pair', product: product, prefer: collection.handle -%}{%- endcapture -%}
+          {%- assign pair = pair | strip -%}
           <li
             class="mc__card scroll-trigger animate--slide-in"
             data-pair="{{ pair }}"
@@ -300,24 +757,168 @@
                       sizes: '(max-width: 749px) 46vw, (max-width: 989px) 30vw, 23vw'
                   }}
                 {%- else -%}
-                  <div class="mc__fallback"><span>{{ product.title | escape }}</span></div>
+                  {%- render 'product-photo-pending' -%}
                 {%- endif -%}
               </div>
-              <h2 class="mc__title">
+              <h3 class="mc__title">
                 {{- product.title | escape -}}
                 {%- if section.settings.show_price -%}
                   <span class="mc__price">{{ product.price | money }}</span>
                 {%- endif -%}
-              </h2>
+                {%- render 'review-stars', product: product -%}
+              </h3>
             </a>
           </li>
         {%- endfor -%}
       </ul>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="mc__pager-wrap" aria-label="{{ section.settings.pager_label | escape }}">
+          <ul class="mc__pager">
+            {%- if paginate.previous -%}
+              <li><a href="{{ paginate.previous.url }}" rel="prev">&larr;<span class="visually-hidden">{{ section.settings.prev_label | escape }}</span></a></li>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              <li>
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}">{{ part.title }}</a>
+                {%- elsif part.title == paginate.current_page -%}
+                  <span aria-current="page">{{ part.title }}</span>
+                {%- else -%}
+                  <span>{{ part.title }}</span>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <li><a href="{{ paginate.next.url }}" rel="next">&rarr;<span class="visually-hidden">{{ section.settings.next_label | escape }}</span></a></li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
     {%- else -%}
-      <p class="mc__empty">{{ section.settings.empty_text | escape }}</p>
+      {%- comment -%}
+        "Nothing here yet" and "your filters matched nothing" are different
+        situations and only one of them has a way out. Showing the first when
+        the shopper has just clicked two pills reads as a broken store.
+      {%- endcomment -%}
+      {%- comment -%}
+        active_count comes from collection.filters, and Shopify empties that
+        object when a filter combination matches zero products — verified live
+        by requesting filter.v.availability=0 against a catalogue where every
+        variant is in stock. The toolbar, the chips and this branch all go
+        blind at once, so a shopper who multi-selects their way to zero sees
+        "nothing here yet" with no way back, on the one page where they most
+        need Clear all. data-mc-empty and the script below patch this from the
+        URL itself, which Shopify cannot empty out from under it.
+      {%- endcomment -%}
+      {%- if active_count > 0 -%}
+        <p class="mc__empty">{{ section.settings.no_match_text | escape }}</p>
+        <p class="mc__empty-action">
+          <a class="mc__clear" href="{{ clear_url }}">{{ section.settings.clear_text | escape }}</a>
+        </p>
+      {%- else -%}
+        <p class="mc__empty" data-mc-empty>{{ section.settings.empty_text | escape }}</p>
+        <p
+          class="mc__empty-action"
+          data-mc-empty-action
+          hidden
+          data-no-match-text="{{ section.settings.no_match_text | escape }}"
+          data-clear-text="{{ section.settings.clear_text | escape }}"
+        ></p>
+      {%- endif -%}
     {%- endif -%}
+    {%- endpaginate -%}
   </div>
 </section>
+
+<script>
+  (function () {
+    var root = document.getElementById('MainCollection-{{ section.id }}');
+    if (!root || root.dataset.sortInit) return;
+    root.dataset.sortInit = '1';
+
+    /* The form is a real GET submit and works without this — the script only
+       removes the extra click. The <noscript> button is what carries it when
+       JavaScript is off, which is why it is not rendered here as well. */
+    var select = root.querySelector('.mc__sort-select');
+    if (!select) return;
+
+    function go() {
+      var form = select.closest('form');
+      if (form) form.submit();
+    }
+
+    /* A bare `change` listener is a keyboard trap. On a closed <select> in
+       Chrome and Firefox, every Down-arrow fires `change`, so a keyboard
+       shopper is navigated away on the first press and can never reach the
+       second option. Track whether the value moved by keyboard and, if it
+       did, wait for Enter or for focus to leave before submitting. Mouse and
+       touch still submit immediately. */
+    var byKeyboard = false;
+    var NAV = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown'];
+
+    select.addEventListener('keydown', function (event) {
+      if (NAV.indexOf(event.key) !== -1) {
+        byKeyboard = true;
+      } else if (event.key === 'Enter') {
+        byKeyboard = false;
+        go();
+      }
+    });
+
+    select.addEventListener('change', function () {
+      if (!byKeyboard) go();
+    });
+
+    select.addEventListener('blur', function () {
+      if (!byKeyboard) return;
+      byKeyboard = false;
+      go();
+    });
+  })();
+
+  (function () {
+    /* Separate IIFE, not inside the sort one above: that one returns early
+       when there is no .mc__sort-select, which is exactly the state this
+       patches — the toolbar is the first thing Shopify blanks out when a
+       filter combination matches zero products.
+
+       collection.filters (and therefore active_count) goes empty in that
+       exact case, verified live by requesting filter.v.availability=0 on a
+       catalogue that is 100% in stock: zero products, and Shopify handed back
+       zero filters and zero sort options along with them. The Liquid render
+       has no way to tell "nothing here" from "your filters matched nothing"
+       when its only signal just vanished. The URL query string cannot be
+       emptied by Shopify's response, so read the answer from there instead. */
+    var root = document.getElementById('MainCollection-{{ section.id }}');
+    var empty = root && root.querySelector('[data-mc-empty]');
+    if (!empty) return;
+
+    var params = new URLSearchParams(window.location.search);
+    var hasFilter = false;
+    params.forEach(function (_, key) {
+      if (key.indexOf('filter.') === 0) hasFilter = true;
+    });
+    if (!hasFilter) return;
+
+    var action = root.querySelector('[data-mc-empty-action]');
+    if (!action) return;
+
+    var clearParams = new URLSearchParams(window.location.search);
+    Array.from(clearParams.keys()).forEach(function (key) {
+      if (key.indexOf('filter.') === 0) clearParams.delete(key);
+    });
+    var clearUrl = window.location.pathname + (clearParams.toString() ? '?' + clearParams.toString() : '');
+
+    empty.textContent = action.dataset.noMatchText;
+    var link = document.createElement('a');
+    link.className = 'mc__clear';
+    link.href = clearUrl;
+    link.textContent = action.dataset.clearText;
+    action.appendChild(link);
+    action.hidden = false;
+  })();
+</script>
 
 {% schema %}
 {
@@ -350,6 +951,102 @@
       "id": "empty_text",
       "label": "Empty collection text",
       "default": "Nothing here yet — check back soon"
+    },
+    {
+      "type": "header",
+      "content": "Filtering and sorting"
+    },
+    {
+      "type": "paragraph",
+      "content": "Filters come from the Search & Discovery app, not from this section. Add or remove them in Shopify admin."
+    },
+    {
+      "type": "text",
+      "id": "size_label",
+      "label": "Relabel the Size filter",
+      "info": "Sizes on this store are age ranges, and parents shop by age. Leave blank to use Shopify's own label.",
+      "default": "Age"
+    },
+    {
+      "type": "text",
+      "id": "hidden_filters",
+      "label": "Filters to hide",
+      "info": "Comma-separated filter names, matched against the label Shopify supplies. Example: Availability, Character"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_counts",
+      "label": "Show a count beside each filter value",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "sort_label",
+      "label": "Sort label",
+      "default": "Sort"
+    },
+    {
+      "type": "text",
+      "id": "active_label",
+      "label": "Active filters (screen readers)",
+      "default": "Active filters"
+    },
+    {
+      "type": "text",
+      "id": "remove_label",
+      "label": "Remove filter (screen readers)",
+      "default": "Remove this filter"
+    },
+    {
+      "type": "text",
+      "id": "clear_text",
+      "label": "Clear filters link",
+      "default": "Clear all"
+    },
+    {
+      "type": "text",
+      "id": "no_match_text",
+      "label": "No results for the current filters",
+      "default": "No tees match that combination"
+    },
+    {
+      "type": "text",
+      "id": "count_singular",
+      "label": "Count word (one)",
+      "default": " tee"
+    },
+    {
+      "type": "text",
+      "id": "count_plural",
+      "label": "Count word (many)",
+      "default": " tees"
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "text",
+      "id": "pager_label",
+      "label": "Pagination (screen readers)",
+      "default": "Pagination"
+    },
+    {
+      "type": "text",
+      "id": "prev_label",
+      "label": "Previous page (screen readers)",
+      "default": "Previous page"
+    },
+    {
+      "type": "text",
+      "id": "next_label",
+      "label": "Next page (screen readers)",
+      "default": "Next page"
     }
   ],
   "blocks": [

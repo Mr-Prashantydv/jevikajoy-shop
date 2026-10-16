@@ -23,5 +23,5 @@
   "sections": {
     "header": { "menu": "Menu", "cart_count": "Cart" }
   },
-  "products": { "product": { "add_to_cart": "Add to cart", "sold_out": "Sold out" } }
+  "products": { "product": { "add_to_cart": "Add to cart", "sold_out": "Sold out", "photo_pending": "Photo coming soon" } }
 }

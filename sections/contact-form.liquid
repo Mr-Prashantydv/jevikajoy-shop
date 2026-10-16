@@ -1,0 +1,437 @@
+{%- comment -%}
+  Contact form + store details.
+
+  The form is Shopify's `contact` form, which posts to the shop's contact email
+  and needs no app. Every visible string is a setting or a block so the details
+  can be corrected without touching Liquid — the defaults below are read out of
+  the store's own billing address and are almost certainly not the address a
+  customer should be given.
+
+  Detail rows are blocks rather than fixed fields: a store adds a second phone
+  or a GST number the moment it needs one, and neither should be a code change.
+{%- endcomment -%}
+
+{%- style -%}
+  #Contact-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 0 8rem;
+  }
+
+  #Contact-{{ section.id }} .ct__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  #Contact-{{ section.id }} .ct__card {
+    padding: 4rem;
+    border-radius: 2.4rem;
+    background: var(--white);
+  }
+
+  #Contact-{{ section.id }} .ct__heading {
+    margin: 0 0 0.8rem;
+    font-size: 3.4rem;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  #Contact-{{ section.id }} .ct__sub {
+    margin: 0 0 2.8rem;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Richtext brings its own <p> with 1em margins; the wrapper owns spacing. */
+  #Contact-{{ section.id }} .ct__sub :where(p) {
+    margin: 0;
+  }
+
+  /* --- Form ------------------------------------------------------------ */
+
+  #Contact-{{ section.id }} .ct__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  #Contact-{{ section.id }} .ct__field {
+    margin-bottom: 2rem;
+  }
+
+  #Contact-{{ section.id }} .ct__label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  #Contact-{{ section.id }} .ct__input,
+  #Contact-{{ section.id }} .ct__textarea {
+    width: 100%;
+    padding: 1.4rem 1.6rem;
+    border: 2px solid var(--sky);
+    border-radius: 1.2rem;
+    background: var(--white);
+    font-family: var(--font-body);
+    font-size: 1.7rem;
+    line-height: 1.4;
+    color: var(--ink);
+    transition: border-color 0.2s var(--ease);
+  }
+
+  #Contact-{{ section.id }} .ct__input:focus,
+  #Contact-{{ section.id }} .ct__textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+  }
+
+  #Contact-{{ section.id }} .ct__input:focus-visible,
+
+  #Contact-{{ section.id }} .ct__textarea {
+    min-height: 14rem;
+    resize: vertical;
+  }
+
+  #Contact-{{ section.id }} .ct__submit {
+    margin-top: 0.8rem;
+  }
+
+  #Contact-{{ section.id }} .ct__submit .btn {
+    min-width: 24rem;
+    font-size: var(--button-text-size);
+  }
+
+  /* Success and error both need >=4.5:1 on white. Outdoor green is 3.8:1 at
+     body size, so the confirmation carries --ink text on a mint fill instead
+     of coloured type on white — the same rule the character cards follow. */
+  #Contact-{{ section.id }} .ct__note {
+    margin: 0 0 2.4rem;
+    padding: 1.6rem 1.8rem;
+    border-radius: 1.2rem;
+    font-size: var(--text-base);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  #Contact-{{ section.id }} .ct__note--ok {
+    background: var(--mint);
+  }
+
+  #Contact-{{ section.id }} .ct__note--error {
+    background: var(--yellow);
+  }
+
+  #Contact-{{ section.id }} .ct__note ul {
+    margin: 0.6rem 0 0;
+    padding-left: 2rem;
+  }
+
+  /* --- Details --------------------------------------------------------- */
+
+  #Contact-{{ section.id }} .ct__aside {
+    padding: 4rem 3.2rem;
+    border-radius: 2.4rem;
+    background: var(--ink);
+  }
+
+  #Contact-{{ section.id }} .ct__aside-heading {
+    margin: 0 0 2.4rem;
+    font-size: 2.7rem;
+    line-height: 1.2;
+    color: var(--cream);
+  }
+
+  #Contact-{{ section.id }} .ct__detail {
+    padding-block: 1.6rem;
+    border-top: 2px solid color-mix(in srgb, var(--cream) 25%, transparent);
+  }
+
+  #Contact-{{ section.id }} .ct__detail:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  #Contact-{{ section.id }} .ct__detail-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 1.5rem;
+    letter-spacing: 0.08em;
+    color: var(--sky);
+  }
+
+  #Contact-{{ section.id }} .ct__detail-value {
+    display: block;
+    font-size: var(--text-lead);
+    line-height: 1.5;
+    color: var(--cream);
+  }
+
+  /* The value is a richtext setting, so it arrives wrapped in its own <p> with
+     18px default margins. Margins do not count toward height, so the mailto:
+     and tel: links measured a 27px tap target inside a box that looked 63px
+     tall. Kill the margin and set the 44px floor explicitly. */
+  #Contact-{{ section.id }} .ct__detail-value > p {
+    margin: 0;
+  }
+
+  #Contact-{{ section.id }} a.ct__detail-value {
+    display: flex;
+    align-items: center;
+    min-height: 4.4rem;
+  }
+
+  #Contact-{{ section.id }} a.ct__detail-value:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    #Contact-{{ section.id }} .ct__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #Contact-{{ section.id }} {
+      padding-block: 0 4.8rem;
+    }
+
+    #Contact-{{ section.id }} .ct__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+
+    #Contact-{{ section.id }} .ct__card,
+    #Contact-{{ section.id }} .ct__aside {
+      padding: 2.4rem 2rem;
+      border-radius: 2rem;
+    }
+
+    #Contact-{{ section.id }} .ct__heading {
+      font-size: 2.8rem;
+    }
+
+    #Contact-{{ section.id }} .ct__submit .btn {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+{%- endstyle -%}
+
+<section id="Contact-{{ section.id }}">
+  <div class="page-width">
+    <div class="ct__grid">
+      <div class="ct__card scroll-trigger animate--fade-in" style="--animation-order: 1;">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="ct__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <div class="ct__sub">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+
+        {%- form 'contact', id: 'ContactForm' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="ct__note ct__note--ok" role="status">{{ section.settings.success_text }}</p>
+          {%- elsif form.errors -%}
+            <div class="ct__note ct__note--error" role="alert">
+              <strong>{{ section.settings.error_text }}</strong>
+              <ul>
+                {%- for field in form.errors -%}
+                  <li>{{ form.errors.messages[field] }}</li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <div class="ct__row">
+            <div class="ct__field">
+              <label class="ct__label" for="ContactName-{{ section.id }}">
+                {{- section.settings.label_name | escape -}}
+              </label>
+              <input
+                class="ct__input"
+                type="text"
+                id="ContactName-{{ section.id }}"
+                name="contact[name]"
+                value="{{ form.name }}"
+                autocomplete="name"
+                required
+              >
+            </div>
+
+            <div class="ct__field">
+              <label class="ct__label" for="ContactEmail-{{ section.id }}">
+                {{- section.settings.label_email | escape -}}
+              </label>
+              <input
+                class="ct__input"
+                type="email"
+                id="ContactEmail-{{ section.id }}"
+                name="contact[email]"
+                value="{{ form.email }}"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="ct__row">
+            <div class="ct__field">
+              <label class="ct__label" for="ContactPhone-{{ section.id }}">
+                {{- section.settings.label_phone | escape -}}
+              </label>
+              <input
+                class="ct__input"
+                type="tel"
+                id="ContactPhone-{{ section.id }}"
+                name="contact[phone]"
+                value="{{ form.phone }}"
+                autocomplete="tel"
+                pattern="[0-9\-\+\s\(\)]*"
+              >
+            </div>
+
+            <div class="ct__field">
+              <label class="ct__label" for="ContactOrder-{{ section.id }}">
+                {{- section.settings.label_order | escape -}}
+              </label>
+              <input
+                class="ct__input"
+                type="text"
+                id="ContactOrder-{{ section.id }}"
+                name="contact[Order number]"
+                autocomplete="off"
+              >
+            </div>
+          </div>
+
+          <div class="ct__field">
+            <label class="ct__label" for="ContactBody-{{ section.id }}">
+              {{- section.settings.label_message | escape -}}
+            </label>
+            <textarea
+              class="ct__textarea"
+              id="ContactBody-{{ section.id }}"
+              name="contact[body]"
+              rows="6"
+              required
+            >{{ form.body }}</textarea>
+          </div>
+
+          <div class="btn-wrap ct__submit">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <button class="btn btn--primary" type="submit">
+              {{- section.settings.submit_label | escape -}}
+            </button>
+          </div>
+        {%- endform -%}
+      </div>
+
+      <aside class="ct__aside scroll-trigger animate--fade-in" style="--animation-order: 2;">
+        {%- if section.settings.details_heading != blank -%}
+          <h2 class="accent-caps ct__aside-heading">{{ section.settings.details_heading | escape }}</h2>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- if block.settings.value == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+          <div class="ct__detail" {{ block.shopify_attributes }}>
+            {%- if block.settings.label != blank -%}
+              <span class="accent-caps ct__detail-label">{{ block.settings.label | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.link != blank -%}
+              <a class="ct__detail-value" href="{{ block.settings.link }}">{{ block.settings.value }}</a>
+            {%- else -%}
+              <span class="ct__detail-value">{{ block.settings.value }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Send us a message"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Sizing, delivery, a print that didn't turn out right — ask us anything. We read every message.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Field labels"
+    },
+    { "type": "text", "id": "label_name", "label": "Name", "default": "Your name" },
+    { "type": "text", "id": "label_email", "label": "Email", "default": "Email" },
+    { "type": "text", "id": "label_phone", "label": "Phone", "default": "Phone (optional)" },
+    { "type": "text", "id": "label_order", "label": "Order number", "default": "Order number (optional)" },
+    { "type": "text", "id": "label_message", "label": "Message", "default": "How can we help?" },
+    { "type": "text", "id": "submit_label", "label": "Submit button", "default": "Send message" },
+    {
+      "type": "header",
+      "content": "Messages"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Success",
+      "default": "Thanks — your message is with us and we'll get back to you as soon as we can."
+    },
+    {
+      "type": "text",
+      "id": "error_text",
+      "label": "Error",
+      "default": "Please check the following:"
+    },
+    {
+      "type": "header",
+      "content": "Details panel"
+    },
+    {
+      "type": "text",
+      "id": "details_heading",
+      "label": "Heading",
+      "default": "Reach us directly"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "detail",
+      "name": "Detail row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "richtext", "id": "value", "label": "Value" },
+        { "type": "text", "id": "link", "label": "Link", "info": "Use mailto: or tel: for email and phone." }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Contact form",
+      "blocks": [{ "type": "detail" }]
+    }
+  ]
+}
+{% endschema %}

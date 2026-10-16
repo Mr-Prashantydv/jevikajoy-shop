@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "blocks": {
+        "jevika": { "type": "link", "settings": { "label": "Jevika", "url": "\/collections\/jevika" } },
+        "joy": { "type": "link", "settings": { "label": "Joy", "url": "\/collections\/joy" } },
+        "brutus": { "type": "link", "settings": { "label": "Brutus", "url": "\/collections\/brutus" } },
+        "minku": { "type": "link", "settings": { "label": "Minku", "url": "\/collections\/minku" } },
+        "pinki": { "type": "link", "settings": { "label": "Pinki", "url": "\/collections\/pinki" } }
+      },
+      "block_order": ["jevika", "joy", "brutus", "minku", "pinki"],
+      "settings": {
+        "show_faces": true,
+        "code_label": "Error 404",
+        "heading": "This page wandered off",
+        "text": "<p>The link you followed doesn't exist any more. Try a search, or pick a character below — the whole crew is waiting.<\/p>",
+        "search_placeholder": "Search for a tee",
+        "links_title": "Or start here",
+        "button_label": "Shop all tees",
+        "button_url": "\/collections\/all"
+      }
+    }
+  },
+  "order": ["main"]
+}

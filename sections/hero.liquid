@@ -1,32 +1,29 @@
 {%- comment -%}
-  Hero — converted from the React component at
-  src/components/site/hero.tsx (plus stickers.tsx / button.tsx, which it
-  composes). DOM order, spacing and sizing follow that file exactly:
-  16/10 media box (16/9 under 750px), absolutely positioned cover image,
-  centred copy column, hard text-shadow on the headline.
-
-  Button, marquee-free layout and the reveal animation all come from
-  theme.css — nothing is re-implemented here.
+  Weekend Picnic campaign. Desktop keeps editable copy beside the scene;
+  mobile overlays readable copy on the photograph. Shared button and
+  reveal styles come from theme.css. Merchant image controls stay available.
 {%- endcomment -%}
 
 {%- style -%}
   #Hero-{{ section.id }} {
     position: relative;
-  }
-
-  /* Keep the hero within one screen. 16/10 alone overflows on most viewports
-     (1920x1080 would compute to 1200px), so cap it and let the image crop.
-     dvh follows mobile browser chrome; the vh line is the fallback. */
-  #Hero-{{ section.id }} {
     background: {{ section.settings.backdrop_color }};
+    /* Full-bleed at every width: the photograph continues beneath the header,
+       while the editable copy keeps its own navigation clearance. */
+    padding-top: 0;
   }
 
   #Hero-{{ section.id }} .hero__media {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 10;
-    max-height: 100vh;
-    max-height: 100dvh;
+    height: auto;
+    aspect-ratio: 1672 / 941;
+  }
+
+  #Hero-{{ section.id }} .hero__media picture {
+    position: absolute;
+    inset: 0;
+    display: block;
   }
 
   #Hero-{{ section.id }} .hero__image {
@@ -34,7 +31,9 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    /* Native artwork framing keeps all three garment prints visible. */
+    object-fit: contain;
+    object-position: right top;
   }
 
   #Hero-{{ section.id }} .hero__layer {
@@ -46,20 +45,21 @@
 
   #Hero-{{ section.id }} .hero__inner {
     width: 100%;
+    padding-top: 11.2rem;
   }
 
   #Hero-{{ section.id }} .hero__text {
-    max-width: 67rem;
+    max-width: min(56rem, 40vw);
     padding-block: 4rem;
-    padding-left: 8rem;
+    padding-left: clamp(2rem, 5vw, 8rem);
   }
 
-  /* The hero art is a #034CA2 royal-blue field. Navy measured 1.59:1 against it
-     (invisible); cream measures 7.67:1. The hard shadow goes to a deeper blue so
-     it reads as depth on the field rather than as a second colour. */
+  /* Navy reads clearly against the light campaign; a small sunshine shadow
+     retains the playful display treatment without obscuring the letters. */
   #Hero-{{ section.id }} .hero__heading {
     color: {{ section.settings.heading_color }};
-    text-shadow: 5px 5px 0 {{ section.settings.heading_shadow }};
+    text-shadow: 1px 1px 0 {{ section.settings.heading_shadow }};
+    font-size: var(--hero-heading-size);
   }
 
   #Hero-{{ section.id }} .hero__cta {
@@ -147,32 +147,57 @@
 
   @media screen and (max-width: 749px) {
     #Hero-{{ section.id }} .hero__media {
-      /* 16/9 collapsed the hero to ~314px on a phone. The reference fills most
-         of the screen, so switch to a portrait ratio with a viewport floor. */
-      aspect-ratio: 3 / 4;
-      min-height: 86vh;
-      min-height: 86dvh;
-      max-height: 100dvh;
+      height: auto;
+      aspect-ratio: auto;
+      max-height: none;
+    }
+
+    #Hero-{{ section.id }} .hero__media picture {
+      position: relative;
+      inset: auto;
+      /* Keep the complete selected portrait beneath the mobile copy. */
+      aspect-ratio: 941 / 1672;
+    }
+
+    #Hero-{{ section.id }} .hero__inner {
+      padding-top: 0;
+      padding-inline: 0;
     }
 
     #Hero-{{ section.id }} .hero__text {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      /* Clear the fixed header, which overlays the hero. */
-      padding-top: 12rem;
-      padding-bottom: 4rem;
+      max-width: 48rem;
+      margin-inline: auto;
+      padding: 2.4rem;
     }
 
-    /* Reference sits the copy low in the frame rather than centred. */
     #Hero-{{ section.id }} .hero__layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
       align-items: flex-end;
+      background: linear-gradient(180deg, transparent 55%, rgba(255, 247, 232, 0.3) 72%, rgba(255, 247, 232, 0.96) 100%);
+    }
+
+    #Hero-{{ section.id }} .hero__cta {
+      margin-top: 1.6rem;
     }
 
     #Hero-{{ section.id }} .hero__heading {
-      font-size: 4.4rem;
+      font-size: clamp(3rem, 8vw, 4rem);
+      line-height: 1.08;
+      text-wrap: balance;
     }
 
     #Hero-{{ section.id }} .hero__stickers {
+      display: none;
+    }
+
+    #Hero-{{ section.id }} .hero__image {
+      object-fit: contain;
+      object-position: center top;
+    }
+
+    #Hero-{{ section.id }} .hero__tag {
       display: none;
     }
   }
@@ -180,14 +205,16 @@
 
 {%- liquid
   assign hero_image = section.settings.image
+  assign hero_mobile_image = section.settings.mobile_image
   assign hero_alt = section.settings.image_alt | escape
   assign cta_url = section.settings.button_link | default: routes.all_products_collection_url
 -%}
 
 <section
   id="Hero-{{ section.id }}"
-  class="banner-section scroll-trigger animate--fade-in"
+  class="banner-section"
 >
+  {%- if section.settings.show_tags -%}
   {%- for i in (1..2) -%}
     {%- if i == 1 -%}
       {%- assign tg = section.settings.tag_one_text -%}
@@ -214,6 +241,7 @@
       >{{ tg | escape }}</span>
     {%- endif -%}
   {%- endfor -%}
+  {%- endif -%}
 
   {%- if section.settings.sticker_1 != blank or section.settings.sticker_2 != blank -%}
     <div class="hero__stickers" aria-hidden="true">
@@ -230,7 +258,21 @@
     </div>
   {%- endif -%}
 
-  <div class="hero__media scroll-trigger animate--fade-in">
+  <div class="hero__media">
+    <picture>
+      {%- if hero_mobile_image != blank -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ hero_mobile_image | image_url: width: 450 }} 450w, {{ hero_mobile_image | image_url: width: 750 }} 750w, {{ hero_mobile_image | image_url: width: 1086 }} 1086w"
+          sizes="100vw"
+        >
+      {%- elsif hero_image == blank -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ 'jjw-hero-picnic-mobile.png' | asset_img_url: '450x' }} 450w, {{ 'jjw-hero-picnic-mobile.png' | asset_img_url: '750x' }} 750w, {{ 'jjw-hero-picnic-mobile.png' | asset_img_url: '941x' }} 941w"
+          sizes="100vw"
+        >
+      {%- endif -%}
     {%- if hero_image != blank -%}
       {{
         hero_image
@@ -246,18 +288,28 @@
     {%- else -%}
       <img
         class="hero__image"
-        src="{{ 'jjw-hero.png' | asset_url }}"
+        src="{{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '1672x' }}"
+        srcset="{{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '900x' }} 900w, {{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '1200x' }} 1200w, {{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '1672x' }} 1672w"
+        sizes="100vw"
         alt="{{ hero_alt }}"
+        width="1672"
+        height="941"
         loading="eager"
         fetchpriority="high"
       >
     {%- endif -%}
+    </picture>
 
     <div class="hero__layer">
       <div class="hero__inner page-width">
-        <div class="hero__text scroll-trigger animate--slide-in">
+        <div class="hero__text">
           {%- if section.settings.heading != blank -%}
-            <h2 class="hxxl hero__heading">{{ section.settings.heading | escape }}</h2>
+            {%- comment -%}
+              h1, not h2: the homepage had no h1 at all, so its hierarchy started
+              one level down and search engines had no page-level heading to read.
+              Styling is class-driven, so the tag change costs nothing visually.
+            {%- endcomment -%}
+            <h1 class="hxxl hero__heading">{{ section.settings.heading | escape }}</h1>
           {%- endif -%}
 
           {%- if section.settings.button_label != blank -%}
@@ -288,32 +340,38 @@
       "type": "color",
       "id": "heading_color",
       "label": "Heading",
-      "default": "#FFF6EB"
+      "default": "#1A2F5E"
     },
     {
       "type": "color",
       "id": "heading_shadow",
       "label": "Heading shadow",
-      "default": "#012F66"
+      "default": "#FFD94C"
     },
     {
       "type": "color",
       "id": "backdrop_color",
       "label": "Backdrop behind image",
-      "default": "#034CA2",
+      "default": "#FFF7E8",
       "info": "Matches the artwork's field so any crop edge blends."
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Hero image",
-      "info": "Falls back to jjw-hero.png when empty."
+      "label": "Desktop hero image",
+      "info": "Uses the selected JJW Weekend Picnic campaign when empty."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile hero image",
+      "info": "Separate portrait artwork. With the default desktop artwork, uses the matching mobile campaign."
     },
     {
       "type": "text",
       "id": "image_alt",
       "label": "Hero image alt text",
-      "default": "Jevika and Joy's World characters"
+      "default": "Yellow Tech Builder, pink Adventure and blue Giggles tees on a sunlit picnic blanket"
     },
     {
       "type": "text",
@@ -350,6 +408,13 @@
     {
       "type": "header",
       "content": "Floating tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show decorative tags",
+      "default": false,
+      "info": "Optional desktop labels. The campaign artwork is shown without tags by default."
     },
     {
       "type": "paragraph",

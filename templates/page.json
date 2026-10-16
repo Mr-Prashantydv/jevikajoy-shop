@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "fallback_title": "Jevika & Joy's World",
+        "empty_text": "<p>We're still writing this one. In the meantime, <a href=\"\/pages\/contact\">say hello<\/a> and we'll answer anything you want to know.<\/p>"
+      }
+    }
+  },
+  "order": ["main"]
+}

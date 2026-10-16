@@ -82,11 +82,38 @@
     },
     "footer": {
       "type": "footer",
-      "settings": {}
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": {
+            "menu": "footer"
+          }
+        },
+        "legal": {
+          "type": "menu",
+          "settings": {
+            "menu": "footer-legal"
+          }
+        }
+      },
+      "block_order": ["shop", "legal"],
+      "settings": {
+        "newsletter_heading": "Join the JJW crew",
+        "newsletter_text": "New characters, new drops and first dibs on restocks — straight to your inbox."
+      }
+    },
+    "whatsapp": {
+      "type": "whatsapp-button",
+      "settings": {
+        "number": "",
+        "label": "Chat with us",
+        "message": "Hi! I have a question about a JJW tee."
+      }
     }
   },
   "order": [
     "footer_marquee",
-    "footer"
+    "footer",
+    "whatsapp"
   ]
 }

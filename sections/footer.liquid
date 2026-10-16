@@ -63,8 +63,11 @@
 
   #Footer-{{ section.id }} .footer__link {
     display: block;
-    font-size: 2.7rem;
-    line-height: 3.24rem;
+    min-height: var(--touch-target);
+    padding: 1.1rem 0;
+    font-family: var(--font-body);
+    font-size: var(--control-text-size);
+    line-height: 1.4;
     color: var(--cream);
     transition: color 0.2s var(--ease);
   }
@@ -79,16 +82,17 @@
 
   #Footer-{{ section.id }} .footer__heading {
     margin: 0;
-    font-size: 2.7rem;
-    line-height: 3.24rem;
+    font-size: var(--heading-small-size);
+    line-height: 1.2;
     color: var(--cream);
   }
 
+  /* Newsletter description is ordinary body copy. */
   #Footer-{{ section.id }} .footer__text {
     margin: 1.25rem 0;
     max-width: 46rem;
-    font-size: 2rem;
-    line-height: 2.7rem;
+    font-size: var(--text-base);
+    line-height: 1.6;
     color: var(--cream);
   }
 
@@ -139,6 +143,9 @@
     right: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
+    /* The icon is 24px wide; the button needs to be a finger wide. */
+    min-width: 4.4rem;
     height: 4.5rem;
     padding: 0;
     color: var(--cream);
@@ -187,6 +194,9 @@
   }
 
   #Footer-{{ section.id }} .footer__credit {
+    /* 25px of line-height alone is a 25px link; the padding makes it 44px. */
+    display: inline-block;
+    padding: 0.95rem 0;
     font-size: 1.4rem;
     line-height: 2.5rem;
     /* Footer field is --ink; credit text must be the light tone, not the same colour. */
@@ -385,7 +395,7 @@
       "type": "textarea",
       "id": "newsletter_text",
       "label": "Text",
-      "default": "Be the first to know about new flavors, special offers, and all things delicious - straight to your inbox."
+      "default": "New characters, new drops and first dibs on restocks — straight to your inbox."
     },
     {
       "type": "text",

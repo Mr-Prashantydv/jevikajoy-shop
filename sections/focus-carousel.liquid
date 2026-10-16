@@ -139,7 +139,7 @@
   #FocusCarousel-{{ section.id }} .focus-carousel__quote {
     margin: 0 0 2.4rem;
     font-family: var(--font-body);
-    font-size: 2.3rem;
+    font-size: var(--text-lead);
     line-height: 1.2;
     font-style: normal;
     color: inherit;
@@ -164,8 +164,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 4rem;
-    height: 4rem;
+    /* 4.4rem is the touch-target floor used across the theme; 4rem was 40px. */
+    width: 4.4rem;
+    height: 4.4rem;
     padding: 0.5rem;
     border-radius: 50%;
     background: var(--ink);
@@ -241,7 +242,7 @@
     }
 
     #FocusCarousel-{{ section.id }} .focus-carousel__quote {
-      font-size: 1.75rem;
+      /* The base step is already the lead size; no narrow-screen override. */
     }
 
     #FocusCarousel-{{ section.id }} .focus-carousel__author {

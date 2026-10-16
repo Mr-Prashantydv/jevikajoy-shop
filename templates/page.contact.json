@@ -1,0 +1,47 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "kicker": "We're listening",
+        "fallback_title": "Contact",
+        "empty_text": ""
+      }
+    },
+    "form": {
+      "type": "contact-form",
+      "blocks": {
+        "email": {
+          "type": "detail",
+          "settings": {
+            "label": "Email",
+            "value": "<p>botfit41@gmail.com<\/p>",
+            "link": "mailto:botfit41@gmail.com"
+          }
+        },
+        "phone": {
+          "type": "detail",
+          "settings": {
+            "label": "Phone",
+            "value": "<p>+91 70112 81878<\/p>",
+            "link": "tel:+917011281878"
+          }
+        },
+        "address": {
+          "type": "detail",
+          "settings": {
+            "label": "Address",
+            "value": "<p>11th Floor, Sector 63<br\/>Gurugram, Haryana 122098<br\/>India<\/p>"
+          }
+        }
+      },
+      "block_order": ["email", "phone", "address"],
+      "settings": {
+        "heading": "Send us a message",
+        "subheading": "<p>Sizing, delivery, a print that didn't turn out right — ask us anything. We read every message.<\/p>",
+        "details_heading": "Reach us directly"
+      }
+    }
+  },
+  "order": ["main", "form"]
+}

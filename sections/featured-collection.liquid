@@ -3,20 +3,50 @@
   (src/components/site/featured-collection.tsx). Horizontal snap carousel of
   product cards, each on its own colour pair, with a page counter and arrows.
 
-  Card colours: product.metafields.custom.card_color may hold one of
-  pink | blue | gold | green | purple. When it is blank the pairs cycle by
-  loop index, which is what the React data file hardcodes per product.
+  Colours use the shared character mapping. A valid custom.card_color
+  metafield remains a merchant override, never a random loop-index colour.
 {%- endcomment -%}
 
 {%- comment -%}
-  Fall back to every published product when no collection is chosen, so the
-  carousel is never an empty band on a fresh install.
+  Source, in order of preference:
+
+    1. the collection the merchant picked
+    2. on a product page, that product's own character collection — so
+       "More From the Squad" is genuinely more of the same squad rather than
+       the whole catalogue in a different order
+    3. every published product, so the carousel is never an empty band
+
+  On a product page the product being viewed is skipped, because recommending
+  a shopper the tee already open in front of them wastes a slot and reads as a
+  bug. `exclude_id` is nil everywhere else, and nil never equals a product id.
 {%- endcomment -%}
-{%- assign collection = section.settings.collection -%}
-{%- if collection == blank -%}
-  {%- assign collection = collections.all -%}
-{%- endif -%}
-{%- assign palette = 'pink,blue,gold,green,purple' | split: ',' -%}
+{%- liquid
+  assign collection = section.settings.collection
+
+  assign exclude_id = nil
+  if template.name == 'product'
+    assign exclude_id = product.id
+
+    if collection == blank
+      for tag in product.tags
+        if tag contains 'character:'
+          assign character_handle = tag | split: ':' | last | strip | downcase
+          assign character_collection = collections[character_handle]
+          if character_collection != blank and character_collection.all_products_count > 1
+            assign collection = character_collection
+            break
+          endif
+        endif
+      endfor
+    endif
+  endif
+
+  if collection == blank
+    assign collection = collections.all
+  endif
+
+  assign palette = 'pink,blue,gold,green,purple' | split: ','
+-%}
 
 {%- style -%}
   #FeaturedCollection-{{ section.id }} {
@@ -33,22 +63,19 @@
     color: var(--ink);
   }
 
-  #FeaturedCollection-{{ section.id }} .fc__spacer {
-    height: 7.2rem;
-  }
-
   #FeaturedCollection-{{ section.id }} .fc__viewport {
     position: relative;
   }
 
   #FeaturedCollection-{{ section.id }} .fc__track {
     display: flex;
-    gap: 4rem;
+    gap: 2.4rem;
     margin: 0;
-    padding: 1.6rem 2rem 1rem;
+    padding: 1.6rem var(--page-gutter) 1rem;
     list-style: none;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-gutter);
     -webkit-overflow-scrolling: touch;
   }
 
@@ -59,11 +86,14 @@
   }
 
   #FeaturedCollection-{{ section.id }} .fc__card {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    container-type: inline-size;
     /* The colour field wraps the whole card, image and text, as in the reference.
        The media only rounds its top corners so the two read as one surface. */
     background: var(--card-bg, var(--pink-bg));
-    border-radius: 2rem;
+    border-radius: var(--card-radius);
     overflow: hidden;
   }
 
@@ -141,26 +171,25 @@
   }
 
   {%- comment -%}
-    Height was a fixed 21.9rem, parking a 40px title inside 219px of box — 89px
-    of dead space above it and 90px below. Sized to its content now, but the
-    title still wants room to breathe, so this aims for ~4.4rem of clear space
-    on each side of it rather than closing the gap up entirely.
-
-    Top only needs 1.8rem: the image's own 2.6rem inset already sits above it,
-    and the two add up to the same 4.4rem as the bottom.
+    Reserve two title lines plus price and padding, so adjacent cards align
+    without the old 219px label slab. Scale the reserve with the card title.
   {%- endcomment -%}
   #FeaturedCollection-{{ section.id }} .fc__label {
     display: grid;
     place-items: center;
-    padding: 1.8rem 2rem 4.4rem;
+    min-height: calc(var(--card-title-size) * 2.3 + 6rem);
+    padding: 1.6rem 1.6rem 2rem;
   }
 
+  /* Matches .jjw-card__title in theme.css - see the note there. This was the
+     outlier: the display face at a flat 4rem, against condensed on every other
+     card in the theme. */
   #FeaturedCollection-{{ section.id }} .fc__title {
-    font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: 4rem;
-    line-height: 1;
-    letter-spacing: -0.02rem;
+    font-family: var(--font-accent);
+    font-weight: 900;
+    font-size: var(--card-title-size);
+    line-height: 1.15;
+    letter-spacing: 0;
     text-align: center;
     text-wrap: balance;
     {%- comment -%}
@@ -196,15 +225,12 @@
   }
 
   #FeaturedCollection-{{ section.id }} .fc__controls {
-    position: absolute;
-    inset-inline: 0;
-    top: calc(50% + 0.8rem);
-    transform: translateY(-50%);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding-inline: 2rem;
-    pointer-events: none;
+    justify-content: center;
+    gap: 2.4rem;
+    margin-top: 1.6rem;
+    padding-inline: var(--page-gutter);
   }
 
   #FeaturedCollection-{{ section.id }} .fc__count {
@@ -241,11 +267,11 @@
   #FeaturedCollection-{{ section.id }} .fc__cta {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: 2.4rem;
   }
 
   #FeaturedCollection-{{ section.id }} .fc__cta .btn {
-    font-size: clamp(1.6rem, 4.2vw, 2.2rem);
+    font-size: var(--button-text-size);
   }
 
   @media screen and (max-width: 989px) {
@@ -253,9 +279,6 @@
       width: 30rem;
     }
 
-    #FeaturedCollection-{{ section.id }} .fc__title {
-      font-size: clamp(3.2rem, 4.5vw, 4rem);
-    }
   }
 
   @media screen and (max-width: 749px) {
@@ -268,18 +291,21 @@
     }
 
     #FeaturedCollection-{{ section.id }} .fc__item {
-      width: calc((100vw - 3.5rem) / 2);
+      width: calc((100vw - 4.2rem) / 2);
     }
 
-    /* Tighter frame at phone width, where the card is roughly half as wide.
-       Keeps the same shape: 1.6rem inset, and matching space either side of
-       the title (1.6 + 1.2 above, 2.8 below). */
+    /* Tighter image and text padding on half-width phone cards. */
     #FeaturedCollection-{{ section.id }} .fc__media {
       --media-inset: 1.6rem;
     }
 
     #FeaturedCollection-{{ section.id }} .fc__label {
-      padding: 1.2rem 1.2rem 2.8rem;
+      padding: 1.2rem 1rem 1.6rem;
+    }
+
+    #FeaturedCollection-{{ section.id }} .fc__arrow {
+      width: var(--touch-target);
+      height: var(--touch-target);
     }
   }
 {%- endstyle -%}
@@ -290,17 +316,19 @@
       {%- if section.settings.heading != blank -%}
         <h2 class="hxxl fc__heading scroll-trigger animate--slide-in">{{ section.settings.heading | escape }}</h2>
       {%- endif -%}
-      <div class="fc__spacer" aria-hidden="true"></div>
     </div>
 
     {%- if collection != blank and collection.products.size > 0 -%}
       <div class="fc__viewport scroll-trigger animate--slide-in">
         <ul class="fc__track no-scrollbar" data-fc-track>
           {%- for product in collection.products limit: section.settings.products_to_show -%}
-            {%- assign pair_index = forloop.index0 | modulo: 5 -%}
-            {%- assign pair = palette[pair_index] -%}
+            {%- if product.id == exclude_id -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- capture pair -%}{%- render 'character-pair', product: product, prefer: collection.handle -%}{%- endcapture -%}
+            {%- assign pair = pair | strip -%}
             {%- assign pair_override = product.metafields.custom.card_color.value | downcase -%}
-            {%- if pair_override != blank -%}
+            {%- if palette contains pair_override -%}
               {%- assign pair = pair_override -%}
             {%- endif -%}
 
@@ -334,10 +362,16 @@
                         widths: '300, 400, 600, 800, 1000',
                         sizes: '(max-width: 749px) 45vw, 36rem'
                     }}
+                  {%- else -%}
+                    {%- render 'product-photo-pending' -%}
                   {%- endif -%}
                 </div>
                 <div class="fc__label">
-                  <h3 class="fc__title">{{ product.title }}</h3>
+                  <h3 class="fc__title">{{ product.title | escape }}
+                    {%- if section.settings.show_price -%}
+                      <span class="jjw-card__price">{{ product.price | money }}</span>
+                    {%- endif -%}
+                  </h3>
                 </div>
               </a>
             </li>
@@ -482,6 +516,12 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price on cards",
+      "default": true
     },
     {
       "type": "checkbox",

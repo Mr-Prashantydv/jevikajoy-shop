@@ -22,16 +22,51 @@
       return;
     }
 
+    function reveal(el) {
+      el.classList.remove('scroll-trigger--offscreen');
+      observer.unobserve(el);
+    }
+
     var observer = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.remove('scroll-trigger--offscreen');
-          observer.unobserve(entry.target);
+          // Scrolled clean past without ever intersecting: still reveal it,
+          // or the element is stranded invisible above the viewport.
+          if (!entry.isIntersecting && entry.boundingClientRect.bottom > 0) return;
+          reveal(entry.target);
         });
       },
       { rootMargin: '0px 0px -50px 0px', threshold: 0 }
     );
+
+    /* IntersectionObserver only fires on a *change* of intersection state. A
+       jump that lands past an element — a hash link, a browser-restored scroll
+       position, a full-page screenshot — moves it from "not intersecting,
+       below" to "not intersecting, above" with no intersecting frame in
+       between, so the callback never runs and the element keeps opacity 0
+       forever. Three collection cards were permanently invisible this way.
+       Sweeping on scroll costs one rAF per gesture and stops entirely once
+       every target has been revealed. */
+    var ticking = false;
+
+    function sweep() {
+      ticking = false;
+      var left = document.querySelectorAll('.scroll-trigger--offscreen');
+      for (var i = 0; i < left.length; i++) {
+        if (left[i].getBoundingClientRect().bottom <= 0) reveal(left[i]);
+      }
+      if (!document.querySelector('.scroll-trigger--offscreen')) {
+        window.removeEventListener('scroll', onScroll);
+      }
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(sweep);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     targets.forEach(function (el) {
       el.classList.add('scroll-trigger--offscreen');

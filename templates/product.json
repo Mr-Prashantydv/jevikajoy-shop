@@ -79,6 +79,34 @@
             "label": "Pinki",
             "collection": "pinki"
           }
+        },
+        "trust_ship": {
+          "type": "trustbadge",
+          "settings": {
+            "label": "Free shipping over Rs. 999",
+            "icon": "shipping"
+          }
+        },
+        "trust_return": {
+          "type": "trustbadge",
+          "settings": {
+            "label": "7-day easy exchange",
+            "icon": "returns"
+          }
+        },
+        "trust_cotton": {
+          "type": "trustbadge",
+          "settings": {
+            "label": "100% organic cotton",
+            "icon": "cotton"
+          }
+        },
+        "trust_secure": {
+          "type": "trustbadge",
+          "settings": {
+            "label": "Secure checkout",
+            "icon": "secure"
+          }
         }
       },
       "block_order": [
@@ -92,16 +120,24 @@
         "tab_joy",
         "tab_brutus",
         "tab_minku",
-        "tab_pinki"
+        "tab_pinki",
+        "trust_ship",
+        "trust_return",
+        "trust_cotton",
+        "trust_secure"
       ],
       "settings": {
         "add_label": "Add to Cart",
         "sold_out_label": "Sold Out",
         "unavailable_label": "Unavailable",
-        "trust_line": "Soft cotton, kind to skin. Easy 7-day exchanges.",
+        "trust_line": "",
         "tabs_label": "Shop by character",
         "coming_soon_label": "Coming Soon",
-        "fallback_title": "Our Tee"
+        "fallback_title": "Our Tee",
+        "show_sticky_atc": true,
+        "highlight_fallback": "100% organic cotton, OEKO-TEX certified inks, BIS certified",
+        "show_payment_icons": true,
+        "payment_label": "Secure checkout"
       }
     },
     "fabric_story": {
@@ -204,10 +240,23 @@
         "heading": "More From the Squad",
         "products_to_show": 12
       }
+    },
+    "bundle": {
+      "type": "bundle-banner",
+      "settings": {
+        "heading": "15% Off Any 3 Tees",
+        "text": "Mix any characters, any sizes — the discount applies automatically at checkout.",
+        "note": "Three for Rs. 1,527 instead of Rs. 1,797",
+        "cta_label": "Shop All Tees",
+        "tone": "gold",
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
     "main",
+    "bundle",
     "fabric_story",
     "feature",
     "related"

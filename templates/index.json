@@ -101,10 +101,20 @@
           "settings": {
             "character": "jevika",
             "behavior": "fall",
-            "x": 44,
-            "y": 56,
-            "size": 17,
-            "depth": 10
+            "x": 41,
+            "y": 63,
+            "size": 27,
+            "depth": 10,
+            "x_nudge": 3,
+            "y_nudge": 0,
+            "start_x": 48,
+            "start_x_nudge": -5,
+            "start_y": 15,
+            "start_y_nudge": 1,
+            "start_size": 9,
+            "phone_x": 40,
+            "phone_y": 56,
+            "phone_size": 57
           }
         },
         "c_joy": {
@@ -112,10 +122,20 @@
           "settings": {
             "character": "joy",
             "behavior": "fall",
-            "x": 55,
-            "y": 57,
-            "size": 16,
-            "depth": 11
+            "x": 59,
+            "y": 63,
+            "size": 26,
+            "depth": 10,
+            "x_nudge": 1,
+            "y_nudge": 0,
+            "start_x": 54,
+            "start_x_nudge": -7,
+            "start_y": 16,
+            "start_y_nudge": -3,
+            "start_size": 9,
+            "phone_x": 62,
+            "phone_y": 57,
+            "phone_size": 57
           }
         },
         "c_pinki": {
@@ -123,10 +143,20 @@
           "settings": {
             "character": "pinki",
             "behavior": "fall",
-            "x": 38,
-            "y": 71,
-            "size": 13,
-            "depth": 20
+            "x": 31,
+            "y": 73,
+            "size": 20,
+            "depth": 22,
+            "x_nudge": 2,
+            "y_nudge": 0,
+            "start_x": 41,
+            "start_x_nudge": 0,
+            "start_y": 18,
+            "start_y_nudge": -3,
+            "start_size": 9,
+            "phone_x": 17,
+            "phone_y": 71,
+            "phone_size": 43
           }
         },
         "c_minku": {
@@ -134,10 +164,20 @@
           "settings": {
             "character": "minku",
             "behavior": "fall",
-            "x": 48,
-            "y": 74,
-            "size": 12,
-            "depth": 21
+            "x": 50,
+            "y": 73,
+            "size": 18,
+            "depth": 21,
+            "x_nudge": -3,
+            "y_nudge": 3,
+            "start_x": 59,
+            "start_x_nudge": 2,
+            "start_y": 18,
+            "start_y_nudge": 1,
+            "start_size": 7,
+            "phone_x": 48,
+            "phone_y": 72,
+            "phone_size": 38
           }
         },
         "c_brutus": {
@@ -145,10 +185,20 @@
           "settings": {
             "character": "brutus",
             "behavior": "fall",
-            "x": 60,
+            "x": 67,
             "y": 71,
-            "size": 15,
-            "depth": 22
+            "size": 30,
+            "depth": 20,
+            "x_nudge": 4,
+            "y_nudge": -4,
+            "start_x": 65,
+            "start_x_nudge": 7,
+            "start_y": 19,
+            "start_y_nudge": 3,
+            "start_size": 11,
+            "phone_x": 77,
+            "phone_y": 69,
+            "phone_size": 62
           }
         },
         "a1": {
@@ -206,6 +256,34 @@
             "shape": "circle",
             "size": 4
           }
+        },
+        "cl1": {
+          "type": "accent",
+          "settings": {
+            "text": "",
+            "color": "#FFFFFF",
+            "text_color": "#FFF6EB",
+            "x": 15,
+            "y": 28,
+            "rotate": 0,
+            "depth": 2,
+            "shape": "cloud",
+            "size": 22
+          }
+        },
+        "cl2": {
+          "type": "accent",
+          "settings": {
+            "text": "",
+            "color": "#FFFFFF",
+            "text_color": "#FFF6EB",
+            "x": 86,
+            "y": 24,
+            "rotate": 0,
+            "depth": 2,
+            "shape": "cloud",
+            "size": 17
+          }
         }
       },
       "block_order": [
@@ -217,13 +295,16 @@
         "a1",
         "a2",
         "a3",
-        "a4"
+        "a4",
+        "cl1",
+        "cl2"
       ],
       "settings": {
         "heading": "Room for Every Kind of Kid",
         "subheading": "FIVE FRIENDS, ONE WARDROBE",
-        "scroll_length": 120,
-        "start_y": 10
+        "ground_offset": 0,
+        "section_height": 120,
+        "pose_editor": true
       }
     },
     "split_content": {

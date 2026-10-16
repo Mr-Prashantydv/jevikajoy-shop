@@ -16,21 +16,19 @@
     overflow: hidden;
     border-radius: 4rem;
     background: var(--blue);
-    padding-top: 3.6rem;
-    padding-bottom: 1.6rem;
+    padding-block: var(--section-space);
     text-align: center;
   }
 
   #FindUs-{{ section.id }} .find-us__heading {
-    margin-top: 9.2rem;
+    margin-top: 0;
     max-width: 110rem;
     padding-inline: 1.5rem;
     color: var(--cream);
-    color: color-mix(in srgb, var(--cream) 75%, transparent);
   }
 
   #FindUs-{{ section.id }} .find-us__marquee {
-    margin-top: 6.8rem;
+    margin-top: 3.2rem;
     width: 100%;
     overflow: hidden;
   }
@@ -54,18 +52,16 @@
   }
 
   #FindUs-{{ section.id }} .find-us__button {
-    margin-top: 10.9rem;
+    margin-top: 3.2rem;
   }
 
   @media screen and (max-width: 749px) {
     #FindUs-{{ section.id }} .find-us__card {
       border-radius: 2rem;
-      padding-top: 2.7rem;
-      padding-bottom: 1.2rem;
     }
 
     #FindUs-{{ section.id }} .find-us__heading {
-      margin-top: 6.7rem;
+      margin-top: 0;
     }
 
     #FindUs-{{ section.id }} .find-us__logo img,

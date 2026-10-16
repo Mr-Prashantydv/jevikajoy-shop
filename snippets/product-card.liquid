@@ -37,7 +37,7 @@
           sizes: card_sizes
       }}
     {%- else -%}
-      <div class="jjw-card__fallback"><span>{{ product.title | escape }}</span></div>
+      {%- render 'product-photo-pending' -%}
     {%- endif -%}
   </div>
   <h3 class="jjw-card__title">
@@ -45,5 +45,6 @@
     {%- unless show_price == false -%}
       <span class="jjw-card__price">{{ product.price | money }}</span>
     {%- endunless -%}
+    {%- render 'review-stars', product: product -%}
   </h3>
 </a>

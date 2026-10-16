@@ -1,0 +1,147 @@
+{%- comment -%}
+  Generic page body. Renders whatever the merchant typed into the page's rich
+  text editor, inside the white-card-on-cream shape the rest of the theme uses.
+
+  The card matters for more than looks: --blue on cream measures 4.34:1, which
+  misses AA for body-size links. On white it is 4.59:1. Prose therefore always
+  sits on --white, never directly on the canvas.
+
+  Both real pages (Contact, Our Story) currently have an empty body in admin,
+  so a blank body has to read as deliberate rather than broken — hence the
+  fallback note, which is itself a setting.
+{%- endcomment -%}
+
+{%- style -%}
+  #MainPage-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 6rem 8rem;
+  }
+
+  #MainPage-{{ section.id }} .page__head {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  /* Title-only: the section is acting as a page header for whatever section
+     follows it, so it must not also reserve the space a card would have. */
+  #MainPage-{{ section.id }}[data-bare] {
+    padding-bottom: 3.6rem;
+  }
+
+  #MainPage-{{ section.id }}[data-bare] .page__head {
+    margin-bottom: 0;
+  }
+
+  #MainPage-{{ section.id }} .page__kicker {
+    display: block;
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--blue);
+  }
+
+  #MainPage-{{ section.id }} .page__title {
+    color: var(--ink);
+  }
+
+  #MainPage-{{ section.id }} .page__card {
+    max-width: 84rem;
+    margin-inline: auto;
+    padding: 4.8rem 4.8rem 5.2rem;
+    border-radius: 2.4rem;
+    background: var(--white);
+  }
+
+  /* Prose itself is .rte in theme.css, shared with Shopify's own /policies
+     markup — which is why the class is not JJW-prefixed. */
+
+  #MainPage-{{ section.id }} .page__empty {
+    text-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    #MainPage-{{ section.id }} {
+      padding-block: 3.2rem 4.8rem;
+    }
+
+    #MainPage-{{ section.id }} .page__head {
+      margin-bottom: 2.4rem;
+    }
+
+    #MainPage-{{ section.id }} .page__card {
+      padding: 2.4rem 2rem 2.8rem;
+      border-radius: 2rem;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign has_body = false
+  if page.content != blank or section.settings.empty_text != blank
+    assign has_body = true
+  endif
+-%}
+
+<section id="MainPage-{{ section.id }}"{% unless has_body %} data-bare="true"{% endunless %}>
+  <div class="page-width">
+    <div class="page__head scroll-trigger animate--slide-in" style="--animation-order: 1;">
+      {%- if section.settings.kicker != blank -%}
+        <span class="accent-caps page__kicker">{{ section.settings.kicker | escape }}</span>
+      {%- endif -%}
+      <h1 class="hxxl page__title">{{ page.title | default: section.settings.fallback_title }}</h1>
+    </div>
+
+    {%- comment -%}
+      No card when there is nothing to put in it. Contact clears empty_text
+      because the form below carries its own intro, and an empty white box
+      reads as a broken page rather than a deliberately spare one.
+    {%- endcomment -%}
+    {%- if has_body -%}
+      <div class="page__card scroll-trigger animate--fade-in" style="--animation-order: 2;">
+        {%- if page.content != blank -%}
+          <div class="rte">{{ page.content }}</div>
+        {%- else -%}
+          {%- comment -%}
+            A div, not a <p>: empty_text is a richtext setting and already
+            emits its own <p>, so wrapping it nested one inside another. The
+            .rte class is also what gives any link in it a visible colour —
+            the global `a { color: inherit }` otherwise hides it entirely.
+          {%- endcomment -%}
+          <div class="rte page__empty">{{ section.settings.empty_text }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page content",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker above the title"
+    },
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Title when the page has none",
+      "default": "Jevika & Joy's World"
+    },
+    {
+      "type": "richtext",
+      "id": "empty_text",
+      "label": "Shown when the page body is empty",
+      "info": "Both Contact and Our Story have an empty body in admin today. This keeps the page from rendering as a blank card.",
+      "default": "<p>We're still writing this one. In the meantime, say hello and we'll answer anything you want to know.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page content"
+    }
+  ]
+}
+{% endschema %}

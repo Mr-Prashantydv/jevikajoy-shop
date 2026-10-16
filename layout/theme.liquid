@@ -17,7 +17,14 @@
       {{ page_title }}
       {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
       {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
-      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+      {%- comment -%}
+        shop.name is stored HTML-escaped (`Jevika &amp; Joy&#39;s World`) but page_title
+        arrives raw, so a direct `contains` never matches and the name gets appended twice
+        on the homepage. escape_once normalises page_title into the same encoding and is
+        idempotent, so it is safe whichever side Shopify hands back escaped.
+      {%- endcomment -%}
+      {%- assign page_title_esc = page_title | escape_once -%}
+      {%- unless page_title_esc contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
     </title>
 
     {%- if page_description -%}
@@ -50,7 +57,7 @@
   </head>
 
   <body class="template--{{ template.name | handle }}">
-    <a class="visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
+    <a class="visually-hidden skip-link" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
 
     {%- comment -%}
       The blob clip path. Defined once here so every section can reference it
@@ -74,5 +81,13 @@
     </main>
 
     {% sections 'footer-group' %}
+
+    {%- comment -%}
+      Rendered here rather than inside a section group so it exists on every
+      template and stays addressable as `cart-drawer` by the Section Rendering
+      API — which is how /cart/add.js and /cart/change.js hand back freshly
+      rendered line items instead of the drawer rebuilding them in JavaScript.
+    {%- endcomment -%}
+    {% section 'cart-drawer' %}
   </body>
 </html>

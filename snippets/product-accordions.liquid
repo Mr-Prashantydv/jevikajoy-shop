@@ -7,8 +7,6 @@
        description_title: section.settings.description_title,
        materials: section.settings.materials,
        materials_title: section.settings.materials_title,
-       size_guide_title: section.settings.size_guide_title,
-       size_guide_note: section.settings.size_guide_note,
        shipping: section.settings.shipping,
        shipping_title: section.settings.shipping_title %}
 
@@ -16,25 +14,25 @@
   text) and fall back to a written default when blank — which is the live path
   today, since product.description is empty on every product.
 
-  ponytail: the four rows are hardcoded, not block-driven. They are the same
-  four on every product; make them blocks when a product needs a fifth.
+  ponytail: the three rows are hardcoded, not block-driven. They are the same
+  three on every product; make them blocks when a product needs a fourth.
+
+  There WAS a fourth, Size Guide, with its own hardcoded four-row table. It was
+  removed: the size guide now renders from snippets/size-guide.liquid beside the
+  size picker, where the question is actually asked. Keeping both put two tables
+  with two different conventions on one page — the accordion measured chest
+  circumference in cm, the new one flat width in inches — and the hardcoded four
+  sizes were simply wrong on giggles-tee, which has eight.
 {%- endcomment -%}
 
 {%- liquid
   assign pa_description_title = description_title | default: 'Description'
   assign pa_materials_title = materials_title | default: 'Materials & Care'
-  assign pa_size_guide_title = size_guide_title | default: 'Size Guide'
   assign pa_shipping_title = shipping_title | default: 'Shipping & Returns'
-
-  assign pa_size_guide_note = size_guide_note | default: 'Measurements are approximate, taken flat in centimetres. Garments may vary by up to 2 cm.'
 
   assign pa_description_text = description | strip_html | strip
   assign pa_materials_text = materials | strip_html | strip
   assign pa_shipping_text = shipping | strip_html | strip
-
-  assign pa_sizes = '4-5 Y,6-7 Y,8-9 Y,10-12 Y' | split: ','
-  assign pa_chest = '62,67,72,78' | split: ','
-  assign pa_length = '40,44,48,53' | split: ','
 -%}
 
 {%- style -%}
@@ -120,48 +118,11 @@
     margin-block-end: 0;
   }
 
-  .product-accordions__table {
-    width: 100%;
-    max-width: 42rem;
-    border-collapse: collapse;
-    font-size: 1.5rem;
-  }
 
-  .product-accordions__table th,
-  .product-accordions__table td {
-    padding: 0.8rem 1.2rem 0.8rem 0;
-    text-align: start;
-    border-block-end: 1px solid rgba(26, 47, 94, 0.16);
-  }
 
-  .product-accordions__table thead th {
-    font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 1.4rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink);
-  }
 
-  .product-accordions__table tbody th {
-    font-family: var(--font-body);
-    font-weight: 700;
-    color: var(--ink);
-  }
 
-  .product-accordions__table tbody tr:last-child th,
-  .product-accordions__table tbody tr:last-child td {
-    border-block-end: 0;
-  }
 
-  .product-accordions__caption {
-    caption-side: bottom;
-    padding-block-start: 1.2rem;
-    font-size: 1.3rem;
-    line-height: 1.6;
-    text-align: start;
-    color: var(--ink-soft);
-  }
 
   @keyframes paReveal {
     from {
@@ -209,36 +170,8 @@
       {%- if pa_materials_text != blank -%}
         {{ materials }}
       {%- else -%}
-        <p>100% cotton jersey, pre-shrunk and skin-friendly. Machine wash cold with like colours, tumble dry low, and iron on the reverse. Do not bleach or dry clean.</p>
+        <p>100% organic cotton jersey, printed with OEKO-TEX certified inks. Machine wash cold with like colours, tumble dry low, and iron on the reverse. Do not bleach or dry clean.</p>
       {%- endif -%}
-    </div>
-  </details>
-
-  <details class="product-accordions__row" name="product-accordions-{{ product.id }}">
-    <summary class="product-accordions__summary">
-      {{ pa_size_guide_title }}
-      <span class="product-accordions__sign" aria-hidden="true"></span>
-    </summary>
-    <div class="product-accordions__panel">
-      <table class="product-accordions__table">
-        <caption class="product-accordions__caption">{{ pa_size_guide_note }}</caption>
-        <thead>
-          <tr>
-            <th scope="col">Size</th>
-            <th scope="col">Chest (cm)</th>
-            <th scope="col">Length (cm)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {%- for size in pa_sizes -%}
-            <tr>
-              <th scope="row">{{ size }}</th>
-              <td>{{ pa_chest[forloop.index0] }}</td>
-              <td>{{ pa_length[forloop.index0] }}</td>
-            </tr>
-          {%- endfor -%}
-        </tbody>
-      </table>
     </div>
   </details>
 

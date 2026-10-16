@@ -111,8 +111,8 @@
     display: grid;
     grid-template-columns: auto auto 1fr;
     align-items: center;
-    gap: 2rem;
-    padding: 1.44rem 2.16rem;
+    gap: 1.6rem;
+    padding: 1.2rem var(--page-gutter);
   }
 
   #Header-{{ s }} .hdr-logo {
@@ -125,7 +125,7 @@
   #Header-{{ s }} .hdr-logo svg {
     /* Size by height and let width follow the artwork's own ratio, so a logo of
        any proportion sits flush instead of being letterboxed inside a fixed track. */
-    height: 8.3rem;
+    height: 5.6rem;
     width: auto;
     max-width: {{ section.settings.logo_width | default: 220 }}px;
     object-fit: contain;
@@ -135,6 +135,12 @@
   #Header-{{ s }} .hdr-menu-wrap {
     position: relative;
     display: block;
+  }
+
+  #Header-{{ s }} .hdr-menu-wrap:has(.hdr-menu:focus-visible) {
+    outline: 3px solid var(--cream);
+    box-shadow: 0 0 0 6px var(--ink);
+    border-radius: 0.8rem;
   }
 
   #Header-{{ s }} .hdr-menu-wrap .btn-shadow {
@@ -148,18 +154,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 7.5rem;
-    width: 8.3rem;
+    height: 4.8rem;
+    width: 5.4rem;
     padding: 0;
     color: var(--cream);
-    background: var(--blue);
+    background: var(--ink);
     clip-path: url(#jjw-blob);
     -webkit-clip-path: url(#jjw-blob);
   }
 
   #Header-{{ s }} .hdr-menu .icon-burger {
-    height: 4.5rem;
-    width: 5.3rem;
+    height: 2.8rem;
+    width: 3.2rem;
   }
 
   #Header-{{ s }} .hdr-menu .icon-close {
@@ -181,12 +187,12 @@
   {%- endcomment -%}
   #Header-{{ s }} .hdr-actions {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-end;
     row-gap: 0.8rem;
     justify-self: end;
-    margin-right: -1.12rem;
+    margin-right: 0;
   }
 
   #Header-{{ s }} .hdr-cta {
@@ -202,16 +208,16 @@
   }
 
   #Header-{{ s }} .hdr-cta .btn {
-    height: 7rem;
-    max-height: 7rem;
-    min-height: 0;
-    width: 22.1rem;
+    height: 4.8rem;
+    max-height: 4.8rem;
+    min-height: var(--touch-target);
+    width: auto;
     max-width: 100%;
-    padding: 0 1.25rem;
-    font-size: 3rem;
+    padding: 0 1.8rem;
+    font-size: var(--button-text-size);
     line-height: 1.2;
-    letter-spacing: 0.15rem;
-    --btn-bg: var(--blue);
+    letter-spacing: 0.05em;
+    --btn-bg: var(--ink);
     --btn-fg: var(--cream);
   }
 
@@ -219,13 +225,20 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    height: 7rem;
-    width: 6.9rem;
+    justify-content: center;
+    height: 4.8rem;
+    width: 4.8rem;
     flex: none;
-    color: var(--cream);
-    background: var(--blue);
-    border-radius: 0.75rem;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    border-radius: 1.2rem;
+    transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+
+  #Header-{{ s }} .hdr-icon:hover {
+    border-color: var(--ink);
+    background: var(--white);
   }
 
   #Header-{{ s }} .hdr-icon + .hdr-icon {
@@ -241,8 +254,8 @@
   }
 
   #Header-{{ s }} .hdr-icon svg {
-    height: 4rem;
-    width: 4rem;
+    height: 2.8rem;
+    width: 2.8rem;
   }
 
   {%- comment -%}
@@ -260,7 +273,7 @@
     align-items: center;
     justify-content: center;
 
-    --shopify-account-avatar-size: 4.4rem;
+    --shopify-account-avatar-size: 3.2rem;
     --shopify-account-color-accent: var(--blue);
     --shopify-account-color-accent-text: var(--white);
     --shopify-account-color-background: var(--cream);
@@ -282,7 +295,7 @@
 
     /* Signed in, the avatar becomes the customer's initial — pink on cream
        is fine here because it is a single large glyph, not body copy. */
-    --shopify-account-signed-in-avatar-size: 4.4rem;
+    --shopify-account-signed-in-avatar-size: 3.2rem;
     --shopify-account-signed-in-avatar-color-background: var(--pink);
     --shopify-account-signed-in-avatar-color-text: var(--cream);
 
@@ -300,7 +313,7 @@
     justify-content: center;
     height: 4.4rem;
     width: 4.4rem;
-    color: var(--cream);
+    color: var(--ink);
   }
 
   {%- comment -%}
@@ -360,8 +373,8 @@
   }
 
   #Header-{{ s }} .hdr-account-avatar svg {
-    height: 4rem;
-    width: 4rem;
+    height: 2.8rem;
+    width: 2.8rem;
   }
 
   #Header-{{ s }} .hdr-count {
@@ -372,12 +385,19 @@
     padding: 0 0.5rem;
     border-radius: 999px;
     background: var(--pink);
-    color: var(--cream);
+    color: var(--ink-deep);
     font-family: var(--font-accent);
     font-weight: 700;
     font-size: 1.5rem;
     line-height: 2rem;
     text-align: center;
+  }
+
+  #Header-{{ s }} .hdr-icon > .hdr-count {
+    height: 2rem;
+    width: auto;
+    font-size: 1.2rem;
+    line-height: 2rem;
   }
 
   /* --- Desktop mega panel ------------------------------------------------ */
@@ -431,15 +451,14 @@
   }
 
   #Header-{{ s }} .hdr-mega-links .btn {
-    min-height: 0;
+    min-height: var(--touch-target);
     padding: 1rem 2.5rem;
-    /* Reference mega nav: 27px condensed caps, letter-spacing 1.35px. */
-    font-size: 2.7rem;
-    line-height: 1.8;
-    letter-spacing: 0.135rem;
+    font-size: var(--button-text-size);
+    line-height: 1.3;
+    letter-spacing: 0.05em;
     border-radius: 0.8rem;
     --btn-bg: var(--blue);
-    --btn-fg: var(--cream);
+    --btn-fg: var(--white);
   }
 
   #Header-{{ s }} .hdr-mega-link {
@@ -448,8 +467,9 @@
     text-align: center;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 2.7rem;
-    line-height: 1.8;
+    font-size: 2rem;
+    line-height: 1.5;
+    min-height: var(--touch-target);
     letter-spacing: 0.135rem;
     text-transform: uppercase;
     color: var(--ink);
@@ -457,7 +477,8 @@
   }
 
   #Header-{{ s }} .hdr-mega-link:hover {
-    color: var(--pink);
+    color: var(--ink-deep);
+    text-decoration: underline;
   }
 
   #Header-{{ s }} .hdr-mega-cards {
@@ -610,13 +631,13 @@
   }
 
   #Header-{{ s }} .hdr-drawer-links .btn {
-    min-height: 0;
+    min-height: var(--touch-target);
     padding: 1rem 1.5rem;
-    font-size: max(2rem, 25px);
+    font-size: var(--button-text-size);
     line-height: 1.2;
     letter-spacing: 0.15rem;
     --btn-bg: var(--blue);
-    --btn-fg: var(--cream);
+    --btn-fg: var(--white);
   }
 
   {%- comment -%}
@@ -973,6 +994,7 @@
 
     #Header-{{ s }} .hdr-actions {
       order: 3;
+      flex-wrap: nowrap;
     }
 
     {%- comment -%}
@@ -1013,8 +1035,7 @@
       column 110px and keeps the logo centred, which shrinking the pills to
       fit would not — they are already at the 44px touch-target floor.
 
-      Below ~340px the sums stop working whatever the gap; the logo would have
-      to shrink. Not chased, since the design already assumed 360 as the floor.
+      The compact band below also supports 320px without wrapping either icon.
     {%- endcomment -%}
     #Header-{{ s }} .hdr-grid {
       padding-inline: 1rem;
@@ -1032,7 +1053,7 @@
 
     #Header-{{ s }} .hdr-drawer-links .btn {
       padding: 1rem 0.8rem;
-      font-size: 2rem;
+      font-size: var(--button-text-size);
     }
 
     {%- comment -%}
@@ -1062,6 +1083,7 @@
          from 360px up. */
       height: 5rem;
       width: auto;
+      max-width: min(11rem, calc(100vw - 23rem));
     }
 
     {%- comment -%}
@@ -1141,6 +1163,18 @@
 
     #Header-{{ s }} .psearch-all {
       padding: 1.6rem;
+    }
+  }
+
+  @media screen and (max-width: 359px) {
+    #Header-{{ s }} .hdr-logo img,
+    #Header-{{ s }} .hdr-logo svg {
+      height: 4.4rem;
+    }
+    #Header-{{ s }} .hdr-menu,
+    #Header-{{ s }} .hdr-icon {
+      height: var(--touch-target);
+      width: var(--touch-target);
     }
   }
 
@@ -1253,17 +1287,33 @@
           </span>
         {%- endif -%}
 
+        {%- comment -%}
+          Still an anchor to /cart: with JS off it navigates to the cart page,
+          which is a real template. The drawer script cancels the navigation and
+          opens instead. The badge always renders, hidden at zero, so JS can
+          update it in place rather than having to build the element the first
+          time something is added.
+        {%- endcomment -%}
         {%- if section.settings.show_cart -%}
-          <a href="{{ routes.cart_url }}" class="hdr-icon" aria-label="{{ 'sections.header.cart_count' | t }}">
+          <a
+            href="{{ routes.cart_url }}"
+            class="hdr-icon"
+            data-cart-open
+            aria-label="{{ 'sections.header.cart_count' | t }}"
+          >
             <span>
               <svg fill="none" viewBox="0 0 18 19" aria-hidden="true" focusable="false">
                 <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M9 1.5A3.25 3.25 0 0 0 5.75 4.75V5.5H3.4a1 1 0 0 0-.996.91l-.9 9.9A1.5 1.5 0 0 0 3 18h12a1.5 1.5 0 0 0 1.494-1.69l-.9-9.9A1 1 0 0 0 14.6 5.5h-2.35v-.75A3.25 3.25 0 0 0 9 1.5m2.25 5h3.35l.9 9.9a.5.5 0 0 1-.5.6H3a.5.5 0 0 1-.5-.6l.9-9.9h3.35v2a.5.5 0 0 0 1 0v-2h2.5v2a.5.5 0 0 0 1 0zm-1-1h-4.5v-.75a2.25 2.25 0 0 1 4.5 0z"/>
               </svg>
             </span>
-            {%- if cart.item_count > 0 -%}
-              <span class="hdr-count" aria-hidden="true">{{ cart.item_count }}</span>
-              <span class="visually-hidden">{{ cart.item_count }}</span>
-            {%- endif -%}
+            <span
+              class="hdr-count"
+              data-cart-count
+              aria-hidden="true"
+              {% if cart.item_count == 0 %}hidden{% endif %}
+            >
+              {{- cart.item_count -}}
+            </span>
           </a>
         {%- endif -%}
       </div>
@@ -1450,10 +1500,19 @@
       document.body.style.overflow = any ? 'hidden' : '';
     }
 
+    // The cart drawer is a separate section with its own overlay. Announce so it
+    // can stand down rather than two scrims stacking.
+    function announceOpen() {
+      document.dispatchEvent(new CustomEvent('jjw:header-open'));
+    }
+
     function setOpen(open) {
       root.dataset.open = open ? 'true' : 'false';
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (open) setSearch(false);
+      if (open) {
+        setSearch(false);
+        announceOpen();
+      }
       lockScroll();
     }
 
@@ -1463,12 +1522,20 @@
       searchToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) {
         setOpen(false);
+        announceOpen();
         // iOS will not focus an input from a handler that also ran a fetch,
         // so focus first and let the query fire on the next keystroke.
         searchInput.focus();
       }
       lockScroll();
     }
+
+    // Symmetric: the cart drawer closes these when it opens.
+    document.addEventListener('jjw:cart-open', function () {
+      if (!root.isConnected) return;
+      if (root.dataset.open === 'true') setOpen(false);
+      if (root.dataset.search === 'true') setSearch(false);
+    });
 
     toggle.addEventListener('click', function () {
       setOpen(root.dataset.open !== 'true');

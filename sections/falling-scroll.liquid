@@ -1,31 +1,28 @@
 {%- comment -%}
-  Falling scroll — ported from the React FallingCookies component
-  (test opencode/src/components/site/falling-cookies.tsx).
+  The cast arriving in their clearing.
 
-  The React version drives the drop with GSAP ScrollTrigger + a pinned section.
-  GSAP is not available here, so the pin is a plain position:sticky and the
-  progress is one scroll listener that writes a --p custom property; all the
-  interpolation happens in CSS calc(). No JS = every item renders in its landed
-  position, which is also the reduced-motion state.
+  Two fully-tuned states per character — a small, high, tight cluster and the
+  large group standing on the grass — with one scroll-driven value, --p,
+  interpolating every position and size between them in CSS calc().
+
+  Nothing is pinned. The old build used a sticky stage, which capped the scene
+  at one viewport and left the heading colliding with the cast; a plain 120vh
+  block gives the composition room and the page's own scroll drives --p just as
+  well. --p defaults to 1, so with JavaScript off the cast renders landed.
 {%- endcomment -%}
 
 {%- style -%}
   #FallingScroll-{{ section.id }} {
-    --p: 1;
     position: relative;
-    height: {{ section.settings.scroll_length }}vh;
+    height: {{ section.settings.section_height | default: 120 }}vh;
     margin-bottom: 1.5rem;
     background: var(--cream);
   }
 
   #FallingScroll-{{ section.id }} .falling-scroll__sticky {
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     {%- comment -%}
       The ground always renders: a merchant upload wins, otherwise the artwork
@@ -43,7 +40,16 @@
     background-image: url({{ 'jjw-ground.png' | asset_url }});
     {%- endif %}
     background-size: 100% auto;
-    background-position: bottom center;
+    {%- comment -%}
+      `ground_offset` was declared in the schema but nothing read it — the rule
+      was a plain `bottom center`, so the control did nothing. It drives the
+      drop now: `calc(100% + Nvh)` is bottom-aligned plus N, pushing the strip
+      below the stage floor so the grass line sits lower and the cast has more
+      cream above it to stand in. vh, not %, because a percentage in
+      background-position resolves against (container - image), which changes
+      with viewport width here and would drift.
+    {%- endcomment -%}
+    background-position: center calc(100% + {{ section.settings.ground_offset | default: 0 }}vh);
     background-repeat: no-repeat;
   }
 
@@ -54,27 +60,22 @@
   }
 
   {%- comment -%}
-    Offset in rem, not a percentage of the stage.
+    In normal flow, not absolutely positioned.
 
-    On the homepage the bar is a sticky height: 0 overlay that floats above
-    whatever scrolls under it, and this section pins a stage with copy at its
-    top. At 3% the heading ran straight into it: at 1311px the Find In Store
-    button (x 838-1059) landed on top of the heading's first line (x 328-983),
-    printing the button across the word "Every".
+    While the stage was pinned the copy had to be placed against the viewport by
+    hand, and `top: 13rem` was tuned to clear the sticky header bar. Nothing is
+    pinned now, so the ordinary page scroll carries the copy past the bar on its
+    own and the offset is simply top padding.
 
-    The bar is a fixed pixel height — about 112px here, 79px on a phone — so a
-    percentage of viewport height is the wrong unit: it drifts with window
-    height while the thing it has to clear does not. 13rem clears the desktop
-    bar with ~18px to spare, 10rem the phone one with ~21px.
+    The width cap stays generous so "Room for Every Kind of Kid" holds one line —
+    at 50% of a 1536px viewport it wrapped to two and cost 87px of height.
   {%- endcomment -%}
   #FallingScroll-{{ section.id }} .falling-scroll__copy {
-    position: absolute;
-    top: 13rem;
-    left: 50%;
+    position: relative;
     z-index: 40;
-    width: 50%;
-    max-width: 80%;
-    transform: translateX(-50%);
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 9rem 2.4rem 0;
     text-align: center;
   }
 
@@ -83,13 +84,33 @@
     color: var(--ink);
   }
 
+  {%- comment -%}
+    An eyebrow, not a second heading. It was 34px+ set solid against an 86px h2,
+    which read as two competing lines rather than a label and a headline. Small
+    and widely tracked reads as a kicker at a glance.
+
+    Stays --ink rather than picking up a brand colour: at this size it is small
+    text, and both candidates fail AA on cream — --blue is 4.34:1 and --pink is
+    2.92:1, against the 4.5:1 this needs.
+  {%- endcomment -%}
   #FallingScroll-{{ section.id }} .falling-scroll__sub {
-    margin: 1rem 0 0;
+    margin: 0 0 1.4rem;
     font-family: var(--font-accent);
-    font-size: max(2vw, 3.4rem);
-    line-height: 6.12rem;
-    letter-spacing: 0.1rem;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
+  }
+
+  {%- comment -%}
+    Use the shared heading role outside the narrow-phone scene. The phone
+    safe-zone override below remains smaller so copy never forces a pose change.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }} .falling-scroll__title {
+    font-size: var(--heading-size);
+    line-height: 1;
+    text-wrap: balance;
   }
 
   #FallingScroll-{{ section.id }} .falling-scroll__pile {
@@ -100,29 +121,27 @@
     width: {{ section.settings.pile_width }}vw;
     height: auto;
     transform: translate(-50%, -50%);
-    opacity: clamp(0, calc(var(--p) * 6), 1);
   }
 
-  /* Floating accents: drift in and bob, standing in for real art later. */
+  /* Floating accents — shapes and clouds. They sit where they are placed and bob. */
   #FallingScroll-{{ section.id }} .falling-scroll__accent {
     position: absolute;
-    left: calc(50% + (var(--x) - 50%) * var(--p, 0));
-    top: calc(50% + (var(--y) - 50%) * var(--p, 0));
+    left: var(--x);
+    top: var(--y);
     width: var(--w);
     aspect-ratio: 1 / 1;
     background: var(--accent-color);
-    transform: translate(-50%, -50%) scale(calc(0.4 + 0.6 * var(--p, 0)));
-    opacity: var(--p, 0);
-    animation: fs-float-{{ section.id }} 4.5s var(--ease) infinite alternate;
-    animation-delay: calc(var(--i, 0) * -0.9s);
+    transform: translate(-50%, -50%);
+    animation: fs-float-{{ section.id }} calc(5s + var(--i, 0) * 0.8s) linear infinite;
+    animation-delay: calc(var(--i, 0) * -1.7s);
     pointer-events: none;
   }
 
   /* Lettered tag variant, matching the hero and about-section labels. */
   #FallingScroll-{{ section.id }} .falling-scroll__tag {
     position: absolute;
-    left: calc(50% + (var(--x) - 50%) * var(--p, 0));
-    top: calc(50% + (var(--y) - 50%) * var(--p, 0));
+    left: var(--x);
+    top: var(--y);
     display: block;
     max-width: 20rem;
     padding: 0.9rem 1.6rem 0.8rem;
@@ -138,17 +157,16 @@
     text-transform: uppercase;
     text-align: center;
     text-wrap: balance;
-    transform: translate(-50%, -50%) rotate(var(--rot, -6deg))
-               scale(calc(0.5 + 0.5 * var(--p, 0)));
-    opacity: var(--p, 0);
-    animation: fs-float-{{ section.id }} 4.5s var(--ease) infinite alternate;
-    animation-delay: calc(var(--i, 0) * -0.9s);
+    transform: translate(-50%, -50%) rotate(var(--rot, -6deg));
+    animation: fs-float-{{ section.id }} calc(5s + var(--i, 0) * 0.8s) linear infinite;
+    animation-delay: calc(var(--i, 0) * -1.7s);
     pointer-events: none;
   }
 
   @media screen and (max-width: 749px) {
     #FallingScroll-{{ section.id }} .falling-scroll__tag {
-      font-size: 1.1rem;
+      /* 1.2rem floor: 1.1rem rendered 11px, under the site minimum. */
+      font-size: 1.2rem;
       max-width: 11rem;
       padding: 0.5rem 0.9rem 0.45rem;
     }
@@ -162,64 +180,202 @@
     border-radius: 60% 40% 55% 45% / 45% 55% 45% 55%;
   }
 
-  @keyframes fs-float-{{ section.id }} {
-    from { translate: 0 0; }
-    to   { translate: 0 -1.4rem; }
+  {%- comment -%}
+    Cloud: the span itself is the flat base pill, and the two pseudo-elements are
+    the bumps rising off it. Built from percentages and aspect-ratio rather than a
+    clip-path, because `clip-path: path()` only takes pixel coordinates and would
+    stop scaling the moment the size setting changed.
+
+    The bumps are sized off the base's HEIGHT, not its width. Sized off width they
+    shrink relative to the base as the cloud gets wider — at 56rem the 46%-of-width
+    circle stood barely 20% of the height proud of the pill and the whole thing
+    read as a rounded slab. Against height it holds the same silhouette at every
+    size, which is the point of a shape driven by one setting.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--cloud {
+    aspect-ratio: 5 / 2;
+    border-radius: 999px;
+    background: var(--accent-color);
   }
 
-  /* The cast falls from above. Each character holds its own x and travels down
-     to its landing point in the group formation, so the arrangement assembles
-     as they arrive rather than expanding out of a pile. */
-  #FallingScroll-{{ section.id }} .falling-scroll__item {
-    --start-y: {{ section.settings.start_y | default: 10 }}%;
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--cloud::before,
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--cloud::after {
+    content: '';
     position: absolute;
-    left: var(--x);
-    width: var(--w);
+    bottom: 0;
+    border-radius: 50%;
+    background: var(--accent-color);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--cloud::before {
+    left: 6%;
+    height: 152%;
+    aspect-ratio: 1;
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__accent--cloud::after {
+    right: 8%;
+    height: 116%;
+    aspect-ratio: 1;
+  }
+
+  {%- comment -%}
+    A four-point orbit on `linear`, not a two-point `alternate` bob.
+
+    The old version was `4.5s var(--ease) infinite alternate`, and both halves of
+    that were wrong for an idle loop. `--ease` is cubic-bezier(0.4, 0, 0.2, 1) —
+    Material's *UI transition* curve, which eases hard at both ends, so every
+    badge dwelled at the top and bottom of its travel and snapped through the
+    middle. `alternate` then replayed that same path backwards, so the motion
+    had a visible turning point twice a cycle. Together they read mechanical.
+
+    A closed loop through four points needs no easing to look smooth — the path
+    supplies the curve, so `linear` never stalls. Duration varies with --i so
+    items fall permanently out of phase instead of marching in lockstep with a
+    fixed offset; a delay alone cannot do that, because equal periods stay
+    correlated forever.
+  {%- endcomment -%}
+  @keyframes fs-float-{{ section.id }} {
+    0%,
+    100% { translate: 0 0; rotate: 0deg; }
+    25%  { translate: 0.5rem -0.9rem; rotate: 1.2deg; }
+    50%  { translate: 0 -1.5rem; rotate: 0deg; }
+    75%  { translate: -0.5rem -0.7rem; rotate: -1.2deg; }
+  }
+
+  {%- comment -%}
+    Every character interpolates between two fully-tuned states as --p runs 0→1:
+    a small, high, tight cluster and the large group standing on the grass.
+
+    The interpolation is resolved into --xc/--nc/--yc/--wc first rather than
+    inlined into `left`. The narrow-screen rule below has to re-express `left`
+    around the centre for its spread multiplier, and doing that on top of an
+    already-inlined lerp would mean writing the whole expression twice and
+    keeping the two in step by hand.
+
+    Percent and px mix inside one calc(), which is what lets the coarse percent
+    and the px nudge travel together as a single value.
+  {%- endcomment -%}
+  {%- comment -%}
+    Three layouts, one interpolation.
+
+    Desktop and phone are different compositions - landscape against portrait -
+    and no single set of numbers serves both, which is why one tuned on a phone
+    used to bleed into desktop. Each character therefore carries a phone-native
+    end pose (--px/--py/--pw) beside its desktop one. The *effective* end values
+    (--xe/--ye/--we) pick the desktop set here, the phone set under 600px, and
+    the exact midpoint on tablets; everything below interpolates from those, so
+    the reveal maths is written once.
+
+    The start pose is shared: it is a small cluster near the heading and reads
+    fine at any width. Only its size follows the phone/desktop ratio so it does
+    not shrink to a speck on a phone.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }} .falling-scroll__item {
+    --xe: var(--x);
+    --ye: var(--y);
+    --we: var(--w);
+    --swe: var(--sw);
+    --ne: var(--nudge, 0px);
+    --yne: var(--ynudge, 0px);
+
+    --xc: calc(var(--sx) + (var(--xe) - var(--sx)) * var(--p, 1));
+    --nc: calc(var(--snudge, 0px) + (var(--ne) - var(--snudge, 0px)) * var(--p, 1));
+    --yc: calc(var(--sy) + (var(--ye) - var(--sy)) * var(--p, 1));
+    --ync: calc(var(--synudge, 0px) + (var(--yne) - var(--synudge, 0px)) * var(--p, 1));
+    --wc: calc(var(--swe) + (var(--we) - var(--swe)) * var(--p, 1));
+
+    position: absolute;
+    left: calc(var(--xc) + var(--nc));
+    width: var(--wc);
     height: auto;
     aspect-ratio: 2 / 3;
     object-fit: contain;
   }
 
-  #FallingScroll-{{ section.id }} .falling-scroll__item--fall {
-    top: calc(var(--y) * var(--p, 0) + var(--start-y, 10%) * (1 - var(--p, 0)));
-    transform: translate(-50%, -50%) scale(calc(0.88 + 0.12 * var(--p, 0)));
-    animation: fs-bob-{{ section.id }} 3.4s var(--ease) infinite alternate;
-    animation-delay: calc(var(--i, 0) * -0.7s);
-    will-change: top, transform;
-  }
-
-  /* Badges sit still, settle 2.4rem upward and drift with a light parallax. */
+  {%- comment -%}
+    The cast does not move. An idle bob was tried and read as hovering — feet
+    drifting against a fixed ground is the exact thing the contact shadows below
+    exist to deny, so the two worked against each other. Only the sky accents
+    float now; anything standing on the grass stays put.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }} .falling-scroll__item--fall,
   #FallingScroll-{{ section.id }} .falling-scroll__item--badge {
-    top: var(--y);
-    transform: translate(-50%, -50%) translateY(calc(2.4rem - 2.4rem * var(--p)))
-      translateY(calc(-10% * var(--p)));
+    /* y in percent for placement, ynudge in px for the last few pixels — the
+       vertical twin of the x/x_nudge pair. One percent of an 864px stage is
+       8.6px, far too coarse to seat a character on a grass line by itself. */
+    top: calc(var(--yc) + var(--ync));
+    transform: translate(-50%, -50%);
   }
 
-  /* Idle bob uses the independent `translate` property so it composes with the
-     scroll-driven `transform` instead of fighting it. */
-  @keyframes fs-bob-{{ section.id }} {
-    from {
-      translate: 0 -0.6rem;
-    }
-    to {
-      translate: 0 0.6rem;
-    }
+  {%- comment -%}
+    Contact shadows — what actually stops the cast reading as floating.
+
+    A figure looks grounded when something marks its contact with the surface;
+    without it the eye reads the gap between feet and grass as air. A soft dark
+    ellipse under each character supplies that cue, the way every cartoon and
+    game grounds a sprite. (A white cloud behind the legs was tried first and
+    read as the opposite — a shape to float ON.)
+
+    The shadow is pinned to the GRASS SURFACE line, not to the character:
+    `100% - 8.44vw` is where the walkable top of the ground strip sits when the
+    2080x627 artwork renders at `100% auto` (28% of its 30.14vw height up from
+    the stage floor — verified against a measured surface of 734px in an 864px
+    stage at 1536 wide). Anchoring to the surface keeps shadow and grass welded
+    at every viewport, and it also means the idle bob plays *against* a still
+    shadow — the figure rises and settles over its own shadow, which is
+    exactly the cue that sells weight.
+
+    Radial gradient rather than a filled ellipse: it fades to nothing, so there
+    is no hard edge to read as another "shape" the way the cloud did.
+
+    It tracks the same interpolation as its character and fades in on --p
+    squared, so it is absent while they are still small and high — a shadow
+    under something visibly in mid-air would undo the very cue it exists for.
+    Squared rather than linear keeps it near-invisible for the first half and
+    lets it arrive as they actually meet the grass.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }} .falling-scroll__shadow {
+    --xe: var(--x);
+    --we: var(--w);
+    --swe: var(--sw);
+    --ne: var(--nudge, 0px);
+
+    --xc: calc(var(--sx) + (var(--xe) - var(--sx)) * var(--p, 1));
+    --nc: calc(var(--snudge, 0px) + (var(--ne) - var(--snudge, 0px)) * var(--p, 1));
+    --wc: calc(var(--swe) + (var(--we) - var(--swe)) * var(--p, 1));
+
+    position: absolute;
+    left: calc(var(--xc) + var(--nc));
+    top: calc(100% - 8.44vw);
+    width: calc(var(--wc) * 0.78);
+    height: calc(var(--wc) * 0.15);
+    opacity: calc(var(--p, 1) * var(--p, 1));
+    transform: translate(-50%, -50%);
+    {%- comment -%}
+      Tuned live against the real grass: a 0.32-peak navy was invisible over the
+      saturated pixel-art texture (verified with a solid-red stand-in that the
+      geometry was right and only the strength was wrong). multiply makes it
+      darken the grass like shade instead of laying a grey film over it.
+    {%- endcomment -%}
+    background: radial-gradient(
+      closest-side,
+      rgba(10, 24, 48, 0.55),
+      rgba(10, 24, 48, 0.32) 55%,
+      rgba(10, 24, 48, 0) 100%
+    );
+    mix-blend-mode: multiply;
+    pointer-events: none;
   }
 
   @media screen and (max-width: 749px) {
-    {%- comment -%}
-      The bar is shorter here (5rem controls), so the copy needs less clearance
-      than the 13rem the base rule uses. See the note there.
-    {%- endcomment -%}
     #FallingScroll-{{ section.id }} .falling-scroll__copy {
-      top: 10rem;
-      width: 86%;
-      max-width: 86%;
+      padding: 6rem 1.6rem 0;
     }
 
     #FallingScroll-{{ section.id }} .falling-scroll__sub {
-      font-size: 2.2rem;
-      line-height: 1.2;
+      font-size: 1.5rem;
+      letter-spacing: 0.16em;
     }
 
     {%- comment -%}
@@ -232,44 +388,132 @@
       instead — which is what the reference does with its tiled floor, since a
       floor has to stay a floor whatever the screen.
     {%- endcomment -%}
+    {%- comment -%}
+      53%, matching what `100% auto` resolves to on desktop.
+
+      The strip is 3.3:1, so full-width on a 430px phone is only 130px — 14% of
+      the stage, and the cast floated ~100px above a grass line that thin. Height
+      sizing crops the sides instead, which is the right trade for a floor. The
+      number matters: at 34% the surface sat at 90.5% of the stage against 85% on
+      desktop, so one set of y values could not serve both. Matched, it can.
+    {%- endcomment -%}
     #FallingScroll-{{ section.id }} .falling-scroll__sticky {
-      background-size: auto 34%;
+      background-size: auto 53%;
+    }
+
+    {%- comment -%}
+      Height-sized ground means the surface line is a share of stage height,
+      not of width: 28% of the 53% band = 14.84% up from the floor.
+    {%- endcomment -%}
+    #FallingScroll-{{ section.id }} .falling-scroll__shadow {
+      top: calc(100% - 14.84%);
     }
   }
 
+
   @media (prefers-reduced-motion: reduce) {
-    #FallingScroll-{{ section.id }} {
-      height: 100vh;
-    }
-
-    #FallingScroll-{{ section.id }} .falling-scroll__sticky {
-      position: static;
-    }
-
-    #FallingScroll-{{ section.id }} .falling-scroll__item--fall {
+    /* The cast is already static; only the sky accents still animate. */
+    #FallingScroll-{{ section.id }} .falling-scroll__accent,
+    #FallingScroll-{{ section.id }} .falling-scroll__tag {
       animation: none;
     }
   }
   /* Narrow viewports: the cast reads tiny at desktop vw sizes, so scale it up to
      fill the stage. Applied below 990px so narrow desktop windows get it too,
      not just phones. */
+  {%- comment -%}
+    Two narrow bands, not one. The scale/spread settings are tuned for a ~390px
+    phone; applied flatly to everything under 990px they made Brutus 509px wide
+    on an 820px tablet — off the right edge and 104px through the floor. The
+    tablet band uses the midpoint between 1 and the phone factor, which is the
+    halfway house one pair of settings can honestly provide.
+  {%- endcomment -%}
+  {%- comment -%}
+    Below 990px the stage is a fixed ASPECT RATIO, not 120vh.
+
+    Every position is a share of the stage: x of its width, y of its height,
+    size in vw. On desktop those axes move together closely enough, but phone
+    viewports differ far more in height than in width - a 390x844 screen and a
+    412x732 screen are 6% apart in width and 15% in height. With height tied to
+    vh the characters stayed the same size while every y and the grass line
+    shifted under them, so one set of stored values drew a different picture
+    on every device. Deriving height from width collapses the three axes onto
+    one: the composition is identical everywhere, only scaled.
+  {%- endcomment -%}
   @media screen and (max-width: 989px) {
-    #FallingScroll-{{ section.id }} .falling-scroll__item {
-      width: calc(var(--w) * {{ section.settings.mobile_scale | default: 270 | divided_by: 100.0 }});
-      /* Cast and badges spread independently: the badges are already near the
-         screen edge, so pushing the characters apart must not move them too. */
-      left: calc(50% + (var(--x) - 50%) * {{ section.settings.mobile_spread | default: 170 | divided_by: 100.0 }});
+    #FallingScroll-{{ section.id }} {
+      height: auto;
+      aspect-ratio: 100 / {{ section.settings.tablet_aspect | default: 110 }};
     }
 
-    #FallingScroll-{{ section.id }} .falling-scroll__item--fall {
-      top: calc(
-        (50% + (var(--y) - 50%) * {{ section.settings.mobile_spread_y | default: 125 | divided_by: 100.0 }}) * var(--p, 0)
-        + var(--start-y, 10%) * (1 - var(--p, 0))
-      );
+    {%- comment -%}
+      Tablet is the midpoint of the desktop and phone poses. It is derived, not
+      tuned: one more hand-set layout would be a third thing to keep in step,
+      and halfway between two good compositions is a good composition.
+    {%- endcomment -%}
+    #FallingScroll-{{ section.id }} .falling-scroll__item,
+    #FallingScroll-{{ section.id }} .falling-scroll__shadow {
+      --xe: calc((var(--x) + var(--px)) / 2);
+      --we: calc((var(--w) + var(--pw)) / 2);
+      --swe: calc(var(--sw) * (1 + var(--pratio)) / 2);
+      --ne: calc(var(--nudge, 0px) / 2);
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__item {
+      --ye: calc((var(--y) + var(--py)) / 2);
+      --yne: calc(var(--ynudge, 0px) / 2);
+    }
+
+    {%- comment -%}
+      No vertical override any more. The old one spread y around the centre,
+      which barely moved anyone sitting near 50% — the back row shifted 12px while
+      the front row shifted 49px — so it could never correct a whole-group offset.
+      Matching the ground proportion above removes the offset instead.
+    {%- endcomment -%}
+    #FallingScroll-{{ section.id }} .falling-scroll__tag {
+      left: calc(50% + (var(--x) - 50%) * {{ section.settings.mobile_spread_tags | default: 130 | divided_by: 100.0 }});
+    }
+  }
+
+  {%- comment -%}
+    Placed AFTER the 989px block on purpose: media queries add no specificity,
+    so a phone rule written above the tablet one loses to it.
+  {%- endcomment -%}
+  @media screen and (max-width: 599px) {
+    #FallingScroll-{{ section.id }} {
+      aspect-ratio: 100 / {{ section.settings.phone_aspect | default: 160 }};
+    }
+
+    /* Fit copy in the scene's safe zone; never compensate by moving the cast. */
+    #FallingScroll-{{ section.id }} .falling-scroll__copy {
+      padding-top: 6.4rem;
+    }
+    #FallingScroll-{{ section.id }} .falling-scroll__title {
+      font-size: clamp(2.6rem, 7.5vw, 4rem);
+    }
+    #FallingScroll-{{ section.id }} .falling-scroll__sub {
+      margin-bottom: 0.8rem;
+    }
+
+    {%- comment -%}
+      Phone-native pose. Percent only, no px nudge: on a 390px screen one
+      percent is under 4px across and about 6px down, fine enough on its own.
+    {%- endcomment -%}
+    #FallingScroll-{{ section.id }} .falling-scroll__item,
+    #FallingScroll-{{ section.id }} .falling-scroll__shadow {
+      --xe: var(--px);
+      --we: var(--pw);
+      --swe: calc(var(--sw) * var(--pratio));
+      --ne: 0px;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__item {
+      --ye: var(--py);
+      --yne: 0px;
     }
 
     #FallingScroll-{{ section.id }} .falling-scroll__tag {
-      left: calc(50% + (var(--x) - 50%) * var(--p, 0) * {{ section.settings.mobile_spread_tags | default: 130 | divided_by: 100.0 }});
+      left: calc(50% + (var(--x) - 50%) * {{ section.settings.mobile_spread_tags | default: 130 | divided_by: 100.0 }});
     }
   }
 
@@ -278,12 +522,16 @@
 <div id="FallingScroll-{{ section.id }}" class="falling-scroll">
   <div class="falling-scroll__sticky">
     <div class="falling-scroll__stage">
+      {%- comment -%}
+        Subheading first, as a kicker above the h2 — a visually-preceding eyebrow
+        is the normal shape for a section label.
+      {%- endcomment -%}
       <div class="falling-scroll__copy">
-        {%- if section.settings.heading != blank -%}
-          <h2 class="hxxl falling-scroll__title">{{ section.settings.heading | escape }}</h2>
-        {%- endif -%}
         {%- if section.settings.subheading != blank -%}
           <p class="falling-scroll__sub">{{ section.settings.subheading | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="hxxl falling-scroll__title">{{ section.settings.heading | escape }}</h2>
         {%- endif -%}
       </div>
 
@@ -335,8 +583,11 @@
           {%- assign fallback_file = 'jjw-pose-' | append: block.settings.character | append: '.png' -%}
           {%- assign fallback_src = fallback_file | asset_img_url: '900x' -%}
         {%- endif -%}
+        {%- assign pw = block.settings.phone_size | default: block.settings.size -%}
+        {%- assign px = block.settings.phone_x | default: block.settings.x -%}
+        {%- assign py = block.settings.phone_y | default: block.settings.y -%}
+        {%- assign pratio = pw | times: 1.0 | divided_by: block.settings.size -%}
         {%- if block.settings.image == blank and fallback_src != blank -%}
-          {%- assign delay = forloop.index0 | times: 6 | at_most: 30 | divided_by: 100.0 -%}
           <img
             class="falling-scroll__item falling-scroll__item--{{ block.settings.behavior }}"
             src="{{ fallback_src }}"
@@ -344,12 +595,12 @@
             width="1024"
             height="1536"
             loading="lazy"
-            {% if block.settings.behavior == 'fall' %}data-fall="{{ delay }}"{% endif %}
-            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}vw; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
+            data-pose="{{ block.id }}"
+            data-pose-name="{{ block.settings.character | default: 'item' }}"
+            style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --y: {{ block.settings.y }}%; --ynudge: {{ block.settings.y_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sy: {{ block.settings.start_y | default: block.settings.y }}%; --synudge: {{ block.settings.start_y_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --py: {{ py }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
             {{ block.shopify_attributes }}
           >
         {%- elsif block.settings.image != blank -%}
-          {%- assign delay = forloop.index0 | times: 6 | at_most: 30 | divided_by: 100.0 -%}
           <img
             class="falling-scroll__item falling-scroll__item--{{ block.settings.behavior }}"
             src="{{ block.settings.image | image_url: width: 1400 }}"
@@ -357,93 +608,491 @@
             width="{{ block.settings.image.width }}"
             height="{{ block.settings.image.height }}"
             loading="lazy"
-            {% if block.settings.behavior == 'fall' %}data-fall="{{ delay }}"{% endif %}
-            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}vw; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
+            data-pose="{{ block.id }}"
+            data-pose-name="{{ block.settings.character | default: 'item' }}"
+            style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --y: {{ block.settings.y }}%; --ynudge: {{ block.settings.y_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sy: {{ block.settings.start_y | default: block.settings.y }}%; --synudge: {{ block.settings.start_y_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --py: {{ py }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
             {{ block.shopify_attributes }}
           >
+        {%- endif -%}
+        {%- comment -%}
+          Contact shadow: one per standing character, sharing its x/nudge/width
+          so it tracks the figure wherever the block is moved. z-index 5 keeps
+          every shadow under every character (they start at depth 10) while
+          staying above the sky accents at depth 2-3.
+        {%- endcomment -%}
+        {%- if block.settings.behavior == 'fall' -%}
+          {%- if block.settings.image != blank or fallback_src != blank -%}
+            <span
+              class="falling-scroll__shadow"
+              aria-hidden="true"
+              data-pose-shadow="{{ block.id }}"
+              style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; z-index: 5;"
+            ></span>
+          {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
     </div>
   </div>
 </div>
 
+{%- comment -%}
+  Reveal driver. The cast holds its start pose until the section is 30% visible,
+  then plays one eased tween of --p from 0 to 1 — an entrance, not a scroll
+  scrub. Scrubbing tied the motion to wheel speed, which read as the characters
+  chasing the scrollbar.
+
+  --p still defaults to 1 in CSS, so no-JS and reduced-motion render the cast
+  landed. The pose editor pins --p via data-poseFreeze; the tween checks the pin
+  every frame, so the editor always wins.
+{%- endcomment -%}
 <script>
   (function () {
     var root = document.getElementById('FallingScroll-{{ section.id }}');
-    if (!root || root.dataset.fsInit) return;
-    root.dataset.fsInit = '1';
+    if (!root || root.dataset.fsRevealInit) return;
+    root.dataset.fsRevealInit = '1';
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    var stage = root.querySelector('.falling-scroll__sticky');
-    var items = root.querySelectorAll('[data-fall]');
-    var ticking = false;
-
-    // power3.inOut, the ease the React timeline used for the drop.
-    function ease(t) {
-      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      root.style.setProperty('--p', '1');
+      return;
     }
 
-    function clamp(n) {
-      return n < 0 ? 0 : n > 1 ? 1 : n;
-    }
+    root.style.setProperty('--p', '0');
 
-    function paint() {
-      ticking = false;
-      // Section replaced by the theme editor: drop the listeners with it.
-      if (!root.isConnected) {
-        window.removeEventListener('scroll', onScroll);
-        window.removeEventListener('resize', onScroll);
-        return;
+    var DURATION = {{ section.settings.reveal_duration | default: 1.2 | times: 1000 }};
+
+    function tween() {
+      root.__fsRevealed = true;
+      var t0 = performance.now();
+      function step(now) {
+        if (root.dataset.poseFreeze) return;
+        var t = (now - t0) / DURATION;
+        if (t > 1) t = 1;
+        /* easeOutCubic - fast start, soft landing. */
+        var e = 1 - Math.pow(1 - t, 3);
+        root.style.setProperty('--p', e.toFixed(4));
+        if (t < 1) requestAnimationFrame(step);
       }
-      var rect = root.getBoundingClientRect();
-      var travel = rect.height - stage.offsetHeight;
-      var p = travel > 0 ? clamp(-rect.top / travel) : rect.top < 0 ? 1 : 0;
-      root.style.setProperty('--p', p.toFixed(4));
-      for (var i = 0; i < items.length; i++) {
-        var d = parseFloat(items[i].getAttribute('data-fall')) || 0;
-        items[i].style.setProperty('--p', ease(clamp((p - d) / 0.7)).toFixed(4));
-      }
+      requestAnimationFrame(step);
     }
-
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(paint);
-    }
-
-    // Scroll events are unreliable here: some embedded/preview contexts and
-    // smooth-scroll libraries never dispatch them. An rAF loop gated by an
-    // IntersectionObserver is immune to that, and idles when off-screen.
-    var running = false;
-
-    function loop() {
-      if (!root.isConnected) { running = false; return; }
-      paint();
-      if (running) requestAnimationFrame(loop);
-    }
-
-    function start() {
-      if (running) return;
-      running = true;
-      requestAnimationFrame(loop);
-    }
-
-    function stop() { running = false; }
 
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        entries[0].isIntersecting ? start() : stop();
-      }, { rootMargin: '100px 0px' }).observe(root);
+      var io = new IntersectionObserver(function (entries) {
+        if (entries[0].intersectionRatio >= 0.3) {
+          io.disconnect();
+          tween();
+        }
+      }, { threshold: [0.3] });
+      io.observe(root);
     } else {
-      start();
+      tween();
     }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    paint();
   })();
 </script>
+
+{%- comment -%}
+  Position editor — staff tool, gated on a setting so it emits nothing at all
+  when off. It cannot be gated on a query string: Liquid cannot read arbitrary
+  query parameters, which is the same constraint that forced search filtering
+  through `search.filters`.
+
+  It works in PIXELS and converts back to the stored pair. One percent of the
+  stage is ~15px across and ~9px down, so a whole-percent control can never seat
+  a character precisely; x/y hold the coarse position and x_nudge/y_nudge carry
+  the remainder, which by construction is always under half a percent.
+{%- endcomment -%}
+{%- comment -%}Position controls belong in the theme editor, never on the public store.{%- endcomment -%}
+{%- if request.design_mode and section.settings.pose_editor -%}
+  {%- style -%}
+    #PoseEditor-{{ section.id }} {
+      position: fixed;
+      bottom: 1.6rem;
+      left: 1.6rem;
+      z-index: 9999;
+      width: 25rem;
+      padding: 1.4rem;
+      border-radius: 1rem;
+      background: rgba(16, 36, 74, 0.96);
+      color: #fff7e8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 1.2rem;
+      line-height: 1.5;
+      box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.35);
+    }
+
+    #PoseEditor-{{ section.id }} h3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      cursor: move;
+      user-select: none;
+      touch-action: none;
+      margin: 0 0 0.8rem;
+      font-family: inherit;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    #PoseEditor-{{ section.id }} button {
+      padding: 0.4rem 0.7rem;
+      border: 1px solid rgba(255, 247, 232, 0.3);
+      border-radius: 0.4rem;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    #PoseEditor-{{ section.id }} button:hover { background: rgba(255, 247, 232, 0.15); }
+    #PoseEditor-{{ section.id }} button[aria-pressed='true'] { background: #ff5fa2; border-color: #ff5fa2; }
+
+    #PoseEditor-{{ section.id }} .pe-cast { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    #PoseEditor-{{ section.id }} .pe-vals { margin-bottom: 1rem; white-space: pre; opacity: 0.9; }
+    #PoseEditor-{{ section.id }} .pe-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-bottom: 1rem; }
+    /* Explicit cells. Placing only the first button left the other three to
+       auto-flow, which put left beside up instead of underneath it. */
+    #PoseEditor-{{ section.id }} .pe-pad button:nth-child(1) { grid-area: 1 / 2; }
+    #PoseEditor-{{ section.id }} .pe-pad button:nth-child(2) { grid-area: 2 / 1; }
+    #PoseEditor-{{ section.id }} .pe-pad button:nth-child(3) { grid-area: 2 / 2; }
+    #PoseEditor-{{ section.id }} .pe-pad button:nth-child(4) { grid-area: 2 / 3; }
+    #PoseEditor-{{ section.id }} .pe-row { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.6rem; }
+    #PoseEditor-{{ section.id }} .pe-row span { flex: 1; }
+    #PoseEditor-{{ section.id }} .pe-copy { width: 100%; margin-top: 0.4rem; padding: 0.7rem; background: #ff5fa2; border-color: #ff5fa2; }
+    #PoseEditor-{{ section.id }} .pe-hint { margin-top: 0.8rem; font-size: 1.05rem; opacity: 0.55; }
+    #PoseEditor-{{ section.id }} .pe-warn { margin-top: 0.8rem; color: #ffd94c; }
+
+    /* Collapsed: only the drag-handle header stays, so the panel shrinks to a
+       tab that can sit anywhere without covering a character. */
+    #PoseEditor-{{ section.id }}.pe-collapsed > *:not(h3) { display: none; }
+    #PoseEditor-{{ section.id }}.pe-collapsed h3 { margin: 0; }
+
+    /* Dashed ring on whatever is selected, so the target is never ambiguous. */
+    #FallingScroll-{{ section.id }} [data-pose].is-pose-selected {
+      outline: 2px dashed #ff5fa2;
+      outline-offset: 4px;
+    }
+
+    #FallingScroll-{{ section.id }} [data-pose] { cursor: grab; }
+    #FallingScroll-{{ section.id }} [data-pose]:active { cursor: grabbing; }
+  {%- endstyle -%}
+
+  <div id="PoseEditor-{{ section.id }}">
+    <h3 data-pe-drag>JJW pose editor<button type="button" data-pe-collapse aria-label="Collapse panel">&minus;</button></h3>
+    <div class="pe-cast" data-pe-cast></div>
+    <div class="pe-row">
+      <button type="button" data-pe-phase="live" aria-pressed="true">live</button>
+      <button type="button" data-pe-phase="start">start</button>
+      <button type="button" data-pe-phase="end">end</button>
+    </div>
+    <div class="pe-vals" data-pe-vals>select a character</div>
+    <div class="pe-pad">
+      <button type="button" data-pe-move="0,-1">↑</button>
+      <button type="button" data-pe-move="-1,0">←</button>
+      <button type="button" data-pe-move="0,1">↓</button>
+      <button type="button" data-pe-move="1,0">→</button>
+    </div>
+    <div class="pe-row"><span>layer</span><button type="button" data-pe-depth="-1">−</button><button type="button" data-pe-depth="1">+</button></div>
+    <div class="pe-row"><span>size</span><button type="button" data-pe-size="-1">−</button><button type="button" data-pe-size="1">+</button></div>
+    <button type="button" class="pe-copy" data-pe-copy>Copy JSON</button>
+    <div class="pe-hint">drag, or arrows · shift = 10px<br>[ ] layer · − = size · drag title to move panel</div>
+    <div class="pe-warn" data-pe-warn hidden></div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.getElementById('FallingScroll-{{ section.id }}');
+      var panel = document.getElementById('PoseEditor-{{ section.id }}');
+      if (!root || !panel || root.dataset.poseInit) return;
+      root.dataset.poseInit = '1';
+
+      var stage = root.querySelector('.falling-scroll__stage');
+      var items = Array.prototype.slice.call(root.querySelectorAll('[data-pose]'));
+      var current = null;
+
+      // Which custom-property set the editor writes. Switching phase also pins
+      // --p, so what you drag is exactly the state you are editing.
+      var PROPS = {
+        end:   { x: '--x',  n: '--nudge',  y: '--y',  ny: '--ynudge',  w: '--w'  },
+        start: { x: '--sx', n: '--snudge', y: '--sy', ny: '--synudge', w: '--sw' }
+      };
+      var phase = 'end';
+
+      {%- comment -%}
+        `live` releases the pin so the scroll animation plays; start/end pin --p
+        to that end of the interpolation so what you drag is what you edit.
+        Live is the default — pinning on load meant the editor being switched on
+        silently disabled the animation.
+      {%- endcomment -%}
+      function setPhase(next) {
+        if (next === 'live') {
+          delete root.dataset.poseFreeze;
+          root.style.setProperty('--p', root.__fsRevealed ? '1' : '0');
+        } else {
+          phase = next;
+          root.dataset.poseFreeze = next === 'start' ? '0' : '1';
+          root.style.setProperty('--p', root.dataset.poseFreeze);
+        }
+        Array.prototype.forEach.call(panel.querySelectorAll('[data-pe-phase]'), function (b) {
+          b.setAttribute('aria-pressed', b.dataset.pePhase === next ? 'true' : 'false');
+        });
+        report();
+      }
+
+      function shadowFor(el) {
+        return root.querySelector('[data-pose-shadow="' + el.dataset.pose + '"]');
+      }
+
+      function num(el, prop) {
+        return parseFloat(el.style.getPropertyValue(prop)) || 0;
+      }
+
+      // Centre of the element in px, relative to the stage.
+      function centre(el) {
+        var r = el.getBoundingClientRect();
+        var s = stage.getBoundingClientRect();
+        return { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 };
+      }
+
+      {%- comment -%}
+        Split a pixel target back into percent + px remainder. The percent is
+        rounded first and the leftover goes to the nudge, so the nudge always
+        lands inside its own +/-40 and +/-60 ranges without clamping.
+      {%- endcomment -%}
+      function split(px, total) {
+        var pct = Math.round((px / total) * 100);
+        return { pct: pct, nudge: Math.round(px - (total * pct) / 100) };
+      }
+
+      // x runs through the narrow-screen spread multiplier below 990px, so the
+      // inverse mapping divides it back out - without this a 10px drag moved
+      // the character 17px on a phone.
+      function bandName() {
+        var w = window.innerWidth;
+        return w < 600 ? 'phone' : w < 990 ? 'tablet' : 'desktop';
+      }
+
+      // On a phone the end pose is the phone-native set; the start pose stays
+      // shared. Tablets are derived and take no edits at all.
+      function band() {
+        if (phase === 'end' && bandName() === 'phone') {
+          return { x: '--px', n: null, y: '--py', ny: null, w: '--pw' };
+        }
+        return PROPS[phase];
+      }
+
+      // --pratio scales the shared start size on phones; keep it in step with
+      // the phone width whenever that changes.
+      function syncRatio(el) {
+        var r = num(el, '--pw') / (num(el, '--w') || 1);
+        el.style.setProperty('--pratio', r.toFixed(4));
+        var sh = shadowFor(el);
+        if (sh) sh.style.setProperty('--pratio', r.toFixed(4));
+      }
+
+      function place(el, px, py) {
+        var s = stage.getBoundingClientRect();
+        if (bandName() === 'tablet') return;
+        var k = band();
+        var sx = k.n ? split(px, s.width) : { pct: Math.round((px / s.width) * 100), nudge: 0 };
+        var sy = k.ny ? split(py, s.height) : { pct: Math.round((py / s.height) * 100), nudge: 0 };
+        el.style.setProperty(k.x, sx.pct + '%');
+        if (k.n) el.style.setProperty(k.n, sx.nudge + 'px');
+        el.style.setProperty(k.y, sy.pct + '%');
+        if (k.ny) el.style.setProperty(k.ny, sy.nudge + 'px');
+        var sh = shadowFor(el);
+        if (sh) {
+          // The shadow tracks x only — it is pinned to the grass line, not the figure.
+          sh.style.setProperty(k.x, sx.pct + '%');
+          if (k.n) sh.style.setProperty(k.n, sx.nudge + 'px');
+        }
+        report();
+      }
+
+      function move(dx, dy) {
+        if (!current) return;
+        var c = centre(current);
+        place(current, c.x + dx, c.y + dy);
+      }
+
+      function bump(prop, delta, min, max) {
+        if (!current || bandName() === 'tablet') return;
+        var v = num(current, prop) + delta;
+        if (v < min) v = min;
+        if (v > max) v = max;
+        if (prop === 'z-index') {
+          current.style.zIndex = v;
+        } else {
+          current.style.setProperty(prop, v + 'vw');
+          var sh = shadowFor(current);
+          if (sh) sh.style.setProperty(prop, v + 'vw');
+          syncRatio(current);
+        }
+        report();
+      }
+
+      function settings(el) {
+        return {
+          character: el.dataset.poseName,
+          start_x: parseFloat(el.style.getPropertyValue('--sx')),
+          start_x_nudge: num(el, '--snudge'),
+          start_y: parseFloat(el.style.getPropertyValue('--sy')),
+          start_y_nudge: num(el, '--synudge'),
+          start_size: num(el, '--sw'),
+          x: parseFloat(el.style.getPropertyValue('--x')),
+          x_nudge: num(el, '--nudge'),
+          y: parseFloat(el.style.getPropertyValue('--y')),
+          y_nudge: num(el, '--ynudge'),
+          size: num(el, '--w'),
+          phone_x: parseFloat(el.style.getPropertyValue('--px')),
+          phone_y: parseFloat(el.style.getPropertyValue('--py')),
+          phone_size: num(el, '--pw'),
+          depth: parseInt(el.style.zIndex, 10)
+        };
+      }
+
+      function report() {
+        if (!current) return;
+        var k = band();
+        var x = parseFloat(current.style.getPropertyValue(k.x));
+        var nx = k.n ? num(current, k.n) : 0;
+        var y = parseFloat(current.style.getPropertyValue(k.y));
+        var ny = k.ny ? num(current, k.ny) : 0;
+        panel.querySelector('[data-pe-vals]').textContent = [
+          current.dataset.poseName + '  [' + phase + (bandName() === 'desktop' ? '' : ' - ' + bandName()) + ']',
+          'x ' + x + '%  ' + (nx >= 0 ? '+' : '') + nx + 'px',
+          'y ' + y + '%  ' + (ny >= 0 ? '+' : '') + ny + 'px',
+          'layer ' + current.style.zIndex + '   size ' + num(current, k.w) + 'vw'
+        ].join(String.fromCharCode(10));
+      }
+
+      function select(el) {
+        items.forEach(function (i) { i.classList.remove('is-pose-selected'); });
+        current = el;
+        el.classList.add('is-pose-selected');
+        Array.prototype.forEach.call(panel.querySelectorAll('[data-pe-pick]'), function (b) {
+          b.setAttribute('aria-pressed', b.dataset.pePick === el.dataset.pose ? 'true' : 'false');
+        });
+        report();
+      }
+
+      // Character picker buttons, built from whatever blocks the template declared.
+      var cast = panel.querySelector('[data-pe-cast]');
+      items.forEach(function (el) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = el.dataset.poseName;
+        b.dataset.pePick = el.dataset.pose;
+        b.setAttribute('aria-pressed', 'false');
+        b.addEventListener('click', function () { select(el); });
+        cast.appendChild(b);
+      });
+
+      // Drag straight on the artwork.
+      items.forEach(function (el) {
+        el.addEventListener('pointerdown', function (e) {
+          e.preventDefault();
+          select(el);
+          var start = centre(el);
+          var ox = e.clientX;
+          var oy = e.clientY;
+          function onMove(ev) { place(el, start.x + (ev.clientX - ox), start.y + (ev.clientY - oy)); }
+          function onUp() {
+            window.removeEventListener('pointermove', onMove);
+            window.removeEventListener('pointerup', onUp);
+          }
+          window.addEventListener('pointermove', onMove);
+          window.addEventListener('pointerup', onUp);
+        });
+      });
+
+      panel.addEventListener('click', function (e) {
+        var b = e.target.closest('button');
+        if (!b) return;
+        if (b.dataset.peMove) {
+          var d = b.dataset.peMove.split(',');
+          move(parseInt(d[0], 10), parseInt(d[1], 10));
+        } else if (b.dataset.peDepth) {
+          bump('z-index', parseInt(b.dataset.peDepth, 10), 6, 30);
+        } else if (b.dataset.peSize) {
+          bump(band().w, parseInt(b.dataset.peSize, 10), 2, 90);
+        } else if (b.hasAttribute('data-pe-collapse')) {
+          panel.classList.toggle('pe-collapsed');
+          b.textContent = panel.classList.contains('pe-collapsed') ? '+' : String.fromCharCode(8722);
+        } else if (b.hasAttribute('data-pe-copy')) {
+          var out = {};
+          items.forEach(function (el) { out[el.dataset.poseName] = settings(el); });
+          var json = JSON.stringify(out, null, 2);
+          if (navigator.clipboard) navigator.clipboard.writeText(json);
+          console.log(json);
+          b.textContent = 'Copied — also in console';
+          setTimeout(function () { b.textContent = 'Copy JSON'; }, 1600);
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (!current || /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+        var step = e.shiftKey ? 10 : 1;
+        var k = e.key;
+        if (k === 'ArrowUp') { move(0, -step); }
+        else if (k === 'ArrowDown') { move(0, step); }
+        else if (k === 'ArrowLeft') { move(-step, 0); }
+        else if (k === 'ArrowRight') { move(step, 0); }
+        else if (k === '[') { bump('z-index', -1, 6, 30); }
+        else if (k === ']') { bump('z-index', 1, 6, 30); }
+        else if (k === '-') { bump(band().w, -1, 2, 90); }
+        else if (k === '=') { bump(band().w, 1, 2, 90); }
+        else { return; }
+        e.preventDefault();
+      });
+
+      {%- comment -%}
+        Below 990px a different rule owns `left`, multiplying the offset from
+        centre by mobile_spread. The editor's px-to-percent maths does not model
+        that, so values tuned here would not mean the same thing. Say so rather
+        than hand back numbers that silently do not apply.
+      {%- endcomment -%}
+      function checkWidth() {
+        var warn = panel.querySelector('[data-pe-warn]');
+        var narrow = window.innerWidth < 990;
+        warn.hidden = !narrow;
+        warn.textContent = bandName() === 'phone' ? 'Phone: editing the phone-native pose. Desktop is untouched.' : bandName() === 'tablet' ? 'Tablet is the midpoint of desktop and phone - tune those two; nothing is editable here.' : '';
+      }
+      window.addEventListener('resize', checkWidth);
+      checkWidth();
+
+      panel.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-pe-phase]');
+        if (b) setPhase(b.dataset.pePhase);
+      });
+
+      // Drag the panel by its title, so it can be moved off a character.
+      panel.querySelector('[data-pe-drag]').addEventListener('pointerdown', function (e) {
+        if (e.target.closest('button')) return;
+        e.preventDefault();
+        var r = panel.getBoundingClientRect();
+        var ox = e.clientX - r.left;
+        var oy = e.clientY - r.top;
+        function mv(ev) {
+          panel.style.left = (ev.clientX - ox) + 'px';
+          panel.style.top = (ev.clientY - oy) + 'px';
+          panel.style.bottom = 'auto';
+          panel.style.right = 'auto';
+        }
+        function up() {
+          window.removeEventListener('pointermove', mv);
+          window.removeEventListener('pointerup', up);
+        }
+        window.addEventListener('pointermove', mv);
+        window.addEventListener('pointerup', up);
+      });
+
+      if (items.length) select(items[0]);
+      setPhase('live');
+    })();
+  </script>
+{%- endif -%}
 
 {% schema %}
 {
@@ -488,13 +1137,13 @@
     {
       "type": "range",
       "id": "ground_offset",
-      "label": "Ground vertical position",
-      "info": "Distance from the bottom of the stage. Raise it to bring the grass line up to the cast's feet.",
-      "min": -20,
-      "max": 60,
+      "label": "Ground drop",
+      "info": "How far the ground sits below the stage floor. The artwork is opaque to its last pixel, so anything above 0 clips the dirt band.",
+      "min": 0,
+      "max": 30,
       "step": 1,
-      "unit": "%",
-      "default": 21
+      "unit": "vh",
+      "default": 0
     },
     {
       "type": "image_picker",
@@ -524,57 +1173,54 @@
     },
     {
       "type": "range",
-      "id": "scroll_length",
-      "label": "Scroll length",
-      "info": "How much scrolling the pinned stage takes up.",
-      "min": 100,
-      "max": 250,
-      "step": 10,
-      "unit": "vh",
-      "default": 150
+      "id": "reveal_duration",
+      "label": "Reveal speed",
+      "info": "How long the cast takes to travel from its start pose to its landed pose once the section is 30% on screen.",
+      "min": 0.3,
+      "max": 3,
+      "step": 0.1,
+      "unit": "s",
+      "default": 1.2
+    },
+    {
+      "type": "checkbox",
+      "id": "pose_editor",
+      "label": "Position editor (staff only)",
+      "info": "Drag characters to place them, then copy the values out. Ships nothing at all when off — leave it off on the live store.",
+      "default": false
     },
     {
       "type": "range",
-      "id": "start_y",
-      "label": "Start height",
-      "min": 0,
-      "max": 40,
-      "step": 1,
-      "unit": "%",
-      "default": 10,
-      "info": "How far down the stage the cast begins before falling."
-    },
-    {
-      "type": "range",
-      "id": "mobile_scale",
-      "label": "Cast size on narrow screens",
-      "min": 100,
-      "max": 400,
-      "step": 10,
-      "unit": "%",
-      "default": 270,
-      "info": "Applied below 990px wide."
-    },
-    {
-      "type": "range",
-      "id": "mobile_spread",
-      "label": "Cast spread on narrow screens",
-      "min": 100,
-      "max": 250,
+      "id": "section_height",
+      "label": "Section height",
+      "info": "How tall the scene is, as a share of the screen.",
+      "min": 80,
+      "max": 200,
       "step": 5,
-      "unit": "%",
-      "default": 170,
-      "info": "Applied below 990px wide."
+      "unit": "vh",
+      "default": 120
     },
     {
       "type": "range",
-      "id": "mobile_spread_y",
-      "label": "Cast vertical spread (narrow)",
-      "min": 100,
+      "id": "tablet_aspect",
+      "label": "Scene height on tablets",
+      "info": "As a share of the screen width, 600-989px wide. Locking the shape to the width is what makes the cast land in the same place on every device.",
+      "min": 80,
       "max": 180,
       "step": 5,
       "unit": "%",
-      "default": 125
+      "default": 110
+    },
+    {
+      "type": "range",
+      "id": "phone_aspect",
+      "label": "Scene height on phones",
+      "info": "As a share of the screen width, under 600px wide.",
+      "min": 100,
+      "max": 220,
+      "step": 5,
+      "unit": "%",
+      "default": 160
     },
     {
       "type": "range",
@@ -668,6 +1314,86 @@
         },
         {
           "type": "range",
+          "id": "x_nudge",
+          "label": "Horizontal nudge",
+          "info": "Fine offset on top of the position above. One percent of a 1536px stage is 15px, so whole-percent steps are too coarse to hold a tight gap between two characters.",
+          "min": -40,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Start of scroll"
+        },
+        {
+          "type": "range",
+          "id": "start_x",
+          "label": "Start horizontal",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "start_x_nudge",
+          "label": "Start horizontal nudge",
+          "min": -40,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "start_y",
+          "label": "Start vertical",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "start_y_nudge",
+          "label": "Start vertical nudge",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "start_size",
+          "label": "Start width",
+          "min": 2,
+          "max": 40,
+          "step": 1,
+          "unit": "vw",
+          "default": 9
+        },
+        {
+          "type": "header",
+          "content": "End of scroll"
+        },
+        {
+          "type": "range",
+          "id": "y_nudge",
+          "label": "Vertical nudge",
+          "info": "Fine offset on the vertical position. One percent of the stage is about 9px — too coarse to seat feet on the grass line.",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
           "id": "y",
           "label": "Vertical position",
           "min": 0,
@@ -675,6 +1401,41 @@
           "step": 1,
           "unit": "%",
           "default": 55
+        },
+        {
+          "type": "header",
+          "content": "Phone pose (under 600px)"
+        },
+        {
+          "type": "range",
+          "id": "phone_x",
+          "label": "Phone horizontal",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "phone_y",
+          "label": "Phone vertical",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 60
+        },
+        {
+          "type": "range",
+          "id": "phone_size",
+          "label": "Phone width",
+          "info": "Tablets take the midpoint between this pose and the desktop one.",
+          "min": 2,
+          "max": 90,
+          "step": 1,
+          "unit": "vw",
+          "default": 40
         },
         {
           "type": "range",
@@ -729,6 +1490,10 @@
             {
               "value": "blob",
               "label": "Blob"
+            },
+            {
+              "value": "cloud",
+              "label": "Cloud"
             }
           ],
           "default": "circle"
@@ -763,9 +1528,10 @@
           "type": "range",
           "id": "size",
           "label": "Size",
+          "info": "A cloud needs far more of this than a dot does — the value is its width, and the shape is only 40% as tall.",
           "min": 1,
-          "max": 12,
-          "step": 0.5,
+          "max": 90,
+          "step": 1,
           "unit": "rem",
           "default": 4
         },

@@ -1,0 +1,299 @@
+{%- comment -%}
+  /collections — the collection index.
+
+  Two of the store's nine collections are Shopify's own samples (`frontpage`
+  and `baby-and-toddler-apparel-example-products`), both empty. An index that
+  lists every collection therefore ships two dead tiles on day one, so empty
+  collections are skipped rather than rendered and hidden.
+
+  Colour: the five character handles take their brand pair, and anything else
+  cycles the same five fills by position, so a new collection is never given a
+  colour that has to be invented. Titles are always --ink — the fills are
+  saturated sheet colours and tinting a title with its own fill measures ~1:1.
+{%- endcomment -%}
+
+{%- style -%}
+  #Collections-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 6rem 8rem;
+  }
+
+  #Collections-{{ section.id }} .cl__head {
+    text-align: center;
+    margin-bottom: 4.4rem;
+  }
+
+  #Collections-{{ section.id }} .cl__kicker {
+    display: block;
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+    line-height: 1;
+    /* Not --pink: Heart Pink on cream is 2.92:1 and misses even the 3:1
+       large-text floor. Adventure Blue on cream is 4.34:1. */
+    color: var(--blue);
+  }
+
+  #Collections-{{ section.id }} .cl__title {
+    color: var(--ink);
+  }
+
+  #Collections-{{ section.id }} .cl__text {
+    max-width: 60rem;
+    margin: 1.8rem auto 0;
+    font-size: 1.9rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Richtext brings its own <p> with 1em margins; the wrapper owns spacing. */
+  #Collections-{{ section.id }} .cl__text :where(p) {
+    margin: 0;
+  }
+
+  #Collections-{{ section.id }} .cl__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.8rem 2.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #Collections-{{ section.id }} .cl__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 2.4rem;
+    overflow: hidden;
+    background: var(--card-bg, var(--blue-bg));
+    transition: transform 0.3s var(--ease);
+  }
+
+  #Collections-{{ section.id }} .cl__media {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    padding: 2rem;
+  }
+
+  #Collections-{{ section.id }} .cl__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  #Collections-{{ section.id }} .cl__initial {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 8rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  #Collections-{{ section.id }} .cl__label {
+    padding: 0 2rem 2.6rem;
+    text-align: center;
+  }
+
+  #Collections-{{ section.id }} .cl__name {
+    margin: 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.7rem;
+    line-height: 1.2;
+    letter-spacing: 0.135rem;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  #Collections-{{ section.id }} .cl__count {
+    display: block;
+    margin-top: 0.6rem;
+    font-family: var(--font-body);
+    font-size: 1.6rem;
+    letter-spacing: 0.05rem;
+    text-transform: none;
+    color: var(--ink);
+    opacity: 0.75;
+  }
+
+  #Collections-{{ section.id }} .cl__empty {
+    text-align: center;
+    font-size: 1.9rem;
+    color: var(--ink-soft);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    #Collections-{{ section.id }} .cl__card:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    #Collections-{{ section.id }} .cl__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #Collections-{{ section.id }} {
+      padding-block: 3.2rem 4.8rem;
+    }
+
+    #Collections-{{ section.id }} .cl__head {
+      margin-bottom: 2.8rem;
+    }
+
+    #Collections-{{ section.id }} .cl__grid {
+      gap: 1.6rem;
+    }
+
+    #Collections-{{ section.id }} .cl__card {
+      border-radius: 2rem;
+    }
+
+    #Collections-{{ section.id }} .cl__media {
+      padding: 1.2rem;
+    }
+
+    #Collections-{{ section.id }} .cl__name {
+      font-size: 1.9rem;
+    }
+
+    #Collections-{{ section.id }} .cl__initial {
+      font-size: 5rem;
+    }
+
+    #Collections-{{ section.id }} .cl__label {
+      padding: 0 1rem 1.8rem;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  comment
+    The cast leads, in the brand's own order, and takes its own colours from
+    the character table. Everything else follows and cycles the same five,
+    continuing the count so a gender collection never lands on the colour of
+    the character beside it — Girls rendered gold next to Brutus before this.
+  endcomment
+  assign cast = 'jevika,joy,brutus,minku,pinki' | split: ','
+  assign cast_pairs = 'pink,blue,gold,green,purple' | split: ','
+  assign cycle = 'pink,blue,gold,green,purple' | split: ','
+-%}
+
+<section id="Collections-{{ section.id }}">
+  <div class="page-width">
+    <div class="cl__head scroll-trigger animate--slide-in" style="--animation-order: 1;">
+      {%- if section.settings.kicker != blank -%}
+        <span class="accent-caps cl__kicker">{{ section.settings.kicker | escape }}</span>
+      {%- endif -%}
+      <h1 class="hxxl cl__title">{{ section.settings.heading | escape }}</h1>
+      {%- if section.settings.text != blank -%}
+        <div class="cl__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- assign shown = 0 -%}
+    <ul class="cl__grid">
+      {%- for handle in cast -%}
+        {%- assign cast_collection = collections[handle] -%}
+        {%- comment -%}
+          A missing collection yields nil, and nil == 0 is false in Liquid — so
+          testing the count alone would render an empty tile for a character
+          whose smart collection has been deleted.
+        {%- endcomment -%}
+        {%- if cast_collection == blank or cast_collection.all_products_count == 0 -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- comment -%}
+          A render argument takes a value, never a filter chain — writing
+          `face: handle | append: '-face.png'` fails the push with
+          "Expected end_of_string but found pipe". Build it first.
+        {%- endcomment -%}
+        {%- assign cast_face = handle | append: '-face.png' -%}
+        {%- assign shown = shown | plus: 1 -%}
+        {%- render 'collection-card',
+          collection: cast_collection,
+          pair: cast_pairs[forloop.index0],
+          face: cast_face,
+          order: shown,
+          show_count: section.settings.show_count,
+          count_singular: section.settings.count_singular,
+          count_plural: section.settings.count_plural
+        -%}
+      {%- endfor -%}
+
+      {%- for collection in collections -%}
+        {%- if collection.all_products_count == 0 -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if cast contains collection.handle -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- assign slot = shown | modulo: 5 -%}
+        {%- assign shown = shown | plus: 1 -%}
+        {%- render 'collection-card',
+          collection: collection,
+          pair: cycle[slot],
+          order: shown,
+          show_count: section.settings.show_count,
+          count_singular: section.settings.count_singular,
+          count_plural: section.settings.count_plural
+        -%}
+      {%- endfor -%}
+    </ul>
+
+    {%- if shown == 0 -%}
+      <p class="cl__empty">{{ section.settings.empty_text }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Shop by"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Pick your character"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Every tee belongs to someone in the crew. Start with a favourite, or browse by who it's for.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product counts",
+      "default": true
+    },
+    { "type": "text", "id": "count_singular", "label": "Count word (one)", "default": " tee" },
+    { "type": "text", "id": "count_plural", "label": "Count word (many)", "default": " tees" },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Shown when nothing has products yet",
+      "default": "New collections are on the way."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections list"
+    }
+  ]
+}
+{% endschema %}

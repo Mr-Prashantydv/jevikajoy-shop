@@ -1,0 +1,101 @@
+{%- comment -%}
+  Size guide, opened inline under the Size picker on the PDP.
+
+  Usage: {% render 'size-guide', rows: section.settings.size_rows, heading: ..., note: ..., summary: ... %}
+
+  A <details> disclosure rather than a modal, deliberately: it needs no
+  JavaScript, so it still opens with scripts off, and the browser gives the
+  expanded/collapsed state to a screen reader for free. A <dialog> would need
+  showModal() and therefore a working script just to be readable.
+
+  Rows come from one textarea setting, pipe-separated, first line the header:
+
+    Age | Height | Chest (in) | Length (in)
+    4-5 Y | 104-110 cm | 12.5 | 17
+
+  A textarea rather than blocks because a size chart is one table that changes
+  as a whole. Blocks would put eight rows in the theme editor's block list
+  alongside the badge blocks main-product already has, and reordering a size
+  chart by drag is worse than editing eight lines of text.
+
+  Every number here is a general Indian kidswear standard, not a measurement
+  taken off a JJW garment — the note setting says so on the page, and it must
+  keep saying so until real numbers replace these.
+{%- endcomment -%}
+
+{%- liquid
+  assign lines = rows | strip | newline_to_br | split: '<br />'
+  comment
+    `if line | strip != blank` fails the push with "Expected end_of_string but
+    found pipe" — an if condition takes a value, never a filter chain, exactly
+    as a render argument does. Assign first.
+  endcomment
+  assign line_count = 0
+  for line in lines
+    assign probe = line | strip
+    if probe != blank
+      assign line_count = line_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- if line_count > 1 -%}
+  <details class="sg">
+    <summary class="sg__toggle accent-caps">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false">
+        <path d="M2 6h16v8H2z" stroke-linejoin="round"/>
+        <path d="M6 6v3M10 6v4M14 6v3" stroke-linecap="round"/>
+      </svg>
+      {{ summary | default: 'Size guide' | escape }}
+    </summary>
+
+    <div class="sg__panel">
+      {%- if heading != blank -%}
+        <p class="sg__heading">{{ heading | escape }}</p>
+      {%- endif -%}
+
+      {%- comment -%}
+        tabindex + role make the scrollable table reachable and announced; a
+        region that scrolls but takes no focus cannot be panned by keyboard.
+      {%- endcomment -%}
+      <div class="sg__scroll" tabindex="0" role="region" aria-label="{{ summary | default: 'Size guide' | escape }}">
+        <table class="sg__table">
+          <thead>
+            <tr>
+              {%- assign header_cells = lines.first | strip | split: '|' -%}
+              {%- for cell in header_cells -%}
+                <th scope="col">{{ cell | strip | escape }}</th>
+              {%- endfor -%}
+            </tr>
+          </thead>
+          <tbody>
+          {%- for line in lines -%}
+            {%- liquid
+              assign trimmed = line | strip
+              if trimmed == blank
+                continue
+              endif
+              assign cells = trimmed | split: '|'
+            -%}
+            {%- unless forloop.first -%}
+              <tr>
+                {%- for cell in cells -%}
+                  {%- if forloop.first -%}
+                    <th scope="row">{{ cell | strip | escape }}</th>
+                  {%- else -%}
+                    <td>{{ cell | strip | escape }}</td>
+                  {%- endif -%}
+                {%- endfor -%}
+              </tr>
+            {%- endunless -%}
+          {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+
+      {%- if note != blank -%}
+        <div class="sg__note">{{ note }}</div>
+      {%- endif -%}
+    </div>
+  </details>
+{%- endif -%}

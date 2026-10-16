@@ -84,9 +84,9 @@
   }
 
   #MainSearch-{{ section.id }} .ms__submit .btn {
-    min-height: 0;
+    min-height: var(--touch-target);
     padding: 1rem 2.4rem;
-    font-size: 2.2rem;
+    font-size: var(--button-text-size);
   }
 
   /* --- Filters ----------------------------------------------------------- */
@@ -102,14 +102,91 @@
   }
 
   #MainSearch-{{ section.id }} .ms__filter-label {
-    margin: 0 0 1.2rem;
+    /* Matches .mc__filter-label on the collection page exactly. The two draw
+       the same Shopify filters and were 16px there, 20px here. */
+    margin: 0 0 0.8rem;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 2rem;
-    letter-spacing: 0.1rem;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     text-align: center;
     color: var(--ink-soft);
+  }
+
+  {%- comment -%}
+    Outlined, exactly as on the collection page. Filters are controls; the
+    solid Sky Blue .jjw-pill is for navigation. Two surfaces that filter the
+    same catalogue had no business looking like different products.
+  {%- endcomment -%}
+  #MainSearch-{{ section.id }} .ms__filter .jjw-pill {
+    min-height: 4.4rem;
+    padding-inline: 1.6rem;
+    font-size: 1.9rem;
+    letter-spacing: 0.08em;
+    background: var(--white);
+    box-shadow: inset 0 0 0 2px var(--ink);
+    color: var(--ink);
+  }
+
+  #MainSearch-{{ section.id }} .ms__filter .jjw-pill:hover {
+    background: var(--sky);
+    color: var(--ink);
+  }
+
+  #MainSearch-{{ section.id }} .ms__filter .jjw-pill[aria-current] {
+    background: var(--ink);
+    color: var(--cream);
+    box-shadow: none;
+  }
+
+  #MainSearch-{{ section.id }} .ms__swatch {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-right: 0.8rem;
+    border-radius: 50%;
+    background: var(--swatch, var(--ink-soft));
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+  }
+
+  #MainSearch-{{ section.id }} .ms__active {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2.4rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainSearch-{{ section.id }} .ms__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 4.4rem;
+    padding: 0 1.6rem;
+    border-radius: 999px;
+    background: var(--ink);
+    font-family: var(--font-accent);
+    font-weight: 700;
+    /* 1.9rem so the --blue hover clears the large-text cutoff: cream on
+       --blue is 4.31:1, which fails 4.5 but passes 3. */
+    font-size: 1.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  #MainSearch-{{ section.id }} .ms__chip:hover {
+    background: var(--blue);
+  }
+
+  #MainSearch-{{ section.id }} .ms__chip svg {
+    width: 1.2rem;
+    height: 1.2rem;
   }
 
   #MainSearch-{{ section.id }} .ms__clear {
@@ -206,7 +283,7 @@
 
     #MainSearch-{{ section.id }} .ms__submit .btn {
       padding: 1rem 1.6rem;
-      font-size: 1.8rem;
+      font-size: var(--button-text-size);
     }
 
     #MainSearch-{{ section.id }} .ms__filters {
@@ -258,13 +335,47 @@
       <div class="ms__filters">
         {%- for filter in search.filters -%}
           {%- if filter.type == 'list' and filter.values.size > 0 -%}
+            {%- liquid
+              comment
+                Same three rules as the collection page: skip values that would
+                return nothing, keep an already-applied value regardless, and
+                never print a group heading over an empty list.
+              endcomment
+              assign renderable = 0
+              for value in filter.values
+                if value.active
+                  assign renderable = renderable | plus: 1
+                elsif value.count > 0
+                  assign renderable = renderable | plus: 1
+                endif
+              endfor
+              if renderable == 0
+                continue
+              endif
+
+              assign filter_key = filter.label | downcase | strip
+              assign is_colour = false
+              if filter.param_name contains 'option.color'
+                assign is_colour = true
+              endif
+              assign group_label = filter.label
+              if filter_key == 'size' and section.settings.size_label != blank
+                assign group_label = section.settings.size_label
+              endif
+            -%}
             <div class="ms__filter">
               <h2 class="ms__filter-label" id="Filter-{{ section.id }}-{{ forloop.index }}">
-                {{- filter.label | escape -}}
+                {{- group_label | escape -}}
               </h2>
-              <ul class="jjw-pills" aria-labelledby="Filter-{{ section.id }}-{{ forloop.index }}">
+              <ul class="jjw-pills" tabindex="0" aria-labelledby="Filter-{{ section.id }}-{{ forloop.index }}">
                 {%- for value in filter.values -%}
                   {%- liquid
+                    unless value.active
+                      if value.count == 0
+                        continue
+                      endif
+                    endunless
+
                     comment
                       Tag values read `character:Joy`; only the part after the
                       colon is shown. The tag itself stays as it is — the
@@ -279,8 +390,11 @@
                     <a
                       class="jjw-pill"
                       href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
-                      {% if value.active %}aria-current="page"{% endif %}
+                      {% if value.active %}aria-current="true"{% endif %}
                     >
+                      {%- if is_colour -%}
+                        <span class="ms__swatch" data-swatch="{{ value.label | handle }}" aria-hidden="true"></span>
+                      {%- endif -%}
                       {{- value_label | escape -}}
                     </a>
                   </li>
@@ -291,6 +405,27 @@
         {%- endfor -%}
 
         {%- if active_filters > 0 -%}
+          <ul class="ms__active" aria-label="{{ section.settings.active_label | escape }}">
+            {%- for filter in search.filters -%}
+              {%- for value in filter.active_values -%}
+                {%- liquid
+                  assign chip_label = value.label
+                  if chip_label contains ':'
+                    assign chip_label = chip_label | split: ':' | last | strip
+                  endif
+                -%}
+                <li>
+                  <a class="ms__chip" href="{{ value.url_to_remove }}">
+                    {{- chip_label | escape }}
+                    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                      <path d="M1 1l10 10M11 1L1 11" stroke-linecap="round"/>
+                    </svg>
+                    <span class="visually-hidden">{{ section.settings.remove_label | escape }}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            {%- endfor -%}
+          </ul>
           <a class="ms__clear" href="{{ routes.search_url }}?q={{ search.terms | url_encode }}&type=product">
             {{- section.settings.clear_text | escape -}}
           </a>
@@ -348,9 +483,20 @@
             </nav>
           {%- endif -%}
         {%- else -%}
-          <p class="ms__count">
-            {{- 'general.search.no_results' | t: terms: shown_terms -}}
-          </p>
+          {%- comment -%}
+            With filters applied, "no results for X" blames the search term for
+            something the filters did, and offers no way back. Say which it was.
+          {%- endcomment -%}
+          {%- if active_filters > 0 -%}
+            <p class="ms__count">{{ section.settings.no_match_text | escape }}</p>
+            <a class="ms__clear" href="{{ routes.search_url }}?q={{ search.terms | url_encode }}&type=product">
+              {{- section.settings.clear_text | escape -}}
+            </a>
+          {%- else -%}
+            <p class="ms__count">
+              {{- 'general.search.no_results' | t: terms: shown_terms -}}
+            </p>
+          {%- endif -%}
         {%- endif -%}
       {%- endpaginate -%}
     {%- endif -%}
@@ -385,6 +531,31 @@
       "id": "clear_text",
       "label": "Clear filters link",
       "default": "Clear all filters"
+    },
+    {
+      "type": "text",
+      "id": "size_label",
+      "label": "Relabel the Size filter",
+      "info": "Sizes on this store are age ranges. Matches the collection page.",
+      "default": "Age"
+    },
+    {
+      "type": "text",
+      "id": "active_label",
+      "label": "Active filters (screen readers)",
+      "default": "Active filters"
+    },
+    {
+      "type": "text",
+      "id": "remove_label",
+      "label": "Remove filter (screen readers)",
+      "default": "Remove this filter"
+    },
+    {
+      "type": "text",
+      "id": "no_match_text",
+      "label": "No results for the current filters",
+      "default": "No tees match that combination"
     }
   ],
   "presets": [

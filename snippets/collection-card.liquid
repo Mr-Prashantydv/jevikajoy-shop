@@ -1,0 +1,54 @@
+{%- comment -%}
+  One tile on the /collections index.
+
+  It is a snippet rather than inline markup because main-list-collections runs
+  two loops over it — the five characters in brand order, then everything else —
+  and two copies of this markup would drift.
+
+  Required: collection, pair (pink|blue|gold|green|purple), order (animation
+  index). Optional: face (an asset filename), show_count, count_singular,
+  count_plural.
+
+  Art order is face sticker, then the merchant's collection image, then the
+  first product's shot, then the initial. Never a broken <img>: half the
+  catalogue still has no photography.
+{%- endcomment -%}
+
+<li class="scroll-trigger animate--fade-in" style="--animation-order: {{ order | default: 1 }};">
+  <a class="cl__card" href="{{ collection.url }}" style="--card-bg: var(--{{ pair }}-bg);">
+    <div class="cl__media">
+      {%- if face != blank -%}
+        <img src="{{ face | asset_url }}" alt="" width="800" height="800" loading="lazy">
+      {%- elsif collection.image != blank -%}
+        {{
+          collection.image
+          | image_url: width: 600
+          | image_tag: alt: '', loading: 'lazy', widths: '300, 450, 600'
+        }}
+      {%- elsif collection.products.first.featured_image != blank -%}
+        {{
+          collection.products.first.featured_image
+          | image_url: width: 600
+          | image_tag: alt: '', loading: 'lazy', widths: '300, 450, 600'
+        }}
+      {%- else -%}
+        <span class="cl__initial" aria-hidden="true">{{ collection.title | slice: 0 | upcase }}</span>
+      {%- endif -%}
+    </div>
+    <div class="cl__label">
+      <h2 class="cl__name">
+        {{ collection.title }}
+        {%- if show_count -%}
+          <span class="cl__count">
+            {{- collection.all_products_count }}
+            {% if collection.all_products_count == 1 %}
+              {{- count_singular -}}
+            {% else %}
+              {{- count_plural -}}
+            {% endif -%}
+          </span>
+        {%- endif -%}
+      </h2>
+    </div>
+  </a>
+</li>

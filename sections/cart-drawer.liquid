@@ -1,0 +1,973 @@
+{%- comment -%}
+  Slide-out cart drawer.
+
+  Rendered once from layout/theme.liquid with {% section 'cart-drawer' %}, so it exists on
+  every template and is addressable by the Section Rendering API as `cart-drawer`. That
+  addressability is the whole reason this is a section and not a snippet: /cart/add.js and
+  /cart/change.js can return freshly rendered HTML for it in the same round trip, so the
+  drawer never has to rebuild line items in JavaScript.
+
+  Self-contained on purpose. The header already owns two panels (menu, search) whose state
+  lives on #Header-<id> inside .hdr-bar. Hanging a third panel off that root would inherit
+  .hdr-bar's stacking context — the exact trap documented in CLAUDE.md that once buried the
+  logo and close button. This drawer is a sibling of the header section instead, with its
+  own overlay above the header's sticky z-index of 50, so the two never negotiate layers.
+  They coordinate by event only: opening this fires jjw:cart-open, which the header listens
+  for to shut its own panels.
+
+  Refresh swaps [data-cd-body] and [data-cd-foot] only, never the whole section — the root
+  element carries the open state and the <style> block, and replacing those would close the
+  drawer mid-interaction and re-inject CSS on every quantity change.
+{%- endcomment -%}
+
+{%- liquid
+  assign threshold = section.settings.free_shipping_threshold | times: 100
+  assign remaining = threshold | minus: cart.total_price
+  assign bundle_min = section.settings.bundle_quantity
+  assign bundle_short = bundle_min | minus: cart.item_count
+-%}
+
+{%- style -%}
+  #CartDrawer-{{ section.id }} .cd__overlay {
+    position: fixed;
+    inset: 0;
+    /* Above the header section's sticky z-index of 50, and above its pinned
+       bar at 60, so the drawer is never argued with. */
+    z-index: 70;
+    background: var(--ink-deep);
+    opacity: 0.4;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 71;
+    display: flex;
+    flex-direction: column;
+    width: 44rem;
+    max-width: 100vw;
+    height: 100%;
+    height: 100dvh;
+    background: var(--cream);
+    box-shadow: -0.8rem 0 3.2rem rgba(16, 36, 74, 0.22);
+    transform: translateX(100%);
+    transition: transform 0.32s var(--ease);
+  }
+
+  #CartDrawer-{{ section.id }}[data-open='true'] .cd__panel {
+    transform: translateX(0);
+  }
+
+  {%- comment -%}
+    Hidden rather than merely off-screen: a translated panel still holds focus
+    and is read by screen readers, so the closed drawer would be tabbable.
+  {%- endcomment -%}
+  #CartDrawer-{{ section.id }}[data-open='false'] .cd__overlay,
+  #CartDrawer-{{ section.id }}[data-open='false'] .cd__panel {
+    visibility: hidden;
+  }
+
+  #CartDrawer-{{ section.id }}[data-open='false'] .cd__overlay {
+    display: none;
+  }
+
+  /* --- Head -------------------------------------------------------------- */
+
+  #CartDrawer-{{ section.id }} .cd__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+    padding: 2.4rem;
+    border-block-end: 2px solid var(--sky);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__title {
+    margin: 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.8rem;
+    line-height: 1;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    height: 4.4rem;
+    width: 4.4rem;
+    padding: 0;
+    color: var(--cream);
+    background: var(--blue);
+    border-radius: 0.75rem;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__close svg {
+    height: 1.6rem;
+    width: 1.6rem;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__close:hover {
+    background: var(--ink);
+  }
+
+  /* --- Scrolling body ---------------------------------------------------- */
+
+  #CartDrawer-{{ section.id }} .cd__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2.4rem;
+  }
+
+  /* --- Free shipping + bundle nudges -------------------------------------- */
+
+  #CartDrawer-{{ section.id }} .cd__nudge {
+    margin: 0 0 2.4rem;
+    padding: 1.6rem 1.8rem;
+    background: var(--white);
+    border-radius: 1.2rem;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__nudge-text {
+    margin: 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.8rem;
+    line-height: 1.2;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__bar {
+    height: 0.8rem;
+    margin-top: 1.2rem;
+    overflow: hidden;
+    background: var(--blue-bg);
+    border-radius: 999px;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__bar span {
+    display: block;
+    height: 100%;
+    background: var(--green);
+    border-radius: 999px;
+    transition: width 0.3s var(--ease);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__nudge--bundle {
+    background: var(--gold-bg);
+  }
+
+  /* --- Line items -------------------------------------------------------- */
+
+  #CartDrawer-{{ section.id }} .cd__items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__row {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1.6rem;
+    padding-block: 2rem;
+    border-block-end: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__row:first-child {
+    padding-block-start: 0;
+  }
+
+  {%- comment -%}
+    The character tint goes on the thumbnail, exactly as the cart page does it —
+    half the catalogue has no photography, so the tile has to carry the item on
+    its own rather than showing a broken frame.
+  {%- endcomment -%}
+  #CartDrawer-{{ section.id }} .cd__media {
+    display: grid;
+    place-items: center;
+    height: 8rem;
+    width: 8rem;
+    overflow: hidden;
+    background: var(--item-bg, var(--blue-bg));
+    border-radius: 1.2rem;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__media img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__media-fallback {
+    padding: 0.6rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.3rem;
+    line-height: 1.1;
+    text-align: center;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__name {
+    display: block;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.15;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__variant {
+    margin: 0.4rem 0 0;
+    font-size: 1.4rem;
+    color: var(--ink-soft);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__line-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__qty button {
+    height: var(--touch-target);
+    width: var(--touch-target);
+    padding: 0;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__qty button:hover {
+    background: var(--blue-bg);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__qty output {
+    min-width: 3rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.8rem;
+    text-align: center;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__price {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.9rem;
+    letter-spacing: 0.06rem;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__remove {
+    min-height: var(--touch-target);
+    margin-top: 0.8rem;
+    padding: 0;
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    color: var(--ink-soft);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__remove:hover {
+    color: var(--pink);
+  }
+
+  /* Dim a row while its request is in flight, so double taps read as ignored. */
+  #CartDrawer-{{ section.id }} .cd__row[aria-busy='true'] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* --- Empty state ------------------------------------------------------- */
+
+  #CartDrawer-{{ section.id }} .cd__empty {
+    display: grid;
+    place-items: center;
+    gap: 2rem;
+    padding-block: 6rem;
+    text-align: center;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__empty p {
+    margin: 0;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.2rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* --- Footer ------------------------------------------------------------ */
+
+  #CartDrawer-{{ section.id }} .cd__foot {
+    padding: 2.4rem;
+    background: var(--white);
+    border-block-start: 2px solid var(--sky);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__totals {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.6rem;
+    margin-bottom: 0.8rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 2.4rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  {%- comment -%}
+    Navy, not Outdoor Green. Green on the white footer measures 2.78:1 at
+    15px, under the 4.5:1 normal-text floor. The saving reads as a saving
+    from the minus sign and its position, not from being coloured.
+  {%- endcomment -%}
+  #CartDrawer-{{ section.id }} .cd__saved {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+    font-size: 1.5rem;
+    color: var(--ink);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__subline {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    font-size: 1.5rem;
+    color: var(--ink-soft);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__note {
+    margin: 0 0 1.6rem;
+    font-size: 1.4rem;
+    color: var(--ink-soft);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__checkout {
+    display: block;
+    width: 100%;
+  }
+
+  #CartDrawer-{{ section.id }} .cd__checkout .btn {
+    min-height: 5.6rem;
+    padding: 1.6rem;
+    font-size: var(--button-text-size);
+  }
+
+  #CartDrawer-{{ section.id }} .cd__view {
+    display: block;
+    margin-top: 1.6rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: underline;
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #CartDrawer-{{ section.id }} .cd__panel {
+      transition: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #CartDrawer-{{ section.id }} .cd__panel {
+      width: 100vw;
+    }
+
+    #CartDrawer-{{ section.id }} .cd__head,
+    #CartDrawer-{{ section.id }} .cd__body,
+    #CartDrawer-{{ section.id }} .cd__foot {
+      padding: 1.6rem;
+    }
+
+    #CartDrawer-{{ section.id }} .cd__title {
+      font-size: 2.4rem;
+    }
+
+    {%- comment -%}
+      Touch targets. The steppers measured 34x36 here, under the 44px floor —
+      fine with a mouse, a miss with a thumb. Remove is a text link, so it gets
+      its hit area from padding rather than from the glyph.
+    {%- endcomment -%}
+    /* 1.2rem landed at 43.5px — under the floor once the line box is counted. */
+    #CartDrawer-{{ section.id }} .cd__remove {
+      padding-block: 1.5rem;
+    }
+  }
+{%- endstyle -%}
+
+<div id="CartDrawer-{{ section.id }}" data-cart-drawer data-open="false">
+  <div class="cd__overlay" data-cd-close aria-hidden="true"></div>
+
+  <aside
+    class="cd__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ section.settings.heading | default: 'Your cart' | escape }}"
+  >
+    <div class="cd__head">
+      {%- comment -%}
+        data-count carries the number machine-readably so a refresh can resync
+        the header badge from the rendered HTML, without parsing "(3)" back out
+        of display text or spending another request on cart.js.
+      {%- endcomment -%}
+      <h2 class="cd__title">
+        {{- section.settings.heading | escape }}
+        <span data-cd-count data-count="{{ cart.item_count }}">({{ cart.item_count }})</span>
+      </h2>
+      <button type="button" class="cd__close" data-cd-close aria-label="{{ 'accessibility.close' | t }}">
+        <svg viewBox="0 0 18 17" fill="none" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M.865 15.978a.5.5 0 0 0 .707.707l7.433-7.431 7.579 7.282a.501.501 0 0 0 .846-.37.5.5 0 0 0-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 1 0-.707-.708L8.991 7.853 1.413.573a.5.5 0 1 0-.693.72l7.563 7.268z"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- comment -%}
+      The live region sits OUTSIDE data-cd-body on purpose. A region that is
+      itself replaced is not reliably announced — the same lesson as the
+      predictive-search results.
+    {%- endcomment -%}
+    <p class="visually-hidden" role="status" aria-live="polite" data-cd-live></p>
+
+    <div class="cd__body" data-cd-body>
+      {%- if cart.item_count > 0 -%}
+        {%- comment -%}
+          Free shipping is a real rate on this store — Domestic Standard drops to
+          Rs. 0 at or above Rs. 999 — so this bar states a fact, not a hope.
+        {%- endcomment -%}
+        {%- if remaining > 0 -%}
+          {%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
+          <div class="cd__nudge">
+            <p class="cd__nudge-text">
+              {{ section.settings.shipping_prefix | escape }}
+              {{ remaining | money }}
+              {{ section.settings.shipping_suffix | escape }}
+            </p>
+            <div class="cd__bar" role="presentation"><span style="width: {{ pct }}%;"></span></div>
+          </div>
+        {%- else -%}
+          <div class="cd__nudge">
+            <p class="cd__nudge-text">{{ section.settings.shipping_met | escape }}</p>
+            <div class="cd__bar" role="presentation"><span style="width: 100%;"></span></div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%}
+          Mirrors the live automatic discount (15% off any 3). If the discount in
+          admin changes, this copy and the bundle-banner section both have to move
+          with it or the store promises a price it will not charge.
+        {%- endcomment -%}
+        {%- if bundle_short > 0 -%}
+          <div class="cd__nudge cd__nudge--bundle">
+            <p class="cd__nudge-text">
+              {{ section.settings.bundle_prefix | escape }}
+              {{ bundle_short }}
+              {{ section.settings.bundle_suffix | escape }}
+            </p>
+          </div>
+        {%- endif -%}
+
+        <ul class="cd__items">
+          {%- for line in cart.items -%}
+            {%- capture pair -%}
+              {%- render 'character-pair', product: line.product -%}
+            {%- endcapture -%}
+            <li class="cd__row" data-cd-row data-line-key="{{ line.key }}">
+              <div class="cd__media" style="--item-bg: var(--{{ pair | strip }}-bg);">
+                {%- if line.image != blank -%}
+                  {{
+                    line.image
+                    | image_url: width: 240
+                    | image_tag: loading: 'lazy', alt: line.title, widths: '80, 160, 240', sizes: '80px'
+                  }}
+                {%- else -%}
+                  <span class="cd__media-fallback">{{ line.product.title | truncatewords: 3, '' | escape }}</span>
+                {%- endif -%}
+              </div>
+
+              <div>
+                <a class="cd__name" href="{{ line.url }}">{{ line.product.title | escape }}</a>
+                {%- unless line.product.has_only_default_variant -%}
+                  <p class="cd__variant">{{ line.variant.title | escape }}</p>
+                {%- endunless -%}
+
+                <div class="cd__line-foot">
+                  <div class="cd__qty">
+                    <button
+                      type="button"
+                      data-cd-qty="{{ line.quantity | minus: 1 }}"
+                      aria-label="{{ 'Decrease quantity for ' | append: line.product.title | escape }}"
+                    >&minus;</button>
+                    <output aria-label="{{ 'Quantity for ' | append: line.product.title | escape }}">
+                      {{- line.quantity -}}
+                    </output>
+                    <button
+                      type="button"
+                      data-cd-qty="{{ line.quantity | plus: 1 }}"
+                      aria-label="{{ 'Increase quantity for ' | append: line.product.title | escape }}"
+                    >+</button>
+                  </div>
+                  <span class="cd__price">{{ line.final_line_price | money }}</span>
+                </div>
+
+                {%- comment -%}
+                  aria-label names the line. Without it a screen reader hears
+                  "Remove" once per row with nothing to tell them apart.
+                {%- endcomment -%}
+                <button
+                  type="button"
+                  class="cd__remove"
+                  data-cd-qty="0"
+                  aria-label="{{ section.settings.remove_label | append: ' ' | append: line.product.title | append: ' ' | append: line.variant.title | escape }}"
+                >
+                  {{- section.settings.remove_label | escape -}}
+                </button>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- else -%}
+        <div class="cd__empty">
+          <p>{{ section.settings.empty_text | escape }}</p>
+          <span class="btn-wrap">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <a class="btn btn--primary" href="{{ routes.all_products_collection_url }}">
+              {{- section.settings.empty_cta | escape -}}
+            </a>
+          </span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="cd__foot" data-cd-foot>
+      {%- if cart.item_count > 0 -%}
+        {%- comment -%}
+          cart.total_price is ALREADY net of discounts. Printing it as
+          "Subtotal" and then a "−Rs. 269.55" line underneath reads as a sum
+          the shopper is meant to do themselves: 1,527.45 − 269.55 = 1,257.90,
+          which is Rs. 269.55 below what checkout actually charges. Show the
+          gross figure, then the saving, then the real total — so the three
+          numbers reconcile.
+        {%- endcomment -%}
+        {%- if cart.total_discount > 0 -%}
+          <div class="cd__subline">
+            <span>{{ section.settings.subtotal_label | escape }}</span>
+            <span>{{ cart.original_total_price | money }}</span>
+          </div>
+          <div class="cd__saved">
+            <span>{{ cart.cart_level_discount_applications.first.title | default: 'Discount' | escape }}</span>
+            <span>&minus;{{ cart.total_discount | money }}</span>
+          </div>
+          <div class="cd__totals">
+            <span>{{ section.settings.total_label | escape }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+        {%- else -%}
+          <div class="cd__totals">
+            <span>{{ section.settings.subtotal_label | escape }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.footer_note != blank -%}
+          <p class="cd__note">{{ section.settings.footer_note | escape }}</p>
+        {%- endif -%}
+
+        <form class="cd__checkout" action="{{ routes.cart_url }}" method="post">
+          <span class="btn-wrap" style="display:block;">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <button type="submit" name="checkout" class="btn btn--primary">
+              {{- section.settings.checkout_label | escape -}}
+            </button>
+          </span>
+        </form>
+
+        <a class="cd__view" href="{{ routes.cart_url }}">{{ section.settings.view_cart_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </aside>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('CartDrawer-{{ section.id }}');
+    if (!root || root.dataset.cdInit) return;
+    root.dataset.cdInit = '1';
+
+    var panel = root.querySelector('.cd__panel');
+    var SECTION = 'cart-drawer';
+    var ON_CART_PAGE = {% if template.name == 'cart' %}true{% else %}false{% endif %};
+    var lastFocus = null;
+    var inFlight = false;
+
+    {%- comment -%}
+      Never hardcode /cart/add.js. Shopify.routes.root carries the locale or
+      market prefix (/en-in/ and friends), and a hardcoded path 404s the moment
+      a second market is switched on. The fallback keeps it working if the
+      global is somehow absent.
+    {%- endcomment -%}
+    function cartUrl(path) {
+      var base = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+      return base + path;
+    }
+
+    /* ---------- open / close ---------- */
+
+    function setOpen(open) {
+      root.dataset.open = open ? 'true' : 'false';
+
+      if (open) {
+        lastFocus = document.activeElement;
+        // Tell the header to stand down rather than stacking a second overlay.
+        document.dispatchEvent(new CustomEvent('jjw:cart-open'));
+        var close = root.querySelector('.cd__close');
+        if (close) close.focus();
+      } else if (lastFocus && lastFocus.isConnected) {
+        lastFocus.focus();
+      }
+
+      {%- comment -%}
+        Lock AFTER dispatching, never before. The header's listener closes its
+        own panels, and its lockScroll() then sees both of its states false and
+        clears body overflow — which unlocked the page behind a drawer that was
+        still open. Setting it last means this write is the one that survives.
+      {%- endcomment -%}
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+
+    /* ---------- rendering ---------- */
+
+    {%- comment -%}
+      Swap only the regions that change. Replacing the whole section would take
+      the root element with it, and the open state and this script live there.
+    {%- endcomment -%}
+    function applyHtml(html) {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      ['[data-cd-body]', '[data-cd-foot]', '[data-cd-count]'].forEach(function (sel) {
+        var next = doc.querySelector(sel);
+        var cur = root.querySelector(sel);
+        if (next && cur) cur.innerHTML = next.innerHTML;
+      });
+
+      {%- comment -%}
+        Resync the header badge from the freshly rendered markup. Anything that
+        changes the cart outside this script — another tab, the cart page, a
+        plain /cart/change link — leaves the badge stale until something reads
+        the truth back. Opening the drawer refreshes, so this is where it lands.
+      {%- endcomment -%}
+      var counted = doc.querySelector('[data-cd-count]');
+      if (counted && counted.dataset.count !== undefined) {
+        syncBadge(parseInt(counted.dataset.count, 10));
+      }
+    }
+
+    {%- comment -%}
+      Replacing the body destroys whichever stepper the shopper just pressed, so
+      focus falls to <body>. That is not only disorienting — it breaks the Tab
+      trap, whose first/last checks never match a body that is outside the
+      panel, letting Tab walk the page behind the overlay. Put focus back on the
+      equivalent control in the re-rendered row, or on Close if that row is gone.
+    {%- endcomment -%}
+    function restoreFocus(lineKey, selector) {
+      var target = null;
+      if (lineKey) {
+        var row = root.querySelector('[data-line-key="' + lineKey + '"]');
+        if (row) target = row.querySelector(selector);
+      }
+      if (!target || !target.isConnected) target = root.querySelector('.cd__close');
+      if (target) target.focus();
+    }
+
+    // Screen readers get nothing from a silent innerHTML swap.
+    function announce(message) {
+      var live = root.querySelector('[data-cd-live]');
+      if (live) live.textContent = message;
+    }
+
+    function applySections(sections) {
+      if (sections && sections[SECTION]) applyHtml(sections[SECTION]);
+    }
+
+    function syncBadge(count) {
+      document.querySelectorAll('[data-cart-count]').forEach(function (el) {
+        el.textContent = count;
+        el.hidden = count === 0;
+      });
+      var label = root.querySelector('[data-cd-count]');
+      if (label) label.textContent = '(' + count + ')';
+    }
+
+    {%- comment -%}
+      No Accept: application/json header here, deliberately.
+
+      On a product URL that header makes Shopify answer with the PRODUCT
+      resource and ignore ?sections= entirely — the response comes back as
+      {"product": {...}} with no section HTML, so the refresh silently did
+      nothing and the drawer kept showing a stale cart. Without the header the
+      same URL returns {"cart-drawer": "<html>"} correctly. The Section
+      Rendering API already responds with JSON whenever ?sections= is present;
+      asking for JSON on top of that picks the wrong resource.
+    {%- endcomment -%}
+    function refreshFromServer() {
+      return fetch(window.location.pathname + '?sections=' + SECTION)
+        .then(function (r) { return r.json(); })
+        .then(applySections)
+        .catch(function () {});
+    }
+
+    /* ---------- cart mutations ---------- */
+
+    function postCart(url, payload) {
+      return fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(
+          Object.assign({ sections: SECTION, sections_url: window.location.pathname }, payload)
+        ),
+      }).then(function (res) {
+        return res.json().then(function (data) {
+          return { ok: res.ok, status: res.status, data: data };
+        });
+      });
+    }
+
+    function addToCart(form) {
+      if (inFlight) return;
+      var field = form.querySelector('[name="id"]');
+      var button = form.querySelector('[data-pdp-submit]');
+      if (!field || !field.value) return;
+
+      inFlight = true;
+      // Remember the prior state: a sold-out variant renders this disabled, and
+      // blindly re-enabling it afterwards would offer an unbuyable variant.
+      var wasDisabled = button ? button.disabled : false;
+      if (button) button.disabled = true;
+
+      postCart(cartUrl('cart/add.js'), { items: [{ id: field.value, quantity: 1 }] })
+        .then(function (r) {
+          if (!r.ok) {
+            // 422 carries a human-readable reason — usually inventory.
+            window.alert(r.data.description || r.data.message || 'Could not add to cart.');
+            return;
+          }
+          applySections(r.data.sections);
+          setOpen(true);
+          // The add response has no cart totals, so read the count back.
+          return fetch(cartUrl('cart.js'), { headers: { Accept: 'application/json' } })
+            .then(function (res) { return res.json(); })
+            .then(function (cart) { syncBadge(cart.item_count); });
+        })
+        .catch(function () {
+          window.alert('Could not add to cart. Please try again.');
+        })
+        .then(function () {
+          inFlight = false;
+          if (button) button.disabled = wasDisabled;
+        });
+    }
+
+    function changeQty(button) {
+      if (inFlight) return;
+      var row = button.closest('[data-cd-row]');
+      if (!row) return;
+
+      inFlight = true;
+      row.setAttribute('aria-busy', 'true');
+
+      {%- comment -%}
+        id is the line KEY, never the line index. Two lines can hold the same
+        variant with different properties, and an index shifts the moment any
+        earlier line is removed — which silently edits the wrong row.
+      {%- endcomment -%}
+      var lineKey = row.dataset.lineKey;
+      var wanted = parseInt(button.dataset.cdQty, 10);
+      // Which control to hand focus back to once the row is re-rendered.
+      var selector = wanted === 0 ? '.cd__remove' : '[data-cd-qty="' + wanted + '"]';
+
+      postCart(cartUrl('cart/change.js'), { id: lineKey, quantity: wanted })
+        .then(function (r) {
+          if (r.ok) {
+            applySections(r.data.sections);
+            syncBadge(r.data.item_count);
+            restoreFocus(wanted === 0 ? null : lineKey, selector);
+            announce(
+              wanted === 0
+                ? '{{ section.settings.removed_announcement | escape }}'
+                : '{{ section.settings.updated_announcement | escape }}'
+            );
+          } else {
+            {%- comment -%}
+              change.js failures were swallowed, so the stepper simply refused
+              to move with no explanation. Note the error body differs from
+              add.js: status is a STRING here, so never share one check.
+            {%- endcomment -%}
+            row.removeAttribute('aria-busy');
+            announce(r.data.description || r.data.message || 'Could not update the cart.');
+            return refreshFromServer();
+          }
+        })
+        .catch(function () {
+          row.removeAttribute('aria-busy');
+          announce('Could not update the cart.');
+          return refreshFromServer();
+        })
+        .then(function () {
+          inFlight = false;
+        });
+    }
+
+    /* ---------- wiring ---------- */
+
+    document.addEventListener('click', function (e) {
+      var opener = e.target.closest('[data-cart-open]');
+      if (opener) {
+        {%- comment -%}
+          Never open over the cart page. main-cart.liquid edits quantities with
+          a POSITIONAL updates[] array, and the drawer only re-renders itself —
+          so removing a line here would leave that form holding three values
+          against a two-line cart. The next quantity typed on the page would
+          then be applied to the wrong product, and the subtotal on screen was
+          already wrong. Let the link navigate instead: /cart re-renders and
+          both surfaces agree again.
+        {%- endcomment -%}
+        if (ON_CART_PAGE) return;
+
+        e.preventDefault();
+        setOpen(true);
+        // Another tab may have changed the cart since this page rendered.
+        refreshFromServer();
+        return;
+      }
+
+      var closer = e.target.closest('[data-cd-close]');
+      if (closer && root.contains(closer)) {
+        e.preventDefault();
+        setOpen(false);
+        return;
+      }
+
+      var qty = e.target.closest('[data-cd-qty]');
+      if (qty && root.contains(qty)) {
+        e.preventDefault();
+        changeQty(qty);
+      }
+    });
+
+    // Delegated, because the PDP form belongs to another section entirely and
+    // may be re-rendered by the theme editor at any time.
+    document.addEventListener('submit', function (e) {
+      var form = e.target.closest('[data-pdp-form]');
+      if (!form) return;
+      e.preventDefault();
+      addToCart(form);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!root.isConnected || root.dataset.open !== 'true') return;
+
+      if (e.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+
+      if (e.key !== 'Tab') return;
+      // Keep focus inside the dialog while it is modal.
+      var focusable = panel.querySelectorAll(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable.length) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+
+    // The header closes this when one of its own panels opens.
+    document.addEventListener('jjw:header-open', function () {
+      if (root.dataset.open === 'true') setOpen(false);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Your Cart" },
+    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
+    { "type": "text", "id": "total_label", "label": "Total label", "info": "Shown under the discount line when one applies.", "default": "Total" },
+    { "type": "text", "id": "updated_announcement", "label": "Screen-reader: quantity updated", "default": "Cart updated" },
+    { "type": "text", "id": "removed_announcement", "label": "Screen-reader: item removed", "default": "Item removed from cart" },
+    { "type": "text", "id": "checkout_label", "label": "Checkout button", "default": "Checkout" },
+    { "type": "text", "id": "view_cart_label", "label": "View cart link", "default": "View full cart" },
+    { "type": "text", "id": "remove_label", "label": "Remove label", "default": "Remove" },
+    { "type": "text", "id": "empty_text", "label": "Empty cart text", "default": "Your cart is empty" },
+    { "type": "text", "id": "empty_cta", "label": "Empty cart button", "default": "Shop All Tees" },
+    { "type": "text", "id": "footer_note", "label": "Footer note", "default": "Taxes and shipping calculated at checkout." },
+    {
+      "type": "header",
+      "content": "Free shipping nudge"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Free shipping threshold",
+      "info": "In rupees. Must match the shipping rate set in Settings → Shipping, or the bar will promise something checkout does not honour.",
+      "default": 999
+    },
+    { "type": "text", "id": "shipping_prefix", "label": "Prefix", "default": "You're" },
+    { "type": "text", "id": "shipping_suffix", "label": "Suffix", "default": "away from free shipping" },
+    { "type": "text", "id": "shipping_met", "label": "Threshold met", "default": "Free shipping unlocked" },
+    {
+      "type": "header",
+      "content": "Bundle nudge"
+    },
+    {
+      "type": "number",
+      "id": "bundle_quantity",
+      "label": "Bundle quantity",
+      "info": "Must match the minimum quantity on the automatic discount in admin.",
+      "default": 3
+    },
+    { "type": "text", "id": "bundle_prefix", "label": "Prefix", "default": "Add" },
+    { "type": "text", "id": "bundle_suffix", "label": "Suffix", "default": "more for 15% off" }
+  ]
+}
+{% endschema %}

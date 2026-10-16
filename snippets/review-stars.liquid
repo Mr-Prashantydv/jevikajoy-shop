@@ -1,0 +1,40 @@
+{%- comment -%}
+  Judge.me star badge for a product card.
+
+  Usage: {% render 'review-stars', product: product %}
+
+  Judge.me writes its own markup into `product.metafields.judgeme.badge` and
+  the theme just prints it. Nothing is rendered when the metafield is absent,
+  which is every product but wander-tee today — Judge.me populates the
+  metafield per product, lazily.
+
+  ⚠ The badge ships with `style="display:none"` and Judge.me's own script is
+  what reveals it. That script arrives through the **Judge.me app embed**,
+  which is NOT enabled in this theme (config/settings_data.json has no app
+  embed blocks at all). Until someone turns it on in the theme editor under
+  Settings → App embeds, this renders a hidden div and nothing more. That is
+  the correct failure mode — never a broken star row — but it is also why
+  turning the embed on is a real to-do and not a nicety.
+{%- endcomment -%}
+
+{%- comment -%}
+  A badge exists for a product with zero reviews too — it carries
+  `data-number-of-reviews='0'` and the words "No reviews". On a store that has
+  taken no orders yet that is every card, and a grid of "No reviews" reads
+  worse than a grid with no star row at all. Show the badge only once it has a
+  review to report. The test is on Judge.me's own data attribute, so if the
+  markup ever changes the badge simply shows — never disappears.
+{%- endcomment -%}
+{%- assign jm_badge = product.metafields.judgeme.badge -%}
+{%- assign jm_has_reviews = true -%}
+{%- if jm_badge == blank or jm_badge contains "data-number-of-reviews='0'" -%}
+  {%- assign jm_has_reviews = false -%}
+{%- endif -%}
+
+{%- if jm_has_reviews -%}
+  {%- comment -%}
+    A <span>, not a <div>: this renders inside the card <h2>/<h3>, and a
+    heading takes phrasing content only. .jjw-stars sets display:block.
+  {%- endcomment -%}
+  <span class="jjw-stars">{{ jm_badge }}</span>
+{%- endif -%}

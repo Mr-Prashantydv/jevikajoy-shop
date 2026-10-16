@@ -1,0 +1,328 @@
+{%- comment -%}
+  404. A dead end is the one page where a shopper is guaranteed to be lost, so
+  it carries the two things that recover the visit — a search box and the
+  character collections — rather than a "page not found" and a home link.
+
+  The search form is `role="search"`, which is what assets/theme.js binds to in
+  order to append the trailing `*`. Shopify's documented options[prefix]=last is
+  inert on this store, so without the star a partial term returns nothing.
+
+  Face art comes from theme assets and is decorative — alt="" throughout, so a
+  screen reader hears the heading and the search box, not five character names.
+{%- endcomment -%}
+
+{%- style -%}
+  #Main404-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 7rem 9rem;
+    text-align: center;
+  }
+
+  #Main404-{{ section.id }} .e__faces {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+  }
+
+  #Main404-{{ section.id }} .e__face {
+    width: 9rem;
+    height: 9rem;
+    object-fit: contain;
+  }
+
+  #Main404-{{ section.id }} .e__face:nth-child(even) {
+    transform: translateY(-1.4rem) rotate(-6deg);
+  }
+
+  #Main404-{{ section.id }} .e__face:nth-child(odd) {
+    transform: rotate(5deg);
+  }
+
+  #Main404-{{ section.id }} .e__code {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 2.4rem;
+    line-height: 1;
+    /* Heart Pink on cream is 2.92:1, under the 3:1 large-text floor. */
+    color: var(--blue);
+  }
+
+  #Main404-{{ section.id }} .e__title {
+    color: var(--ink);
+  }
+
+  #Main404-{{ section.id }} .e__text {
+    max-width: 56rem;
+    margin: 2rem auto 0;
+    font-size: 1.9rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Richtext brings its own <p> with 1em margins; the wrapper owns spacing. */
+  #Main404-{{ section.id }} .e__text :where(p) {
+    margin: 0;
+  }
+
+  /* --- Search ---------------------------------------------------------- */
+
+  #Main404-{{ section.id }} .e__search {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 52rem;
+    margin: 3.2rem auto 0;
+    padding: 0.6rem 0.6rem 0.6rem 2rem;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background: var(--white);
+  }
+
+  #Main404-{{ section.id }} .e__search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 1.2rem 0;
+    border: 0;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 1.7rem;
+    color: var(--ink);
+  }
+
+  #Main404-{{ section.id }} .e__search-input::placeholder {
+    color: var(--ink-soft);
+  }
+
+  #Main404-{{ section.id }} .e__search-input:focus {
+    outline: none;
+  }
+
+  #Main404-{{ section.id }} .e__search:focus-within {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+  }
+
+  /* 44px is the touch-target floor; the pill is 4.6rem so the icon clears it. */
+  #Main404-{{ section.id }} .e__search-go {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 4.6rem;
+    height: 4.6rem;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+    transition: background 0.2s var(--ease);
+  }
+
+  #Main404-{{ section.id }} .e__search-go:hover {
+    background: var(--blue);
+  }
+
+  #Main404-{{ section.id }} .e__search-go svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  /* --- Links ----------------------------------------------------------- */
+
+  #Main404-{{ section.id }} .e__links-title {
+    margin: 4.8rem 0 1.6rem;
+    font-size: 1.8rem;
+    color: var(--ink);
+  }
+
+  #Main404-{{ section.id }} .e__cta {
+    margin-top: 3.6rem;
+  }
+
+  #Main404-{{ section.id }} .e__cta .btn {
+    min-width: 26rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    #Main404-{{ section.id }} {
+      padding-block: 4rem 5.6rem;
+    }
+
+    #Main404-{{ section.id }} .e__faces {
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    #Main404-{{ section.id }} .e__face {
+      width: 5.6rem;
+      height: 5.6rem;
+    }
+
+    #Main404-{{ section.id }} .e__search {
+      margin-top: 2.4rem;
+      padding-left: 1.6rem;
+    }
+
+    #Main404-{{ section.id }} .e__links-title {
+      margin-top: 3.2rem;
+    }
+
+    #Main404-{{ section.id }} .e__cta .btn {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+{%- endstyle -%}
+
+<section id="Main404-{{ section.id }}">
+  <div class="page-width">
+    {%- if section.settings.show_faces -%}
+      <div class="e__faces" aria-hidden="true">
+        {%- assign faces = 'jevika,joy,brutus,minku,pinki' | split: ',' -%}
+        {%- for face in faces -%}
+          <img
+            class="e__face"
+            src="{{ face | append: '-face.png' | asset_url }}"
+            alt=""
+            width="180"
+            height="180"
+            loading="eager"
+          >
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.code_label != blank -%}
+      <span class="accent-caps e__code">{{ section.settings.code_label | escape }}</span>
+    {%- endif -%}
+
+    <h1 class="hxxl e__title">{{ section.settings.heading | escape }}</h1>
+
+    {%- if section.settings.text != blank -%}
+      <div class="e__text">{{ section.settings.text }}</div>
+    {%- endif -%}
+
+    <form class="e__search" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="Error404Search-{{ section.id }}">
+        {{- section.settings.search_placeholder | escape -}}
+      </label>
+      <input
+        class="e__search-input"
+        type="search"
+        id="Error404Search-{{ section.id }}"
+        name="q"
+        placeholder="{{ section.settings.search_placeholder | escape }}"
+        autocomplete="off"
+      >
+      <button class="e__search-go" type="submit" aria-label="{{ section.settings.search_placeholder | escape }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M20 20l-3.6-3.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </form>
+
+    {%- assign link_blocks = section.blocks | where: 'type', 'link' -%}
+    {%- if link_blocks.size > 0 -%}
+      {%- if section.settings.links_title != blank -%}
+        <p class="accent-caps e__links-title">{{ section.settings.links_title | escape }}</p>
+      {%- endif -%}
+      <ul class="jjw-pills">
+        {%- for block in link_blocks -%}
+          {%- if block.settings.label == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+          <li {{ block.shopify_attributes }}>
+            <a class="accent-caps jjw-pill" href="{{ block.settings.url | default: routes.root_url }}">
+              {{- block.settings.label | escape -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="btn-wrap e__cta">
+        <span class="btn-shadow" aria-hidden="true"></span>
+        <a class="btn btn--primary" href="{{ section.settings.button_url | default: routes.all_products_collection_url }}">
+          {{- section.settings.button_label | escape -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_faces",
+      "label": "Show the character faces",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "code_label",
+      "label": "Kicker",
+      "default": "Error 404"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "This page wandered off"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>The link you followed doesn't exist any more. Try a search, or pick a character below — the whole crew is waiting.</p>"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search for a tee"
+    },
+    {
+      "type": "text",
+      "id": "links_title",
+      "label": "Links heading",
+      "default": "Or start here"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button text",
+      "default": "Shop all tees"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label" },
+        { "type": "url", "id": "url", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "404"
+    }
+  ]
+}
+{% endschema %}

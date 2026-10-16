@@ -1,10 +1,32 @@
 {
   "sections": {
-    "main": { "type": "main-cart", "settings": {} },
+    "main": {
+      "type": "main-cart",
+      "settings": {}
+    },
     "recommendations": {
       "type": "featured-collection",
-      "settings": { "heading": "Add Another Hero", "products_to_show": 12 }
+      "settings": {
+        "heading": "Add Another Hero",
+        "products_to_show": 12
+      }
+    },
+    "bundle": {
+      "type": "bundle-banner",
+      "settings": {
+        "heading": "15% Off Any 3 Tees",
+        "text": "Mix any characters, any sizes — the discount applies automatically at checkout.",
+        "note": "Three for Rs. 1,527 instead of Rs. 1,797",
+        "cta_label": "Shop All Tees",
+        "tone": "gold",
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
     }
   },
-  "order": ["main", "recommendations"]
+  "order": [
+    "main",
+    "bundle",
+    "recommendations"
+  ]
 }

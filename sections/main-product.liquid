@@ -56,6 +56,12 @@
   if colour_option
     assign selected_colour = colour_option.selected_value
   endif
+
+  comment
+    One id for the buy form, so the sticky mobile bar's button can submit it
+    through the `form` attribute instead of carrying a second form of its own.
+  endcomment
+  assign atc_form_id = 'PdpForm-' | append: section.id
 -%}
 
 {%- style -%}
@@ -186,16 +192,17 @@
   /* --- Info -------------------------------------------------------------- */
 
   #MainProduct-{{ section.id }} .pdp__info {
+    min-width: 0;
     position: sticky;
     top: 3rem;
   }
 
   #MainProduct-{{ section.id }} .pdp__title {
-    /* Reference PDP h1: 70px heavy condensed, line-height 1, ls 0.6px. */
+    /* Product title role: prominent, but not campaign-display size. */
     font-family: var(--font-accent);
     font-weight: 900;
-    font-size: clamp(3.6rem, 5vw, 7rem);
-    line-height: 1;
+    font-size: var(--product-title-size);
+    line-height: 1.1;
     letter-spacing: 0.06rem;
     color: var(--ink);
     margin: 0 0 1.5rem;
@@ -221,14 +228,13 @@
   }
 
   #MainProduct-{{ section.id }} .pdp__tab {
+    position: relative;
+    min-height: var(--touch-target);
     padding: 1rem 1.5rem;
     border-radius: 0.5rem;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 1.44rem;
-    /* Reference tab is 39px tall at 14.4px/10px padding. Big Shoulders runs
-       taller than Toroka, so the line box is pinned rather than left to the
-       font's own metrics, which gave 42px. */
+    font-size: 1.8rem;
     line-height: 1.3;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -239,7 +245,7 @@
   }
 
   #MainProduct-{{ section.id }} .pdp__tab[aria-selected='true'] {
-    background: var(--blue);
+    background: var(--ink);
     color: var(--cream);
     box-shadow: 4px 4px 0 0 var(--ink-deep);
   }
@@ -282,7 +288,16 @@
   #MainProduct-{{ section.id }} .pdp__card-thumb img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+  }
+
+  /* Character art stands in for products with no photography yet. It is a
+     transparent cut-out, not a packshot, so `cover` would crop the face off.
+     Qualified with `img` deliberately: the rule above scores 1,1,1 and a plain
+     `.pdp__card-face` (1,1,0) would lose to it no matter where it sits. */
+  #MainProduct-{{ section.id }} .pdp__card-thumb img.pdp__card-face {
+    object-fit: contain;
+    padding: 1.2rem;
   }
 
   #MainProduct-{{ section.id }} .pdp__card-thumb span {
@@ -302,7 +317,7 @@
     margin-top: 0.8rem;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: var(--text-base);
     line-height: 1.25;
     color: var(--ink);
   }
@@ -310,7 +325,13 @@
   /* --- Purchase block ---------------------------------------------------- */
 
   #MainProduct-{{ section.id }} .pdp__buy {
-    margin-top: 2.4rem;
+    margin-top: 1.6rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__details {
+    margin-top: 3.2rem;
+    padding-top: 2.4rem;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
   }
 
   #MainProduct-{{ section.id }} .pdp__price {
@@ -334,6 +355,8 @@
   }
 
   #MainProduct-{{ section.id }} .pdp__group {
+    min-inline-size: 0;
+    max-width: 100%;
     margin: 2.4rem 0 0;
     padding: 0;
     border: 0;
@@ -342,7 +365,7 @@
   #MainProduct-{{ section.id }} .pdp__group-name {
     display: block;
     margin-bottom: 1rem;
-    font-size: 1.4rem;
+    font-size: var(--text-base);
     color: var(--ink);
   }
 
@@ -371,11 +394,16 @@
 
   /* Size pills */
   #MainProduct-{{ section.id }} .pdp__pill {
-    display: inline-block;
-    padding: 1rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6.4rem;
+    min-height: var(--touch-target);
+    padding: 1rem;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 1.44rem;
+    font-size: 1.8rem;
+    line-height: 1.2;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     text-align: center;
@@ -383,8 +411,6 @@
     background: var(--blue-bg);
     color: var(--ink);
     border-radius: 0.5rem;
-    clip-path: url(#jjw-blob);
-    -webkit-clip-path: url(#jjw-blob);
     transition: background 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
   }
 
@@ -410,13 +436,124 @@
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 0 3px var(--cream), 0 0 0 6px var(--ink);
   }
 
-  #MainProduct-{{ section.id }} [data-swatch='black'] { --swatch: #1a1a1a; }
-  #MainProduct-{{ section.id }} [data-swatch='blue'] { --swatch: #2563eb; }
-  #MainProduct-{{ section.id }} [data-swatch='white'] { --swatch: #ffffff; }
-  #MainProduct-{{ section.id }} [data-swatch='pink'] { --swatch: #f9a8d4; }
-  #MainProduct-{{ section.id }} [data-swatch='peach'] { --swatch: #ffcba4; }
-  #MainProduct-{{ section.id }} [data-swatch='sand'] { --swatch: #e3d0ac; }
-  #MainProduct-{{ section.id }} [data-swatch='yellow'] { --swatch: #fde047; }
+  /* The [data-swatch] hex map moved to theme.css when the collection page's
+     colour filter began drawing the same dots. One list, two surfaces. */
+
+  /* --- Size guide ---------------------------------------------------------
+     A <details> under the Size fieldset. Prose sits on --white because the
+     table carries --blue nowhere but the toggle, and 4.34:1 on cream would
+     fail at this size. */
+
+  #MainProduct-{{ section.id }} .sg {
+    margin-top: 1.2rem;
+  }
+
+  #MainProduct-{{ section.id }} .sg__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 4.4rem;
+    font-size: 1.7rem;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.4rem;
+    list-style: none;
+  }
+
+  #MainProduct-{{ section.id }} .sg__toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  #MainProduct-{{ section.id }} .sg__toggle:hover {
+    color: var(--ink-deep);
+  }
+
+
+  #MainProduct-{{ section.id }} .sg__toggle svg {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 auto;
+  }
+
+  #MainProduct-{{ section.id }} .sg__panel {
+    margin-top: 1.2rem;
+    padding: 2rem;
+    border-radius: 1.6rem;
+    background: var(--white);
+  }
+
+  #MainProduct-{{ section.id }} .sg__heading {
+    margin: 0 0 1.2rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* Four columns of numbers do not fit a 390px phone; scroll the table rather
+     than shrink the type past legibility. */
+  #MainProduct-{{ section.id }} .sg__scroll {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  #MainProduct-{{ section.id }} .sg__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.5rem;
+    white-space: nowrap;
+  }
+
+  #MainProduct-{{ section.id }} .sg__table th,
+  #MainProduct-{{ section.id }} .sg__table td {
+    padding: 0.9rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+    color: var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} .sg__table thead th {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--sky);
+  }
+
+  #MainProduct-{{ section.id }} .sg__table tbody th {
+    font-weight: 700;
+  }
+
+  #MainProduct-{{ section.id }} .sg__table tbody tr:last-child th,
+  #MainProduct-{{ section.id }} .sg__table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  #MainProduct-{{ section.id }} .sg__note {
+    margin: 1.2rem 0 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  #MainProduct-{{ section.id }} .sg__note :where(p) {
+    margin: 0;
+  }
+
+  /* --- Reviews ------------------------------------------------------------ */
+
+  #MainProduct-{{ section.id }} .pdp__reviews {
+    margin-top: 6rem;
+  }
+
+  #MainProduct-{{ section.id }} .jjw-stars {
+    margin-top: 0.8rem;
+  }
 
   /* Sold-out combinations stay reachable but never read as available. */
   #MainProduct-{{ section.id }} .pdp__value[data-unavailable] .pdp__pill {
@@ -430,8 +567,9 @@
 
   #MainProduct-{{ section.id }} .pdp__values input:focus-visible + .pdp__pill,
   #MainProduct-{{ section.id }} .pdp__values input:focus-visible + .pdp__swatch {
-    outline: 3px solid var(--gold);
-    outline-offset: 3px;
+    outline: 3px solid var(--cream);
+    outline-offset: 0;
+    box-shadow: 0 0 0 6px var(--ink);
   }
 
   /* ATC — full-width like the reference's stacked retailer buttons (576x68). */
@@ -447,9 +585,9 @@
   }
 
   #MainProduct-{{ section.id }} .pdp__atc .btn {
-    min-height: 6.8rem;
-    font-size: 3rem;
-    letter-spacing: 0.15rem;
+    min-height: 5.6rem;
+    font-size: var(--button-text-size);
+    letter-spacing: 0.05em;
   }
 
   #MainProduct-{{ section.id }} .pdp__atc .btn[disabled] {
@@ -460,13 +598,140 @@
   }
 
   #MainProduct-{{ section.id }} .btn-wrap:has(.btn[disabled]) .btn-shadow {
-    transform: translate(6px, 6px);
+    transform: translate(4px, 4px);
   }
 
   #MainProduct-{{ section.id }} .pdp__trust {
     margin: 1.6rem 0 0;
     font-size: 1.4rem;
     color: var(--ink-soft);
+  }
+
+  /* --- Sticky buy bar (phones only) ---------------------------------------
+     Desktop never shows it: the info column is already `position: sticky`, so
+     the real button stays on screen there and a second one would be noise.
+
+     z-index 9 puts it above page content and above the WhatsApp bubble's 8,
+     but below the header overlay's 10 and well below the cart drawer's 70/71
+     — opening the menu, search or the drawer must cover this, not fight it. */
+
+  #MainProduct-{{ section.id }} .pdp__sticky {
+    display: none;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__sticky[hidden] {
+    display: none;
+  }
+
+  /* --- Highlight bullets (between the title and the accordions) ----------- */
+
+  #MainProduct-{{ section.id }} .pdp__highlights {
+    display: grid;
+    gap: 0.8rem;
+    margin: 0 0 2.4rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__highlights li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    font-size: var(--text-base);
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__highlights svg {
+    width: 1.8rem;
+    height: 1.8rem;
+    /* Outdoor Green on cream is 3.9:1 — fine for a 2.2px tick, which is a
+       non-text graphic needing 3:1, and it never carries the meaning alone. */
+    color: var(--green);
+    margin-top: 0.2rem;
+  }
+
+  /* --- Trust badges + payment row (below the buy button) ------------------ */
+
+  #MainProduct-{{ section.id }} .pdp__badges-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0 0;
+    padding: 1.6rem;
+    border-radius: 1.6rem;
+    background: var(--white);
+    list-style: none;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__badge-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 0;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__badge-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background: var(--sky);
+    /* Navy on Sky Blue is 7.5:1; the icon is a 1.8px stroke so it needs the
+       contrast far more than a block of text would. */
+    color: var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__badge-icon svg {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__badge-text {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__payments {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1.2rem;
+    margin: 1.6rem 0 0;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__payments-label {
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  #MainProduct-{{ section.id }} .pdp__payment-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__payment-icon {
+    display: block;
+    width: 3.8rem;
+    height: 2.4rem;
   }
 
   {%- comment -%}
@@ -476,7 +741,7 @@
   {%- endcomment -%}
   @media screen and (max-width: 989px) {
     #MainProduct-{{ section.id }} .pdp__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 3rem;
     }
 
@@ -485,7 +750,7 @@
     }
 
     #MainProduct-{{ section.id }} .pdp__title {
-      font-size: 3.6rem;
+      font-size: 3.2rem;
     }
 
     /* Title order swap: mobile node in, desktop node out. */
@@ -550,16 +815,23 @@
     }
 
     #MainProduct-{{ section.id }} .pdp__dot {
+      /* A 10px dot is the visual; the tap target is the padding. background-clip
+         keeps the fill on the content box so the ring stays 10px while the
+         button is 44px — a bare 10px button failed the touch-target floor. */
       width: 1rem;
       height: 1rem;
-      padding: 0;
+      padding: 1.7rem;
+      box-sizing: content-box;
+      background-clip: content-box;
       border-radius: 50%;
-      background: var(--blue-bg);
-      transition: background 0.2s var(--ease);
+      background-color: var(--blue-bg);
+      transition: background-color 0.2s var(--ease);
     }
 
     #MainProduct-{{ section.id }} .pdp__dot[aria-current='true'] {
-      background: var(--ink);
+      /* background-color, not the shorthand: the shorthand resets
+         background-clip and the active dot would balloon to the full 44px. */
+      background-color: var(--ink);
     }
 
     /* Reference phone cards run three across. */
@@ -573,6 +845,79 @@
     #MainProduct-{{ section.id }} .pdp__pill,
     #MainProduct-{{ section.id }} .pdp__swatch {
       transition: none;
+    }
+  }
+
+  /* --- Sticky buy bar, phones -------------------------------------------- */
+
+  @media screen and (max-width: 749px) {
+    #MainProduct-{{ section.id }} .pdp__sticky {
+      display: block;
+      position: fixed;
+      inset-inline: 0;
+      bottom: 0;
+      z-index: 9;
+      padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px));
+      background: var(--cream);
+      border-top: 2px solid var(--sky);
+      /* The bar is the last thing between a shopper and the button, so it gets
+         a real edge rather than floating: on a cream page a shadow alone is
+         almost invisible and the bar reads as part of the content. */
+      box-shadow: 0 -4px 16px rgba(16, 36, 74, 0.1);
+    }
+
+    /* Lift the WhatsApp bubble above the bar while it is showing. It has to be
+       matched from `body`, not from this section — the bubble is rendered by
+       footer-group and is not a descendant or sibling of anything in here, so
+       the var has to be set somewhere they both inherit from. Scoping the
+       :has() to this section's bar keeps it off every other template. */
+    body:has(#MainProduct-{{ section.id }} .pdp__sticky:not([hidden])) {
+      --jjw-sticky-atc-offset: 7.4rem;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__sticky[hidden] {
+      display: none;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__sticky-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.2rem;
+      align-items: center;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__sticky-meta {
+      display: grid;
+      min-width: 0;
+    }
+
+    #MainProduct-{{ section.id }} .pdp__sticky-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--font-accent);
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    #MainProduct-{{ section.id }} .pdp__sticky-price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    #MainProduct-{{ section.id }} .pdp__sticky-cta .btn {
+      min-height: 5rem;
+      min-width: 15rem;
+      padding-inline: 2rem;
+      font-size: var(--button-text-size);
+    }
+
+    #MainProduct-{{ section.id }} .pdp__sticky-cta .btn-shadow {
+      transform: translate(4px, 4px);
     }
   }
 {%- endstyle -%}
@@ -825,7 +1170,9 @@
     {%- comment -%} ---- Info ---- {%- endcomment -%}
     <div class="pdp__info">
       <h1 class="pdp__title">{{ product.title | default: section.settings.fallback_title }}</h1>
+      {%- render 'review-stars', product: product -%}
 
+      {%- capture product_details -%}
       {%- comment -%} Character tabs — reference's pack-format tabs. {%- endcomment -%}
       {%- if tab_blocks.size > 0 -%}
         {%- liquid
@@ -874,17 +1221,29 @@
               {%- liquid
                 assign shown = 0
                 assign tab_char = block.settings.label | downcase
+                comment
+                  card_face is set only inside the known-character branches, so a
+                  merchant-typed label that matches nothing leaves it nil and the
+                  tile falls through to the text label rather than pointing
+                  asset_url at a file that was never uploaded.
+                endcomment
+                assign card_face = nil
                 case tab_char
                   when 'jevika'
                     assign card_pair = 'pink'
+                    assign card_face = 'jevika-face.png'
                   when 'joy'
                     assign card_pair = 'blue'
+                    assign card_face = 'joy-face.png'
                   when 'brutus'
                     assign card_pair = 'gold'
+                    assign card_face = 'brutus-face.png'
                   when 'minku'
                     assign card_pair = 'green'
+                    assign card_face = 'minku-face.png'
                   when 'pinki'
                     assign card_pair = 'purple'
+                    assign card_face = 'pinki-face.png'
                   else
                     assign card_pair = 'blue'
                 endcase
@@ -905,6 +1264,19 @@
                     <span class="pdp__card-thumb">
                       {%- if card_product.featured_image != blank -%}
                         {{ card_product.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', alt: card_product.title }}
+                      {%- elsif card_face != blank -%}
+                        {%- comment -%}
+                          alt is empty on purpose: .pdp__card-label repeats the
+                          product name directly below, so captioning the art
+                          would make a screen reader announce it twice.
+                        {%- endcomment -%}
+                        <img
+                          src="{{ card_face | asset_url }}"
+                          alt=""
+                          loading="lazy"
+                          width="400"
+                          height="400"
+                          class="pdp__card-face">
                       {%- else -%}
                         <span>{{ card_product.title | escape }}</span>
                       {%- endif -%}
@@ -924,8 +1296,18 @@
         {%- endfor -%}
       {%- endif -%}
 
-      {%- comment -%} Accordions sit above the purchase block, per reference. {%- endcomment -%}
+      {%- comment -%}
+        Bullets before the accordions: the accordion's Description row holds the
+        full prose, and this is the version a shopper reads without opening
+        anything. Supporting details follow the purchase controls on every screen.
+      {%- endcomment -%}
+      {%- render 'product-highlights',
+        product: product,
+        fallback: section.settings.highlight_fallback
+      -%}
+
       {%- render 'product-accordions', product: product, description: product.description -%}
+      {%- endcapture -%}
 
       {%- comment -%} ---- Purchase ---- {%- endcomment -%}
       <div class="pdp__buy">
@@ -997,8 +1379,23 @@
                         <label class="pdp__pill" for="{{ input_id }}">{{ value | escape }}</label>
                       {%- endif -%}
                     </div>
+                    {%- comment -%}closes .pdp__value{%- endcomment -%}
                   {%- endfor -%}
                 </div>
+
+                {%- comment -%}
+                  The size guide hangs off the Size fieldset rather than sitting
+                  loose in the buy block, because "will this fit" is a question
+                  asked at the moment of choosing a size, not before or after.
+                {%- endcomment -%}
+                {%- unless is_colour -%}
+                  {%- render 'size-guide',
+                    rows: section.settings.size_rows,
+                    heading: section.settings.size_heading,
+                    note: section.settings.size_note,
+                    summary: section.settings.size_summary
+                  -%}
+                {%- endunless -%}
               </fieldset>
             {%- endfor -%}
             {%- endunless -%}
@@ -1006,6 +1403,7 @@
         {%- endif -%}
 
         <form
+          id="{{ atc_form_id }}"
           action="{{ routes.cart_add_url }}"
           method="post"
           enctype="multipart/form-data"
@@ -1036,11 +1434,135 @@
           </span>
         </form>
 
+        {%- comment -%}
+          Trust badges, then the payment row, then the one-line reassurance —
+          descending order of how much weight each carries at the moment of
+          deciding. Badges are blocks so the set can change per store without
+          touching Liquid; each is an inline SVG rather than an uploaded image,
+          per the house rule that image-borne text becomes real text.
+        {%- endcomment -%}
+        {%- assign trust_blocks = section.blocks | where: 'type', 'trustbadge' -%}
+        {%- if trust_blocks.size > 0 -%}
+          <ul class="pdp__badges-row">
+            {%- for block in trust_blocks -%}
+              {%- if block.settings.label == blank -%}
+                {%- continue -%}
+              {%- endif -%}
+              <li class="pdp__badge-item" {{ block.shopify_attributes }}>
+                <span class="pdp__badge-icon" aria-hidden="true">
+                  {%- case block.settings.icon -%}
+                    {%- when 'shipping' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>
+                      </svg>
+                    {%- when 'returns' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+                      </svg>
+                    {%- when 'secure' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l7 3v6c0 4.4-3 7.7-7 9-4-1.3-7-4.6-7-9V6z"/><path d="M9 12l2 2 4-4"/>
+                      </svg>
+                    {%- when 'cotton' -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 21c-4 0-7-3-7-7 0-5 7-11 7-11s7 6 7 11c0 4-3 7-7 7z"/><path d="M12 21v-7"/>
+                      </svg>
+                    {%- else -%}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>
+                      </svg>
+                  {%- endcase -%}
+                </span>
+                <span class="pdp__badge-text">{{ block.settings.label | escape }}</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- comment -%}
+          Payment icons come from `shop.enabled_payment_types`, so they are
+          always exactly what this store actually accepts — never a stock strip
+          of card logos it cannot take. It renders nothing when the store has
+          no gateways configured, which is the state today.
+        {%- endcomment -%}
+        {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+          <div class="pdp__payments">
+            {%- if section.settings.payment_label != blank -%}
+              <span class="pdp__payments-label">{{ section.settings.payment_label | escape }}</span>
+            {%- endif -%}
+            <ul class="pdp__payment-list">
+              {%- for type in shop.enabled_payment_types -%}
+                <li>{{ type | payment_type_svg_tag: class: 'pdp__payment-icon' }}</li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
         {%- if section.settings.trust_line != blank -%}
           <p class="pdp__trust">{{ section.settings.trust_line | escape }}</p>
         {%- endif -%}
       </div>
+      <div class="pdp__details">{{ product_details }}</div>
     </div>
+
+    {%- comment -%}
+      Sticky buy bar, phones only. It is NOT a second <form> — two forms posting
+      the same variant would double-add if a shopper hit both, and a duplicated
+      hidden variant input is one more thing to keep in sync with the picker.
+      The button submits the real form by id, so the existing variant-change
+      JavaScript keeps owning the state and there is exactly one source of it.
+
+      Hidden until the real Add to Cart scrolls out of view, so it never covers
+      the button it is standing in for.
+    {%- endcomment -%}
+    {%- if section.settings.show_sticky_atc -%}
+      <div class="pdp__sticky" data-pdp-sticky hidden>
+        <div class="pdp__sticky-inner">
+          <span class="pdp__sticky-meta">
+            <span class="pdp__sticky-title">{{ product.title | escape }}</span>
+            <span class="pdp__sticky-price" data-pdp-sticky-price>
+              {{- current_variant.price | default: product.price | money -}}
+            </span>
+          </span>
+          <span class="btn-wrap pdp__sticky-cta">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <button
+              class="btn btn--primary"
+              type="submit"
+              form="{{ atc_form_id }}"
+              data-pdp-sticky-button
+              {% unless current_variant.available %}disabled{% endunless %}
+            >
+              {%- if current_variant.available -%}
+                {{ section.settings.add_label | escape }}
+              {%- else -%}
+                {{ section.settings.sold_out_label | escape }}
+              {%- endif -%}
+            </button>
+          </span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}
+      Judge.me's own review widget markup, straight out of its metafield. It is
+      absent on every product but wander-tee today, and the theme prints
+      nothing when it is — never an empty "Reviews" heading over a blank box.
+
+      It needs Judge.me's script, which arrives via the app embed. That embed
+      is not enabled in this theme; see snippets/review-stars.liquid.
+    {%- endcomment -%}
+    {%- comment -%}
+      Test the CONTENT, not the presence. With zero reviews Judge.me stores the
+      literal string `<div></div>` in this metafield — verified against the
+      store — which is not blank, so a `!= blank` guard passed and wander-tee
+      shipped 60px of empty margin under its buy block. strip_html reduces the
+      placeholder to nothing while a real widget survives it.
+    {%- endcomment -%}
+    {%- assign jm_widget = product.metafields.judgeme.widget | strip_html | strip -%}
+    {%- if jm_widget != blank -%}
+      <div class="pdp__reviews">{{ product.metafields.judgeme.widget }}</div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -1052,14 +1574,31 @@
 
     // --- Category tabs.
     var tabs = root.querySelectorAll('[data-pdp-tab]');
+    function selectTab(tab) {
+      tabs.forEach(function (t) {
+        var active = t === tab;
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+        t.tabIndex = active ? 0 : -1;
+      });
+      root.querySelectorAll('[data-pdp-panel]').forEach(function (p) {
+        p.hidden = p.dataset.pdpPanel !== tab.dataset.pdpTab;
+      });
+    }
     tabs.forEach(function (tab) {
+      tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
       tab.addEventListener('click', function () {
-        tabs.forEach(function (t) {
-          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-        });
-        root.querySelectorAll('[data-pdp-panel]').forEach(function (p) {
-          p.hidden = p.dataset.pdpPanel !== tab.dataset.pdpTab;
-        });
+        selectTab(tab);
+      });
+      tab.addEventListener('keydown', function (event) {
+        var index = Array.prototype.indexOf.call(tabs, tab);
+        if (event.key === 'ArrowRight') index = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') index = (index + tabs.length - 1) % tabs.length;
+        else if (event.key === 'Home') index = 0;
+        else if (event.key === 'End') index = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        selectTab(tabs[index]);
+        tabs[index].focus();
       });
     });
 
@@ -1074,7 +1613,8 @@
 
       var nav = document.createElement('div');
       nav.className = 'pdp__dots';
-      nav.setAttribute('role', 'tablist');
+      nav.setAttribute('role', 'group');
+      nav.setAttribute('aria-label', {{ section.settings.thumb_label | default: 'Show image' | json }});
       slides.forEach(function (slide, i) {
         var dot = document.createElement('button');
         dot.type = 'button';
@@ -1082,7 +1622,7 @@
         dot.setAttribute('aria-label', {{ section.settings.thumb_label | default: 'Show image' | json }} + ' ' + (i + 1));
         if (i === 0) dot.setAttribute('aria-current', 'true');
         dot.addEventListener('click', function () {
-          g.scrollTo({ left: slide.offsetLeft - g.offsetLeft, behavior: 'smooth' });
+          g.scrollTo({ left: slide.offsetLeft - g.offsetLeft, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
         });
         nav.appendChild(dot);
       });
@@ -1132,6 +1672,8 @@
     var compareEl = root.querySelector('[data-pdp-compare]');
     var submit = root.querySelector('[data-pdp-submit]');
     var submitText = root.querySelector('[data-pdp-submit-text]');
+    var stickyButton = root.querySelector('[data-pdp-sticky-button]');
+    var stickyPrice = root.querySelector('[data-pdp-sticky-price]');
     var labels = {
       add: {{ section.settings.add_label | default: 'Add to Cart' | json }},
       soldOut: {{ section.settings.sold_out_label | default: 'Sold Out' | json }},
@@ -1209,6 +1751,18 @@
           submitText.textContent = !variant ? labels.unavailable : variant.available ? labels.add : labels.soldOut;
         }
       }
+
+      /* The sticky bar mirrors the real button rather than deriving its own
+         state — one source of truth, so the two can never disagree about
+         whether the chosen size is in stock. */
+      if (stickyButton) {
+        var stickyBuyable = !!(variant && variant.available);
+        stickyButton.disabled = !stickyBuyable;
+        stickyButton.textContent = !variant
+          ? labels.unavailable
+          : variant.available ? labels.add : labels.soldOut;
+      }
+      if (variant && stickyPrice) stickyPrice.innerHTML = variant.price;
     }
 
     picker.addEventListener('change', function (event) {
@@ -1216,6 +1770,45 @@
     });
 
     update();
+  })();
+
+  (function () {
+    /* Reveal the sticky buy bar only once the real Add to Cart has scrolled
+       away, so it never sits on top of the button it stands in for.
+
+       Its own IntersectionObserver rather than the theme's scroll-reveal: this
+       has to toggle BOTH ways as the shopper scrolls up and down, where
+       .scroll-trigger reveals once and unobserves. Separate IIFE too, because
+       the variant script above returns early on products with no picker and
+       the bar must still work on those. */
+    var root = document.getElementById('MainProduct-{{ section.id }}');
+    if (!root || root.dataset.stickyInit) return;
+    root.dataset.stickyInit = '1';
+
+    var bar = root.querySelector('[data-pdp-sticky]');
+    var anchor = root.querySelector('[data-pdp-submit]');
+    if (!bar || !anchor) return;
+
+    if (!('IntersectionObserver' in window)) {
+      /* No observer: leave the bar hidden rather than pinning a duplicate
+         button over the page for the whole visit. */
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          /* Past it going down, or scrolled back above it — the button is out
+             of view either way, but only the downward case should summon the
+             bar. Above the fold the shopper has not reached the buy block yet. */
+          var scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+          bar.hidden = !scrolledPast;
+        });
+      },
+      { rootMargin: '0px 0px -80px 0px', threshold: 0 }
+    );
+
+    observer.observe(anchor);
   })();
 </script>
 
@@ -1250,6 +1843,82 @@
       "label": "Trust line",
       "info": "Short reassurance under the button.",
       "default": "Soft cotton, kind to skin. Easy 7-day exchanges."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sticky_atc",
+      "label": "Sticky Add to Cart on mobile",
+      "info": "Appears once the real button scrolls out of view. Phones only — on desktop the buy column is already sticky.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Highlight bullets"
+    },
+    {
+      "type": "paragraph",
+      "content": "Age range and colourway count are counted from the product itself. Anything typed here is added after them, and a product metafield custom.highlights takes precedence over both."
+    },
+    {
+      "type": "text",
+      "id": "highlight_fallback",
+      "label": "Shared bullets",
+      "info": "Comma separated. True of every tee.",
+      "default": "100% organic cotton, OEKO-TEX certified inks, BIS certified"
+    },
+    {
+      "type": "header",
+      "content": "Payment icons"
+    },
+    {
+      "type": "paragraph",
+      "content": "Drawn from the gateways this store actually accepts, so nothing is promised that checkout cannot take. Renders nothing until a payment provider is configured in admin."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons under the button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_label",
+      "label": "Payment row label",
+      "default": "Secure checkout"
+    },
+    {
+      "type": "header",
+      "content": "Size guide"
+    },
+    {
+      "type": "paragraph",
+      "content": "Opens under the Size picker. Clear the table to switch it off everywhere."
+    },
+    {
+      "type": "text",
+      "id": "size_summary",
+      "label": "Link text",
+      "default": "Size guide"
+    },
+    {
+      "type": "text",
+      "id": "size_heading",
+      "label": "Panel heading",
+      "default": "Find the right age"
+    },
+    {
+      "type": "textarea",
+      "id": "size_rows",
+      "label": "Size table",
+      "info": "One row per line, columns separated by a vertical bar. The first line is the header.",
+      "default": "Age | Child height | Chest (in) | Length (in) | Shoulder (in)\n4-5 Y | 104-110 cm | 12.5 | 17 | 10.5\n5-6 Y | 110-116 cm | 13 | 18 | 11\n6-7 Y | 116-122 cm | 13.5 | 19 | 11.5\n7-8 Y | 122-128 cm | 14 | 20 | 12\n8-9 Y | 128-134 cm | 14.5 | 21 | 12.5\n9-10 Y | 134-140 cm | 15 | 22 | 13\n10-12 Y | 140-152 cm | 16 | 23 | 13.5\n11-12 Y | 146-152 cm | 16.5 | 23.5 | 14"
+    },
+    {
+      "type": "richtext",
+      "id": "size_note",
+      "label": "Note under the table",
+      "info": "These figures are a general Indian kidswear standard, not measurements taken from a JJW garment. The note must keep saying so until real numbers replace them.",
+      "default": "<p>A general guide to Indian kids' sizing, measured flat across the garment. If your child is between two ages, size up — these are made to be lived in, not grown out of by March.</p>"
     },
     {
       "type": "text",
@@ -1315,6 +1984,32 @@
             { "value": "brutus", "label": "Brutus" },
             { "value": "minku", "label": "Minku" },
             { "value": "pinki", "label": "Pinki" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "trustbadge",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Shown under the Add to Cart button. Keep it to three or four words.",
+          "default": "Free shipping over Rs. 999"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "shipping",
+          "options": [
+            { "value": "shipping", "label": "Delivery van" },
+            { "value": "returns", "label": "Return arrow" },
+            { "value": "secure", "label": "Shield" },
+            { "value": "cotton", "label": "Leaf" },
+            { "value": "check", "label": "Tick" }
           ]
         }
       ]

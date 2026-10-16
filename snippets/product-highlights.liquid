@@ -1,0 +1,104 @@
+{%- comment -%}
+  The scannable bullet summary that sits between the title and the price.
+
+  Usage:
+    {% render 'product-highlights', product: product, fallback: section.settings.highlight_fallback %}
+
+  Source order:
+
+    1. `product.metafields.custom.highlights` — a list.single_line_text_field,
+       one bullet per entry. Per-product and merchant-editable, and the only
+       thing here that can say something specific about *this* tee.
+    2. Derived from the product's own data: how many colourways, what age range
+       the sizes cover. These are read off the option values, so they can never
+       drift out of date the way typed copy does — add a colour in admin and the
+       bullet counts it the same day.
+    3. The `fallback` setting — the claims that are true of every JJW tee.
+
+  2 and 3 are additive: a product with no metafield still gets a useful four
+  bullets, and one with a metafield gets its own copy first. Nothing here
+  invents a fact — every bullet is either typed by the merchant or counted from
+  the product.
+
+  Size range is taken from the FIRST and LAST size value rather than sorted,
+  because Shopify hands the values back in the order they are defined and this
+  store's are already ordered — except giggles-tee, whose six overlapping
+  ranges are stored out of order (4-5, 6-7, 9-10, 5-6, 7-8, 11-12). Scanning
+  for the lowest and highest leading number handles both.
+{%- endcomment -%}
+
+{%- liquid
+  assign bullets = ''
+
+  assign custom = product.metafields.custom.highlights.value
+  if custom != blank
+    for item in custom
+      assign clean = item | strip
+      if clean != blank
+        assign bullets = bullets | append: clean | append: '|~|'
+      endif
+    endfor
+  endif
+
+  assign size_option = nil
+  assign colour_option = nil
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname == 'color' or oname == 'colour'
+      assign colour_option = option
+    elsif oname == 'size' or oname == 'age'
+      assign size_option = option
+    endif
+  endfor
+
+  if size_option != nil and size_option.values.size > 0
+    assign low = 999
+    assign high = 0
+    for value in size_option.values
+      assign digits = value | split: '-'
+      assign first_num = digits | first | strip | plus: 0
+      assign last_part = digits | last | strip
+      assign last_num = last_part | split: ' ' | first | plus: 0
+      if first_num > 0 and first_num < low
+        assign low = first_num
+      endif
+      if last_num > high
+        assign high = last_num
+      endif
+    endfor
+    if low < 999 and high > 0
+      assign age_line = 'Ages ' | append: low | append: '–' | append: high | append: ', ' | append: size_option.values.size | append: ' sizes'
+      assign bullets = bullets | append: age_line | append: '|~|'
+    endif
+  endif
+
+  if colour_option != nil and colour_option.values.size > 1
+    assign colour_line = colour_option.values.size | append: ' colourways'
+    assign bullets = bullets | append: colour_line | append: '|~|'
+  endif
+
+  if fallback != blank
+    assign extra = fallback | split: ','
+    for item in extra
+      assign clean = item | strip
+      if clean != blank
+        assign bullets = bullets | append: clean | append: '|~|'
+      endif
+    endfor
+  endif
+
+  assign bullet_list = bullets | split: '|~|'
+-%}
+
+{%- if bullet_list.size > 0 -%}
+  <ul class="pdp__highlights">
+    {%- for bullet in bullet_list -%}
+      <li>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false">
+          <path d="M3 8.5l3.2 3.2L13 5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{ bullet }}
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

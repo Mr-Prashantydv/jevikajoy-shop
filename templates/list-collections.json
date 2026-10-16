@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-list-collections",
+      "settings": {
+        "kicker": "Shop by",
+        "heading": "Pick your character",
+        "text": "<p>Every tee belongs to someone in the crew. Start with a favourite, or browse by who it's for.<\/p>",
+        "show_count": true,
+        "count_singular": " tee",
+        "count_plural": " tees",
+        "empty_text": "New collections are on the way."
+      }
+    }
+  },
+  "order": ["main"]
+}
