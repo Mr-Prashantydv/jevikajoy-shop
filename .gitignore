@@ -20,9 +20,25 @@ docs/clone/raw/
 # Agent tooling scratch space #
 ################################
 .claude/
+.codex/
+.mimosa/
 .graphify_detect.json
 .graphify_python
 graphify-out/
+__pycache__/
+
+# Probe output — curl cookie jars, captured pages, API responses, audit
+# screenshots. Cookie jars carry storefront session tokens: never commit #
+###########################################################################
+_scratch/
+_probe/
+
+# Theme packages and store exports — regenerable, and the store export is
+# ~500 MB. Hero concept art is large and not shipped by the theme #
+###########################################################################
+*.zip
+docs/migration/export-*/theme/
+docs/hero-concepts/
 
 # Source photography — masters live outside git, theme ships only the
 # resized assets/jjw-*.{png,jpg,webp} derived from them #
