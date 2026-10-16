@@ -21,7 +21,8 @@
     "close": "Close"
   },
   "sections": {
-    "header": { "menu": "Menu", "cart_count": "Cart" }
+    "header": { "menu": "Menu", "cart_count": "Cart" },
+    "cart": { "original_price": "Original price", "discounted_price": "Discounted price" }
   },
   "products": { "product": { "add_to_cart": "Add to cart", "sold_out": "Sold out", "photo_pending": "Photo coming soon" } }
 }

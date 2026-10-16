@@ -406,8 +406,17 @@ gated on `template.name == 'cart'` and simply lets the link navigate.
 `lockScroll()` saw both header states false and cleared the lock — unlocking the page behind
 an open drawer. Dispatch first, write `overflow` last, so the drawer's write is the survivor.
 
-Known asymmetry, not yet fixed: the cart **page** still shows only the post-discount figure
-with no discount row, so it and the drawer present the same promo differently.
+The cart **page** and the drawer show the same three rows, built the same way. Two rules
+keep the numbers reconciling whichever kind of discount admin is running:
+
+- **Name discounts from `cart.discount_applications`, never `cart_level_discount_applications`.**
+  A product discount ("15% off any 3 tees" can be one) is line-level and never appears in the
+  cart-level list, so the row came out unnamed. One row per application, using
+  `total_allocated_amount`; the amounts sum to `cart.total_discount`.
+- **A discounted line shows its full price struck through beside `final_line_price`.** A
+  product discount is already inside `final_line_price`, so without the struck figure the
+  lines add up to less than the full-price subtotal printed under them. The two prices carry
+  visually hidden labels from `sections.cart.*` in the locale file.
 
 **Two settings must be kept in step with admin or the store lies to the shopper.**
 `free_shipping_threshold` has to match the real shipping rate (today: Rs. 0 domestic standard
