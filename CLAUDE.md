@@ -16,30 +16,80 @@ overriding new work; that history lives on `master`, this build lives on `scratc
 `README.md` is Dawn's original README, left over from that base. **It does not describe this
 theme** — ignore it.
 
+## Stores and themes
+
+The shop has moved twice. Only the third store is alive:
+
+| Store | State |
+|---|---|
+| `bnwvrc-04.myshopify.com` | First store. Returns HTTP 402. |
+| `00d611-p1.myshopify.com` | **Frozen** for unpaid billing — "This store is currently unavailable" (checked 2026-10-16). Admin, storefront and API are all closed. See `docs/migration/ownership-transfer-runbook.md`. |
+| **`1uz1hi-01.myshopify.com`** | **Current.** Catalogue migrated 4 October 2026 (`docs/migration/`). Serves `jevikajoy.shop`. Shopify account `jevikaandjoy@gmail.com` per the migration notes (`jevikajoychatgpt@gmail.com` is the other candidate the owner named) — log the CLI in with whichever holds it. |
+
+Themes on `1uz1hi-01`, read from the storefront's `Shopify.theme` on 2026-10-16:
+
+| Theme | ID | Role |
+|---|---|---|
+| JJW Migration | `164825399535` | **main — live to shoppers** |
+| JJW UI consistency preview | `164840702191` | unpublished — the working target |
+
+**Never push to `164825399535` without an explicit go-ahead in chat.** It is the live store.
+
+**The local source has not been diffed against either theme since the move.** The preview
+holds the October UI pass (`docs/ui-consistency.md`), and the Weekend Picnic hero went
+straight to live (`design.md`). Pull both into scratch folders and compare before the first
+push, or a push may silently undo work that only exists remotely.
+
+**Facts below that were measured before October 2026 came from `00d611-p1`.** They describe
+this theme's code correctly, but anything about *store* state has to be re-checked on
+`1uz1hi-01` before it is relied on: the automatic discount's ID, threshold and minimum
+quantity; the free-shipping rate; the Search & Discovery filters; whether Judge.me is
+installed; which menus exist; the customer-accounts version, plan and the shop ID in the
+sign-in URL; the `queries` corpus; product IDs and SKUs. Known already: **the new store's name
+was never set**, so every page `<title>` reads "My Store" (Settings → General in admin).
+
+The Shopify connector in Claude may still be authorised against the frozen store, in which case
+every call answers *"This shop is unavailable for API access"*. Reconnect it to `1uz1hi-01`
+before any Admin API work.
+
 ## Commands
 
 ```bash
-# Push to the Development theme (the working target)
-shopify theme push --store 00d611-p1.myshopify.com --theme 194587852932 --path .
+# Push to the preview theme (the working target)
+shopify theme push --store 1uz1hi-01.myshopify.com --theme 164840702191 --path .
 
 # Push specific files only
-shopify theme push --store 00d611-p1.myshopify.com --theme 194587852932 --path . \
+shopify theme push --store 1uz1hi-01.myshopify.com --theme 164840702191 --path . \
   --only sections/hero.liquid --only assets/theme.css
 
 # Pull remote state (useful when the theme editor has been used)
-shopify theme pull --store 00d611-p1.myshopify.com --theme 194587852932 --path <dir>
+shopify theme pull --store 1uz1hi-01.myshopify.com --theme 164840702191 --path <dir>
 
 # List themes
-shopify theme list --store 00d611-p1.myshopify.com
+shopify theme list --store 1uz1hi-01.myshopify.com
 
 # Create a shareable snapshot (uploads a NEW unpublished theme, returns a preview URL)
-shopify theme share --store 00d611-p1.myshopify.com --path .
+shopify theme share --store 1uz1hi-01.myshopify.com --path .
 ```
 
-Preview: `https://00d611-p1.myshopify.com?preview_theme_id=194587852932`
+Preview: `https://1uz1hi-01.myshopify.com?preview_theme_id=164840702191` — it redirects to
+`jevikajoy.shop` and keeps the preview parameter.
 
-**Always use the permanent `.myshopify.com` domain.** `jevikajoy.shop` is a vanity domain and
-the CLI rejects it with a confusing "not authorized to use the CLI to develop in this store".
+**Always use the permanent `.myshopify.com` domain with the CLI.** `jevikajoy.shop` is only the
+store's primary domain, and the CLI rejects it with a confusing "not authorized to use the CLI
+to develop in this store".
+
+### Setting up a machine
+
+- **Node.js 22.12+ and Git 2.28+** (Shopify CLI 4.x requirements), then
+  `npm install -g @shopify/cli@latest`. CLI 4.x upgrades itself after that.
+- On Windows, a default PowerShell execution policy blocks the `npm.ps1` / `shopify.ps1`
+  shims with "running scripts is disabled on this system". Call `npm.cmd` / `shopify.cmd`,
+  or work from Git Bash.
+- If git refuses with "detected dubious ownership", the folder was created under another
+  Windows account. `git config --global --add safe.directory D:/projects/JEVIKAJOY.SHOP`
+  clears it.
+- **There is no git remote.** Commits on `scratch-theme` exist only on this disk.
 
 There is no build step, no test suite, and no linter wired up. `.theme-check.yml` and
 `.prettierrc.json` are Dawn leftovers.
@@ -121,10 +171,13 @@ Known, deliberate exceptions: the hero field `#034CA2`/`#012F66` matches the col
 into the hero artwork (changing it needs new art), and PDP colour swatches (`#2563eb`,
 `#e3d0ac` for Sand, etc.) depict physical garment colours, not brand UI.
 
-**Every Colour option value needs a swatch entry** in `main-product.liquid`
+**Every Colour option value needs a swatch entry** in `assets/theme.css`
 (`[data-swatch='<handle>']`). A value with no entry falls back to `--ink-soft` and renders a
 navy dot — which is how a Sand colourway briefly showed up as navy. Add the hex when you add
-the colour.
+the colour. The map lived scoped inside `main-product.liquid` until the collection page's
+colour filter began drawing the same dots; it is unscoped now so one list serves both, and the
+PDP rules that used to win on `#MainProduct-<id>` specificity were deleted rather than left to
+shadow it.
 
 **Never tint text with its own card's solid — always `--ink` on the fill.** The reference does
 tint, and copying it put gold on its pale-yellow card at roughly **1.5:1**. When the fills went
@@ -154,6 +207,16 @@ these rather than redefining them:
 - `.marquee` / `.marquee__track` / `.marquee__group` — 24s linear, content repeated so the
   `-50%` translate loops seamlessly
 - `.scroll-trigger` + `.animate--fade-in` / `.animate--slide-in`, driven by `assets/theme.js`
+
+**`IntersectionObserver` alone strands content invisible.** It fires only on a *change* of
+intersection state, so a jump that lands past an element — a hash link, a browser-restored
+scroll position, a full-page screenshot — takes it from "not intersecting, below" to "not
+intersecting, above" with no intersecting frame between, the callback never runs, and it
+keeps `opacity: 0` for the life of the page. Three `/collections` cards were permanently
+invisible this way and it read as a section bug, not a theme-wide one.
+`initScrollReveal()` now also reveals on `!isIntersecting && boundingClientRect.bottom <= 0`
+and sweeps on a passive, rAF-throttled `scroll` listener that unbinds itself once nothing is
+left hidden. Anything new using `.scroll-trigger` inherits the fix; do not reimplement it.
 
 `html` is `62.5%`, so **1rem = 10px**. Rem values port directly from the React source.
 
@@ -200,6 +263,16 @@ track is a reachable point at all. Any track showing N-of-M cards has this probl
 `scroll-behavior`, so a `prefers-reduced-motion` rule that sets `scroll-behavior: auto` is
 ignored. Omit it and let CSS decide. It also makes the scroll testable — see the preview-pane
 note under "Verifying changes".
+
+**Padding cannot inset an absolutely positioned child, and `inset` cannot size an image.**
+Two failed attempts at putting an even frame around the `featured-collection` packshot:
+padding on the positioned parent did nothing, because an absolutely positioned child resolves
+`inset: 0` against the parent's *padding box*, which already includes that padding. Moving the
+inset onto the image as `inset: 2.6rem` then broke differently — an `<img>` is a **replaced**
+element, so `width: auto` takes its intrinsic width and the opposing offset is ignored, leaving
+the picture hanging 26px off the right edge. What works is `padding` on the `<img>` itself:
+`object-fit` draws into the content box, so padding both shrinks the drawing area and keeps it
+centred. One variable drives all four sides.
 
 **Never hang carousel button state solely off the `scroll` event.** One missed event leaves a
 button `disabled`, a disabled button swallows the next click, and the track is stranded at that
@@ -274,6 +347,79 @@ renders on both `/search` and the collection page, so section-scoped rules would
 both. `main-collection.liquid` uses the shared pill but still has its own copy of the card
 rules.
 
+### Cart drawer
+
+`sections/cart-drawer.liquid` is rendered from **`layout/theme.liquid`** with
+`{% section 'cart-drawer' %}`, not from a section group. That is deliberate: it makes the
+section addressable as `cart-drawer` by the Section Rendering API, which is how `/cart/add.js`
+and `/cart/change.js` hand back freshly rendered line items in the same round trip. The drawer
+never rebuilds a line item in JavaScript.
+
+**It is a sibling of the header, never a child.** The header already owns two panels whose
+state lives on `#Header-<id>` *inside* `.hdr-bar`. A third panel hung off that root would
+inherit the bar's stacking context — the exact bug that once buried the logo and close
+button. The drawer carries its own overlay at `z-index: 70` and panel at `71`, clear of the
+header section's sticky `50` and its pinned `60`. The two coordinate by event only:
+`jjw:cart-open` and `jjw:header-open`, each closing the other's panels.
+
+Four API facts that are easy to get wrong, all confirmed against the docs:
+
+- **`/cart/add.js` does not return the cart.** Its body is `{"items": [...]}` — no
+  `item_count`, no totals. Reading `item_count` off it yields `undefined`; re-fetch `cart.js`.
+  `/cart/change.js` *does* return the full cart.
+- **Identify lines by `key`, never index.** `/cart/change.js` takes `id` *or* `line`, never
+  both. An index shifts the moment an earlier line is removed, silently editing the wrong row,
+  and two lines can hold the same variant with different properties. The cart *page* still
+  uses positional `updates[]` and `url_to_remove`; the drawer does not.
+- **Scripts inside section-rendered HTML do not execute** when inserted via `innerHTML` or
+  `DOMParser`. All drawer behaviour is delegated from a listener outside the replaced region.
+- **Never hardcode `/cart/add.js`.** Use `window.Shopify.routes.root + 'cart/add.js'`; the
+  root carries the locale/market prefix and a hardcoded path 404s the day a second market
+  opens.
+
+Refresh swaps `[data-cd-body]`, `[data-cd-foot]` and `[data-cd-count]` only — never the whole
+section, which would take the root element, the open state and the `<style>` block with it.
+
+**Do not send `Accept: application/json` with `?sections=`.** On a product URL that header
+makes Shopify answer with the *product* resource and ignore the sections parameter entirely —
+the body comes back as `{"product": {...}}` with no section HTML, so the refresh silently does
+nothing and the drawer keeps showing a stale cart. The same URL without the header returns
+`{"cart-drawer": "<html>"}`. The Section Rendering API already replies with JSON whenever
+`?sections=` is present; asking for JSON on top of it picks the wrong resource. This cost a
+real bug that only surfaced when the cart was changed outside the drawer's own JavaScript.
+
+**`cart.total_price` is already net of discounts — never label it "Subtotal" above a
+discount row.** Doing that printed `Subtotal Rs. 1,527.45` and `−Rs. 269.55` underneath, which
+reads as Rs. 1,257.90 while checkout charges Rs. 1,527.45 — understating the price to the
+shopper on the exact 3-item cart the bundle nudge is pushing them toward. Use
+`cart.original_total_price` for the gross line, then the saving, then `cart.total_price` as
+the total, so the three numbers reconcile.
+
+**The drawer must never open over `/cart`.** `main-cart.liquid` edits quantities with a
+*positional* `updates[]` array, and the drawer only re-renders itself. Remove a line in the
+drawer while the cart page is underneath and that form is left holding three values against a
+two-line cart, so the next quantity typed there is applied to the wrong product. The opener is
+gated on `template.name == 'cart'` and simply lets the link navigate.
+
+**Opening order matters for the scroll lock.** The drawer used to lock `body` overflow and
+*then* dispatch `jjw:cart-open`; the header's listener closed its own panels, and its
+`lockScroll()` saw both header states false and cleared the lock — unlocking the page behind
+an open drawer. Dispatch first, write `overflow` last, so the drawer's write is the survivor.
+
+Known asymmetry, not yet fixed: the cart **page** still shows only the post-discount figure
+with no discount row, so it and the drawer present the same promo differently.
+
+**Two settings must be kept in step with admin or the store lies to the shopper.**
+`free_shipping_threshold` has to match the real shipping rate (today: Rs. 0 domestic standard
+at or above **Rs. 999**), and `bundle_quantity` has to match the automatic discount's minimum
+(**15% off at 3+** on the old store, `DiscountAutomaticNode/1831669891204` there — the ID
+differs on `1uz1hi-01`). The same discount is
+advertised by `bundle-banner` on the PDP and cart page, so a change in admin has to move
+three things.
+
+The header cart icon stays an `<a href="{{ routes.cart_url }}">` and checkout stays a real
+form POST, so with JS off both degrade to the cart page rather than dead controls.
+
 ### Data model — build for this, not for assumptions
 
 10 products. Every one has exactly two options: **Size** and **Color**.
@@ -286,6 +432,12 @@ rules.
 - Tags carry taxonomy: `character:Pinki`, `gender:Boys`, `gender:Girls`. A product may carry
   **more than one** `character:` tag — `brutus-boxer-tee` is both Brutus and Joy. Code that
   derives a colour pair must decide deliberately which one wins (see below).
+- **Descriptions are written for all 10.** They were empty on 9 of 10 until Phase 2. The
+  house voice is the `wander-tee` copy; drafts live in `docs/product-copy/descriptions.json`.
+  They deliberately claim only what the site already claims — organic cotton, BIS, OEKO-TEX
+  inks, ages 4-12 — and never fabric weight, origin, wash durability or popularity. Products
+  with no photography describe the character and the make, never a print, because there is no
+  way to know what is on a shirt nobody has photographed.
 - **5 of 10 products have images**, 4-per-colourway plus a 16:9 banner: `tech-builder-tee` (15),
   `adventure-tee`, `brutus-boxer-tee`, `giggles-tee`, `wander-tee` (16 each). The other five
   have none, and descriptions are empty across the board. Anything reading
@@ -328,6 +480,33 @@ tag instead makes it blue everywhere, since tags arrive alphabetically.
 `/collections/joy`), as are `boys` / `girls` on `gender:`. Adding a product to a character
 category is a `tagsAdd`, never a collection edit.
 
+### Size guide and reviews
+
+The size guide is `snippets/size-guide.liquid`, a `<details>` rendered inside the **Size**
+fieldset on the PDP — at the moment the size is chosen, not buried below. Rows come from one
+pipe-separated `textarea` setting on `main-product`, first line the header. A textarea rather
+than blocks because a size chart changes as a whole, and eight size rows in the theme editor's
+block list next to the badge blocks would be worse to edit, not better.
+
+**Its numbers are a general Indian kidswear standard, not measurements taken from a JJW
+garment.** Prashant chose that knowingly over shipping it empty. The note under the table says
+so on the page and must keep saying so until real measurements replace them.
+
+`product-accordions.liquid` used to carry a fourth row, Size Guide, with its own hardcoded
+table. It was removed rather than kept alongside: two tables on one page disagreed on
+convention (accordion measured chest circumference in cm, the new one flat width in inches),
+and the accordion's four hardcoded sizes were simply wrong on `giggles-tee`, which has eight.
+The snippet is three rows now.
+
+**Judge.me is installed and syncing** — it writes `product.metafields.judgeme.badge` (the star
+badge, for cards) and `.widget` (the full review block, for the PDP). `snippets/review-stars.liquid`
+prints the badge and renders nothing when the metafield is absent, which is every product but
+`wander-tee` today. ⚠️ **The Judge.me app embed is not enabled in this theme**
+(`config/settings_data.json` has no app embed blocks at all), so its script never loads and the
+badge — which ships `display:none` and relies on that script to reveal it — stays invisible.
+Turning it on is one toggle in the theme editor under Settings → App embeds, and nothing
+Judge.me-related will appear until someone does.
+
 ⚠️ Shopify's product search **silently mis-filters tags containing a colon**:
 `query: "tag:'character:Minku'"` returns only some of the matching products. Filter in code
 against the full product list instead of trusting that query.
@@ -342,21 +521,138 @@ Templates are JSON and compose sections; `header-group.json` / `footer-group.jso
   panel), featured-collection (as related products)
 - `templates/collection.json` — main-collection, product-trust
 
+### Collection filtering
+
+`main-collection.liquid` carries two different things that look alike and must not be confused:
+the **character pills** at the top are navigation *between* collections (each is a link to
+`/collections/<handle>`), and the **filter bar** below the heading narrows *within* the current
+one. They were originally drawn with the same solid Sky Blue `.jjw-pill` and the page read as
+one wall of blue with no way to tell a link from a control. Filters are now outlined —
+white fill, 2px navy ring, filling navy when active. Keep that distinction if either is
+restyled.
+
+Filtering is Shopify's `collection.filters`, the same route `main-search.liquid` uses. Four
+filters exist on this store: Availability, Size, Color and a product-tag filter labelled
+"Character". Notes that cost time to establish:
+
+- **Size values arrive in numeric order already** — `4-5 Y … 11-12 Y`, not alphabetical.
+  Verified live. Do not add a sort on the assumption that `10-12 Y` would lead.
+- Size is relabelled **"Age"** through a setting, because the values *are* ages and parents
+  shop by age. `hidden_filters` takes a comma-separated list of Shopify's own labels for
+  anything a merchant wants dropped.
+- **Values with `count == 0` are skipped, unless active.** Everything is in stock today, so
+  otherwise the Availability filter would offer an "Out of stock" pill that returns nothing.
+  The `unless active` half matters: without it the pill you just clicked disappears under you.
+- **The sort form must carry active filters as hidden inputs.** It is a GET submit, so without
+  them the query string is rebuilt from the form alone and every applied filter is silently
+  dropped. Clearing filters likewise preserves `sort_by` when it is not the default.
+- The empty state distinguishes "this collection has nothing" from "your filters matched
+  nothing" — only the second has a way out, and it gets a clear-all link.
+
+The **Character** filter is admin-side content, not a theme bug: its values also include the
+`gender:` tags and the three theme tags (`Adventure Squad`, `Street & Sports`, `Tech & Smart`).
+Minku is present — an earlier note here said it was missing, and that is no longer true.
+
 `product-trust` (the nine curved-text badges) was swapped off the PDP for `fabric-story` and
 now renders **only** on the collection page. The section file stays for that reason.
-- `templates/cart.json` — main-cart, featured-collection (as recommendations)
+- `templates/cart.json` — main-cart, bundle-banner, featured-collection (as recommendations)
 - `templates/search.json` — main-search (no blocks; filters come from Shopify)
 
-`404`, `blog`, `article`, `page`, `list-collections` are still **placeholder
-`.liquid` files** that print "This page is not built yet." `page` matters most: the store
-has two real pages, **Contact** and **Our Story**, both rendering the stub today. There is
-no `policy.liquid` and `templates/customers/` is empty.
+`bundle-banner` announces the store's automatic discount and is declared on **both**
+`product.json` and `cart.json`; the copy lives in settings so the same section carries
+whatever the offer becomes. Clearing its heading switches it off everywhere at once. The
+discount itself is a Shopify automatic discount — **15% off any 3 tees**, min quantity 3,
+`DiscountAutomaticNode/1831669891204` on the old store — so the banner is only advertising,
+never enforcing.
+Change one and the other has to follow, or the store promises a price it will not charge.
 
-The footer nav renders nothing sitewide: `footer.liquid` loops over `menu` blocks and
-`footer-group.json` declares the footer section with none — the same trap as the mega menu.
+`whatsapp-button` lives in `footer-group.json`, which renders on every template just before
+`</body>`. It returns nothing until a number is entered, so it ships hidden rather than
+behind a checkbox. It sits at `z-index: 8`, deliberately below the header overlay's 10, so
+opening the menu or search covers it instead of leaving it floating over the scrim.
+
+- `templates/page.json` — main-page
+- `templates/page.contact.json` — main-page (title only) + contact-form
+- `templates/404.json` — main-404
+- `templates/list-collections.json` — main-list-collections
+
+`blog` and `article` remain placeholder `.liquid` files printing "This page is not built
+yet." The store's only blog is Shopify's default *News* with **zero** articles, so there is
+nothing to render; build them when there is. `templates/customers/` is empty on purpose.
+
+**`templates/policy.liquid` is never rendered on this store — do not write one.** Shopify
+serves `/policies/*` itself and injects its own markup into the theme layout:
+
+```
+.shopify-policy__container > .shopify-policy__title > h1
+.shopify-policy__container > .shopify-policy__body  > .rte
+```
+
+One was written, uploaded, and confirmed byte-identical on the remote by checksum; the live
+page still came back as Shopify's container, so the file was deleted rather than left as
+dead code. Style the classes above instead — they live in `theme.css`. Shopify also injects
+`policy-<hash>.css`, whose rules are plain and the same specificity as ours
+(`.shopify-policy__container { max-width: 65ch }`), and load order is not ours to control;
+the rules are scoped under `#MainContent` to win on specificity rather than with the
+`!important` this theme was rebuilt to be rid of.
+
+That is also why the shared prose class is **`.rte`, not `.jjw-rte`** — Shopify's policy
+body already carries `class="rte"`, so one rule set styles both the policy pages and
+`main-page` instead of 26 duplicated selectors. Anything rendering admin-authored rich text
+should use it, and must sit on `--white`: `--blue` links are 4.34:1 on cream (fails AA) and
+4.59:1 on white.
+
+**Neither a `{% render %}` argument nor an `{% if %}` condition takes a filter chain.**
+`face: handle | append: '-face.png'` and `if line | strip != blank` both fail the push with
+*Expected end_of_string but found pipe*. `assign` it first — each of these cost a push cycle.
+Worse, the CLI reports this as a per-file error inside a wall of `--only` pattern warnings, so
+a `| tail -8` shows the success box of the run and hides it — the section silently stayed at
+its old version through two pushes. Filter pushes with
+`grep -iE "^\W+(error|success)|Liquid syntax"`, never by line count.
+
+**A `--only` push can print the success box and not apply the file.** It has happened twice:
+`main-list-collections.liquid` and `product-accordions.liquid` both reported success while the
+remote kept the previous version, and the second one was only caught because the rendered page
+still showed a row that had been deleted. A full `shopify theme push` fixed both. The success
+box is not evidence — verify with the Admin API and compare checksums:
+
+```bash
+python -c "import hashlib,pathlib;d=pathlib.Path('snippets/x.liquid').read_bytes();print(len(d),hashlib.md5(d).hexdigest())"
+```
+
+then read `theme.files(filenames: [...]) { nodes { size checksumMd5 } }` and require both to
+match. This is the same check the product-image uploader runs on its signed policies, and for
+the same reason: a silent no-op is worse than an error.
+
+**A `richtext` setting must never be emitted inside a `<p>`.** It brings its own `<p>`, and a
+nested one closes the outer tag early, so the copy escapes the class that was styling it and
+lands unstyled with browser-default 1em margins. It renders — which is why it survives a
+glance — but at the wrong size and colour. Four sections shipped this before it was caught
+(`main-404`, `main-list-collections`, `contact-form`, `size-guide`). Use a `<div>` and add
+`:where(p) { margin: 0 }` so the wrapper keeps owning the spacing. Grep for it with:
+
+```bash
+grep -nE '<p[^>]*>\{\{ *section\.settings\.[a-z_]+ *\}\}</p>' sections/*.liquid
+```
+
+**`nil == 0` is false in Liquid.** `collections['minku'].all_products_count == 0` does not
+guard against a deleted collection — it yields nil and the test passes through, rendering an
+empty tile. Test `== blank` first.
+
+The footer nav is wired: `footer.liquid` loops over `menu` blocks, and `footer-group.json`
+declares two — `footer` (shop and help) and `footer-legal`. Both menus exist in admin.
+`footer-legal` holds **only Privacy**, because it is the store's only policy; the drafts for
+the other four are in `docs/policies/` and have to be pasted into admin by hand, since the
+Shopify connection lacks `write_legal_policies` and `shopPolicyUpdate` refuses without it.
 
 Not yet built from the reference: the collection page's full-bleed banner strip, its wide
 feature panel, and the "sweet treat" marquee band.
+
+**Inside a `{% liquid %}` tag every line is a separate statement.** A filter chain wrapped
+across lines parses as unknown tags — `assign x = y` then a line starting `| remove: '+'`
+fails with *Unknown tag*. Keep the chain on one line. And never write percent-brace markup
+inside a `liquid`-tag `comment`: the literal braces close the tag early, which reports as
+*'comment' tag was never closed*. Both cost a push cycle each in `whatsapp-button`.
 
 **Sections declared in a template get only the blocks that template specifies.** A section's
 `presets` block list applies only when a merchant adds it through the theme editor. Forgetting
@@ -525,7 +821,7 @@ not using it", and theme developers are told to stop shipping the Liquid files. 
 is not an option here. The folder is empty on purpose.
 
 A plain `<a href="{{ routes.account_url }}">` 302s the shopper to
-`shopify.com/authentication/100517019780/login` — an unbranded page with a purple *Continue
+`shopify.com/authentication/<shop-id>/login` (`100517019780` on the old store) — an unbranded page with a purple *Continue
 with shop* button. That page is **not** brandable on this plan: `checkoutBranding` /
 `checkoutBrandingUpsert` require Plus and the store is on `Shopify`
 (`shop.plan.shopifyPlus: false`), so the API answers *"Access denied … the shop must be on a
