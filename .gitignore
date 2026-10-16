@@ -8,6 +8,8 @@
 ehthumbs.db
 Thumbs.db
 .shopify
+# Holds the Theme Access password — never commit. Template: shopify.theme.toml.example
+shopify.theme.toml
 node_modules
 *.zip.push-*.json
 .remote-snapshot/

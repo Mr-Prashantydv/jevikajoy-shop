@@ -1,0 +1,14 @@
+# Copy this file to shopify.theme.toml (gitignored) and paste the Theme Access
+# password over the placeholder. The CLI then pushes without a browser login:
+#
+#   shopify theme push -e dev --unpublished    (first push: creates a new theme)
+#   shopify theme push -e dev                  (after `theme` below is filled in)
+#
+# The first push goes to a NEW unpublished theme on purpose: the local source has
+# not been compared with the live or preview themes, so pushing over either could
+# silently undo work that only exists remotely.
+
+[environments.dev]
+store = "1uz1hi-01"
+password = "shptka_PASTE_THE_PASSWORD_HERE"
+# theme = "<id printed by the first push>"
