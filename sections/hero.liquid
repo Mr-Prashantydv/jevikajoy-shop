@@ -54,11 +54,16 @@
     padding-left: clamp(2rem, 5vw, 8rem);
   }
 
-  /* Navy reads clearly against the light campaign; a small sunshine shadow
-     retains the playful display treatment without obscuring the letters. */
+  /* Sticker lettering. The blanket under the heading runs from cream down to
+     tan in the leaf shadows, where Adventure Blue alone falls to ~1.9:1, so
+     the letters carry their own white outline and stay legible on any patch.
+     paint-order draws the stroke under the fill, keeping the letterforms
+     full weight; sizes are in em so the outline scales with the heading. */
   #Hero-{{ section.id }} .hero__heading {
     color: {{ section.settings.heading_color }};
-    text-shadow: 1px 1px 0 {{ section.settings.heading_shadow }};
+    -webkit-text-stroke: 0.14em {{ section.settings.heading_outline }};
+    paint-order: stroke fill;
+    text-shadow: 0.08em 0.08em 0 {{ section.settings.heading_shadow }};
     font-size: var(--hero-heading-size);
   }
 
@@ -340,7 +345,13 @@
       "type": "color",
       "id": "heading_color",
       "label": "Heading",
-      "default": "#1A2F5E"
+      "default": "#0F7DAF"
+    },
+    {
+      "type": "color",
+      "id": "heading_outline",
+      "label": "Heading outline",
+      "default": "#FFFFFF"
     },
     {
       "type": "color",

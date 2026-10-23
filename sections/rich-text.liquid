@@ -16,10 +16,10 @@
     text-align: center;
   }
 
-  /* --ink, not --pink: Heart Pink on cream is 2.92:1, under the 3:1 large-text floor. */
+  /* --heading, not --pink: Heart Pink on cream is 2.92:1, under the 3:1 large-text floor. */
   #RichText-{{ section.id }} .rich-text__heading {
     margin-top: 2rem;
-    color: var(--ink);
+    color: var(--heading);
   }
 
   #RichText-{{ section.id }} .rich-text__link-wrap {
@@ -31,12 +31,16 @@
     /* Scales down on a phone so a social handle stays on one line. */
     font-size: min(2.7rem, 6.4vw);
     line-height: 1.2;
-    color: var(--pink);
-    transition: color 0.2s var(--ease);
+    /* Matches the heading above. Bold and >= 20px at 320 wide, so large text:
+       4.31:1 on cream clears 3:1. Pink was 2.92:1. */
+    color: var(--heading);
+    text-decoration: underline 0.12em transparent;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.2s var(--ease);
   }
 
   #RichText-{{ section.id }} a.rich-text__link:hover {
-    color: var(--blue);
+    text-decoration-color: currentColor;
   }
 
   @media screen and (max-width: 749px) {

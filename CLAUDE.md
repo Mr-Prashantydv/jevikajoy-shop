@@ -178,7 +178,7 @@ measurements and swap every colour role for the JJW equivalent before writing CS
 | Sheet name | Hex | Token |
 |---|---|---|
 | Adventure Red | `#F52A2A` | *(unused so far — no token yet)* |
-| Adventure Blue | `#0F7DAF` | `--blue` |
+| Adventure Blue | `#0F7DAF` | `--blue`, `--heading` (big headings on cream, 4.31:1) |
 | Sunshine Gold | `#F6A313` | `--gold` |
 | Sky Blue | `#59C8F6` | `--sky` |
 | Mint Green | `#73D78D` | `--mint`, `--green-bg` *(too light for text; `--green` uses Outdoor `#4FAF4B`)* |
@@ -194,6 +194,14 @@ measurements and swap every colour role for the JJW equivalent before writing CS
 | Indoor background | `#FFF7E8` | `--cream` |
 | Pure White | `#FFFFFF` | `--white` (cards on the cream canvas) |
 | Warm White | `#F8F8F6` | `--warm-white` |
+
+**Big headings are Adventure Blue, not navy** (2026-10-23, the owner's call). `--heading`
+(`settings.color_heading`) colours every `.hxxl` that sits on cream. It is large-text-only —
+4.31:1 on cream passes the 3:1 floor but not the 4.5:1 body floor — so body copy, eyebrows and
+anything on a coloured fill stay `--ink`. Not switched: `split-content` (Sky Blue panel, blue
+on it is ~2:1) and `reviews` (cream on the navy band). The hero heading is the same blue as
+sticker lettering — white `-webkit-text-stroke` under the fill (`paint-order: stroke fill`)
+plus a Star Yellow offset — because the blanket's leaf shadows drop plain blue to ~1.9:1.
 
 **The `*-bg` character fills are sheet colours, not tints. Do not mix new ones.** They used to
 be `#ffd7e6` / `#c9e8f7` / `#ffe9c2` / `#d3f3de` / `#e4dcff` — five pastels we invented,
