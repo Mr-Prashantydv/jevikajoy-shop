@@ -91,6 +91,9 @@ container that clones from GitHub). They share nothing but GitHub and the live t
   commit runs `git pull --rebase` and reads the result instead of resolving conflicts blind.
 - Telling them apart in `git log`: PC commits are authored by Prashant; cloud commits by
   `Claude <noreply@anthropic.com>` with a `Claude-Session:` trailer linking the session.
+- **Codex also works in the PC folder** and reads `AGENTS.md`, which carries the same rules.
+  Uncommitted files there may be its work in progress: never commit, push or revert them
+  without asking, and push live with `--only` so they cannot ride along.
 
 ## Commands
 

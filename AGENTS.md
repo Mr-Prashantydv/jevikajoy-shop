@@ -52,6 +52,30 @@ The Shopify connector in Claude may still be authorised against the frozen store
 every call answers *"This shop is unavailable for API access"*. Reconnect it to `1uz1hi-01`
 before any Admin API work.
 
+## Three agents, one repo
+
+The owner works from three places at once, sharing nothing but GitHub and the live theme:
+Codex in this folder (`D:\projects\JEVIKAJOY.SHOP`), a Claude Code session on the same PC
+(the one with the Shopify CLI logged in), and Claude Code on the web (a cloud container cloned
+from GitHub). `CLAUDE.md` is the fuller, more current guide; where it and this file disagree,
+it wins.
+
+- **GitHub `scratch-theme` is the source of truth** — not this folder, not the live theme.
+- **Sync before touching a file.** `git fetch --prune`, then check what is ahead of you:
+  `git log --oneline HEAD..origin/scratch-theme`, and every `origin/scratch-theme-*` or
+  `origin/claude/*` branch. Bring it in first.
+- **Commit when a piece of work is finished.** The Claude session works in this same folder; it
+  pushes only named files with `--only`, so uncommitted work is never sent by it, but it also
+  cannot tell finished work from half-done.
+- **Never run a full `shopify theme push` from this folder.** It uploads every file here,
+  including anyone's unfinished edits, straight to shoppers. Live pushes go through the PC
+  Claude session, from committed `scratch-theme`, after pulling live and checking nothing in
+  the theme editor would be overwritten.
+- **Push schema before templates, separately** (see the push traps below): a section with new
+  settings first, then the `templates/*.json` or `*-group.json` that uses them.
+- **One file, one agent at a time.** If two must touch the same file, the second to commit
+  rebases and reads the result instead of resolving conflicts blind.
+
 ## Commands
 
 ```bash
