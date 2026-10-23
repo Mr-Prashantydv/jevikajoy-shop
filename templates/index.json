@@ -10,7 +10,7 @@
         "p1": {
           "type": "phrase",
           "settings": {
-            "text": "100% Organic Cotton"
+            "text": "Bio Washed"
           }
         },
         "s1": {
@@ -22,7 +22,7 @@
         "p2": {
           "type": "phrase",
           "settings": {
-            "text": "BIS Certified"
+            "text": "Silicone Soft"
           }
         },
         "s2": {
@@ -34,7 +34,7 @@
         "p3": {
           "type": "phrase",
           "settings": {
-            "text": "OEKO-TEX Inks"
+            "text": "Pre-Shrunk"
           }
         },
         "s3": {
@@ -46,7 +46,7 @@
         "p4": {
           "type": "phrase",
           "settings": {
-            "text": "Ages 4-12"
+            "text": "Taped Seams"
           }
         },
         "s4": {
@@ -58,10 +58,46 @@
         "p5": {
           "type": "phrase",
           "settings": {
-            "text": "Free Shipping Over Rs999"
+            "text": "100% Organic Cotton"
           }
         },
         "s5": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p6": {
+          "type": "phrase",
+          "settings": {
+            "text": "OEKO-TEX Inks"
+          }
+        },
+        "s6": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p7": {
+          "type": "phrase",
+          "settings": {
+            "text": "BIS Certified"
+          }
+        },
+        "s7": {
+          "type": "phrase",
+          "settings": {
+            "text": "•"
+          }
+        },
+        "p8": {
+          "type": "phrase",
+          "settings": {
+            "text": "Free Shipping Over Rs999"
+          }
+        },
+        "s8": {
           "type": "phrase",
           "settings": {
             "text": "•"
@@ -78,7 +114,13 @@
         "p4",
         "s4",
         "p5",
-        "s5"
+        "s5",
+        "p6",
+        "s6",
+        "p7",
+        "s7",
+        "p8",
+        "s8"
       ],
       "settings": {}
     },
@@ -91,7 +133,98 @@
     },
     "find_us": {
       "type": "find-us",
-      "settings": {}
+      "blocks": {
+        "m_bio": {
+          "type": "logo",
+          "settings": {
+            "label": "Bio Washed",
+            "caption": "Smooth, less bobbling",
+            "icon": "sparkle",
+            "fill": "yellow"
+          }
+        },
+        "m_silicone": {
+          "type": "logo",
+          "settings": {
+            "label": "Silicone Soft",
+            "caption": "Soft from first wear",
+            "icon": "cloud",
+            "fill": "sky"
+          }
+        },
+        "m_cpl": {
+          "type": "logo",
+          "settings": {
+            "label": "Pre-Shrunk",
+            "caption": "Washed before it's sewn",
+            "icon": "wash",
+            "fill": "white"
+          }
+        },
+        "m_seams": {
+          "type": "logo",
+          "settings": {
+            "label": "Taped Seams",
+            "caption": "Neck & shoulders",
+            "icon": "needle",
+            "fill": "candy"
+          }
+        },
+        "m_colour": {
+          "type": "logo",
+          "settings": {
+            "label": "Colour-Fast",
+            "caption": "Lab tested",
+            "icon": "drop",
+            "fill": "lavender"
+          }
+        },
+        "m_organic": {
+          "type": "logo",
+          "settings": {
+            "label": "100%",
+            "caption": "Organic cotton",
+            "icon": "leaf",
+            "fill": "yellow"
+          }
+        },
+        "m_oeko": {
+          "type": "logo",
+          "settings": {
+            "label": "OEKO-TEX",
+            "caption": "Certified inks",
+            "icon": "star",
+            "fill": "sky"
+          }
+        },
+        "m_bis": {
+          "type": "logo",
+          "settings": {
+            "label": "BIS",
+            "caption": "Certified",
+            "icon": "shield",
+            "fill": "white"
+          }
+        }
+      },
+      "block_order": [
+        "m_bio",
+        "m_silicone",
+        "m_cpl",
+        "m_seams",
+        "m_colour",
+        "m_organic",
+        "m_oeko",
+        "m_bis"
+      ],
+      "settings": {
+        "heading": "Pre-Washed. Pre-Shrunk. Ready to Play.",
+        "heading_highlight": "Ready to Play.",
+        "subheading": "<p>Every tee is bio washed and silicone washed, so it's soft from the very first wear. Every panel is laundered before it's stitched, so the shrinking happens at our factory, not in your machine.</p>",
+        "button_label": "Shop the Tees",
+        "story_label": "See how it's made",
+        "story_handle": "how-its-made"
+      }
     },
     "falling_scroll": {
       "type": "falling-scroll",
@@ -102,7 +235,7 @@
             "character": "jevika",
             "behavior": "fall",
             "x": 41,
-            "y": 63,
+            "y": 56,
             "size": 27,
             "depth": 10,
             "x_nudge": 3,
@@ -123,7 +256,7 @@
             "character": "joy",
             "behavior": "fall",
             "x": 59,
-            "y": 63,
+            "y": 57,
             "size": 26,
             "depth": 10,
             "x_nudge": 1,
@@ -144,7 +277,7 @@
             "character": "pinki",
             "behavior": "fall",
             "x": 31,
-            "y": 73,
+            "y": 67,
             "size": 20,
             "depth": 22,
             "x_nudge": 2,
@@ -165,11 +298,11 @@
             "character": "minku",
             "behavior": "fall",
             "x": 50,
-            "y": 73,
+            "y": 69,
             "size": 18,
             "depth": 21,
             "x_nudge": -3,
-            "y_nudge": 3,
+            "y_nudge": 0,
             "start_x": 59,
             "start_x_nudge": 2,
             "start_y": 18,
@@ -186,11 +319,11 @@
             "character": "brutus",
             "behavior": "fall",
             "x": 67,
-            "y": 71,
+            "y": 55,
             "size": 30,
             "depth": 20,
             "x_nudge": 4,
-            "y_nudge": -4,
+            "y_nudge": 0,
             "start_x": 65,
             "start_x_nudge": 7,
             "start_y": 19,
@@ -204,57 +337,69 @@
         "a1": {
           "type": "accent",
           "settings": {
-            "text": "100% Organic Cotton",
-            "color": "#0F7DAF",
-            "text_color": "#FFF6EB",
-            "x": 27,
-            "y": 43,
+            "text": "100% Organic",
+            "color": "#73D78D",
+            "text_color": "#1A2F5E",
+            "x": 11,
+            "y": 42,
             "rotate": -8,
-            "depth": 3,
+            "depth": 30,
             "shape": "circle",
-            "size": 4
+            "size": 4,
+            "text_two": "Cotton",
+            "phone_x": 27,
+            "phone_y": 10
           }
         },
         "a2": {
           "type": "accent",
           "settings": {
-            "text": "BIS Certified",
-            "color": "#E5377E",
-            "text_color": "#FFF6EB",
-            "x": 72,
-            "y": 45,
+            "text": "BIS",
+            "color": "#59C8F6",
+            "text_color": "#1A2F5E",
+            "x": 90,
+            "y": 40,
             "rotate": 7,
-            "depth": 3,
+            "depth": 30,
             "shape": "circle",
-            "size": 4
+            "size": 4,
+            "text_two": "Certified",
+            "phone_x": 73,
+            "phone_y": 11
           }
         },
         "a3": {
           "type": "accent",
           "settings": {
-            "text": "OEKO-TEX Inks",
-            "color": "#F6A313",
+            "text": "OEKO-TEX",
+            "color": "#FFD94C",
             "text_color": "#1A2F5E",
-            "x": 75,
-            "y": 72,
+            "x": 89,
+            "y": 60,
             "rotate": 5,
-            "depth": 3,
+            "depth": 30,
             "shape": "circle",
-            "size": 4
+            "size": 4,
+            "text_two": "Inks",
+            "phone_x": 71,
+            "phone_y": 23
           }
         },
         "a4": {
           "type": "accent",
           "settings": {
-            "text": "Safe for School",
-            "color": "#2FA85E",
-            "text_color": "#FFF6EB",
-            "x": 24,
-            "y": 68,
+            "text": "Safe for",
+            "color": "#FF5FA2",
+            "text_color": "#1A2F5E",
+            "x": 12,
+            "y": 62,
             "rotate": -6,
-            "depth": 3,
+            "depth": 30,
             "shape": "circle",
-            "size": 4
+            "size": 4,
+            "text_two": "School",
+            "phone_x": 29,
+            "phone_y": 22
           }
         },
         "cl1": {
@@ -311,78 +456,6 @@
       "type": "split-content",
       "settings": {}
     },
-    "focus_carousel": {
-      "type": "focus-carousel",
-      "blocks": {
-        "r1": {
-          "type": "review",
-          "settings": {
-            "quote": "The cotton is genuinely soft and the print has not cracked after a dozen washes. She asks for it every week.",
-            "author": "— Priya M.",
-            "rating": 5,
-            "color_bg": "ink",
-            "color_shadow": "blue",
-            "color_text": "cream"
-          }
-        },
-        "r2": {
-          "type": "review",
-          "settings": {
-            "quote": "Sizing runs true and the colours stayed bright. I ordered two more for my nephews the same month.",
-            "author": "— Rahul K.",
-            "rating": 5,
-            "color_bg": "pink",
-            "color_shadow": "ink",
-            "color_text": "cream"
-          }
-        },
-        "r3": {
-          "type": "review",
-          "settings": {
-            "quote": "Finally tees my son can wear all day without fussing. The characters are his, not some cartoon he half recognises.",
-            "author": "— Ananya R.",
-            "rating": 5,
-            "color_bg": "blue",
-            "color_shadow": "ink",
-            "color_text": "cream"
-          }
-        },
-        "r4": {
-          "type": "review",
-          "settings": {
-            "quote": "Bought one for each twin. Months on they still look new, and the paw print is the first thing their friends notice.",
-            "author": "— Sneha D.",
-            "rating": 5,
-            "color_bg": "green",
-            "color_shadow": "ink",
-            "color_text": "cream"
-          }
-        },
-        "r5": {
-          "type": "review",
-          "settings": {
-            "quote": "Ordered on a whim before a birthday and it arrived early. The fabric feels far better than the price suggests.",
-            "author": "— Meera T.",
-            "rating": 5,
-            "color_bg": "gold",
-            "color_shadow": "ink",
-            "color_text": "cream"
-          }
-        }
-      },
-      "block_order": [
-        "r1",
-        "r2",
-        "r3",
-        "r4",
-        "r5"
-      ],
-      "settings": {
-        "heading": "Loved by Little Humans",
-        "background_asset": "jjw-hero.png",
-        "overlay_opacity": 45
-      }
-    },
     "rich_text": {
       "type": "rich-text",
       "settings": {}
@@ -394,6 +467,18 @@
     "social_icons": {
       "type": "social-icons",
       "settings": {}
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "heading": "Little tees. Big stories.",
+        "eyebrow": "The JJW love letters",
+        "description": "For every little personality, there's an adventure. Here's where your family's story joins ours.",
+        "scene_note": "Special delivery from the squad!",
+        "empty_heading": "Your story could be our first.",
+        "button_label": "Find your character",
+        "signoff": "A little personality. A whole lot of heart."
+      }
     }
   },
   "order": [
@@ -403,7 +488,7 @@
     "find_us",
     "falling_scroll",
     "split_content",
-    "focus_carousel",
+    "reviews",
     "rich_text",
     "social_marquee",
     "social_icons"
