@@ -40,16 +40,20 @@ JJW Migration into this theme, which already had the October UI pass (`docs/ui-c
 go-ahead in chat.** To try work safely, `shopify theme share` it into a throwaway unpublished
 theme, check that, then delete it.
 
-**Local matches live** (2026-10-21, after the headings, fonts and pinned falling-scroll
-shipped; every pushed file verified by pulling back, JSON compared by content since Shopify
-reformats it and adds a header comment). The only remote-only files are
+**Live vs local** (checked 2026-10-23 by pulling live and comparing, JSON by content since
+Shopify reformats it and adds a header comment): live matches `scratch-theme` except four
+changes that are committed but **not pushed to Shopify yet** — the Returns page from `e524ee7`
+(`sections/main-returns.liquid`, `templates/page.returns.json`, and the returns link in
+`snippets/product-accordions.liquid`, which renders only once a `returns` page exists in admin)
+and the cloud session's navy `rich-text` heading (`9695b29`). The only remote-only files are
 `assets/jjw-hero-v2-*.png` and `jjw-hero-v3-*.png`, referenced by nothing, so a full push will
 delete them. Pushing to the live theme needs `--allow-live`, or the
 CLI fails with "Failed to prompt".
 
 ⚠️ **No automatic discount exists on `1uz1hi-01`** (checked 2026-10-21: 3× Wander Tee came to
-Rs. 1,797 with `total_discount: 0`), yet `bundle-banner` still promises "Three for Rs. 1,527".
-Either recreate the 15%-off-3 automatic discount in admin or clear the banner heading.
+Rs. 1,797 with `total_discount: 0`). The `bundle-banner` heading has been cleared on both
+templates (`f8240bb`, live), so the banner no longer promises it. Recreate the 15%-off-3
+automatic discount in admin before giving the banner a heading again.
 
 **Facts below that were measured before October 2026 came from `00d611-p1`.** They describe
 this theme's code correctly, but anything about *store* state has to be re-checked on
@@ -62,6 +66,31 @@ was never set**, so every page `<title>` reads "My Store" (Settings → General 
 The Shopify connector in Claude may still be authorised against the frozen store, in which case
 every call answers *"This shop is unavailable for API access"*. Reconnect it to `1uz1hi-01`
 before any Admin API work.
+
+## Two sessions, one repo
+
+The owner works from two places at once: a Claude Code session on the PC
+(`D:\projects\JEVIKAJOY.SHOP`, Shopify CLI logged in) and Claude Code on the web (a cloud
+container that clones from GitHub). They share nothing but GitHub and the live theme, so:
+
+- **GitHub `scratch-theme` is the source of truth** — not the PC folder, not the live theme.
+- **Sync before touching a file.** `git fetch --prune`, then check what is ahead of you:
+  `git log --oneline HEAD..origin/scratch-theme`, and every `origin/scratch-theme-*` or
+  `origin/claude/*` branch with `git log --oneline scratch-theme..<branch>`. Bring it in first.
+- **Cloud sessions commit to their own branch** (`scratch-theme-<id>`, created for them), not
+  to `scratch-theme`, and push after every commit. Work that exists only inside a cloud
+  container is gone when the session ends.
+- **The PC session merges.** It fast-forwards or merges cloud branches into `scratch-theme`
+  and pushes that to GitHub, so the next cloud session starts from everything. A cloud branch
+  is deleted only after its session is finished, never while it may still push.
+- **Only the PC pushes to Shopify, and only from a `scratch-theme` that contains every cloud
+  branch.** A full push from a checkout missing the other side's work silently reverts it on
+  the live store. Before any live push, pull live into a scratch folder and compare: anything
+  changed in the theme editor exists only there, and a push overwrites it.
+- **One file, one place at a time.** If both sides must touch the same file, the second to
+  commit runs `git pull --rebase` and reads the result instead of resolving conflicts blind.
+- Telling them apart in `git log`: PC commits are authored by Prashant; cloud commits by
+  `Claude <noreply@anthropic.com>` with a `Claude-Session:` trailer linking the session.
 
 ## Commands
 
