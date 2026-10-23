@@ -203,3 +203,50 @@ Nothing should go live before the refund policy is published. Otherwise the new 
   botfit41@gmail.com; **"Allow buyers to initiate return from the tracking page" ON**.
 - Returns page (test theme #165506482415 only): "Start a return" now links to that tracking page, and
   step 1 says "choose Return … pick 'Size not as expected'" instead of promising an Exchange button.
+
+## 7. COD test orders (2026-10-23) — what the flow actually did
+
+Owner placed COD orders on the live store (guest checkout). Three orders were created, **#1001**
+(3 tees, ₹2,176), **#1002** and **#1003** (1 tee, ₹978 each) — checkout was evidently submitted more
+than once.
+
+| Stage | Result |
+|---|---|
+| Shopify order | Created, *Payment pending* (COD), *Unfulfilled*. Timeline: "A ₹978 payment is pending on Cash on Delivery". |
+| Confirmation email | Sent and *Delivered*. Shopify's default template, headed **"My Store"**, no logo, "View your order" button → Shopify order-status page. |
+| Shiprocket sync | All three appear within ~1 min in Shiprocket → Orders → New, channel "Jevika & Joy's World", COD, pickup "Home". |
+| Shippable? | **No.** Every order: dead weight 0 kg, 0×0×0 cm, "Info missing". Phone shows `xxxxxxxxxx` (none captured — checkout phone is optional). |
+| Customer tracking | Only Shopify's order-status page until a courier is booked; the Shiprocket tracking page / Return button exist only after an AWB. |
+
+Problems the test exposed:
+
+1. **Shipping is a flat ₹379 on every order**, including #1001 at ₹1,797 of tees. The only India rate is
+   one named **"मानक"** (Hindi for "Standard"), inherited from the store default via Markets. There is
+   **no free-over-₹999 rule**, so the site's "Free shipping over Rs. 999" (footer marquee, PDP badge,
+   cart-drawer progress bar) is false today, and ₹379 on a ₹599 tee is a conversion killer.
+   `docs/policies/shipping-policy.html` assumes Rs. 99 / free ≥ Rs. 999 — that was the old store.
+2. **Products have no weight** (0.0 kg on the Shopify order too). Set ~0.2–0.3 kg per variant in Shopify,
+   or upload Shiprocket's product catalogue with weight and box size, or Shiprocket cannot quote/ship and
+   weight-discrepancy charges follow.
+3. **Phone not required at checkout** → courier and COD confirmation calls impossible.
+4. Markets → India shows **Taxes: Not collecting** and **Returns and cancellations: No rules set**.
+5. Store name still "My Store" (email header, checkout, page titles).
+6. Shopify shows "1 app may need updated data access" on Shipping settings (probably Shiprocket).
+
+**Fixed 2026-10-23 (owner's go-ahead):** Markets → India → Shipping is now **"Standard", ₹99, free on
+₹999 and up, 3–5 business days, all products** (saved, reloaded, confirmed). This matches the theme's
+`free_shipping_threshold` (999) and the "Free shipping over Rs. 999" copy. Origin location is still
+"Laxmi Nagar" (Delhi) while the Shiprocket pickup is Kadarpur, Gurugram — check Settings → Locations.
+Express no longer exists; drop it from `docs/policies/shipping-policy.html` before publishing.
+
+**Fixed 2026-10-23 (owner's go-ahead):** all **172 variants** across the 10 products now weigh
+**0.25 kg** (Shopify bulk editor; "Changes saved", reloaded and re-checked top, middle and end).
+Shiprocket still needs **box dimensions** (0×0×0 today) — set them per order in Shiprocket or upload its
+product catalogue. Orders #1001–#1003 synced before the change and keep 0 kg in Shiprocket.
+Bulk-editor gotcha: typing into a selected but not-yet-edited cell is read as a **barcode scan**
+("Barcode not found" dialog) — double-click the cell first. The grid loads 50 rows at a time, so scroll to
+the end before a shift-click paste or the rows below the fold are skipped.
+
+**Fixed 2026-10-23 (owner's go-ahead):** Settings → Checkout → Shipping address phone number is now **Required** (saved, reloaded, confirmed).
+
+**Added 2026-10-23 (owner's go-ahead):** Shiprocket → Package Master → **"JJW tee mailer"**, Flyer / poly mailer, **30 × 25 × 3 cm** (Saved; listed after reload). Volumetric 0.45 kg vs 0.25 kg actual, so a single tee bills at the 0.5 kg slab. 0 approved products — the weight is not frozen per product yet. Pick it per order on Ship Now (or add products to it to freeze volumetric weight).
