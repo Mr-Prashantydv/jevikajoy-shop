@@ -206,7 +206,7 @@
     transition: color 0.2s var(--ease);
   }
 
-  #Footer-{{ section.id }} .footer__credit:hover {
+  #Footer-{{ section.id }} a.footer__credit:hover {
     text-decoration: underline;
   }
 
@@ -347,29 +347,43 @@
       {%- endif -%}
     </div>
 
-    <div class="page-width footer__credits">
-      {%- if section.settings.credit_one_label != blank -%}
-        <a
-          class="accent-caps footer__credit"
-          href="{{ section.settings.credit_one_link | default: '#' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ section.settings.credit_one_label }}
-        </a>
-      {%- endif -%}
+    {%- comment -%}
+      Credits ship empty: the old defaults named the reference site's agencies. A label with
+      no link renders as plain text rather than a dead '#' link.
+    {%- endcomment -%}
+    {%- if section.settings.credit_one_label != blank or section.settings.credit_two_label != blank -%}
+      <div class="page-width footer__credits">
+        {%- if section.settings.credit_one_label != blank -%}
+          {%- if section.settings.credit_one_link != blank -%}
+            <a
+              class="accent-caps footer__credit"
+              href="{{ section.settings.credit_one_link }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ section.settings.credit_one_label }}
+            </a>
+          {%- else -%}
+            <span class="accent-caps footer__credit">{{ section.settings.credit_one_label }}</span>
+          {%- endif -%}
+        {%- endif -%}
 
-      {%- if section.settings.credit_two_label != blank -%}
-        <a
-          class="accent-caps footer__credit"
-          href="{{ section.settings.credit_two_link | default: '#' }}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ section.settings.credit_two_label }}
-        </a>
-      {%- endif -%}
-    </div>
+        {%- if section.settings.credit_two_label != blank -%}
+          {%- if section.settings.credit_two_link != blank -%}
+            <a
+              class="accent-caps footer__credit"
+              href="{{ section.settings.credit_two_link }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ section.settings.credit_two_label }}
+            </a>
+          {%- else -%}
+            <span class="accent-caps footer__credit">{{ section.settings.credit_two_label }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 </footer>
 
@@ -428,8 +442,7 @@
     {
       "type": "text",
       "id": "credit_one_label",
-      "label": "First credit label",
-      "default": "Design: Wonderkind"
+      "label": "First credit label"
     },
     {
       "type": "url",
@@ -439,8 +452,7 @@
     {
       "type": "text",
       "id": "credit_two_label",
-      "label": "Second credit label",
-      "default": "Development: Has Merit Studio"
+      "label": "Second credit label"
     },
     {
       "type": "url",
