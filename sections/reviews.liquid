@@ -1,0 +1,192 @@
+{%- comment -%}
+  JJW love letters: a character-led home for real Judge.me reviews.
+  The artwork is decorative. Review text, ratings and totals come only from
+  Judge.me; the first-review state never invents quotes or customer identities.
+{%- endcomment -%}
+{%- liquid
+  assign jm = shop.metafields.judgeme
+  assign review_count = jm.all_reviews_count | plus: 0
+  assign review_rating = jm.all_reviews_rating | plus: 0
+  assign app_count = 0
+  for block in section.blocks
+    if block.type == '@app'
+      assign app_count = app_count | plus: 1
+    endif
+  endfor
+  assign has_feed = false
+  if app_count > 0
+    assign has_feed = true
+  elsif review_count > 0 and jm.featured_carousel != blank
+    assign has_feed = true
+  endif
+-%}
+{%- capture heart -%}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 21 3 12C-4 5 5-3 12 5c7-8 16 0 9 7Z" fill="currentColor"/></svg>{%- endcapture -%}
+{%- style -%}
+  #Reviews-{{ section.id }} {
+    position: relative; isolation: isolate; overflow: hidden;
+    padding-block: clamp(5.6rem, 7vw, 10rem);
+    background: var(--ink); color: var(--cream);
+  }
+  #Reviews-{{ section.id }}::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .11;
+    background-image: radial-gradient(var(--cream) 1px, transparent 1px);
+    background-size: 2.8rem 2.8rem;
+    mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+  }
+  #Reviews-{{ section.id }} .letters__inner { position: relative; }
+  #Reviews-{{ section.id }} .letters__intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 3rem; margin-bottom: clamp(3.2rem, 4vw, 5.6rem); }
+  #Reviews-{{ section.id }} .letters__eyebrow { display: inline-flex; align-items: center; gap: 1rem; margin: 0 0 1.6rem; font-family: var(--font-accent); font-size: 1.5rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--yellow); }
+  #Reviews-{{ section.id }} .letters__eyebrow svg { width: 2.6rem; height: 2.6rem; }
+  #Reviews-{{ section.id }} .letters__heading { max-width: 12ch; margin: 0; font-family: var(--font-heading); font-size: clamp(4.8rem, 6.6vw, 9.2rem); font-weight: 800; line-height: .98; letter-spacing: -.025em; color: var(--cream); text-wrap: balance; }
+  #Reviews-{{ section.id }} .letters__description { max-width: 30rem; margin: 0 1rem .6rem 0; font-size: var(--text-lead); line-height: 1.6; color: var(--cream); }
+  #Reviews-{{ section.id }} .letters__stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; gap: clamp(3.6rem, 6vw, 9rem); }
+  #Reviews-{{ section.id }} .letters__scene { position: relative; min-width: 0; }
+  #Reviews-{{ section.id }} .letters__scene-frame { position: relative; aspect-ratio: 1; overflow: hidden; border: .8rem solid var(--cream); border-radius: 46% 46% 39% 39% / 41% 41% 36% 36%; background: var(--sky); transform: rotate(-3deg); }
+  #Reviews-{{ section.id }} .letters__art { display: block; width: 100%; height: 100%; object-fit: cover; transform: rotate(3deg) scale(1.06); }
+  #Reviews-{{ section.id }} .letters__scene-note { position: absolute; right: -1rem; bottom: .6rem; max-width: 20rem; padding: 1.4rem 2rem; border: 2px solid var(--ink-deep); border-radius: 1.2rem; background: var(--yellow); color: var(--ink); box-shadow: .5rem .5rem 0 var(--ink-deep); transform: rotate(5deg); font-family: var(--font-heading); font-size: clamp(1.8rem, 2vw, 2.5rem); font-weight: 700; line-height: 1.15; text-align: center; }
+  #Reviews-{{ section.id }} .letters__spark { position: absolute; width: 4.8rem; height: 4.8rem; fill: var(--yellow); pointer-events: none; }
+  #Reviews-{{ section.id }} .letters__spark--one { top: -2rem; right: 0; transform: rotate(12deg); }
+  #Reviews-{{ section.id }} .letters__spark--two { bottom: 10%; left: -2rem; width: 3rem; fill: var(--candy); }
+  #Reviews-{{ section.id }} .letters__letter { position: relative; min-width: 0; }
+  #Reviews-{{ section.id }} .letters__letter::before { content: ''; position: absolute; inset: .8rem -.8rem -.8rem .8rem; border: 2px solid var(--ink-deep); border-radius: 2rem; background: var(--sky); transform: rotate(3deg); }
+  #Reviews-{{ section.id }} .letters__paper { position: relative; padding: clamp(2.4rem, 3.2vw, 4.8rem); border: 2px solid var(--ink-deep); border-radius: 2rem; background: var(--cream); color: var(--ink); overflow-wrap: anywhere; }
+  #Reviews-{{ section.id }} .letters__paper-top { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; margin-bottom: 2rem; }
+  #Reviews-{{ section.id }} .letters__status { margin: 0; font-family: var(--font-accent); font-size: 1.4rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__stamp { display: grid; place-items: center; flex: 0 0 4.8rem; width: 4.8rem; height: 4.8rem; padding: 1.2rem; border: 1px dashed var(--ink); border-radius: 50%; transform: rotate(-12deg); color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__stamp svg { width: 100%; height: 100%; }
+  #Reviews-{{ section.id }} .letters__empty-heading { margin: 0; max-width: 15ch; font-family: var(--font-heading); font-size: clamp(3.2rem, 3.8vw, 5.2rem); line-height: 1.05; font-weight: 800; letter-spacing: -.025em; color: var(--ink); text-wrap: balance; }
+  #Reviews-{{ section.id }} .letters__text { margin-top: 2rem; font-size: var(--text-lead); line-height: 1.65; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__text :where(p) { margin: 0; }
+  #Reviews-{{ section.id }} .letters__button { display: flex; margin-top: 3rem; padding-right: .6rem; padding-bottom: .6rem; }
+  #Reviews-{{ section.id }} .letters__button .btn { max-width: 100%; white-space: normal; text-align: center; }
+  #Reviews-{{ section.id }} .letters__button .btn-wrap { max-width: 100%; }
+  #Reviews-{{ section.id }} .letters__button a:focus-visible { outline: 3px solid var(--ink); outline-offset: 7px; }
+  #Reviews-{{ section.id }} .letters__bottom { display: flex; justify-content: space-between; align-items: center; gap: 2rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--ink); }
+  #Reviews-{{ section.id }} .letters__signoff { max-width: 24rem; margin: 0; font-size: 1.4rem; line-height: 1.5; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__envelope { width: 4.8rem; height: 3.8rem; flex-shrink: 0; transform: rotate(8deg); color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__summary { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 0 0 2.6rem; font-size: 1.5rem; font-weight: 700; line-height: 1.6; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__stars { display: flex; gap: .3rem; }
+  #Reviews-{{ section.id }} .letters__stars svg { width: 1.8rem; height: 1.8rem; }
+  #Reviews-{{ section.id }} .letters__feed { min-width: 0; }
+  /* Keep app functionality and its native controls. Override only the visual shell. */
+  #Reviews-{{ section.id }} .letters__feed .jdgm-carousel-wrapper { width: 100%; margin: 0; padding: 0; }
+  #Reviews-{{ section.id }} .letters__feed .jdgm-carousel { font-family: var(--font-body); color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__feed .jdgm-carousel-item { background: transparent; font-family: var(--font-body); color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__feed .jdgm-carousel-item__review-body { font-size: var(--text-lead); line-height: 1.6; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__feed .jdgm-carousel-item__reviewer-name { color: var(--ink); font-size: 1.5rem; font-weight: 700; }
+  #Reviews-{{ section.id }} .letters__feed :is(.jdgm-carousel-title, .jdgm-carousel-title-and-link) { display: none; }
+  #Reviews-{{ section.id }} .letters__feed :is(button, a):focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+  #Reviews-{{ section.id }} .letters__pending { margin: 0; font-size: var(--text-lead); line-height: 1.65; color: var(--ink); }
+  @media (min-width: 1440px) { #Reviews-{{ section.id }} .letters__inner { padding-inline: 5rem; } }
+  @media (max-width: 989px) {
+    #Reviews-{{ section.id }} .letters__stage { gap: 3.6rem; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+    #Reviews-{{ section.id }} .letters__description { max-width: 25rem; font-size: 1.7rem; }
+    #Reviews-{{ section.id }} .letters__scene-note { font-size: 1.8rem; max-width: 16rem; }
+  }
+  @media (max-width: 749px) {
+    #Reviews-{{ section.id }} .letters__intro { display: block; margin-bottom: 3.2rem; }
+    #Reviews-{{ section.id }} .letters__heading { max-width: 12ch; font-size: clamp(4.4rem, 12vw, 6rem); }
+    #Reviews-{{ section.id }} .letters__description { margin: 2rem 0 0; max-width: 34rem; font-size: 1.7rem; }
+    #Reviews-{{ section.id }} .letters__stage { grid-template-columns: minmax(0, 1fr); gap: 3.8rem; }
+    #Reviews-{{ section.id }} .letters__scene { width: 85%; max-width: 34rem; margin-inline: auto; }
+    #Reviews-{{ section.id }} .letters__scene-note { bottom: -.5rem; right: -1.4rem; }
+    #Reviews-{{ section.id }} .letters__letter { margin-inline: .2rem 1.2rem; }
+    #Reviews-{{ section.id }} .letters__paper { padding: 2.4rem; }
+    #Reviews-{{ section.id }} .letters__empty-heading { font-size: clamp(3.2rem, 9vw, 4.6rem); }
+    #Reviews-{{ section.id }} .letters__eyebrow { font-size: 1.3rem; }
+    #Reviews-{{ section.id }} .letters__button { margin-top: 2.4rem; }
+    #Reviews-{{ section.id }} .letters__bottom { gap: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #Reviews-{{ section.id }} .letters__scene-frame, #Reviews-{{ section.id }} .letters__art { transform: none; }
+  }
+{%- endstyle -%}
+<section id="Reviews-{{ section.id }}" class="reviews" {% if section.settings.heading != blank %}aria-labelledby="ReviewsHeading-{{ section.id }}"{% endif %}>
+  <div class="letters__inner page-width">
+    <div class="letters__intro">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="letters__eyebrow"><svg viewBox="0 0 32 26" fill="none" aria-hidden="true"><rect x="1" y="3" width="30" height="22" rx="3" stroke="currentColor" stroke-width="2"/><path d="m2 5 14 11L30 5M2 24l9-10m19 10-9-10" stroke="currentColor" stroke-width="2"/></svg>{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 id="ReviewsHeading-{{ section.id }}" class="letters__heading">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+      </div>
+      {%- if section.settings.description != blank -%}<p class="letters__description">{{ section.settings.description | escape }}</p>{%- endif -%}
+    </div>
+    <div class="letters__stage">
+      <div class="letters__scene" aria-hidden="true">
+        <div class="letters__scene-frame">
+          {%- if section.settings.scene_image != blank -%}
+            {{ section.settings.scene_image | image_url: width: 1200 | image_tag: class: 'letters__art', alt: '', loading: 'lazy', sizes: '(min-width: 750px) 42vw, 85vw', widths: '360, 600, 900, 1200' }}
+          {%- else -%}<img class="letters__art" src="{{ 'jjw-reviews-clubhouse.webp' | asset_url }}" alt="" width="1254" height="1254" loading="lazy">{%- endif -%}
+        </div>
+        <svg class="letters__spark letters__spark--one" viewBox="0 0 40 40"><path d="m20 0 5 15 15 5-15 5-5 15-5-15L0 20l15-5Z"/></svg>
+        <svg class="letters__spark letters__spark--two" viewBox="0 0 40 40"><path d="m20 0 5 15 15 5-15 5-5 15-5-15L0 20l15-5Z"/></svg>
+        {%- if section.settings.scene_note != blank -%}<span class="letters__scene-note">{{ section.settings.scene_note | escape }}</span>{%- endif -%}
+      </div>
+      <div class="letters__letter">
+        <div class="letters__paper">
+          <div class="letters__paper-top">
+            <p class="letters__status">{% if review_count > 0 or has_feed %}{{ section.settings.review_label | escape }}{% else %}{{ section.settings.empty_label | escape }}{% endif %}</p>
+            <span class="letters__stamp" aria-hidden="true">{{ heart }}</span>
+          </div>
+          {%- if review_count > 0 or has_feed -%}
+            {%- if review_count > 0 -%}
+            {%- assign summary = section.settings.summary_text | replace: '[rating]', review_rating | replace: '[count]', review_count -%}
+            {%- if review_rating < 1 or review_rating > 5 -%}
+              {%- assign summary = section.settings.count_text | replace: '[count]', review_count -%}
+            {%- endif -%}
+            <p class="letters__summary">
+              {%- if review_rating > 0 and review_rating <= 5 -%}
+                {%- assign rounded = review_rating | round -%}
+                <span class="letters__stars" aria-hidden="true">{%- for i in (1..5) -%}<svg viewBox="0 0 24 24"><path d="m12 1 3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6-6.8-3.6L5.2 22l1.3-7.6L1 9l7.6-1.1Z" fill="{% if i <= rounded %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="1.4"/></svg>{%- endfor -%}</span>
+              {%- endif -%}
+              <span>{{ summary | escape }}</span>
+            </p>
+            {%- endif -%}
+            {%- if has_feed -%}
+              <div class="letters__feed">
+                {%- if app_count > 0 -%}
+                  {%- for block in section.blocks -%}{%- if block.type == '@app' -%}{% render block %}{%- endif -%}{%- endfor -%}
+                {%- else -%}<div class="jdgm-carousel-wrapper">{{ jm.featured_carousel }}</div>{%- endif -%}
+              </div>
+              <noscript><p class="letters__pending">{{ section.settings.pending_text | escape }}</p></noscript>
+            {%- else -%}<p class="letters__pending">{{ section.settings.pending_text | escape }}</p>{%- endif -%}
+          {%- else -%}
+            {%- if section.settings.empty_heading != blank -%}<h3 class="letters__empty-heading">{{ section.settings.empty_heading | escape }}</h3>{%- endif -%}
+            {%- if section.settings.empty_text != blank -%}<div class="letters__text">{{ section.settings.empty_text }}</div>{%- endif -%}
+          {%- endif -%}
+          {%- if section.settings.button_label != blank -%}
+            <div class="letters__button"><span class="btn-wrap"><span class="btn-shadow" aria-hidden="true"></span><a class="btn btn--primary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a></span></div>
+          {%- endif -%}
+          <div class="letters__bottom">
+            {%- if section.settings.signoff != blank -%}<p class="letters__signoff">{{ section.settings.signoff | escape }}</p>{%- endif -%}
+            <svg class="letters__envelope" viewBox="0 0 48 36" fill="none" aria-hidden="true"><rect x="1" y="1" width="46" height="34" rx="4" fill="var(--yellow)" stroke="currentColor" stroke-width="2"/><path d="m2 3 22 17L46 3M2 34l14-13m30 13L32 21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "JJW love letters", "tag": "div",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The JJW love letters" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Little tees. Big stories." },
+    { "type": "textarea", "id": "description", "label": "Introduction", "default": "For every little personality, there's an adventure. Here's where your family's story joins ours." },
+    { "type": "image_picker", "id": "scene_image", "label": "Character scene", "info": "Leave empty for the JJW clubhouse artwork. Decorative, separate from reviewer identities." },
+    { "type": "text", "id": "scene_note", "label": "Artwork note", "default": "Special delivery from the squad!" },
+    { "type": "text", "id": "review_label", "label": "Review card label", "default": "Notes from our families" },
+    { "type": "text", "id": "summary_text", "label": "Rating summary", "info": "[rating] and [count] come from Judge.me. Requires the Judge.me app embed.", "default": "[rating] out of 5 from [count] reviews" },
+    { "type": "text", "id": "count_text", "label": "Summary without a rating", "default": "[count] family reviews" },
+    { "type": "text", "id": "pending_text", "label": "Published reviews without a carousel", "default": "Find our families' reviews on their favourite tees." },
+    { "type": "header", "content": "Before the first review" },
+    { "type": "text", "id": "empty_label", "label": "Status", "default": "No reviews yet" },
+    { "type": "text", "id": "empty_heading", "label": "Invitation heading", "default": "Your story could be our first." },
+    { "type": "richtext", "id": "empty_text", "label": "Invitation text", "default": "<p>The squad is ready for your adventures. Real reviews from JJW families will appear here as they come in.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Find your character" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "signoff", "label": "Sign-off", "default": "A little personality. A whole lot of heart." }
+  ],
+  "blocks": [ { "type": "@app" } ],
+  "presets": [ { "name": "JJW love letters" } ]
+}
+{% endschema %}
