@@ -8,9 +8,9 @@
 
   Art resolution order:
     1. the block's own image_picker, if the merchant set one
-    2. <character>-face.png from theme assets, keyed off the character select
+    2. A viewport into the shared generated portrait artwork, keyed by character
 
-  The face PNGs are cut-out stickers on transparency and ship with the theme,
+  The portraits share one transparent PNG and ship with the theme,
   so the cards populate without anyone uploading to Files first. A card whose
   character has no matching asset renders label-only — never a broken <img>.
 {%- endcomment -%}
@@ -19,13 +19,25 @@
   assign hc_character = block.settings.character | downcase | strip
   assign hc_label = block.settings.label | default: hc_character | capitalize
 
-  assign hc_known = 'jevika,joy,brutus,minku,pinki' | split: ','
-  assign hc_asset = ''
-  for name in hc_known
-    if name == hc_character
-      assign hc_asset = name | append: '-face.png'
-    endif
-  endfor
+  assign hc_portrait = ''
+  assign hc_face = ''
+  case hc_character
+    when 'jevika'
+      assign hc_portrait = '0 95 492 600'
+      assign hc_face = '0 105 492 470'
+    when 'joy'
+      assign hc_portrait = '492 95 389 600'
+      assign hc_face = '492 95 389 430'
+    when 'brutus'
+      assign hc_portrait = '881 95 352 600'
+      assign hc_face = '881 95 352 445'
+    when 'minku'
+      assign hc_portrait = '1233 95 389 600'
+      assign hc_face = '1233 95 389 440'
+    when 'pinki'
+      assign hc_portrait = '1622 55 494 640'
+      assign hc_face = '1622 55 494 510'
+  endcase
 
   if style == 'drawer'
     assign hc_root = 'hdr-drawer-card'
@@ -39,26 +51,28 @@
 -%}
 
 <div class="{{ hc_root }}" data-palette="{{ block.settings.palette }}" {{ block.shopify_attributes }}>
-  <a href="{{ block.settings.link | default: routes.root_url }}">
+  <a href="{{ block.settings.link | default: routes.all_products_collection_url }}">
     {%- if block.settings.image != blank -%}
       <div class="{{ hc_media }}">
         {{
           block.settings.image
           | image_url: width: 400
-          | image_tag: alt: hc_label, loading: 'lazy', widths: '200, 300, 400'
+          | image_tag: alt: '', loading: 'lazy', widths: '200, 300, 400'
         }}
       </div>
-    {%- elsif hc_asset != blank -%}
-      <div class="{{ hc_media }}">
-        <img
-          src="{{ hc_asset | asset_url }}"
-          alt="{{ hc_label | escape }}"
-          width="800"
-          height="800"
-          loading="lazy"
-        >
+    {%- elsif hc_portrait != blank -%}
+      <div class="{{ hc_media }} hdr-portrait-media" data-nav-character="{{ hc_character }}">
+        <svg class="hdr-nav-art hdr-nav-art--portrait" viewBox="{{ hc_portrait }}" aria-hidden="true" focusable="false">
+          <use href="#HeaderNavArt-{{ section_id }}"/>
+        </svg>
+        <svg class="hdr-nav-art hdr-nav-art--face" viewBox="{{ hc_face }}" aria-hidden="true" focusable="false">
+          <use href="#HeaderNavArt-{{ section_id }}"/>
+        </svg>
       </div>
     {%- endif -%}
-    <div class="{{ hc_text }}">{{ hc_label | escape }}</div>
+    <div class="{{ hc_text }}">
+      <span>{{ hc_label | escape }}</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
   </a>
 </div>

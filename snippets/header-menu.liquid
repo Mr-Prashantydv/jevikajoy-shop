@@ -1,0 +1,47 @@
+{%- comment -%}One menu composition for desktop and mobile; artwork stays in header-card.{%- endcomment -%}
+<div class="hdr-menu-content">
+  <div class="hdr-menu-intro">
+    <div>
+      {%- if section.settings.menu_eyebrow != blank -%}
+        <p class="hdr-menu-eyebrow">{{ section.settings.menu_eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.menu_heading != blank -%}
+        <h2 class="hdr-menu-heading">{{ section.settings.menu_heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+    <a class="hdr-shop-all" href="{{ routes.all_products_collection_url }}">
+      <span>{{ section.settings.shop_all_label | escape }}</span>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+  <div class="hdr-menu-body{% if section.blocks.size == 0 %} hdr-menu-body--links-only{% endif %}">
+    <nav class="hdr-menu-nav" aria-label="{{ section.settings.links_heading | escape }}">
+      {%- if section.settings.links_heading != blank -%}
+        <h3 class="hdr-menu-label">{{ section.settings.links_heading | escape }}</h3>
+      {%- endif -%}
+      {%- render 'header-links', links: section.settings.menu.links, view_label: section.settings.view_label -%}
+    </nav>
+    {%- if section.blocks.size > 0 -%}
+      <div class="hdr-menu-characters">
+        {%- if section.settings.cards_heading != blank -%}
+          <h3 class="hdr-menu-label">{{ section.settings.cards_heading | escape }}</h3>
+        {%- endif -%}
+        <div class="hdr-character-grid">
+          {%- for block in section.blocks -%}
+            {%- render 'header-card', block: block, style: card_style, section_id: section.id -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+  {%- if section.settings.secondary_menu.links != blank or section.settings.cta_url != blank -%}
+    <div class="hdr-menu-footer">
+      {%- for link in section.settings.secondary_menu.links -%}
+        <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+      {%- endfor -%}
+      {%- if section.settings.cta_url != blank and section.settings.cta_text != blank -%}
+        <a class="hdr-menu-footer-cta" href="{{ section.settings.cta_url }}">{{ section.settings.cta_text | escape }} <span aria-hidden="true">↗</span></a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

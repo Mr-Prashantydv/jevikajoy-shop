@@ -420,302 +420,273 @@
     line-height: 2rem;
   }
 
-  /* --- Desktop mega panel ------------------------------------------------ */
-
+  /* --- Menu panels: shared composition, native nested links, character cards --- */
   #Header-{{ s }} .hdr-mega {
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    z-index: 50;
-    background: var(--cream);
-    padding: 3rem 3rem 5rem;
-    max-height: 70vh;
+    inset: 100% 0 auto;
+    z-index: 25;
+    max-height: calc(100dvh - var(--hdr-bar-height, 9.6rem));
     overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--cream);
+    border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+    border-bottom: 3px solid var(--ink);
+    border-radius: 0 0 2.8rem 2.8rem;
   }
-
-  #Header-{{ s }} .hdr-mega-inner {
-    display: flex;
-    min-height: 35rem;
-    gap: 4rem;
-  }
-
-  #Header-{{ s }} .hdr-mega-links {
-    width: 20rem;
-    flex-shrink: 0;
-    padding-block: 2rem;
-  }
-
-  #Header-{{ s }} .hdr-mega-links ul {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    list-style: none;
-    margin: 0 0 1rem;
-    padding: 0;
-  }
-
-  #Header-{{ s }} .hdr-mega-links li {
-    margin-bottom: 1rem;
-    width: auto;
-  }
-
-  #Header-{{ s }} .hdr-mega-links .btn-wrap {
-    display: block;
-    width: 100%;
-  }
-
-  #Header-{{ s }} .hdr-mega-links .btn-shadow {
-    transform: translate(4px, 4px);
-    --btn-shadow-color: var(--ink-deep);
-  }
-
-  #Header-{{ s }} .hdr-mega-links .btn {
-    min-height: var(--touch-target);
-    padding: 1rem 2.5rem;
-    font-size: var(--button-text-size);
-    line-height: 1.3;
-    letter-spacing: 0.05em;
-    border-radius: 0.8rem;
-    --btn-bg: var(--blue);
-    --btn-fg: var(--white);
-  }
-
-  #Header-{{ s }} .hdr-mega-link {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 2rem;
-    line-height: 1.5;
-    min-height: var(--touch-target);
-    letter-spacing: 0.135rem;
-    text-transform: uppercase;
-    color: var(--ink);
-    transition: color 0.3s var(--ease);
-  }
-
-  #Header-{{ s }} .hdr-mega-link:hover {
-    color: var(--ink-deep);
-    text-decoration: underline;
-  }
-
-  #Header-{{ s }} .hdr-mega-cards {
-    position: relative;
-    flex: 1;
-  }
-
-  #Header-{{ s }} .hdr-mega-spacer {
-    visibility: hidden;
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.3;
-    margin: 0;
-  }
-
-  #Header-{{ s }} .hdr-mega-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    align-items: center;
-    justify-items: center;
-    gap: 1vw;
-  }
-
-  @media screen and (min-width: 1200px) {
-    #Header-{{ s }} .hdr-mega-grid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-  }
-
-  #Header-{{ s }} .hdr-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    border-radius: 2rem;
-    background: var(--mc-bg, var(--sky));
-    box-shadow: 6px 6px 0 0 var(--mc-shadow, var(--ink-deep));
-    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
-  }
-
-  #Header-{{ s }} .hdr-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 0 0 transparent;
-  }
-
-  /* Padding lives on the link so the whole card is one hit target. */
-  #Header-{{ s }} .hdr-card > a {
-    display: block;
-    width: 100%;
-    overflow: hidden;
-    padding: 2rem 1rem;
-    text-align: center;
-  }
-
-  #Header-{{ s }} .hdr-card-media {
-    margin: 0 auto 1rem;
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    max-width: 20rem;
-  }
-
-  {%- comment -%}
-    Character art is a cut-out sticker on transparency. cover + scale(1.2)
-    would crop the head; contain keeps the whole character inside the card.
-  {%- endcomment -%}
-  #Header-{{ s }} .hdr-card-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-  }
-
-  #Header-{{ s }} .hdr-card-label {
-    margin-inline: auto;
-    max-width: 90%;
-    font-family: var(--font-accent);
-    font-weight: 700;
-    /* Reference card label: 27px condensed caps, letter-spacing 1.35px. */
-    font-size: 2.7rem;
-    line-height: 1.3;
-    letter-spacing: 0.135rem;
-    text-transform: uppercase;
-    {%- comment -%}
-      Navy, not the card's own solid. --mc-bg now holds a brand-sheet colour
-      rather than a pale tint, so Heart Pink on Candy Pink measured 1.1:1 and
-      the label was invisible; gold and green were 1.5. --mc-shadow still
-      drives the offset shadow, where contrast does not apply.
-    {%- endcomment -%}
-    color: var(--ink);
-  }
-
-  /* --- Mobile drawer ----------------------------------------------------- */
-
-  {%- comment -%}
-    Sits under the bar (z 20), not over it, so the close button, logo and
-    search stay reachable while the drawer is open — the reference keeps all
-    three visible. padding-top clears the bar's own height.
-  {%- endcomment -%}
   #Header-{{ s }} .hdr-drawer {
     position: fixed;
-    inset: 0;
+    inset: var(--hdr-bar-height, 9.6rem) 0 0;
     z-index: 15;
     overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--cream);
-    padding: 12rem 2rem 4rem;
+    padding-bottom: max(2.4rem, env(safe-area-inset-bottom));
+    border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
   }
-
-  #Header-{{ s }} .hdr-drawer-inner {
+  #Header-{{ s }} .hdr-drawer-inner { max-width: 76rem; margin-inline: auto; }
+  #Header-{{ s }} .hdr-menu-content {
+    max-width: 150rem;
+    margin-inline: auto;
+    padding: 3rem var(--page-gutter) 3.6rem;
+    color: var(--ink);
+  }
+  #Header-{{ s }} .hdr-menu-intro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  #Header-{{ s }} .hdr-menu-eyebrow {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-accent);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  #Header-{{ s }} .hdr-menu-heading {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(3rem, 3.2vw, 4.6rem);
+    line-height: 1.08;
+    color: var(--ink);
+  }
+  #Header-{{ s }} .hdr-shop-all {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.4rem;
+    min-height: 5rem;
+    max-width: 100%;
+    padding: 1rem 1.8rem;
+    border: 2px solid var(--ink);
+    border-radius: 1.2rem;
+    background: var(--yellow);
+    box-shadow: 4px 4px 0 var(--ink-deep);
+    color: var(--ink);
+    font-family: var(--font-accent);
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+  }
+  #Header-{{ s }} .hdr-shop-all svg { flex: none; width: 2rem; height: 2rem; }
+  #Header-{{ s }} .hdr-menu-body {
+    display: grid;
+    grid-template-columns: minmax(18rem, 22rem) minmax(0, 1fr);
+    gap: 3.2rem;
+  }
+  #Header-{{ s }} .hdr-menu-body--links-only { grid-template-columns: 1fr; }
+  #Header-{{ s }} .hdr-menu-nav {
+    padding-right: 2.4rem;
+    border-right: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  }
+  #Header-{{ s }} .hdr-menu-body--links-only .hdr-menu-nav { border-right: 0; }
+  #Header-{{ s }} .hdr-menu-label {
+    margin: 0 0 1.4rem;
+    font-family: var(--font-accent);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  #Header-{{ s }} .hdr-nav-list { list-style: none; margin: 0; padding: 0; }
+  #Header-{{ s }} .hdr-nav-list > li + li { margin-top: 0.3rem; }
+  #Header-{{ s }} .hdr-nav-link,
+  #Header-{{ s }} .hdr-nav-group > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+    min-height: var(--touch-target);
+    padding: 0.7rem 1rem;
+    margin-inline: -1rem 0;
+    border-radius: 0.8rem;
+    color: var(--ink);
+    font-family: var(--font-accent);
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.25;
+    cursor: pointer;
+    list-style: none;
+    overflow-wrap: anywhere;
+  }
+  #Header-{{ s }} .hdr-nav-group > summary::-webkit-details-marker { display: none; }
+  #Header-{{ s }} .hdr-nav-link svg,
+  #Header-{{ s }} .hdr-nav-group > summary svg { flex: none; width: 1.8rem; height: 1.8rem; }
+  #Header-{{ s }} .hdr-nav-group[open] > summary svg { transform: rotate(180deg); }
+  #Header-{{ s }} .hdr-nav-link[aria-current='page'],
+  #Header-{{ s }} .hdr-nav-parent[aria-current='page'] { text-decoration: underline; text-underline-offset: 0.4rem; }
+  #Header-{{ s }} .hdr-nav-children {
+    margin: 0.4rem 0 1.2rem;
+    padding-left: 1.4rem;
+    border-left: 2px solid var(--sky);
+  }
+  #Header-{{ s }} .hdr-nav-children .hdr-nav-link,
+  #Header-{{ s }} .hdr-nav-children .hdr-nav-group > summary,
+  #Header-{{ s }} .hdr-nav-parent {
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  #Header-{{ s }} .hdr-nav-parent {
+    display: flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+    overflow-wrap: anywhere;
+  }
+  #Header-{{ s }} .hdr-character-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.4rem;
+    padding: 0 0.5rem 0.6rem 0;
+  }
+  #Header-{{ s }} .hdr-card,
+  #Header-{{ s }} .hdr-drawer-card {
+    min-width: 0;
+    background: var(--mc-bg, var(--sky));
+    border: 2px solid var(--ink);
+    border-radius: 1.8rem;
+    box-shadow: 4px 5px 0 var(--ink-deep);
+    transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+  }
+  #Header-{{ s }} .hdr-card > a,
+  #Header-{{ s }} .hdr-drawer-card > a {
     display: flex;
     flex-direction: column;
-    margin-inline: auto;
-    max-width: 76rem;
+    height: 100%;
+    padding: 1.4rem 1.2rem 1.1rem;
+    color: var(--ink);
+    border-radius: 1.5rem;
   }
-
-  #Header-{{ s }} .hdr-drawer-links {
+  #Header-{{ s }} .hdr-card-media,
+  #Header-{{ s }} .hdr-drawer-card-media {
+    width: 100%;
+    aspect-ratio: 1;
+    margin: 0 auto 1.2rem;
+  }
+  #Header-{{ s }} .hdr-card-media img,
+  #Header-{{ s }} .hdr-drawer-card-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  #Header-{{ s }} .hdr-portrait-media { aspect-ratio: 4 / 5; }
+  #Header-{{ s }} .hdr-nav-art { display: block; width: 100%; height: 100%; overflow: hidden; }
+  #Header-{{ s }} .hdr-nav-art--face { display: none; }
+  #Header-{{ s }} .hdr-card-label,
+  #Header-{{ s }} .hdr-drawer-card-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-top: auto;
+    color: var(--ink);
+    font-family: var(--font-accent);
+    font-size: clamp(1.8rem, 1.7vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  #Header-{{ s }} .hdr-card-label svg,
+  #Header-{{ s }} .hdr-drawer-card-label svg { flex: none; width: 1.8rem; height: 1.8rem; }
+  #Header-{{ s }} .hdr-menu-footer {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem;
-    margin-bottom: 1rem;
+    align-items: center;
+    gap: 0.8rem 2.4rem;
+    margin-top: 2.8rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
   }
-
-  #Header-{{ s }} .hdr-drawer-links .btn-wrap {
-    min-width: 12rem;
-    flex: 1;
-  }
-
-  {%- comment -%}
-    Reference features the first entry across the full width with the rest
-    sharing the row beneath. Keyed to position, not to the active link, so
-    the block keeps that shape on every page — on a product page no menu
-    link is active and all four collapsed into one cramped row.
-  {%- endcomment -%}
-  #Header-{{ s }} .hdr-drawer-links .btn-wrap:first-child {
-    flex: 1 0 100%;
-  }
-
-  {%- comment -%}
-    Every drawer button carries the offset shadow, as the reference does.
-    Previously only the active one did, so on any page without an active menu
-    link the whole block rendered flat.
-  {%- endcomment -%}
-  #Header-{{ s }} .hdr-drawer-links .btn-shadow {
-    transform: translate(4px, 4px);
-    opacity: 1;
-    --btn-shadow-color: var(--ink-deep);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  #Header-{{ s }} .hdr-drawer-links .btn {
+  #Header-{{ s }} .hdr-menu-footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
     min-height: var(--touch-target);
-    padding: 1rem 1.5rem;
-    font-size: var(--button-text-size);
-    line-height: 1.2;
-    letter-spacing: 0.15rem;
-    --btn-bg: var(--blue);
-    --btn-fg: var(--white);
-  }
-
-  {%- comment -%}
-    Reference drawer runs the cards as a wrapping grid, not a single column:
-    two up on a phone, four from tablet width.
-  {%- endcomment -%}
-  #Header-{{ s }} .hdr-drawer-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.6rem;
-    padding-block: 1rem;
-  }
-
-  @media screen and (min-width: 600px) {
-    #Header-{{ s }} .hdr-drawer-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-  }
-
-  #Header-{{ s }} .hdr-drawer-card {
-    border-radius: 1.2rem;
-    background: var(--mc-bg, var(--sky));
-    box-shadow: 6px 6px 0 0 var(--mc-shadow, var(--ink-deep));
-  }
-
-  #Header-{{ s }} .hdr-drawer-card > a {
-    display: block;
-    padding: 1.4rem 1rem;
-    text-align: center;
-  }
-
-  #Header-{{ s }} .hdr-drawer-card-media {
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    max-width: 12rem;
-    margin: 0 auto 0.6rem;
-  }
-
-  #Header-{{ s }} .hdr-drawer-card-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  #Header-{{ s }} .hdr-drawer-card-label {
-    font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 2.2rem;
-    line-height: 1.2;
-    letter-spacing: 0.11rem;
-    text-transform: uppercase;
-    {%- comment -%}
-      Navy, not the card's own solid. --mc-bg now holds a brand-sheet colour
-      rather than a pale tint, so Heart Pink on Candy Pink measured 1.1:1 and
-      the label was invisible; gold and green were 1.5. --mc-shadow still
-      drives the offset shadow, where contrast does not apply.
-    {%- endcomment -%}
     color: var(--ink);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  #Header-{{ s }} .hdr-menu-footer-cta { margin-left: auto; }
+  #Header-{{ s }} .hdr-drawer-account { margin: 0 var(--page-gutter); padding-top: 1.8rem; }
+  #Header-{{ s }} :is(.hdr-menu-content, .hdr-drawer-account) :is(a, summary):focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 4px;
+  }
+  #Header-{{ s }} .hdr-menu-text { font: 700 1.7rem var(--font-accent); text-transform: uppercase; letter-spacing: 0.04em; }
+  #Header-{{ s }}[data-scrolled='true'] .hdr-bar { background: var(--cream); }
+  #Header-{{ s }} .hdr-search { padding-top: calc(var(--hdr-bar-height, 9.6rem) + 1.6rem); }
+  @supports not (clip-path: url(#jjw-blob)) {
+    #Header-{{ s }} .hdr-menu { border-radius: 1rem; }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    #Header-{{ s }} :is(.hdr-card, .hdr-drawer-card):hover,
+    #Header-{{ s }} .hdr-shop-all:hover { transform: translate(-1px, -3px); box-shadow: 5px 8px 0 var(--ink-deep); }
+  }
+  #Header-{{ s }} :is(.hdr-nav-link, .hdr-nav-group > summary):hover { background: var(--white); }
+  #Header-{{ s }} .hdr-menu-footer a:hover { text-decoration: underline; text-underline-offset: 0.4rem; }
+  @media screen and (max-width: 1199px) and (min-width: 991px) {
+    #Header-{{ s }} .hdr-menu-body { grid-template-columns: 18rem minmax(0, 1fr); gap: 2rem; }
+    #Header-{{ s }} .hdr-character-grid { gap: 1rem; }
+    #Header-{{ s }} .hdr-card > a { padding: 1rem 0.8rem; }
+    #Header-{{ s }} .hdr-card-label svg { width: 1.4rem; height: 1.4rem; }
+  }
+  @media screen and (max-width: 990px) {
+    #Header-{{ s }} .hdr-menu-content { padding-top: 2.4rem; }
+    #Header-{{ s }} .hdr-menu-intro { align-items: flex-start; flex-direction: column; gap: 1.6rem; margin-bottom: 2.6rem; }
+    #Header-{{ s }} .hdr-shop-all { width: 100%; }
+    #Header-{{ s }} .hdr-menu-body { grid-template-columns: 1fr; gap: 2.4rem; }
+    #Header-{{ s }} .hdr-menu-nav { border-right: 0; padding-right: 0; padding-bottom: 1.8rem; border-bottom: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); }
+    #Header-{{ s }} .hdr-menu-nav > .hdr-nav-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem 2rem; align-items: start; }
+    #Header-{{ s }} .hdr-menu-nav > .hdr-nav-list > li + li { margin-top: 0; }
+    #Header-{{ s }} .hdr-character-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    #Header-{{ s }} .hdr-menu-footer-cta { margin-left: 0; }
+    #Header-{{ s }} .hdr-menu-text { display: none; }
+  }
+  @media screen and (max-width: 599px) {
+    #Header-{{ s }} .hdr-character-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
+    #Header-{{ s }} .hdr-drawer-card > a { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr); align-items: center; gap: 0.8rem; padding: 0.8rem; }
+    #Header-{{ s }} .hdr-drawer-card-media { width: 5.6rem; margin: 0; }
+    #Header-{{ s }} .hdr-drawer-card-media.hdr-portrait-media { aspect-ratio: 1; }
+    #Header-{{ s }} .hdr-nav-art--portrait { display: none; }
+    #Header-{{ s }} .hdr-nav-art--face { display: block; }
+    #Header-{{ s }} .hdr-drawer-card-label { flex-wrap: wrap; margin: 0; font-size: 1.8rem; gap: 0.2rem; }
+    #Header-{{ s }} .hdr-drawer-card-label svg { width: 1.5rem; height: 1.5rem; }
+    #Header-{{ s }} .hdr-menu-heading { font-size: 3.4rem; }
+    #Header-{{ s }} .hdr-nav-link, #Header-{{ s }} .hdr-nav-group > summary { font-size: 2rem; }
+  }
+  @media screen and (max-width: 359px) {
+    #Header-{{ s }} .hdr-drawer-card > a { grid-template-columns: 4.2rem minmax(0, 1fr); gap: 0.5rem; padding: 0.7rem; }
+    #Header-{{ s }} .hdr-drawer-card-media { width: 4.2rem; }
+    #Header-{{ s }} .hdr-drawer-card-label svg { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #Header-{{ s }} :is(.hdr-card, .hdr-drawer-card, .hdr-shop-all) { transition: none; }
   }
 
   /* --- Card palettes ------------------------------------------------------ */
@@ -1063,20 +1034,6 @@
     }
 
     {%- comment -%}
-      At 12rem minimum only two buttons fit a phone row, which stranded the
-      fourth link alone on a full-width row. 9rem lets the three that follow
-      the featured link share one row, as the reference does.
-    {%- endcomment -%}
-    #Header-{{ s }} .hdr-drawer-links .btn-wrap {
-      min-width: 9rem;
-    }
-
-    #Header-{{ s }} .hdr-drawer-links .btn {
-      padding: 1rem 0.8rem;
-      font-size: var(--button-text-size);
-    }
-
-    {%- comment -%}
       Reference mobile header carries three controls: menu, logo, search.
       The CTA already left at 990; the account pill drops out here as well,
       so the bar keeps menu / logo / search + cart. Cart stays, it is commerce.
@@ -1188,9 +1145,8 @@
       line-height: 1.8rem;
     }
 
-    /* The bar is shorter here (5rem controls), so the panel needs less clearance. */
     #Header-{{ s }} .hdr-search {
-      padding: 8.4rem 1.5rem 4rem;
+      padding-inline: 1.5rem;
     }
 
     {%- comment -%}
@@ -1224,20 +1180,22 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    #Header-{{ s }} .hdr-card,
-    #Header-{{ s }} .hdr-drawer-links .btn-shadow,
-    #Header-{{ s }} .hdr-mega-link {
-      transition: none;
-    }
-
-    #Header-{{ s }} .hdr-card:hover {
-      transform: none;
-    }
+  @media screen and (min-width: 991px) {
+    #Header-{{ s }} .hdr-menu { width: 11rem; gap: 1rem; }
+    #Header-{{ s }} .hdr-menu .icon-burger { width: 2.4rem; }
+  }
+  #Header-{{ s }} .hdr-search {
+    padding-top: calc(var(--hdr-bar-height, 9.6rem) + 1.6rem);
   }
 {%- endstyle -%}
 
 <div id="Header-{{ s }}" data-open="false" data-search="false">
+  {%- comment -%}One image source for every viewport; fetched on the first menu opening.{%- endcomment -%}
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position: absolute; overflow: hidden; pointer-events: none;">
+    <defs>
+      <image id="HeaderNavArt-{{ s }}" width="2116" height="743" data-hdr-art-source="{{ 'jjw-nav-characters.png' | asset_url }}"/>
+    </defs>
+  </svg>
   <div class="hdr-overlay" data-hdr-close aria-hidden="true"></div>
 
   <header class="hdr-bar">
@@ -1268,7 +1226,7 @@
           data-hdr-toggle
           aria-expanded="false"
           aria-controls="HeaderMega-{{ s }} HeaderDrawer-{{ s }}"
-          aria-label="{{ 'sections.header.menu' | t }}"
+          aria-label="{{ section.settings.menu_button_label | escape }}"
         >
           <svg class="icon-burger" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16" aria-hidden="true" focusable="false">
             <path fill="currentColor" d="M1 .5a.5.5 0 1 0 0 1h15.71a.5.5 0 0 0 0-1zM.5 8a.5.5 0 0 1 .5-.5h15.71a.5.5 0 0 1 0 1H1A.5.5 0 0 1 .5 8m0 7a.5.5 0 0 1 .5-.5h15.71a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5"/>
@@ -1276,12 +1234,13 @@
           <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 17" aria-hidden="true" focusable="false">
             <path fill="currentColor" d="M.865 15.978a.5.5 0 0 0 .707.707l7.433-7.431 7.579 7.282a.501.501 0 0 0 .846-.37.5.5 0 0 0-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 1 0-.707-.708L8.991 7.853 1.413.573a.5.5 0 1 0-.693.72l7.563 7.268z"/>
           </svg>
+          <span class="hdr-menu-text">{{ section.settings.menu_button_label | escape }}</span>
         </button>
       </div>
 
       <div class="hdr-actions">
-        {%- if section.settings.cta_text != blank -%}
-          <a href="{{ section.settings.cta_url | default: routes.root_url }}" class="hdr-cta btn-wrap">
+        {%- if section.settings.cta_text != blank and section.settings.cta_url != blank -%}
+          <a href="{{ section.settings.cta_url }}" class="hdr-cta btn-wrap">
             <span class="btn-shadow" aria-hidden="true"></span>
             <span class="btn">{{ section.settings.cta_text | escape }}</span>
           </a>
@@ -1373,66 +1332,18 @@
       role="navigation"
       aria-label="{{ 'sections.header.menu' | t }}"
     >
-      <div class="hdr-mega-inner">
-        <div class="hdr-mega-links">
-          <ul>
-            {%- for link in section.settings.menu.links -%}
-              <li>
-                {%- if link.active or link.child_active -%}
-                  <div class="btn-wrap">
-                    <span class="btn-shadow" aria-hidden="true"></span>
-                    <a href="{{ link.url }}" class="btn" aria-current="page">{{ link.title | escape }}</a>
-                  </div>
-                {%- else -%}
-                  <a href="{{ link.url }}" class="hdr-mega-link">{{ link.title | escape }}</a>
-                {%- endif -%}
-              </li>
-            {%- endfor -%}
-          </ul>
-        </div>
-
-        <div class="hdr-mega-cards">
-          <h3 class="hdr-mega-spacer" aria-hidden="true">{{ section.settings.cards_heading | escape }}</h3>
-          <div class="hdr-mega-grid">
-            {%- for block in section.blocks -%}
-              {%- render 'header-card', block: block -%}
-            {%- endfor -%}
-          </div>
-        </div>
-      </div>
+      {%- render 'header-menu', section: section -%}
     </div>
 
     {%- comment -%} Mobile drawer — hidden at 991px and above, per React. {%- endcomment -%}
     <div
       id="HeaderDrawer-{{ s }}"
       class="hdr-drawer"
-      role="dialog"
-      aria-modal="true"
+      role="navigation"
       aria-label="{{ 'sections.header.menu' | t }}"
     >
       <div class="hdr-drawer-inner">
-        <div class="hdr-drawer-links">
-          {%- for link in section.settings.menu.links -%}
-            <div class="btn-wrap{% if link.active or link.child_active %} is-active{% endif %}">
-              <span class="btn-shadow" aria-hidden="true"></span>
-              <a
-                href="{{ link.url }}"
-                class="btn"
-                {% if link.active or link.child_active %}
-                  aria-current="page"
-                {% endif %}
-              >
-                {{- link.title | escape -}}
-              </a>
-            </div>
-          {%- endfor -%}
-        </div>
-
-        <div class="hdr-drawer-grid">
-          {%- for block in section.blocks -%}
-            {%- render 'header-card', block: block, style: 'drawer' -%}
-          {%- endfor -%}
-        </div>
+        {%- render 'header-menu', section: section, card_style: 'drawer' -%}
 
         {%- comment -%}
           The account pill cannot fit the phone bar (see the 749px block), so
@@ -1464,8 +1375,6 @@
       <div
         id="HeaderSearch-{{ s }}"
         class="hdr-search"
-        role="dialog"
-        aria-modal="true"
         aria-label="{{ 'general.search.search' | t }}"
       >
         <div class="hdr-search-inner">
@@ -1529,6 +1438,17 @@
       </div>
     {%- endif -%}
   </header>
+  <noscript>
+    <style>
+      #shopify-section-{{ s }} { position: relative; height: auto; }
+      #Header-{{ s }} .hdr-menu-wrap { display: none; }
+      #Header-{{ s }} .hdr-nojs { padding: 2rem var(--page-gutter); background: var(--cream); }
+    </style>
+    <nav class="hdr-nojs" aria-label="{{ section.settings.menu_button_label | escape }}">
+      <a class="hdr-shop-all" href="{{ routes.all_products_collection_url }}">{{ section.settings.shop_all_label | escape }}</a>
+      {%- render 'header-links', links: section.settings.menu.links, view_label: section.settings.view_label -%}
+    </nav>
+  </noscript>
 </div>
 
 <script>
@@ -1541,6 +1461,8 @@
     var searchToggle = root.querySelector('[data-hdr-search-toggle]');
     var searchInput = root.querySelector('[data-hdr-search-input]');
     var searchResults = root.querySelector('[data-hdr-search-results]');
+    var navArt = root.querySelector('[data-hdr-art-source]');
+    if (navArt) navArt.addEventListener('load', function () { navArt.dataset.loaded = 'true'; });
 
     /* Drives the logo shrinking to 5.6rem on scroll; the CSS only acts on it on
        the homepage, the one template where the bar is sticky. */
@@ -1562,25 +1484,89 @@
       syncScrolled();
     }
 
-    function lockScroll() {
-      var any = root.dataset.open === 'true' || root.dataset.search === 'true';
-      document.body.style.overflow = any ? 'hidden' : '';
+    var bar = root.querySelector('.hdr-bar');
+    var grid = root.querySelector('.hdr-grid');
+    var modalActive = false;
+    var savedOverflow = '';
+    var backgroundState = [];
+    var menuLabel = toggle.getAttribute('aria-label');
+    var closeLabel = {{ 'accessibility.close' | t | json }};
+    var desktop = window.matchMedia('(min-width: 991px)');
+
+    function syncHeight() {
+      root.style.setProperty('--hdr-bar-height', bar.getBoundingClientRect().height + 'px');
+    }
+    var sizeObserver = new ResizeObserver(syncHeight);
+    sizeObserver.observe(grid);
+    syncHeight();
+
+    function setBackgroundInert() {
+      // Walk out through section groups too: the modal must isolate main/footer,
+      // while the logo and the close/search/cart controls remain usable.
+      var branch = root;
+      while (branch && branch !== document.body) {
+        Array.prototype.forEach.call(branch.parentElement.children, function (sibling) {
+          if (sibling === branch || /^(SCRIPT|STYLE|LINK)$/.test(sibling.tagName)) return;
+          backgroundState.push({ element: sibling, inert: sibling.inert });
+          sibling.inert = true;
+        });
+        branch = branch.parentElement;
+      }
     }
 
-    // The cart drawer is a separate section with its own overlay. Announce so it
-    // can stand down rather than two scrims stacking.
+    function syncModal() {
+      var any = root.dataset.open === 'true' || root.dataset.search === 'true';
+      if (any && !modalActive) {
+        savedOverflow = document.body.style.overflow;
+        // Fixed positioning otherwise removes an interior page's header height.
+        if (!document.body.classList.contains('template--index')) {
+          root.style.minHeight = bar.getBoundingClientRect().height + 'px';
+        }
+        setBackgroundInert();
+        modalActive = true;
+      }
+      if (any) {
+        bar.setAttribute('role', 'dialog');
+        bar.setAttribute('aria-modal', 'true');
+        bar.setAttribute('aria-label', root.dataset.search === 'true' ? searchToggle.getAttribute('aria-label') : menuLabel);
+        document.body.style.overflow = 'hidden';
+        syncHeight();
+      } else if (modalActive) {
+        backgroundState.forEach(function (state) { state.element.inert = state.inert; });
+        backgroundState = [];
+        document.body.style.overflow = savedOverflow;
+        root.style.minHeight = '';
+        bar.removeAttribute('role');
+        bar.removeAttribute('aria-modal');
+        bar.removeAttribute('aria-label');
+        modalActive = false;
+      }
+    }
+
     function announceOpen() {
       document.dispatchEvent(new CustomEvent('jjw:header-open'));
     }
 
+    function menuPanel() {
+      return root.querySelector(desktop.matches ? '.hdr-mega' : '.hdr-drawer');
+    }
+
     function setOpen(open) {
+      if (open && navArt && !navArt.hasAttribute('href')) navArt.setAttribute('href', navArt.dataset.hdrArtSource);
       root.dataset.open = open ? 'true' : 'false';
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? closeLabel : menuLabel);
       if (open) {
-        setSearch(false);
+        root.dataset.search = 'false';
+        if (searchToggle) searchToggle.setAttribute('aria-expanded', 'false');
+        // Close the cart before capturing overflow and applying our own lock.
         announceOpen();
       }
-      lockScroll();
+      syncModal();
+      if (open) {
+        menuPanel().scrollTop = 0;
+        menuPanel().querySelector('.hdr-shop-all').focus({ preventScroll: true });
+      }
     }
 
     function setSearch(open) {
@@ -1588,16 +1574,15 @@
       root.dataset.search = open ? 'true' : 'false';
       searchToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) {
-        setOpen(false);
+        root.dataset.open = 'false';
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', menuLabel);
         announceOpen();
-        // iOS will not focus an input from a handler that also ran a fetch,
-        // so focus first and let the query fire on the next keystroke.
-        searchInput.focus();
       }
-      lockScroll();
+      syncModal();
+      if (open) searchInput.focus();
     }
 
-    // Symmetric: the cart drawer closes these when it opens.
     document.addEventListener('jjw:cart-open', function () {
       if (!root.isConnected) return;
       if (root.dataset.open === 'true') setOpen(false);
@@ -1605,24 +1590,79 @@
     });
 
     toggle.addEventListener('click', function () {
-      setOpen(root.dataset.open !== 'true');
+      var open = root.dataset.open !== 'true';
+      setOpen(open);
+      if (!open) toggle.focus();
     });
 
     root.querySelector('[data-hdr-close]').addEventListener('click', function () {
+      var wasSearch = root.dataset.search === 'true';
       setOpen(false);
       setSearch(false);
+      (wasSearch ? searchToggle : toggle).focus();
     });
 
+    // Menus are navigation, not ARIA menus: native links/details keep their
+    // normal keyboard behavior. Include controls inside Shopify's shadow root.
+    function focusableElements(container) {
+      var elements = [];
+      Array.prototype.forEach.call(container.querySelectorAll('a[href], button, input, select, textarea, summary, [tabindex], shopify-account'), function (element) {
+        if (!element.getClientRects().length || getComputedStyle(element).visibility === 'hidden') return;
+        if (element.shadowRoot) {
+          elements = elements.concat(focusableElements(element.shadowRoot));
+        } else if (!element.disabled && element.tabIndex >= 0) {
+          elements.push(element);
+        }
+      });
+      return elements;
+    }
+
     document.addEventListener('keydown', function (e) {
-      // Section may have been swapped out by the theme editor.
+      if (!root.isConnected || !modalActive) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        if (root.dataset.search === 'true') {
+          setSearch(false);
+          searchToggle.focus();
+        } else {
+          setOpen(false);
+          toggle.focus();
+        }
+      } else if (e.key === 'Tab') {
+        var elements = focusableElements(bar);
+        var first = elements[0];
+        var last = elements[elements.length - 1];
+        var active = document.activeElement;
+        while (active && active.shadowRoot && active.shadowRoot.activeElement) active = active.shadowRoot.activeElement;
+        if (e.shiftKey && (active === first || elements.indexOf(active) === -1)) {
+          e.preventDefault();
+          if (last) last.focus();
+        } else if (!e.shiftKey && (active === last || elements.indexOf(active) === -1)) {
+          e.preventDefault();
+          if (first) first.focus();
+        }
+      }
+    });
+
+    root.addEventListener('click', function (e) {
+      var link = e.target.closest('a[href]');
+      if (link && link.closest('.hdr-menu-content') && !e.ctrlKey && !e.metaKey && !e.shiftKey) setOpen(false);
+    });
+
+    function syncMenuMode() {
       if (!root.isConnected) return;
-      if (e.key !== 'Escape') return;
-      if (root.dataset.search === 'true') {
-        setSearch(false);
-        searchToggle.focus();
-      } else if (root.dataset.open === 'true') {
-        setOpen(false);
-        toggle.focus();
+      if (root.dataset.open === 'true') menuPanel().querySelector('.hdr-shop-all').focus({ preventScroll: true });
+      syncHeight();
+    }
+    desktop.addEventListener('change', syncMenuMode);
+
+    document.addEventListener('shopify:section:unload', function (e) {
+      if (e.target.contains(root)) {
+        root.dataset.open = 'false';
+        root.dataset.search = 'false';
+        syncModal();
+        sizeObserver.disconnect();
+        desktop.removeEventListener('change', syncMenuMode);
       }
     });
 
@@ -1719,7 +1759,11 @@
   "name": "Header",
   "tag": "section",
   "class": "jjw-header-section",
-  "enabled_on": { "groups": ["header"] },
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  },
   "max_blocks": 10,
   "settings": [
     {
@@ -1744,6 +1788,48 @@
       "label": "Menu",
       "default": "main-menu",
       "info": "Shown in the mega menu and the mobile drawer."
+    },
+    {
+      "type": "text",
+      "id": "menu_button_label",
+      "label": "Menu button label",
+      "default": "Explore"
+    },
+    {
+      "type": "text",
+      "id": "menu_eyebrow",
+      "label": "Menu eyebrow",
+      "default": "Welcome to their world"
+    },
+    {
+      "type": "text",
+      "id": "menu_heading",
+      "label": "Menu heading",
+      "default": "Pick their next adventure."
+    },
+    {
+      "type": "text",
+      "id": "shop_all_label",
+      "label": "Shop all link label",
+      "default": "Shop all tees"
+    },
+    {
+      "type": "text",
+      "id": "links_heading",
+      "label": "Navigation group heading",
+      "default": "Explore JJW"
+    },
+    {
+      "type": "text",
+      "id": "view_label",
+      "label": "Parent menu link prefix",
+      "default": "View"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Help and information menu",
+      "info": "Optional links below the character cards."
     },
     {
       "type": "header",
@@ -1802,8 +1888,8 @@
       "type": "text",
       "id": "cards_heading",
       "label": "Card group heading",
-      "default": "Products",
-      "info": "Reserves vertical space above the cards; not shown to sighted users."
+      "default": "Shop by character",
+      "info": "Visible heading above the character cards."
     }
   ],
   "blocks": [
@@ -1826,15 +1912,33 @@
           "type": "select",
           "id": "character",
           "label": "Character",
-          "info": "Supplies the card artwork from the theme's built-in face stickers when no image is uploaded.",
+          "info": "Supplies the card artwork from the theme's generated character portraits when no image is uploaded.",
           "default": "jevika",
           "options": [
-            { "value": "jevika", "label": "Jevika" },
-            { "value": "joy", "label": "Joy" },
-            { "value": "brutus", "label": "Brutus" },
-            { "value": "minku", "label": "Minku" },
-            { "value": "pinki", "label": "Pinki" },
-            { "value": "", "label": "None" }
+            {
+              "value": "jevika",
+              "label": "Jevika"
+            },
+            {
+              "value": "joy",
+              "label": "Joy"
+            },
+            {
+              "value": "brutus",
+              "label": "Brutus"
+            },
+            {
+              "value": "minku",
+              "label": "Minku"
+            },
+            {
+              "value": "pinki",
+              "label": "Pinki"
+            },
+            {
+              "value": "",
+              "label": "None"
+            }
           ]
         },
         {
@@ -1849,12 +1953,30 @@
           "label": "Colour",
           "default": "sky",
           "options": [
-            { "value": "sky", "label": "Sky" },
-            { "value": "blue", "label": "Blue" },
-            { "value": "pink", "label": "Pink" },
-            { "value": "gold", "label": "Gold" },
-            { "value": "green", "label": "Green" },
-            { "value": "purple", "label": "Purple" }
+            {
+              "value": "sky",
+              "label": "Sky"
+            },
+            {
+              "value": "blue",
+              "label": "Blue"
+            },
+            {
+              "value": "pink",
+              "label": "Pink"
+            },
+            {
+              "value": "gold",
+              "label": "Gold"
+            },
+            {
+              "value": "green",
+              "label": "Green"
+            },
+            {
+              "value": "purple",
+              "label": "Purple"
+            }
           ]
         }
       ]
@@ -1864,11 +1986,46 @@
     {
       "name": "Header",
       "blocks": [
-        { "type": "card", "settings": { "label": "Jevika", "palette": "pink" } },
-        { "type": "card", "settings": { "label": "Joy", "palette": "sky" } },
-        { "type": "card", "settings": { "label": "Brutus", "palette": "gold" } },
-        { "type": "card", "settings": { "label": "Minku", "palette": "green" } },
-        { "type": "card", "settings": { "label": "Pinki", "palette": "purple" } }
+        {
+          "type": "card",
+          "settings": {
+            "label": "Jevika",
+            "palette": "pink",
+            "character": "jevika"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "label": "Joy",
+            "palette": "sky",
+            "character": "joy"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "label": "Brutus",
+            "palette": "gold",
+            "character": "brutus"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "label": "Minku",
+            "palette": "green",
+            "character": "minku"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "label": "Pinki",
+            "palette": "purple",
+            "character": "pinki"
+          }
+        }
       ]
     }
   ]

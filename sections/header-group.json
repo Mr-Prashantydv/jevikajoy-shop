@@ -60,12 +60,21 @@
       ],
       "settings": {
         "cta_text": "Find In Store",
-        "cards_heading": "Characters",
+        "cards_heading": "Shop by character",
         "show_search": true,
         "show_account": true,
-        "show_cart": true
+        "show_cart": true,
+        "menu": "main-menu",
+        "menu_button_label": "Explore",
+        "menu_eyebrow": "Welcome to their world",
+        "menu_heading": "Pick their next adventure.",
+        "shop_all_label": "Shop all tees",
+        "links_heading": "Explore JJW",
+        "view_label": "View"
       }
     }
   },
-  "order": ["header"]
+  "order": [
+    "header"
+  ]
 }
