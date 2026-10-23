@@ -333,6 +333,10 @@
     margin-top: 3.2rem;
   }
 
+  #MainProduct-{{ section.id }} .pdp__assurance {
+    margin-top: 1.2rem;
+  }
+
   #MainProduct-{{ section.id }} .pdp__details {
     margin-top: 3.2rem;
     padding-top: 2.4rem;
@@ -1449,6 +1453,14 @@
           <div class="pdp__related">{{ character_tabs }}</div>
         {%- endif -%}
 
+      </div>
+      <div class="pdp__details">{{ product_details }}</div>
+
+      {%- comment -%}
+        Reassurance closes the column, under the accordions: buying and the
+        character's other tees come first, the fine print last.
+      {%- endcomment -%}
+      <div class="pdp__assurance">
         {%- comment -%}
           Trust badges, then the payment row, then the one-line reassurance —
           descending order of how much weight each carries at the moment of
@@ -1517,7 +1529,6 @@
           <p class="pdp__trust">{{ section.settings.trust_line | escape }}</p>
         {%- endif -%}
       </div>
-      <div class="pdp__details">{{ product_details }}</div>
     </div>
 
     {%- comment -%}
