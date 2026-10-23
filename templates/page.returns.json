@@ -1,0 +1,66 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-returns",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "title": "Ask within 7 days",
+            "text": "Open your tracking page (the link in your shipping SMS or email, or the button below) and choose Return. Want a different size? Pick \"Size not as expected\" and tell us the size you'd like."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "title": "We confirm",
+            "text": "We check the request against the conditions below and let you know by SMS or email."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "title": "Courier collects",
+            "text": "A courier picks the tee up from your door. Keep it folded with the tags on, ready to hand over."
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "title": "New size or refund",
+            "text": "Once it reaches us, we ship the new size or refund you — to your original payment method within 5-7 business days."
+          }
+        },
+        "cond_1": {
+          "type": "condition",
+          "settings": { "text": "Requested within 7 days of delivery" }
+        },
+        "cond_2": {
+          "type": "condition",
+          "settings": { "text": "Unworn and unwashed, free of stains, odours and pet hair" }
+        },
+        "cond_3": {
+          "type": "condition",
+          "settings": { "text": "All original tags still attached, in its original packaging" }
+        },
+        "cond_4": {
+          "type": "condition",
+          "settings": { "text": "Damaged or wrong item? Tell us within 48 hours of delivery with a photo, and we'll put it right at no cost to you" }
+        }
+      },
+      "block_order": ["step_1", "step_2", "step_3", "step_4", "cond_1", "cond_2", "cond_3", "cond_4"],
+      "settings": {
+        "kicker": "Wrong size? No stress",
+        "fallback_title": "Returns & exchanges",
+        "intro": "<p>Kids grow faster than anyone plans for. If a tee doesn't fit, you have 7 days from delivery to send it back or swap the size.</p>",
+        "conditions_heading": "What we can take back",
+        "button_label": "Start a return",
+        "button_url": "https://jevikajoy.shiprocket.co/tracking",
+        "help_text": "<p>Use the tracking link in your shipping SMS or email. Can't find it? <a href=\"/pages/contact\">Write to us</a> with your order number and we'll start it for you.</p>",
+        "contact_label": "Contact us",
+        "contact_url": ""
+      }
+    }
+  },
+  "order": ["main"]
+}

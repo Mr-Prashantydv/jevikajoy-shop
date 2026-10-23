@@ -118,6 +118,13 @@
     margin-block-end: 0;
   }
 
+  .product-accordions__link {
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
 
 
 
@@ -185,6 +192,14 @@
         {{ shipping }}
       {%- else -%}
         <p>Orders are dispatched within 2 business days and usually arrive in 3&ndash;7 days. Unworn items with tags attached can be returned within 7 days of delivery.</p>
+      {%- endif -%}
+      {%- comment -%}
+        Only once the Returns page exists in admin (handle `returns`, template
+        page.returns) — until then this would link to a 404.
+      {%- endcomment -%}
+      {%- assign pa_returns_page = pages['returns'] -%}
+      {%- if pa_returns_page != blank -%}
+        <p><a class="product-accordions__link" href="{{ pa_returns_page.url }}">How returns and exchanges work</a></p>
       {%- endif -%}
     </div>
   </details>

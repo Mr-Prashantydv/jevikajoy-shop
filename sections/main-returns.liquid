@@ -1,0 +1,354 @@
+{%- comment -%}
+  Returns & exchanges page (templates/page.returns.json). Plan and reasoning:
+  docs/returns/returns-flow.md.
+
+  Returns are requested on Shiprocket's tracking page, so the one action this
+  page offers is a link there. Its URL is a setting, and while it is blank the
+  button is not drawn at all — the email route under it is always present, so
+  the page never offers a control that leads nowhere.
+
+  The refund-policy link checks shop.refund_policy rather than hardcoding
+  /policies/refund-policy, which 404s until the policy is published in admin.
+
+  Step numbers sit on sheet fills with --ink type, never a tinted numeral on
+  its own fill (see "Never tint text with its own card's solid" in CLAUDE.md).
+  Prose is on --white for the same reason main-page's is: --blue links fail AA
+  on cream.
+{%- endcomment -%}
+
+{%- style -%}
+  #MainReturns-{{ section.id }} {
+    background: var(--cream);
+    padding-block: 6rem 8rem;
+    color: var(--ink);
+  }
+
+  #MainReturns-{{ section.id }} .rt__head {
+    max-width: 72rem;
+    margin: 0 auto 4.8rem;
+    text-align: center;
+  }
+
+  #MainReturns-{{ section.id }} .rt__kicker {
+    display: block;
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--blue);
+  }
+
+  #MainReturns-{{ section.id }} .rt__intro {
+    margin-top: 1.6rem;
+    font-size: 1.8rem;
+    line-height: 1.5;
+  }
+
+  #MainReturns-{{ section.id }} .rt__intro :where(p) {
+    margin: 0;
+  }
+
+  #MainReturns-{{ section.id }} .rt__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 2rem;
+    margin: 0 0 4rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  #MainReturns-{{ section.id }} .rt__step {
+    padding: 2.8rem 2.4rem 3rem;
+    border-radius: 2.4rem;
+    background: var(--white);
+  }
+
+  #MainReturns-{{ section.id }} .rt__num {
+    display: grid;
+    place-items: center;
+    width: 4.8rem;
+    height: 4.8rem;
+    margin-bottom: 1.6rem;
+    border-radius: 50%;
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink-deep);
+  }
+
+  #MainReturns-{{ section.id }} .rt__step:nth-child(4n + 1) .rt__num { background: var(--yellow); }
+  #MainReturns-{{ section.id }} .rt__step:nth-child(4n + 2) .rt__num { background: var(--sky); }
+  #MainReturns-{{ section.id }} .rt__step:nth-child(4n + 3) .rt__num { background: var(--mint); }
+  #MainReturns-{{ section.id }} .rt__step:nth-child(4n + 4) .rt__num { background: var(--candy); }
+
+  #MainReturns-{{ section.id }} .rt__step-title {
+    margin: 0 0 0.8rem;
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    line-height: 1.2;
+  }
+
+  #MainReturns-{{ section.id }} .rt__step-text {
+    margin: 0;
+    font-size: 1.6rem;
+    line-height: 1.5;
+  }
+
+  #MainReturns-{{ section.id }} .rt__card {
+    max-width: 84rem;
+    margin: 0 auto 4rem;
+    padding: 4rem 4.8rem 4.4rem;
+    border-radius: 2.4rem;
+    background: var(--white);
+  }
+
+  #MainReturns-{{ section.id }} .rt__card-title {
+    margin: 0 0 1.6rem;
+    font-family: var(--font-heading);
+    font-size: 2.6rem;
+    line-height: 1.2;
+  }
+
+  #MainReturns-{{ section.id }} .rt__list {
+    margin: 0;
+    padding-left: 2.2rem;
+    font-size: 1.7rem;
+    line-height: 1.6;
+  }
+
+  #MainReturns-{{ section.id }} .rt__card .rte + .rt__list,
+  #MainReturns-{{ section.id }} .rt__list + .rte {
+    margin-top: 2rem;
+  }
+
+  #MainReturns-{{ section.id }} .rt__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.4rem;
+    text-align: center;
+  }
+
+  #MainReturns-{{ section.id }} .rt__help {
+    max-width: 60rem;
+    font-size: 1.6rem;
+    line-height: 1.5;
+  }
+
+  #MainReturns-{{ section.id }} .rt__help :where(p) {
+    margin: 0;
+  }
+
+  /* Links sit on cream here, where --blue measures 4.34:1 — so they are
+     --ink and underlined instead. */
+  #MainReturns-{{ section.id }} .rt__help a,
+  #MainReturns-{{ section.id }} .rt__links a {
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  #MainReturns-{{ section.id }} .rt__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem 2.8rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    #MainReturns-{{ section.id }} {
+      padding-block: 3.2rem 4.8rem;
+    }
+
+    #MainReturns-{{ section.id }} .rt__head {
+      margin-bottom: 2.8rem;
+    }
+
+    #MainReturns-{{ section.id }} .rt__steps {
+      gap: 1.4rem;
+      margin-bottom: 2.8rem;
+    }
+
+    #MainReturns-{{ section.id }} .rt__card {
+      padding: 2.4rem 2rem 2.8rem;
+      border-radius: 2rem;
+      margin-bottom: 2.8rem;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign steps = section.blocks | where: 'type', 'step'
+  assign conditions = section.blocks | where: 'type', 'condition'
+-%}
+
+<section id="MainReturns-{{ section.id }}">
+  <div class="page-width">
+    <div class="rt__head scroll-trigger animate--slide-in" style="--animation-order: 1;">
+      {%- if section.settings.kicker != blank -%}
+        <span class="accent-caps rt__kicker">{{ section.settings.kicker | escape }}</span>
+      {%- endif -%}
+      <h1 class="hxxl">{{ page.title | default: section.settings.fallback_title }}</h1>
+      {%- if section.settings.intro != blank -%}
+        <div class="rt__intro">{{ section.settings.intro }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if steps.size > 0 -%}
+      <ol class="rt__steps">
+        {%- for block in steps -%}
+          <li class="rt__step scroll-trigger animate--slide-in" style="--animation-order: {{ forloop.index | plus: 1 }};" {{ block.shopify_attributes }}>
+            <span class="rt__num" aria-hidden="true">{{ forloop.index }}</span>
+            <h2 class="rt__step-title">{{ block.settings.title | escape }}</h2>
+            {%- if block.settings.text != blank -%}
+              <p class="rt__step-text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+
+    {%- if conditions.size > 0 or page.content != blank -%}
+      <div class="rt__card scroll-trigger animate--fade-in">
+        {%- if section.settings.conditions_heading != blank -%}
+          <h2 class="rt__card-title">{{ section.settings.conditions_heading | escape }}</h2>
+        {%- endif -%}
+        {%- if conditions.size > 0 -%}
+          <ul class="rt__list">
+            {%- for block in conditions -%}
+              <li {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        {%- if page.content != blank -%}
+          <div class="rte">{{ page.content }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="rt__actions">
+      {%- if section.settings.button_label != blank and section.settings.button_url != blank -%}
+        <div class="btn-wrap">
+          <span class="btn-shadow" aria-hidden="true"></span>
+          <a class="btn btn--primary" href="{{ section.settings.button_url }}" target="_blank" rel="noopener">
+            {{- section.settings.button_label | escape -}}
+          </a>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.help_text != blank -%}
+        <div class="rt__help">{{ section.settings.help_text }}</div>
+      {%- endif -%}
+
+      <ul class="rt__links">
+        {%- if shop.refund_policy != blank -%}
+          <li><a href="{{ shop.refund_policy.url }}">{{ shop.refund_policy.title | escape }}</a></li>
+        {%- endif -%}
+        {%- if shop.shipping_policy != blank -%}
+          <li><a href="{{ shop.shipping_policy.url }}">{{ shop.shipping_policy.title | escape }}</a></li>
+        {%- endif -%}
+        {%- if section.settings.contact_label != blank -%}
+          <li><a href="{{ section.settings.contact_url | default: '/pages/contact' }}">{{ section.settings.contact_label | escape }}</a></li>
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Returns page",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker above the title",
+      "default": "Wrong size? No stress"
+    },
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Title when the page has none",
+      "default": "Returns & exchanges"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "default": "<p>Kids grow faster than anyone plans for. If a tee doesn't fit, you have 7 days from delivery to send it back or swap the size.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Conditions"
+    },
+    {
+      "type": "text",
+      "id": "conditions_heading",
+      "label": "Heading",
+      "default": "What we can take back"
+    },
+    {
+      "type": "header",
+      "content": "Start a return"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Start a return"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Return request link",
+      "info": "Your Shiprocket tracking page, where returns are requested. The button stays hidden until this is filled in."
+    },
+    {
+      "type": "richtext",
+      "id": "help_text",
+      "label": "Help line under the button",
+      "default": "<p>Use the tracking link in your shipping SMS or email. Can't find it? <a href=\"/pages/contact\">Write to us</a> with your order number and we'll start it for you.</p>"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Contact link label",
+      "default": "Contact us"
+    },
+    {
+      "type": "url",
+      "id": "contact_url",
+      "label": "Contact link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Step" },
+        { "type": "textarea", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "condition",
+      "name": "Condition",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Unworn and unwashed" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Returns page"
+    }
+  ]
+}
+{% endschema %}
