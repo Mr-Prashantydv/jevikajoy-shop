@@ -100,7 +100,11 @@ to develop in this store".
 - If git refuses with "detected dubious ownership", the folder was created under another
   Windows account. `git config --global --add safe.directory D:/projects/JEVIKAJOY.SHOP`
   clears it.
-- **There is no git remote.** Commits on `scratch-theme` exist only on this disk.
+- **Remote:** `origin` is the private GitHub repo `Mr-Prashantydv/jevikajoy-shop` (added
+  2026-10-23). Only `scratch-theme` is pushed; `master` (the abandoned Dawn build) and the
+  `claude/*` worktree branches are local only. To work elsewhere:
+  `git clone -b scratch-theme https://github.com/Mr-Prashantydv/jevikajoy-shop.git`.
+  The live Shopify theme is not a backup of the source — pull it only to compare.
 
 There is no build step, no test suite, and no linter wired up. `.theme-check.yml` and
 `.prettierrc.json` are Dawn leftovers.
