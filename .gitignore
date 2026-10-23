@@ -46,3 +46,8 @@ docs/hero-concepts/
 # resized assets/jjw-*.{png,jpg,webp} derived from them #
 ###########################################################
 product-images/
+
+# Session scratch: reference art, helper scripts and a copy of the Shopify
+# CLI config, which can hold login tokens. Never commit #
+##########################################################################
+tmp/
