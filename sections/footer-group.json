@@ -8,7 +8,7 @@
         "p1": {
           "type": "phrase",
           "settings": {
-            "text": "100% Organic Cotton"
+            "text": "Soft From the First Wear"
           }
         },
         "s1": {
@@ -20,7 +20,7 @@
         "p2": {
           "type": "phrase",
           "settings": {
-            "text": "BIS Certified"
+            "text": "Pre-Shrunk Before It's Sewn"
           }
         },
         "s2": {
@@ -32,7 +32,7 @@
         "p3": {
           "type": "phrase",
           "settings": {
-            "text": "OEKO-TEX Inks"
+            "text": "Taped Neck & Shoulders"
           }
         },
         "s3": {
@@ -44,7 +44,7 @@
         "p4": {
           "type": "phrase",
           "settings": {
-            "text": "Ages 4-12"
+            "text": "Lab-Tested Colour"
           }
         },
         "s4": {
@@ -96,7 +96,10 @@
           }
         }
       },
-      "block_order": ["shop", "legal"],
+      "block_order": [
+        "shop",
+        "legal"
+      ],
       "settings": {
         "newsletter_heading": "Join the JJW crew",
         "newsletter_text": "New characters, new drops and first dibs on restocks — straight to your inbox."

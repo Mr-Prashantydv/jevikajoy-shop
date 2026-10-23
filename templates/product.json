@@ -27,21 +27,21 @@
         "badge_all_1": {
           "type": "badge",
           "settings": {
-            "text": "100% Soft Cotton",
+            "text": "Bio Washed Soft",
             "character": ""
           }
         },
         "badge_all_2": {
           "type": "badge",
           "settings": {
-            "text": "Skin Friendly Inks",
+            "text": "Pre-Shrunk",
             "character": ""
           }
         },
         "badge_all_3": {
           "type": "badge",
           "settings": {
-            "text": "Built For Play",
+            "text": "Taped Seams",
             "character": ""
           }
         },
@@ -135,9 +135,10 @@
         "coming_soon_label": "Coming Soon",
         "fallback_title": "Our Tee",
         "show_sticky_atc": true,
-        "highlight_fallback": "100% organic cotton, OEKO-TEX certified inks, BIS certified",
+        "highlight_fallback": "Bio + silicone washed for softness, Pre-shrunk before it's stitched, 100% organic cotton, OEKO-TEX certified inks, BIS certified",
         "show_payment_icons": true,
-        "payment_label": "Secure checkout"
+        "payment_label": "Secure checkout",
+        "materials": "<p>100% organic cotton jersey, bio washed and silicone washed for a smooth, soft finish. Every panel is laundered before it is stitched (cut panel laundry), so the tee is pre-shrunk. Taped neck and shoulders, overlocked side seams, flatlock finishing and double-needle hems. Colours are lab tested for colour-fastness, and prints use OEKO-TEX certified inks.</p><p>Machine wash cold with like colours, tumble dry low, and iron on the reverse. Do not bleach or dry clean.</p>"
       }
     },
     "fabric_story": {
@@ -147,8 +148,8 @@
           "type": "detail",
           "settings": {
             "photo": "jjw-fabric-weave.jpg",
-            "title": "Soft cotton jersey",
-            "text": "knitted to move, and pre-shrunk so it still fits after the wash",
+            "title": "Bio + silicone washed",
+            "text": "enzyme-polished so the surface stays smooth, then silicone-softened so it feels soft from the very first wear",
             "tone": "pink"
           }
         },
@@ -156,8 +157,8 @@
           "type": "detail",
           "settings": {
             "photo": "jjw-fabric-collar.jpg",
-            "title": "Ribbed collar",
-            "text": "stretches over a head in a hurry, then pulls back to shape",
+            "title": "Taped neck",
+            "text": "tape along the neck seam helps the collar keep its shape through every pull over a head",
             "tone": "blue"
           }
         },
@@ -166,7 +167,7 @@
           "settings": {
             "photo": "jjw-fabric-shoulder.jpg",
             "title": "Taped shoulders",
-            "text": "a strip of tape keeps the seam from stretching out",
+            "text": "a strip of tape keeps the seam that takes the most pull from stretching out",
             "tone": "gold"
           }
         },
@@ -175,7 +176,7 @@
           "settings": {
             "photo": "jjw-fabric-hem.jpg",
             "title": "Double-needle hems",
-            "text": "two rows of stitching, so nothing unravels on a fence",
+            "text": "two rows of stitching on every hem, so nothing unravels on a fence",
             "tone": "green"
           }
         },
@@ -183,24 +184,45 @@
           "type": "spec",
           "settings": {
             "label": "Fabric",
-            "value": "100% cotton jersey"
+            "value": "100% organic cotton jersey"
           }
         },
         "s2": {
           "type": "spec",
           "settings": {
             "label": "Finish",
-            "value": "Pre-shrunk"
+            "value": "Bio + silicone washed"
           }
         },
         "s3": {
+          "type": "spec",
+          "settings": {
+            "label": "Pre-shrink",
+            "value": "Cut panel laundered"
+          }
+        },
+        "s4": {
+          "type": "spec",
+          "settings": {
+            "label": "Seams",
+            "value": "Overlocked, flatlock finished"
+          }
+        },
+        "s5": {
+          "type": "spec",
+          "settings": {
+            "label": "Colour",
+            "value": "Lab tested for fastness"
+          }
+        },
+        "s6": {
           "type": "spec",
           "settings": {
             "label": "Wash",
             "value": "Cold, like colours"
           }
         },
-        "s4": {
+        "s7": {
           "type": "spec",
           "settings": {
             "label": "Dry",
@@ -216,18 +238,22 @@
         "s1",
         "s2",
         "s3",
-        "s4"
+        "s4",
+        "s5",
+        "s6",
+        "s7"
       ],
       "settings": {
-        "heading": "Made to Survive Recess",
-        "intro": "<p>The details that decide whether a tee lasts one term or three</p>"
+        "heading": "Built Like Premium Basics",
+        "intro": "<p>Washed soft, shrunk before it's sewn, and taped where it takes the most pull</p>",
+        "story_label": "See how it's made",
+        "story_handle": "how-its-made"
       }
     },
     "feature": {
       "type": "split-content",
       "settings": {
         "heading": "Built to Be Worn Out",
-        "image_position": "left",
         "tag_one_name": "Brutus",
         "tag_one_role": "Chief Good Boy",
         "tag_two_name": "",
@@ -244,7 +270,7 @@
     "bundle": {
       "type": "bundle-banner",
       "settings": {
-        "heading": "15% Off Any 3 Tees",
+        "heading": "",
         "text": "Mix any characters, any sizes — the discount applies automatically at checkout.",
         "note": "Three for Rs. 1,527 instead of Rs. 1,797",
         "cta_label": "Shop All Tees",

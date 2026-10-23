@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "main": {
+      "type": "craft-standard",
+      "blocks": {
+        "c_soft": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Bio wash + silicone wash",
+            "title": "Soft From the First Wear",
+            "text": "<p>A new tee shouldn't need ten washes to feel right. Ours are finished soft before they leave the factory.</p>",
+            "points": "Bio wash: natural enzymes polish away the loose surface fibres that turn into bobbles\nSilicone wash: a softening finish that gives the cotton its smooth, silky feel",
+            "fill": "candy",
+            "photo": "jjw-fabric-weave.jpg",
+            "icon": "cloud"
+          }
+        },
+        "c_cpl": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Cut panel laundry",
+            "title": "Pre-Shrunk Before It's Sewn",
+            "text": "<p>Cotton shrinks the first time it meets water, so we give it that water first. Every cut panel is laundered before a single stitch goes in.</p>",
+            "points": "The shrinking happens at our factory, not in your machine\nEach panel is washed on its own, not just the finished tee",
+            "fill": "sky",
+            "photo": "",
+            "icon": "wash"
+          }
+        },
+        "c_seams": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Construction",
+            "title": "Stitched Like Premium Basics",
+            "text": "<p>A tee gives up at its joins first, so that is where the most care goes.</p>",
+            "points": "Taped neck and shoulders, so the seams that take the most pull keep their shape\nOverlocked side seams, finished so the edges don't fray\nFlatlock and coverstitch finishing that lies flat against skin\nDouble-needle hems: two rows of stitching on every hem",
+            "fill": "yellow",
+            "photo": "jjw-fabric-shoulder.jpg",
+            "icon": "needle"
+          }
+        },
+        "c_colour": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Lab tested",
+            "title": "Colour That Stays Bright",
+            "text": "<p>Our colours are lab tested for colour-fastness in the wash, and every print is made with OEKO-TEX certified inks.</p>",
+            "points": "Colour-fastness tested in a lab\nOEKO-TEX certified inks on every print",
+            "fill": "lavender",
+            "photo": "",
+            "icon": "drop"
+          }
+        },
+        "c_skin": {
+          "type": "chapter",
+          "settings": {
+            "kicker": "Certified",
+            "title": "Safe on Little Skin",
+            "text": "<p>What touches your child all day should be simple and checked.</p>",
+            "points": "100% organic cotton\nOEKO-TEX certified inks\nBIS certified\nSized for ages 4 to 12",
+            "fill": "mint",
+            "photo": "jjw-fabric-collar.jpg",
+            "icon": "shield"
+          }
+        }
+      },
+      "block_order": [
+        "c_soft",
+        "c_cpl",
+        "c_seams",
+        "c_colour",
+        "c_skin"
+      ],
+      "settings": {
+        "eyebrow": "The JJW Standard",
+        "heading": "Built Like Premium Basics. Sized for Kids.",
+        "heading_highlight": "Sized for Kids.",
+        "intro": "<p>Soft from the first wear, pre-shrunk before it's sewn, and stitched the way the best grown-up basics are. Here is everything that goes into a JJW tee before it reaches you.</p>",
+        "close_heading": "Find Your Character's Tee",
+        "button_label": "Shop the Tees"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

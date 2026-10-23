@@ -1306,7 +1306,7 @@
         fallback: section.settings.highlight_fallback
       -%}
 
-      {%- render 'product-accordions', product: product, description: product.description -%}
+      {%- render 'product-accordions', product: product, description: product.description, materials: section.settings.materials -%}
       {%- endcapture -%}
 
       {%- comment -%} ---- Purchase ---- {%- endcomment -%}
@@ -1865,6 +1865,12 @@
       "label": "Shared bullets",
       "info": "Comma separated. True of every tee.",
       "default": "100% organic cotton, OEKO-TEX certified inks, BIS certified"
+    },
+    {
+      "type": "richtext",
+      "id": "materials",
+      "label": "Materials & Care text",
+      "info": "Shared by every tee. Leave empty for the built-in wording."
     },
     {
       "type": "header",

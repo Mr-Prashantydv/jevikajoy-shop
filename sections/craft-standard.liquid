@@ -1,0 +1,652 @@
+{%- comment -%}
+  Craft standard — the "How a JJW tee is made" page.
+
+  A heading with a Star Yellow marker on one phrase, then one chapter per
+  block: a coloured media panel (a fabric macro photo, or a big icon when no
+  photo fits) beside the copy and a ticked list. On desktop the chapters
+  alternate sides and a dashed "stitch" line runs down the gap between the
+  columns, knotted at each chapter. Phones stack and drop the line.
+
+  Copy rule: every claim here was confirmed by the owner on 2026-10-22
+  (bio wash, silicone wash, cut panel laundry, taped neck and shoulders,
+  overlocked side seams, flatlock/coverstitch, double-needle hems, lab-tested
+  colour-fastness) or is already made site-wide (organic cotton, OEKO-TEX
+  inks, BIS, ages 4-12). No numbers, no competitor names, no sequence that
+  was not stated: only cut panel laundry is placed in time ("before it's
+  sewn"), because that is what the process is.
+
+  Media photos are the theme's universal fabric macros, offered through a
+  select so a block can never point at an asset that is not there.
+{%- endcomment -%}
+
+{%- style -%}
+  #Craft-{{ section.id }} {
+    background: var(--cream);
+    padding-block: calc(var(--section-space) + 2rem) var(--section-space);
+    color: var(--ink);
+  }
+
+  /* --- Head ------------------------------------------------------------- */
+
+  #Craft-{{ section.id }} .cs__head {
+    max-width: 96rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  #Craft-{{ section.id }} .cs__eyebrow {
+    display: inline-block;
+    margin: 0 0 1.6rem;
+    padding: 0.6rem 1.4rem 0.5rem;
+    border-radius: 0.8rem;
+    background: var(--yellow);
+    box-shadow: 0.4rem 0.4rem 0 var(--ink-deep);
+    transform: rotate(-3deg);
+  }
+
+  #Craft-{{ section.id }} .cs__heading {
+    margin: 0;
+    color: var(--ink);
+  }
+
+  #Craft-{{ section.id }} .cs__mark {
+    padding-inline: 0.12em;
+    white-space: nowrap;
+    background: linear-gradient(
+      transparent 56%,
+      var(--yellow) 56%,
+      var(--yellow) 90%,
+      transparent 90%
+    );
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  #Craft-{{ section.id }} .cs__intro {
+    max-width: 64rem;
+    margin: 2.4rem auto 0;
+    font-family: var(--font-body);
+    font-size: var(--text-lead);
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  #Craft-{{ section.id }} .cs__intro :where(p) {
+    margin: 0;
+  }
+
+  /* --- Chapters --------------------------------------------------------- */
+
+  #Craft-{{ section.id }} .cs__chapters {
+    position: relative;
+    display: grid;
+    gap: 10rem;
+    margin: 9rem auto 0;
+    padding: 0;
+    max-width: 120rem;
+    list-style: none;
+  }
+
+  /* The stitch line: a dashed seam down the gap between the two columns. */
+  #Craft-{{ section.id }} .cs__chapters::before {
+    content: '';
+    position: absolute;
+    top: 4rem;
+    bottom: 4rem;
+    left: 50%;
+    border-left: 0.3rem dashed var(--ink);
+    transform: translateX(-50%);
+  }
+
+  #Craft-{{ section.id }} .cs__chapter {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 10rem;
+  }
+
+  /* A knot on the seam, in the chapter's colour. */
+  #Craft-{{ section.id }} .cs__chapter::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 0.4rem solid var(--ink);
+    border-radius: 50%;
+    background: var(--fill, var(--white));
+    transform: translate(-50%, -50%);
+  }
+
+  #Craft-{{ section.id }} .cs__chapter:nth-child(even) .cs__media {
+    order: 2;
+  }
+
+  #Craft-{{ section.id }} .cs__media {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    border-radius: 3.2rem;
+    background: var(--fill, var(--white));
+    box-shadow: 1rem 1rem 0 var(--ink-deep);
+  }
+
+  /* Inset so the chapter colour shows as a frame round the photo. An <img>
+     is a replaced element, so the inset alone cannot size it: width and
+     height are given explicitly. */
+  #Craft-{{ section.id }} .cs__photo {
+    position: absolute;
+    top: 1.6rem;
+    left: 1.6rem;
+    width: calc(100% - 3.2rem);
+    height: calc(100% - 3.2rem);
+    border-radius: 2rem;
+    object-fit: cover;
+  }
+
+  #Craft-{{ section.id }} .cs__art {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #Craft-{{ section.id }} .cs__art-disc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--ink);
+    box-shadow: 0.8rem 0.8rem 0 var(--ink-deep);
+    transform: rotate(-6deg);
+  }
+
+  #Craft-{{ section.id }} .cs__art-disc .jjw-icon {
+    width: 56%;
+    height: 56%;
+  }
+
+  #Craft-{{ section.id }} .cs__num {
+    position: absolute;
+    top: -2.4rem;
+    left: -2.4rem;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow:
+      0 0 0 0.4rem var(--ink),
+      0.6rem 0.6rem 0 0.4rem var(--ink-deep);
+    font-family: var(--font-heading);
+    font-size: 3.6rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--ink);
+    transform: rotate(-8deg);
+  }
+
+  #Craft-{{ section.id }} .cs__chapter:nth-child(even) .cs__num {
+    left: auto;
+    right: -2.4rem;
+    transform: rotate(8deg);
+  }
+
+  #Craft-{{ section.id }} .cs__copy {
+    max-width: 52rem;
+  }
+
+  #Craft-{{ section.id }} .cs__chapter:nth-child(even) .cs__copy {
+    justify-self: end;
+  }
+
+  #Craft-{{ section.id }} .cs__kicker {
+    display: block;
+    margin-bottom: 1.2rem;
+  }
+
+  #Craft-{{ section.id }} .cs__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(3.6rem, 3.6vw, 5.6rem);
+    font-weight: 800;
+    line-height: 1.02;
+    color: var(--ink);
+  }
+
+  #Craft-{{ section.id }} .cs__nb {
+    white-space: nowrap;
+  }
+
+  #Craft-{{ section.id }} .cs__text {
+    margin-top: 1.6rem;
+    font-size: var(--text-lead);
+    line-height: 1.55;
+  }
+
+  #Craft-{{ section.id }} .cs__text :where(p) {
+    margin: 0;
+  }
+
+  #Craft-{{ section.id }} .cs__points {
+    display: grid;
+    gap: 1.4rem;
+    margin: 2.4rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #Craft-{{ section.id }} .cs__points li {
+    display: grid;
+    grid-template-columns: 3.2rem 1fr;
+    align-items: start;
+    gap: 1.2rem;
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  #Craft-{{ section.id }} .cs__tick {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    border: 0.25rem solid var(--ink);
+    border-radius: 50%;
+    background: var(--fill, var(--white));
+  }
+
+  #Craft-{{ section.id }} .cs__tick svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  /* --- Close ------------------------------------------------------------ */
+
+  #Craft-{{ section.id }} .cs__close {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3.2rem;
+    margin-top: 10rem;
+    text-align: center;
+  }
+
+  #Craft-{{ section.id }} .cs__close-heading {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(3.6rem, 4.4vw, 6.4rem);
+    font-weight: 800;
+    line-height: 1.02;
+    color: var(--ink);
+  }
+
+  @media screen and (max-width: 989px) {
+    #Craft-{{ section.id }} .cs__chapters {
+      gap: 8rem;
+    }
+
+    #Craft-{{ section.id }} .cs__chapter {
+      gap: 6rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #Craft-{{ section.id }} {
+      padding-block: 5.6rem 6.4rem;
+    }
+
+    #Craft-{{ section.id }} .cs__chapters {
+      gap: 6.4rem;
+      margin-top: 6.4rem;
+    }
+
+    #Craft-{{ section.id }} .cs__chapters::before,
+    #Craft-{{ section.id }} .cs__chapter::after {
+      display: none;
+    }
+
+    #Craft-{{ section.id }} .cs__chapter {
+      grid-template-columns: 1fr;
+      gap: 3.2rem;
+    }
+
+    #Craft-{{ section.id }} .cs__chapter:nth-child(even) .cs__media {
+      order: 0;
+    }
+
+    #Craft-{{ section.id }} .cs__chapter:nth-child(even) .cs__copy {
+      justify-self: start;
+    }
+
+    #Craft-{{ section.id }} .cs__media {
+      margin-inline: 1rem 1.6rem;
+      border-radius: 2rem;
+      box-shadow: 0.6rem 0.6rem 0 var(--ink-deep);
+    }
+
+    #Craft-{{ section.id }} .cs__photo {
+      top: 1rem;
+      left: 1rem;
+      width: calc(100% - 2rem);
+      height: calc(100% - 2rem);
+      border-radius: 1.2rem;
+    }
+
+    #Craft-{{ section.id }} .cs__num,
+    #Craft-{{ section.id }} .cs__chapter:nth-child(even) .cs__num {
+      top: -1.6rem;
+      left: -1rem;
+      right: auto;
+      width: 5.6rem;
+      height: 5.6rem;
+      font-size: 2.6rem;
+      transform: rotate(-8deg);
+    }
+
+    #Craft-{{ section.id }} .cs__points li {
+      font-size: 1.6rem;
+    }
+
+    #Craft-{{ section.id }} .cs__close {
+      margin-top: 7.2rem;
+      gap: 2.4rem;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign heading = section.settings.heading | escape
+  assign highlight = section.settings.heading_highlight | escape
+  if highlight != blank and heading contains highlight
+    assign marked = '<span class="cs__mark">' | append: highlight | append: '</span>'
+    assign heading = heading | replace_first: highlight, marked
+  endif
+-%}
+
+<section id="Craft-{{ section.id }}">
+  <div class="page-width">
+    <header class="cs__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="cs__eyebrow accent-caps scroll-trigger animate--fade-in">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if heading != blank -%}
+        <h1 class="hxxl cs__heading scroll-trigger animate--slide-in">{{ heading }}</h1>
+      {%- endif -%}
+      {%- if section.settings.intro != blank -%}
+        <div class="cs__intro scroll-trigger animate--slide-in" style="--animation-order: 1;">
+          {{ section.settings.intro }}
+        </div>
+      {%- endif -%}
+    </header>
+
+    {%- if section.blocks.size > 0 -%}
+      <ol class="cs__chapters">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            case block.settings.fill
+              when 'yellow'
+                assign fill = 'var(--yellow)'
+              when 'sky'
+                assign fill = 'var(--sky)'
+              when 'candy'
+                assign fill = 'var(--candy)'
+              when 'lavender'
+                assign fill = 'var(--lavender)'
+              when 'mint'
+                assign fill = 'var(--mint)'
+              else
+                assign fill = 'var(--white)'
+            endcase
+            assign points = block.settings.points | newline_to_br | split: '<br />'
+          -%}
+          <li class="cs__chapter scroll-trigger animate--slide-in" style="--fill: {{ fill }};" {{ block.shopify_attributes }}>
+            <div class="cs__media">
+              <span class="cs__num" aria-hidden="true">{{ forloop.index }}</span>
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 1400
+                  | image_tag:
+                    class: 'cs__photo',
+                    loading: 'lazy',
+                    widths: '500, 750, 1000, 1400',
+                    sizes: '(max-width: 749px) 100vw, 50vw',
+                    alt: ''
+                }}
+              {%- elsif block.settings.photo != blank -%}
+                <img
+                  class="cs__photo"
+                  src="{{ block.settings.photo | asset_img_url: '1000x' }}"
+                  srcset="
+                    {{ block.settings.photo | asset_img_url: '500x' }} 500w,
+                    {{ block.settings.photo | asset_img_url: '750x' }} 750w,
+                    {{ block.settings.photo | asset_img_url: '1000x' }} 1000w
+                  "
+                  sizes="(max-width: 749px) 100vw, 50vw"
+                  width="1000"
+                  height="1000"
+                  loading="lazy"
+                  alt=""
+                >
+              {%- else -%}
+                <div class="cs__art">
+                  <span class="cs__art-disc">{%- render 'jjw-icon', name: block.settings.icon -%}</span>
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="cs__copy">
+              {%- if block.settings.kicker != blank -%}
+                <span class="cs__kicker accent-caps">{{ block.settings.kicker | escape }}</span>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                {%- comment -%} Hyphenated words kept whole, as in find-us. {%- endcomment -%}
+                {%- liquid
+                  assign title_words = block.settings.title | escape | split: ' '
+                  assign title = ''
+                  for word in title_words
+                    assign piece = word
+                    if word contains '-'
+                      assign piece = '<span class="cs__nb">' | append: word | append: '</span>'
+                    endif
+                    unless forloop.first
+                      assign title = title | append: ' '
+                    endunless
+                    assign title = title | append: piece
+                  endfor
+                -%}
+                <h2 class="cs__title">{{ title }}</h2>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="cs__text">{{ block.settings.text }}</div>
+              {%- endif -%}
+              {%- if block.settings.points != blank -%}
+                <ul class="cs__points">
+                  {%- for raw in points -%}
+                    {%- assign point = raw | strip -%}
+                    {%- if point != blank -%}
+                      <li>
+                        <span class="cs__tick" aria-hidden="true">
+                          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m3.5 8.5 3 3 6-7"/></svg>
+                        </span>
+                        <span>{{ point | escape }}</span>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+
+    {%- if section.settings.close_heading != blank or section.settings.button_label != blank -%}
+      <div class="cs__close scroll-trigger animate--slide-in">
+        {%- if section.settings.close_heading != blank -%}
+          <h2 class="cs__close-heading">{{ section.settings.close_heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <div class="btn-wrap">
+            <span class="btn-shadow" aria-hidden="true"></span>
+            <a class="btn btn--primary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+              {{ section.settings.button_label }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Craft standard",
+  "tag": "div",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The JJW Standard"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Built Like Premium Basics. Sized for Kids."
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Highlighted phrase",
+      "info": "Part of the heading to underline in yellow. Must match the heading exactly.",
+      "default": "Sized for Kids."
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro"
+    },
+    {
+      "type": "text",
+      "id": "close_heading",
+      "label": "Closing heading",
+      "default": "Find Your Character's Tee"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the Tees"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "info": "Leave empty to link to all products."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "chapter",
+      "name": "Chapter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Small label above"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "textarea",
+          "id": "points",
+          "label": "Ticked points",
+          "info": "One per line."
+        },
+        {
+          "type": "select",
+          "id": "fill",
+          "label": "Colour",
+          "default": "sky",
+          "options": [
+            { "value": "candy", "label": "Candy Pink" },
+            { "value": "sky", "label": "Sky Blue" },
+            { "value": "yellow", "label": "Star Yellow" },
+            { "value": "lavender", "label": "Lavender" },
+            { "value": "mint", "label": "Mint Green" },
+            { "value": "white", "label": "Pure White" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo",
+          "info": "Overrides the built-in photo below."
+        },
+        {
+          "type": "select",
+          "id": "photo",
+          "label": "Built-in photo",
+          "default": "",
+          "options": [
+            { "value": "", "label": "None (show the icon)" },
+            { "value": "jjw-fabric-weave.jpg", "label": "Fabric weave" },
+            { "value": "jjw-fabric-collar.jpg", "label": "Collar" },
+            { "value": "jjw-fabric-shoulder.jpg", "label": "Shoulder seam" },
+            { "value": "jjw-fabric-hem.jpg", "label": "Sleeve hem" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon (when there is no photo)",
+          "default": "sparkle",
+          "options": [
+            { "value": "sparkle", "label": "Sparkle" },
+            { "value": "cloud", "label": "Cloud (soft)" },
+            { "value": "wash", "label": "Washing machine" },
+            { "value": "needle", "label": "Needle and thread" },
+            { "value": "scissors", "label": "Scissors" },
+            { "value": "drop", "label": "Drop" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" },
+            { "value": "heart", "label": "Heart" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Craft standard",
+      "blocks": [
+        { "type": "chapter" },
+        { "type": "chapter" },
+        { "type": "chapter" }
+      ]
+    }
+  ]
+}
+{% endschema %}
