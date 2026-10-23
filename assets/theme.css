@@ -32,6 +32,7 @@
   --white: #ffffff; /* Pure White — cards on the cream canvas */
   --warm-white: #f8f8f6; /* Warm White */
   --ink: #1a2f5e; /* Navy Blue */
+  --heading: #0f7daf; /* Adventure Blue — big headings on cream; 4.31:1, large text only */
   --ink-soft: rgba(26, 47, 94, 0.75);
   --ink-deep: #10244a; /* Night navy — shadow layer under every button */
 

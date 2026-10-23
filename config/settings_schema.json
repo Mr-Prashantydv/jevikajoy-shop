@@ -47,7 +47,14 @@
         "id": "color_ink",
         "label": "Ink",
         "default": "#1A2F5E",
-        "info": "Headings and body text."
+        "info": "Body text, and text on the coloured character cards."
+      },
+      {
+        "type": "color",
+        "id": "color_heading",
+        "label": "Headings",
+        "default": "#0F7DAF",
+        "info": "Big headings on the cream canvas. Needs 3:1 against cream."
       },
       {
         "type": "color",
