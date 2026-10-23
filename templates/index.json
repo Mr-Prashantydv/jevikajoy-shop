@@ -480,6 +480,22 @@
         "signoff": "A little personality. A whole lot of heart."
       },
       "blocks": {
+        "note_photo": {
+          "type": "note",
+          "settings": {
+            "heading": "Show us their favourite tee.",
+            "text": "<p>Share a photo of your little one in their JJW tee and tag @JevikaAndJoy. The squad loves seeing where the adventures go.</p>"
+          }
+        },
+        "note_character": {
+          "type": "note",
+          "settings": {
+            "heading": "Who did they pick?",
+            "text": "<p>Jevika, Joy, Brutus, Minku or Pinki: tell us which character your child chose, and why. Your note could be the first one here.</p>",
+            "link_label": "Meet the squad",
+            "link": "shopify://collections/all"
+          }
+        },
         "sample_review_1": {
           "type": "review",
           "settings": {
@@ -503,7 +519,7 @@
           }
         }
       },
-      "block_order": ["sample_review_1", "sample_review_2"]
+      "block_order": ["note_photo", "note_character", "sample_review_1", "sample_review_2"]
     }
   },
   "order": [

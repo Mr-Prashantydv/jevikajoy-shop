@@ -630,7 +630,11 @@ letter card.
 letter card. Priority is Judge.me feed → review blocks → empty card. A block ticked **Sample**
 renders only under `request.design_mode`, so a placeholder shows the layout in the editor and
 never to shoppers; `templates/index.json` ships two such samples. Never untick Sample on text
-we wrote. The track uses `x mandatory` safely because each slide is a full track width.
+we wrote.
+Before the first review the slider still shows, carrying **invitations**: the
+`empty_heading`/`empty_text` card as slide 1, then one slide per `note` block (two ship:
+photo/tag and "who did they pick?"). Notes ask; they never quote anyone. In the theme editor
+the sample reviews take precedence, so delete them to preview the invitations there. The track uses `x mandatory` safely because each slide is a full track width.
 
 The live design (2026-10-22) is "JJW love letters": navy band, the cast scene in
 `assets/jjw-reviews-clubhouse.webp` (decorative, never a reviewer), and a cream letter card that
