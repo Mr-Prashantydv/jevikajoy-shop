@@ -634,7 +634,12 @@ we wrote.
 Before the first review the slider still shows, carrying **invitations**: the
 `empty_heading`/`empty_text` card as slide 1, then one slide per `note` block (two ship:
 photo/tag and "who did they pick?"). Notes ask; they never quote anyone. In the theme editor
-the sample reviews take precedence, so delete them to preview the invitations there. The track uses `x mandatory` safely because each slide is a full track width.
+the sample reviews take precedence, so delete them to preview the invitations there.
+
+**Live since 2026-10-23: five review blocks** (Priya, Rohit, Neha, Ankita, Sameer) that the
+owner supplied in chat as customer reviews and told us to publish. The samples and the two
+invitation notes were removed from `index.json` at the same time. We did not write them and
+cannot verify them; their wash and climate remarks are the reviewers' words, not site claims. The track uses `x mandatory` safely because each slide is a full track width.
 
 The live design (2026-10-22) is "JJW love letters": navy band, the cast scene in
 `assets/jjw-reviews-clubhouse.webp` (decorative, never a reviewer), and a cream letter card that

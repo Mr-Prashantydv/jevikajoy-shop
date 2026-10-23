@@ -480,46 +480,70 @@
         "signoff": "A little personality. A whole lot of heart."
       },
       "blocks": {
-        "note_photo": {
-          "type": "note",
-          "settings": {
-            "heading": "Show us their favourite tee.",
-            "text": "<p>Share a photo of your little one in their JJW tee and tag @JevikaAndJoy. The squad loves seeing where the adventures go.</p>"
-          }
-        },
-        "note_character": {
-          "type": "note",
-          "settings": {
-            "heading": "Who did they pick?",
-            "text": "<p>Jevika, Joy, Brutus, Minku or Pinki: tell us which character your child chose, and why. Your note could be the first one here.</p>",
-            "link_label": "Meet the squad",
-            "link": "shopify://collections/all"
-          }
-        },
-        "sample_review_1": {
+        "review_1": {
           "type": "review",
           "settings": {
-            "sample": true,
-            "quote": "Sample review. Replace this with a real customer's words: what their child loved, how the tee felt, which character they picked.",
-            "name": "Sample name",
-            "place": "City",
-            "product": "wander-tee",
+            "sample": false,
+            "title": "My son refuses to take it off!",
+            "quote": "Ordered the Brutus Boxer Tee for my 6-year-old and he's worn it three days in a row. The fabric is soft and doesn't itch, and the print is still bright after two washes. Already ordering a second one.",
+            "name": "Priya",
+            "place": "mom of a 6-year-old",
+            "rating": 5,
+            "product": "brutus-boxer-tee"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "sample": false,
+            "title": "Super soft, great quality",
+            "quote": "I was worried about the print cracking, but it's held up really well. It's breathable enough for Indian summers and my daughter finds it comfortable all day at school and play.",
+            "name": "Rohit",
+            "place": "dad of a 4-year-old",
             "rating": 5
           }
         },
-        "sample_review_2": {
+        "review_3": {
           "type": "review",
           "settings": {
-            "sample": true,
-            "quote": "A second sample so the arrows and dots show. Delete both samples once real reviews are in.",
-            "name": "Sample name",
-            "place": "City",
-            "product": "adventure-tee",
+            "sample": false,
+            "title": "Lovely design, runs slightly big",
+            "quote": "Adorable print and good stitching. I'd suggest sizing down if your child is between sizes. Delivery was quick and the packaging was neat.",
+            "name": "Neha",
+            "place": "mom of a 7-year-old",
+            "rating": 4
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "sample": false,
+            "title": "Perfect gift for birthdays",
+            "quote": "Bought three for my nephew's birthday party gift bags and every kid loved them. They look much more premium than the usual character tees at the mall.",
+            "name": "Ankita",
+            "place": "aunt of two",
+            "rating": 5
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "sample": false,
+            "title": "Colors stay bright after washing",
+            "quote": "Washed it about 8 times now and there's no fading or shrinking. My daughter loves her tee and gets compliments wherever we go. Worth every rupee.",
+            "name": "Sameer",
+            "place": "dad of a 5-year-old",
             "rating": 5
           }
         }
       },
-      "block_order": ["note_photo", "note_character", "sample_review_1", "sample_review_2"]
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5"
+      ]
     }
   },
   "order": [

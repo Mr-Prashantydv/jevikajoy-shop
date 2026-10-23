@@ -118,6 +118,10 @@
   #Reviews-{{ section.id }} .letters__slide-stars { display: flex; gap: .3rem; margin-bottom: 1.6rem; color: var(--gold); }
   #Reviews-{{ section.id }} .letters__slide-stars path { stroke: var(--ink-deep); }
   #Reviews-{{ section.id }} .letters__slide-stars svg { width: 2rem; height: 2rem; }
+  #Reviews-{{ section.id }} .letters__review-title { margin: 0 0 1.2rem; font-family: var(--font-heading); font-size: clamp(2.6rem, 3vw, 3.6rem); font-weight: 800; line-height: 1.1; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__review-title + .letters__quote { padding-top: 0; }
+  #Reviews-{{ section.id }} .letters__review-title + .letters__quote::before { content: none; }
+  #Reviews-{{ section.id }} .letters__review-title + .letters__quote p { font-family: var(--font-body); font-size: var(--text-lead); font-weight: 500; line-height: 1.6; }
   #Reviews-{{ section.id }} .letters__quote { position: relative; margin: 0; padding-top: 4.4rem; }
   /* Decorative mark in the reviewer's character fill; the words stay --ink.
      Kept inside the slide box: the track's overflow-x clips both axes, so a
@@ -266,6 +270,7 @@
                       {%- for i in (1..5) -%}{%- if i <= stars -%}{{ star }}{%- else -%}{{ star_empty }}{%- endif -%}{%- endfor -%}
                       <span class="visually-hidden">{{ rating_text | escape }}</span>
                     </div>
+                    {%- if block.settings.title != blank -%}<p class="letters__review-title">{{ block.settings.title | escape }}</p>{%- endif -%}
                     <blockquote class="letters__quote"><p>{{ block.settings.quote | escape | newline_to_br }}</p></blockquote>
                     <figcaption class="letters__who">
                       <span>
@@ -422,9 +427,10 @@
       "name": "Review",
       "settings": [
         { "type": "checkbox", "id": "sample", "label": "Sample", "default": false, "info": "Ticked: shows only in the theme editor, never to shoppers. Untick only for a real customer's words." },
+        { "type": "text", "id": "title", "label": "Review title" },
         { "type": "textarea", "id": "quote", "label": "What they said" },
         { "type": "text", "id": "name", "label": "Name", "info": "First name and initial, with the customer's permission." },
-        { "type": "text", "id": "place", "label": "City" },
+        { "type": "text", "id": "place", "label": "City or detail", "info": "e.g. a city, or 'mom of a 6-year-old'." },
         { "type": "product", "id": "product", "label": "Tee they bought", "info": "Colours the slide with that character and links to the tee." },
         { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 }
       ]
