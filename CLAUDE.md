@@ -623,7 +623,16 @@ written before the store could take a single payment, and two claimed wash durab
 / `all_reviews_rating`; above zero it prints the rating summary and either an `@app` block
 (Judge.me's Cards/Testimonials carousel, added in the theme editor) or Judge.me's
 `featured_carousel` metafield. At zero, or with Judge.me absent, it shows a "No reviews yet"
-letter card. The live design (2026-10-22) is "JJW love letters": navy band, the cast scene in
+letter card.
+
+**Review blocks** (2026-10-23) are the second source: the merchant types real customers' words
+(quote, name, city, tee, stars) into `review` blocks, which slide one at a time inside the
+letter card. Priority is Judge.me feed → review blocks → empty card. A block ticked **Sample**
+renders only under `request.design_mode`, so a placeholder shows the layout in the editor and
+never to shoppers; `templates/index.json` ships two such samples. Never untick Sample on text
+we wrote. The track uses `x mandatory` safely because each slide is a full track width.
+
+The live design (2026-10-22) is "JJW love letters": navy band, the cast scene in
 `assets/jjw-reviews-clubhouse.webp` (decorative, never a reviewer), and a cream letter card that
 holds either the invitation or Judge.me's rating and carousel. As of 2026-10-22 Judge.me is **not installed on `1uz1hi-01`** (no `jdgm` markup on any
 page), so the empty card is what renders.
