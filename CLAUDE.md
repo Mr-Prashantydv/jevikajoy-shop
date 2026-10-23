@@ -346,8 +346,10 @@ fills on 16:9), the y values were re-seated for it, and 750–989px keeps each c
 desktop feet height (its ground is width-sized too) instead of the y midpoint, which floated
 the back row. The walkable grass face in `jjw-ground.png` is **21–36% of the strip's height**
 above the floor (6.3–10.9vw when width-sized); measure feet as a fraction of the strip, never
-against one line. Feet now sit at 0.24–0.32 at every width ≥750, and each desktop/tablet
-shadow sits at its own character's feet. Phones (<600, height-sized ground) were left as
+against one line. Feet now sit at 0.24–0.28 at every width ≥750, and each desktop/tablet
+shadow sits at its own character's feet. **Not every pose PNG is 2:3** — Brutus is 1278×1230,
+Pinki 1121×1403 — so ≥750px the items take `object-position: 50% 100%`; centred, `contain`
+left Brutus 0.27× his width above his own shadow (0.53 of the strip at 1650px). Phones (<600, height-sized ground) were left as
 tuned; Brutus lands low there (0.04). Fits: 1.0 at 1280×1024 and 820×1180; 0.71 at
 1366×768; 0.58 at 1906×901.
 

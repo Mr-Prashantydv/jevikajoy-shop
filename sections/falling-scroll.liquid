@@ -473,6 +473,20 @@
     }
   }
 
+  {%- comment -%}
+    Feet at the bottom of the box, not centred in it. Brutus (1278x1230) and
+    Pinki (1121x1403) are not 2:3, so `contain` letterboxed them with empty
+    space under the feet: Brutus stood 0.27 x his width above his own shadow,
+    0.53 of the strip up at 1650px. The y values and the shadows above assume
+    the art ends at the box bottom; this makes that true. Phones keep the
+    centred art their phone_y values were tuned against.
+  {%- endcomment -%}
+  @media screen and (min-width: 750px) {
+    #FallingScroll-{{ section.id }} .falling-scroll__item {
+      object-position: 50% 100%;
+    }
+  }
+
   @media screen and (max-width: 749px) {
     #FallingScroll-{{ section.id }} .falling-scroll__copy {
       padding: 6rem 1.6rem 0;
