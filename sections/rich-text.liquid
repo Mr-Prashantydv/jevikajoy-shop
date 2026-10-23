@@ -27,8 +27,9 @@
 
   #RichText-{{ section.id }} .rich-text__link {
     display: block;
-    font-size: 2.7rem;
-    line-height: 3.24rem;
+    /* Scales down on a phone so a social handle stays on one line. */
+    font-size: min(2.7rem, 6.4vw);
+    line-height: 1.2;
     color: var(--pink);
     transition: color 0.2s var(--ease);
   }

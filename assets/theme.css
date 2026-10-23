@@ -13,8 +13,9 @@
 /* Body face was SofiaProSoft-*.otf. Those files are Fontspring DEMO builds:
    96 glyphs, of which 29 — including & ' - " ! / 4 @ ( ) — share the .notdef
    outline, so they rendered as tofu boxes in live copy. Demo licence also
-   forbids web embedding. Nunito is the nearest OFL geometric-rounded match. */
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap');
+   forbids web embedding. Body is Quicksand (OFL, rounded), chosen 2026-10-21 over
+   Nunito; it stops at 700, so heavier body weights fall back to 700. */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Barlow+Semi+Condensed:wght@500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap');
 
 /* --- Tokens ------------------------------------------------------------
    Role structure mirrors the React theme; hex values are the JJW palette.
@@ -78,10 +79,14 @@
 
   /* Type */
   --font-heading: 'Baloo 2', system-ui, sans-serif;
-  --font-accent: 'Big Shoulders Display', system-ui, sans-serif;
-  --font-body: 'Nunito', system-ui, sans-serif;
-  --heading-size: clamp(3.2rem, 3.6vw + 1rem, 5.6rem);
-  --hero-heading-size: clamp(3.6rem, 4.4vw, 6.4rem);
+  /* Barlow Semi Condensed: closest free match to the reference's Toroka
+     Condensed (chosen 2026-10-21). Wider than the Big Shoulders it replaced. */
+  --font-accent: 'Barlow Semi Condensed', system-ui, sans-serif;
+  --font-body: 'Quicksand', system-ui, sans-serif;
+  /* Partake's .hxxl, min(6vw, 106px): 77px at 1280. The 56px cap read as timid
+     beside the reference, so section and hero headings share its full scale. */
+  --heading-size: clamp(3.6rem, 6vw, 10.6rem);
+  --hero-heading-size: clamp(3.6rem, 6vw, 10.6rem);
   --product-title-size: clamp(3.2rem, 4vw, 5.2rem);
   --heading-small-size: clamp(2.4rem, 2.4vw, 3.2rem);
   --control-text-size: 1.6rem;
@@ -90,7 +95,7 @@
   /* Shape + motion */
   --radius: 1.6rem;
   --card-radius: 2rem;
-  --card-title-size: clamp(2.2rem, 2.3vw, 2.8rem);
+  --card-title-size: clamp(1.9rem, 2.3vw, 2.8rem);
   --page-gutter: clamp(1.5rem, 2vw, 2.4rem);
   --section-space: clamp(4rem, 6vw, 8rem);
   --touch-target: 4.4rem;
@@ -99,13 +104,16 @@
 }
 
 @supports (font-size: 1cqi) {
-  :root { --card-title-size: clamp(2.2rem, 9cqi, 2.8rem); }
+  /* 1.9rem floor: Barlow is wider than Big Shoulders, and at 2.2rem the
+     longest names ("Tech Builder Tee") wrapped in 157px phone cards. */
+  :root { --card-title-size: clamp(1.9rem, 8cqi, 2.8rem); }
 }
 
 @media screen and (max-width: 749px) {
   :root {
-    --heading-size: 3.2rem;
-    --hero-heading-size: clamp(3.4rem, 9vw, 4.4rem);
+    /* Partake: 10vw for section headings on a phone (39px at 390). */
+    --heading-size: 10vw;
+    --hero-heading-size: 12vw;
   }
 }
 
