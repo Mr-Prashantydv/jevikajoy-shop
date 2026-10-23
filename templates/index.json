@@ -478,7 +478,32 @@
         "empty_heading": "Your story could be our first.",
         "button_label": "Find your character",
         "signoff": "A little personality. A whole lot of heart."
-      }
+      },
+      "blocks": {
+        "sample_review_1": {
+          "type": "review",
+          "settings": {
+            "sample": true,
+            "quote": "Sample review. Replace this with a real customer's words: what their child loved, how the tee felt, which character they picked.",
+            "name": "Sample name",
+            "place": "City",
+            "product": "wander-tee",
+            "rating": 5
+          }
+        },
+        "sample_review_2": {
+          "type": "review",
+          "settings": {
+            "sample": true,
+            "quote": "A second sample so the arrows and dots show. Delete both samples once real reviews are in.",
+            "name": "Sample name",
+            "place": "City",
+            "product": "adventure-tee",
+            "rating": 5
+          }
+        }
+      },
+      "block_order": ["sample_review_1", "sample_review_2"]
     }
   },
   "order": [

@@ -2,6 +2,12 @@
   JJW love letters: a character-led home for real Judge.me reviews.
   The artwork is decorative. Review text, ratings and totals come only from
   Judge.me; the first-review state never invents quotes or customer identities.
+
+  Review blocks are the second source: real words from real customers, typed in
+  by the merchant (WhatsApp, Instagram, email) before Judge.me has any. They
+  slide one at a time inside the letter. Judge.me wins whenever it has a feed.
+  A block ticked "Sample" renders only in the theme editor (request.design_mode),
+  so a placeholder can show the layout without a shopper ever reading it.
 {%- endcomment -%}
 {%- liquid
   assign jm = shop.metafields.judgeme
@@ -11,6 +17,14 @@
   for block in section.blocks
     if block.type == '@app'
       assign app_count = app_count | plus: 1
+    endif
+  endfor
+  assign slide_count = 0
+  for block in section.blocks
+    if block.type == 'review' and block.settings.quote != blank
+      unless block.settings.sample and request.design_mode == false
+        assign slide_count = slide_count | plus: 1
+      endunless
     endif
   endfor
   assign has_feed = false
@@ -76,6 +90,40 @@
   #Reviews-{{ section.id }} .letters__feed .jdgm-carousel-item__reviewer-name { color: var(--ink); font-size: 1.5rem; font-weight: 700; }
   #Reviews-{{ section.id }} .letters__feed :is(.jdgm-carousel-title, .jdgm-carousel-title-and-link) { display: none; }
   #Reviews-{{ section.id }} .letters__feed :is(button, a):focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+  {%- comment -%}
+    One review per view, so every snap point is a whole track width and the
+    last one is exactly the scroll end: mandatory cannot strand the track here
+    the way it froze fabric-story's N-of-M cards.
+  {%- endcomment -%}
+  #Reviews-{{ section.id }} .letters__track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; scroll-behavior: smooth; }
+  #Reviews-{{ section.id }} .letters__track::-webkit-scrollbar { display: none; }
+  #Reviews-{{ section.id }} .letters__slide { flex: 0 0 100%; min-width: 0; margin: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+  #Reviews-{{ section.id }} .letters__slide-stars { display: flex; gap: .3rem; margin-bottom: 1.6rem; color: var(--gold); }
+  #Reviews-{{ section.id }} .letters__slide-stars path { stroke: var(--ink-deep); }
+  #Reviews-{{ section.id }} .letters__slide-stars svg { width: 2rem; height: 2rem; }
+  #Reviews-{{ section.id }} .letters__quote { position: relative; margin: 0; padding-top: 4.4rem; }
+  /* Decorative mark in the reviewer's character fill; the words stay --ink.
+     Kept inside the slide box: the track's overflow-x clips both axes, so a
+     mark hung above or left of the slide was cut off, and on wide screens the
+     next slide's mark peeked in at the right edge. */
+  #Reviews-{{ section.id }} .letters__quote::before { content: '\201C'; position: absolute; top: 0; left: .2rem; height: 4rem; font-family: var(--font-heading); font-size: 8rem; line-height: 1; color: var(--slide-fill, var(--sky)); -webkit-text-stroke: 2px var(--ink-deep); paint-order: stroke fill; }
+  #Reviews-{{ section.id }} .letters__quote p { margin: 0; font-family: var(--font-heading); font-size: clamp(2.2rem, 2.4vw, 3rem); font-weight: 700; line-height: 1.3; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__who { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.2rem; margin-top: 2.2rem; font-size: 1.5rem; line-height: 1.4; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__name { font-weight: 700; font-style: normal; }
+  #Reviews-{{ section.id }} .letters__tee { display: inline-block; padding: .5rem 1.2rem; border: 2px solid var(--ink-deep); border-radius: 99rem; background: var(--slide-fill, var(--sky)); color: var(--ink); font-family: var(--font-accent); font-size: 1.4rem; font-weight: 700; letter-spacing: .04em; text-decoration: none; }
+  #Reviews-{{ section.id }} a.letters__tee:hover { text-decoration: underline; }
+  #Reviews-{{ section.id }} .letters__sample { display: inline-block; margin-bottom: 1.2rem; padding: .3rem .8rem; border: 1px dashed var(--ink); border-radius: .6rem; font-size: 1.2rem; font-weight: 700; color: var(--ink); }
+  #Reviews-{{ section.id }} .letters__controls { display: flex; align-items: center; justify-content: space-between; gap: 1.6rem; margin-top: 2.8rem; }
+  #Reviews-{{ section.id }} .letters__arrow { display: grid; place-items: center; width: 4.8rem; height: 4.8rem; padding: 0; border: 2px solid var(--ink-deep); border-radius: 50%; background: var(--white); color: var(--ink); box-shadow: .3rem .3rem 0 var(--ink-deep); cursor: pointer; transition: transform .15s var(--ease), box-shadow .15s var(--ease); }
+  #Reviews-{{ section.id }} .letters__arrow:hover:not(:disabled) { transform: translate(.3rem, .3rem); box-shadow: 0 0 0 var(--ink-deep); }
+  #Reviews-{{ section.id }} .letters__arrow:disabled { opacity: .35; cursor: default; }
+  #Reviews-{{ section.id }} .letters__arrow svg { width: 2rem; height: 1.4rem; }
+  #Reviews-{{ section.id }} .letters__dots { display: flex; flex-wrap: wrap; justify-content: center; gap: .2rem; }
+  /* 2.4rem hit area around a 1rem dot. */
+  #Reviews-{{ section.id }} .letters__dot { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; padding: 0; border: 0; background: none; cursor: pointer; }
+  #Reviews-{{ section.id }} .letters__dot::before { content: ''; width: 1rem; height: 1rem; border: 2px solid var(--ink); border-radius: 50%; transition: background .2s var(--ease), transform .2s var(--ease); }
+  #Reviews-{{ section.id }} .letters__dot[aria-current='true']::before { background: var(--ink); transform: scale(1.25); }
+  #Reviews-{{ section.id }} :is(.letters__arrow, .letters__dot, .letters__tee):focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
   #Reviews-{{ section.id }} .letters__pending { margin: 0; font-size: var(--text-lead); line-height: 1.65; color: var(--ink); }
   @media (min-width: 1440px) { #Reviews-{{ section.id }} .letters__inner { padding-inline: 5rem; } }
   @media (max-width: 989px) {
@@ -96,9 +144,13 @@
     #Reviews-{{ section.id }} .letters__eyebrow { font-size: 1.3rem; }
     #Reviews-{{ section.id }} .letters__button { margin-top: 2.4rem; }
     #Reviews-{{ section.id }} .letters__bottom { gap: 1rem; }
+    #Reviews-{{ section.id }} .letters__quote { padding-top: 3.8rem; }
+    #Reviews-{{ section.id }} .letters__quote::before { font-size: 7rem; }
+    #Reviews-{{ section.id }} .letters__controls { margin-top: 2.2rem; }
   }
   @media (prefers-reduced-motion: reduce) {
     #Reviews-{{ section.id }} .letters__scene-frame, #Reviews-{{ section.id }} .letters__art { transform: none; }
+    #Reviews-{{ section.id }} .letters__track { scroll-behavior: auto; }
   }
 {%- endstyle -%}
 <section id="Reviews-{{ section.id }}" class="reviews" {% if section.settings.heading != blank %}aria-labelledby="ReviewsHeading-{{ section.id }}"{% endif %}>
@@ -124,7 +176,7 @@
       <div class="letters__letter">
         <div class="letters__paper">
           <div class="letters__paper-top">
-            <p class="letters__status">{% if review_count > 0 or has_feed %}{{ section.settings.review_label | escape }}{% else %}{{ section.settings.empty_label | escape }}{% endif %}</p>
+            <p class="letters__status">{% if review_count > 0 or has_feed or slide_count > 0 %}{{ section.settings.review_label | escape }}{% else %}{{ section.settings.empty_label | escape }}{% endif %}</p>
             <span class="letters__stamp" aria-hidden="true">{{ heart }}</span>
           </div>
           {%- if review_count > 0 or has_feed -%}
@@ -149,6 +201,60 @@
               </div>
               <noscript><p class="letters__pending">{{ section.settings.pending_text | escape }}</p></noscript>
             {%- else -%}<p class="letters__pending">{{ section.settings.pending_text | escape }}</p>{%- endif -%}
+          {%- elsif slide_count > 0 -%}
+            {%- capture star -%}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 1 3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6-6.8-3.6L5.2 22l1.3-7.6L1 9l7.6-1.1Z" fill="currentColor" stroke="currentColor" stroke-width="1.4"/></svg>{%- endcapture -%}
+            {%- capture star_empty -%}<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 1 3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6-6.8-3.6L5.2 22l1.3-7.6L1 9l7.6-1.1Z" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>{%- endcapture -%}
+            <div class="letters__slider" data-letters-slider role="region" aria-roledescription="carousel" aria-label="{{ section.settings.review_label | escape }}">
+              <div class="letters__track" id="LettersTrack-{{ section.id }}" data-letters-track aria-live="polite">
+                {%- assign n = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type != 'review' or block.settings.quote == blank -%}{%- continue -%}{%- endif -%}
+                  {%- if block.settings.sample and request.design_mode == false -%}{%- continue -%}{%- endif -%}
+                  {%- assign n = n | plus: 1 -%}
+                  {%- assign tee = block.settings.product -%}
+                  {%- assign fill = 'blue' -%}
+                  {%- if tee != blank -%}
+                    {%- capture fill -%}{%- render 'character-pair', product: tee -%}{%- endcapture -%}
+                    {%- assign fill = fill | strip -%}
+                  {%- endif -%}
+                  {%- assign slide_label = 'accessibility.slide_of' | t: index: n, total: slide_count -%}
+                  <figure class="letters__slide" role="group" aria-roledescription="slide" aria-label="{{ slide_label | escape }}" style="--slide-fill: var(--{{ fill }}-bg);" {{ block.shopify_attributes }}>
+                    {%- if block.settings.sample and section.settings.sample_badge != blank -%}<span class="letters__sample">{{ section.settings.sample_badge | escape }}</span>{%- endif -%}
+                    {%- assign stars = block.settings.rating -%}
+                    {%- assign rating_text = section.settings.rating_label | replace: '[rating]', stars -%}
+                    <div class="letters__slide-stars">
+                      {%- for i in (1..5) -%}{%- if i <= stars -%}{{ star }}{%- else -%}{{ star_empty }}{%- endif -%}{%- endfor -%}
+                      <span class="visually-hidden">{{ rating_text | escape }}</span>
+                    </div>
+                    <blockquote class="letters__quote"><p>{{ block.settings.quote | escape | newline_to_br }}</p></blockquote>
+                    <figcaption class="letters__who">
+                      <span>
+                        {%- if block.settings.name != blank -%}<cite class="letters__name">{{ block.settings.name | escape }}</cite>{%- endif -%}
+                        {%- if block.settings.name != blank and block.settings.place != blank %}, {% endif -%}
+                        {%- if block.settings.place != blank -%}{{ block.settings.place | escape }}{%- endif -%}
+                      </span>
+                      {%- if tee != blank -%}<a class="letters__tee" href="{{ tee.url }}">{{ tee.title | escape }}</a>{%- endif -%}
+                    </figcaption>
+                  </figure>
+                {%- endfor -%}
+              </div>
+              {%- if slide_count > 1 -%}
+                <div class="letters__controls">
+                  <button type="button" class="letters__arrow" data-letters-prev aria-label="{{ 'accessibility.previous' | t }}" aria-controls="LettersTrack-{{ section.id }}">
+                    <svg viewBox="0 0 20 14" fill="none" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7.21.15a.5.5 0 0 1 .7.71L3.77 6H19.5a.5.5 0 0 1 0 1H3.77l4.14 5.14a.5.5 0 0 1-.78.62l-4.9-6.08a.5.5 0 0 1 0-.63z" stroke="currentColor" stroke-width=".8"/></svg>
+                  </button>
+                  <div class="letters__dots">
+                    {%- for i in (1..slide_count) -%}
+                      {%- assign dot_label = 'accessibility.slide_of' | t: index: i, total: slide_count -%}
+                      <button type="button" class="letters__dot" data-letters-dot="{{ forloop.index0 }}" aria-label="{{ dot_label | escape }}" aria-controls="LettersTrack-{{ section.id }}"{% if forloop.first %} aria-current="true"{% endif %}></button>
+                    {%- endfor -%}
+                  </div>
+                  <button type="button" class="letters__arrow" data-letters-next aria-label="{{ 'accessibility.next' | t }}" aria-controls="LettersTrack-{{ section.id }}">
+                    <svg viewBox="0 0 20 14" fill="none" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.79.15a.5.5 0 0 0-.7.71L16.23 6H.5a.5.5 0 0 0 0 1h15.73l-4.14 5.14a.5.5 0 0 0 .78.62l4.9-6.08a.5.5 0 0 0 0-.63z" stroke="currentColor" stroke-width=".8"/></svg>
+                  </button>
+                </div>
+              {%- endif -%}
+            </div>
           {%- else -%}
             {%- if section.settings.empty_heading != blank -%}<h3 class="letters__empty-heading">{{ section.settings.empty_heading | escape }}</h3>{%- endif -%}
             {%- if section.settings.empty_text != blank -%}<div class="letters__text">{{ section.settings.empty_text }}</div>{%- endif -%}
@@ -165,6 +271,74 @@
     </div>
   </div>
 </section>
+{%- if slide_count > 1 -%}
+<script>
+  (function () {
+    var root = document.getElementById('Reviews-{{ section.id }}');
+    if (!root || root.dataset.lettersInit) return;
+    var track = root.querySelector('[data-letters-track]');
+    if (!track) return;
+    root.dataset.lettersInit = '1';
+    var slides = track.children;
+    var prev = root.querySelector('[data-letters-prev]');
+    var next = root.querySelector('[data-letters-next]');
+    var dots = root.querySelectorAll('[data-letters-dot]');
+
+    function current() {
+      return Math.round(track.scrollLeft / (track.clientWidth || 1));
+    }
+
+    function sync() {
+      var i = current();
+      prev.disabled = i <= 0;
+      next.disabled = i >= slides.length - 1;
+      for (var d = 0; d < dots.length; d++) {
+        if (d === i) dots[d].setAttribute('aria-current', 'true');
+        else dots[d].removeAttribute('aria-current');
+      }
+    }
+
+    {%- comment -%}
+      No behavior option: the CSS scroll-behavior decides, so reduced motion
+      is honoured. The timer re-syncs after the move in case a scroll event is
+      missed, so a button is never left disabled at the wrong end.
+    {%- endcomment -%}
+    var pending;
+    function go(i) {
+      i = Math.max(0, Math.min(slides.length - 1, i));
+      track.scrollTo({ left: i * track.clientWidth });
+      clearTimeout(pending);
+      pending = setTimeout(sync, 500);
+    }
+
+    prev.addEventListener('click', function () { go(current() - 1); });
+    next.addEventListener('click', function () { go(current() + 1); });
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].addEventListener('click', function (e) { go(+e.currentTarget.dataset.lettersDot); });
+    }
+    track.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(current() + 1); }
+    });
+
+    var raf;
+    track.addEventListener('scroll', function () {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(sync);
+    }, { passive: true });
+    window.addEventListener('resize', sync);
+
+    {%- comment -%} Theme editor: selecting a review block scrolls to it. {%- endcomment -%}
+    document.addEventListener('shopify:block:select', function (e) {
+      if (!root.contains(e.target)) return;
+      var i = Array.prototype.indexOf.call(slides, e.target);
+      if (i > -1) go(i);
+    });
+
+    sync();
+  })();
+</script>
+{%- endif -%}
 {% schema %}
 {
   "name": "JJW love letters", "tag": "div",
@@ -178,6 +352,10 @@
     { "type": "text", "id": "summary_text", "label": "Rating summary", "info": "[rating] and [count] come from Judge.me. Requires the Judge.me app embed.", "default": "[rating] out of 5 from [count] reviews" },
     { "type": "text", "id": "count_text", "label": "Summary without a rating", "default": "[count] family reviews" },
     { "type": "text", "id": "pending_text", "label": "Published reviews without a carousel", "default": "Find our families' reviews on their favourite tees." },
+    { "type": "header", "content": "Review slider" },
+    { "type": "paragraph", "content": "Add Review blocks with real words from real customers. Judge.me's carousel replaces them once it has reviews." },
+    { "type": "text", "id": "rating_label", "label": "Star rating, read aloud", "default": "Rated [rating] out of 5" },
+    { "type": "text", "id": "sample_badge", "label": "Sample review tag", "info": "Shown on sample reviews, which only appear in the theme editor.", "default": "Sample · only you can see this" },
     { "type": "header", "content": "Before the first review" },
     { "type": "text", "id": "empty_label", "label": "Status", "default": "No reviews yet" },
     { "type": "text", "id": "empty_heading", "label": "Invitation heading", "default": "Your story could be our first." },
@@ -186,7 +364,21 @@
     { "type": "url", "id": "button_link", "label": "Button link" },
     { "type": "text", "id": "signoff", "label": "Sign-off", "default": "A little personality. A whole lot of heart." }
   ],
-  "blocks": [ { "type": "@app" } ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "checkbox", "id": "sample", "label": "Sample", "default": false, "info": "Ticked: shows only in the theme editor, never to shoppers. Untick only for a real customer's words." },
+        { "type": "textarea", "id": "quote", "label": "What they said" },
+        { "type": "text", "id": "name", "label": "Name", "info": "First name and initial, with the customer's permission." },
+        { "type": "text", "id": "place", "label": "City" },
+        { "type": "product", "id": "product", "label": "Tee they bought", "info": "Colours the slide with that character and links to the tee." },
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 }
+      ]
+    }
+  ],
   "presets": [ { "name": "JJW love letters" } ]
 }
 {% endschema %}

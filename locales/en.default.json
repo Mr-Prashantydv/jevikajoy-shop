@@ -18,6 +18,7 @@
     "skip_to_text": "Skip to content",
     "next": "Next",
     "previous": "Previous",
+    "slide_of": "Review {{ index }} of {{ total }}",
     "close": "Close"
   },
   "sections": {
