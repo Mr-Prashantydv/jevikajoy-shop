@@ -14,15 +14,22 @@
 {%- style -%}
   #FallingScroll-{{ section.id }} {
     position: relative;
-    height: {{ section.settings.section_height | default: 120 }}vh;
     margin-bottom: 1.5rem;
     background: var(--cream);
+    {%- comment -%}
+      The ground lives in a variable so the pinned build (below) can paint it on
+      the stage instead of the pin box without repeating the Liquid branch.
+    {%- endcomment -%}
+    {%- if section.settings.ground_image != blank %}
+    --fs-ground: url({{ section.settings.ground_image | image_url: width: 2400 }});
+    {%- else %}
+    --fs-ground: url({{ 'jjw-ground.png' | asset_url }});
+    {%- endif %}
   }
 
   #FallingScroll-{{ section.id }} .falling-scroll__sticky {
     position: relative;
     z-index: 10;
-    height: 100%;
     overflow: hidden;
     {%- comment -%}
       The ground always renders: a merchant upload wins, otherwise the artwork
@@ -34,11 +41,15 @@
       wide viewport. This uses the artwork's full width and lets its height
       fall where it may, anchored to the bottom of the stage.
     {%- endcomment -%}
-    {%- if section.settings.ground_image != blank %}
-    background-image: url({{ section.settings.ground_image | image_url: width: 2400 }});
-    {%- else %}
-    background-image: url({{ 'jjw-ground.png' | asset_url }});
-    {%- endif %}
+    background-image: var(--fs-ground);
+  }
+
+  {%- comment -%}
+    Size and position are shared with the stage, which carries the ground
+    instead of the pin box once the section is pinned.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }} .falling-scroll__sticky,
+  #FallingScroll-{{ section.id }} .falling-scroll__stage {
     background-size: 100% auto;
     {%- comment -%}
       `ground_offset` was declared in the schema but nothing read it — the rule
@@ -53,10 +64,18 @@
     background-repeat: no-repeat;
   }
 
+  {%- comment -%}
+    Desktop is a fixed ASPECT RATIO too, like tablet and phone. It used to be
+    section_height vh tall while the ground and the cast are sized by WIDTH, so
+    the grass rose under the cast on every screen wider than the one the y
+    values were tuned on: at 1906x901 feet landed 130-270px below the grass top,
+    Brutus in the dirt. Height from width keeps the whole picture one shape;
+    section_height now means "that many vh on a 16:9 screen".
+  {%- endcomment -%}
   #FallingScroll-{{ section.id }} .falling-scroll__stage {
     position: relative;
     width: 100%;
-    height: 100%;
+    aspect-ratio: 100 / {{ section.settings.section_height | default: 120 | times: 0.5625 }};
   }
 
   {%- comment -%}
@@ -70,10 +89,18 @@
     The width cap stays generous so "Room for Every Kind of Kid" holds one line —
     at 50% of a 1536px viewport it wrapped to two and cost 87px of height.
   {%- endcomment -%}
+  {%- comment -%}
+    The copy is a sibling of the stage, not a child, so the pinned desktop build
+    can stack it above the stage. Unpinned it overlays the stage's top edge,
+    which is exactly where it sat when it was the stage's first in-flow child.
+  {%- endcomment -%}
   #FallingScroll-{{ section.id }} .falling-scroll__copy {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 40;
-    max-width: 120rem;
+    max-width: 160rem;
     margin: 0 auto;
     padding: 9rem 2.4rem 0;
     text-align: center;
@@ -137,39 +164,101 @@
     pointer-events: none;
   }
 
-  /* Lettered tag variant, matching the hero and about-section labels. */
+  {%- comment -%}
+    Lettered tags are two-tier stickers, the same build as the Founder / Brutus
+    tags in split-content and the reference's badges: a larger top card in the
+    heading face, a small caps card stuck over its lower edge at a counter
+    tilt, and two spark triangles. The wrapper only places and tilts the pair.
+
+    Type is --ink on the sheet colour (block setting), never a tint of the
+    fill; the offset shadow is night navy like every button shadow. The cards
+    scale with the viewport on desktop so a sticker stays ~13% of the stage
+    wide and fits the clear margin beside the cast at 990px.
+  {%- endcomment -%}
   #FallingScroll-{{ section.id }} .falling-scroll__tag {
     position: absolute;
     left: var(--x);
     top: var(--y);
     display: block;
-    max-width: 20rem;
-    padding: 0.9rem 1.6rem 0.8rem;
-    border-radius: 0.5rem;
-    background: var(--accent-color);
-    color: var(--tag-fg, var(--cream));
-    box-shadow: 4px 4px 0 0 var(--tag-shadow, rgba(0, 0, 0, 0.2));
-    font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 1.9rem;
-    line-height: 1.1;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    text-align: center;
-    text-wrap: balance;
+    width: max-content;
     transform: translate(-50%, -50%) rotate(var(--rot, -6deg));
     animation: fs-float-{{ section.id }} calc(5s + var(--i, 0) * 0.8s) linear infinite;
     animation-delay: calc(var(--i, 0) * -1.7s);
     pointer-events: none;
   }
 
+  #FallingScroll-{{ section.id }} .falling-scroll__tag-card {
+    display: block;
+    width: max-content;
+    background: var(--accent-color);
+    color: var(--tag-fg, var(--ink));
+    border-radius: 0.6rem;
+    box-shadow: 3px 3px 0 0 var(--ink-deep);
+    white-space: nowrap;
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__tag-card--top {
+    padding: 0.6rem 1.4rem 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(1.6rem, 1.6vw, 2.4rem);
+    line-height: 1.05;
+    transform: rotate(-3deg);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__tag-card--bottom {
+    margin: -0.4rem 0 0 1.6rem;
+    padding: 0.4rem 1.1rem 0.35rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 1vw, 1.5rem);
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transform: rotate(4deg);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__spark {
+    position: absolute;
+    width: 1.4rem;
+    height: 1.4rem;
+    background: var(--accent-color);
+    clip-path: polygon(0% 0%, 100% 42%, 32% 100%);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__spark--a {
+    top: -1.8rem;
+    left: 6%;
+    transform: rotate(-35deg);
+  }
+
+  #FallingScroll-{{ section.id }} .falling-scroll__spark--b {
+    bottom: -1.6rem;
+    right: 4%;
+    transform: rotate(145deg);
+  }
+
   @media screen and (max-width: 749px) {
-    #FallingScroll-{{ section.id }} .falling-scroll__tag {
-      /* 1.2rem floor: 1.1rem rendered 11px, under the site minimum. */
-      font-size: 1.2rem;
-      max-width: 11rem;
-      padding: 0.5rem 0.9rem 0.45rem;
+    /* 1.2rem is the floor for any label on this site. */
+    #FallingScroll-{{ section.id }} .falling-scroll__tag-card--top {
+      padding: 0.4rem 0.9rem 0.35rem;
+      font-size: 1.4rem;
     }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__tag-card--bottom {
+      margin: -0.3rem 0 0 1rem;
+      padding: 0.3rem 0.7rem 0.25rem;
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__spark {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__spark--a { top: -1.3rem; }
+    #FallingScroll-{{ section.id }} .falling-scroll__spark--b { bottom: -1.2rem; }
   }
 
   #FallingScroll-{{ section.id }} .falling-scroll__accent--circle { border-radius: 50%; }
@@ -368,6 +457,19 @@
     pointer-events: none;
   }
 
+  {%- comment -%}
+    Desktop: each shadow sits at its own character's feet (the bottom of the
+    2:3 figure box), not on one shared line. The walkable grass face runs from
+    6.3vw (front edge) to 10.9vw (back edge) above the floor, and the back row
+    stands deeper into it than the front row, so one line could only ever be
+    right for one of them.
+  {%- endcomment -%}
+  @media screen and (min-width: 990px) {
+    #FallingScroll-{{ section.id }} .falling-scroll__shadow {
+      top: calc(var(--y) + var(--ynudge, 0px) + 0.75 * var(--we));
+    }
+  }
+
   @media screen and (max-width: 749px) {
     #FallingScroll-{{ section.id }} .falling-scroll__copy {
       padding: 6rem 1.6rem 0;
@@ -397,7 +499,8 @@
       number matters: at 34% the surface sat at 90.5% of the stage against 85% on
       desktop, so one set of y values could not serve both. Matched, it can.
     {%- endcomment -%}
-    #FallingScroll-{{ section.id }} .falling-scroll__sticky {
+    #FallingScroll-{{ section.id }} .falling-scroll__sticky,
+    #FallingScroll-{{ section.id }} .falling-scroll__stage {
       background-size: auto 53%;
     }
 
@@ -441,9 +544,31 @@
     one: the composition is identical everywhere, only scaled.
   {%- endcomment -%}
   @media screen and (max-width: 989px) {
+    {%- comment -%}
+      The aspect ratio lives on the stage, and the copy sits in flow above it
+      rather than over its sky. Overlaid, the heading took the only clear band
+      above the cast's heads, which is where the stickers go on a narrow screen,
+      and in the pinned build it held the eyebrow under the header for the whole
+      drop. The stage, and so every stored position and the ground, is the same
+      box either way.
+    {%- endcomment -%}
     #FallingScroll-{{ section.id }} {
       height: auto;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__sticky {
+      height: auto;
+      background-image: none;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__copy {
+      position: relative;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__stage {
+      height: auto;
       aspect-ratio: 100 / {{ section.settings.tablet_aspect | default: 110 }};
+      background-image: var(--fs-ground);
     }
 
     {%- comment -%}
@@ -470,8 +595,32 @@
       the front row shifted 49px — so it could never correct a whole-group offset.
       Matching the ground proportion above removes the offset instead.
     {%- endcomment -%}
+    {%- comment -%}
+      The cast spans the full width here, so the side margins the desktop
+      stickers use do not exist. Stickers take their own phone/tablet position
+      in the sky band above the heads instead.
+    {%- endcomment -%}
     #FallingScroll-{{ section.id }} .falling-scroll__tag {
-      left: calc(50% + (var(--x) - 50%) * {{ section.settings.mobile_spread_tags | default: 130 | divided_by: 100.0 }});
+      left: var(--tpx, var(--x));
+      top: var(--tpy, var(--y));
+    }
+  }
+
+  {%- comment -%}
+    750-989px sizes the ground by width, like desktop, so the walkable grass
+    face is the same 6.3-10.9vw band above the floor. Each character keeps its
+    DESKTOP feet height there, with the head end lengthened for the larger
+    tablet figure; the midpoint-of-y used above put the back row 0.55 of the
+    strip up, standing on air.
+  {%- endcomment -%}
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    #FallingScroll-{{ section.id }} .falling-scroll__item {
+      --ye: calc(100% - ((100 - var(--yv)) * {{ section.settings.section_height | default: 120 | times: 0.005625 }}vw - 0.75 * var(--w) + 0.75 * var(--we)));
+      --yne: 0px;
+    }
+
+    #FallingScroll-{{ section.id }} .falling-scroll__shadow {
+      top: calc(100% - ((100 - var(--yv)) * {{ section.settings.section_height | default: 120 | times: 0.005625 }}vw - 0.75 * var(--w)));
     }
   }
 
@@ -480,7 +629,7 @@
     so a phone rule written above the tablet one loses to it.
   {%- endcomment -%}
   @media screen and (max-width: 599px) {
-    #FallingScroll-{{ section.id }} {
+    #FallingScroll-{{ section.id }} .falling-scroll__stage {
       aspect-ratio: 100 / {{ section.settings.phone_aspect | default: 160 }};
     }
 
@@ -489,7 +638,7 @@
       padding-top: 6.4rem;
     }
     #FallingScroll-{{ section.id }} .falling-scroll__title {
-      font-size: clamp(2.6rem, 7.5vw, 4rem);
+      font-size: var(--heading-size);
     }
     #FallingScroll-{{ section.id }} .falling-scroll__sub {
       margin-bottom: 0.8rem;
@@ -511,9 +660,156 @@
       --ye: var(--py);
       --yne: 0px;
     }
+  }
 
-    #FallingScroll-{{ section.id }} .falling-scroll__tag {
-      left: calc(50% + (var(--x) - 50%) * {{ section.settings.mobile_spread_tags | default: 130 | divided_by: 100.0 }});
+  {%- comment -%}
+    Pinned build — the reference's scroll mechanic, rebuilt for a standing cast.
+
+    Everything above is the unpinned layout: it is what the theme editor (and
+    so the pose editor), reduced motion and no-JS get. The script adds
+    .is-pinned only when none of those apply, so every rule below is scoped to
+    it.
+
+    Shape: the root becomes a scroll track (an ::after spacer is the scroll
+    distance the drop plays over) and the pin box is exactly one screen tall,
+    like the reference: heading at the top, scene anchored to the bottom, the
+    whole section in view for the whole drop.
+
+    The stage keeps its tuned natural height (K x 100vh on desktop, its aspect
+    ratio below 990px), so every stored position, the ground and the grass line
+    are exactly the unpinned composition. When the stage is taller than the
+    room left under the heading, its top - empty sky - simply slides up behind
+    the heading. If the heads or the stickers would then reach the heading,
+    the script sets --fs-fit below 1: the cast shrinks pivoting on its feet,
+    so it stays planted on the unscaled grass, and the stickers' and clouds'
+    distance above the floor shrinks by the same factor.
+
+    Each character drops straight down from above the pin box onto its landed
+    spot, in depth order (back row first), driven by --f (0 = parked above,
+    1 = landed) and --sq (the landing squash), both written per character by
+    the script. Nothing moves once they have landed.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }}.is-pinned {
+    height: auto;
+    aspect-ratio: auto;
+  }
+
+  {%- comment -%}
+    The scroll distance is a spacer in the root's CONTENT box, not bottom
+    padding: a sticky box can only travel within its parent's content box, so
+    with padding it had nowhere to go and scrolled away unpinned.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }}.is-pinned::after {
+    content: '';
+    display: block;
+    height: {{ section.settings.pin_distance | default: 100 }}vh;
+  }
+
+  {%- comment -%}
+    100vh, not svh: on a phone vh is the large viewport, so with the browser
+    bar showing only the bottom of the dirt strip is hidden, and once it
+    retracts (as it does on scrolling down) the frame fills the screen with no
+    cream band under the ground.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background-image: none;
+  }
+
+  #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__copy {
+    position: relative;
+    width: 100%;
+  }
+
+  #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: var(--fs-ground);
+  }
+
+  @media screen and (max-width: 989px) {
+    #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__stage {
+      height: auto;
+      aspect-ratio: 100 / {{ section.settings.tablet_aspect | default: 110 }};
+    }
+
+    {%- comment -%}
+      Held still under the sticky header for the whole drop, so the eyebrow has
+      to clear the bar outright: at 6.4rem it sat at 64px against a 74px bar and
+      the logo covered it.
+    {%- endcomment -%}
+    #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__copy {
+      padding-top: 9.6rem;
+    }
+  }
+
+  @media screen and (max-width: 599px) {
+    #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__stage {
+      aspect-ratio: 100 / {{ section.settings.phone_aspect | default: 160 }};
+    }
+  }
+
+  {%- comment -%}
+    The drop. --fs-park is the stage top's offset inside the pin box (negative
+    when the stage reaches up behind the heading), so a parked character waits
+    fully above the pin box, where its overflow hides it. Horizontal position
+    and size are the landed ones throughout: they fall straight down. Scale is
+    the fit factor, times 0.9 -> 1 on the way down, times the squash, all
+    pivoting on the feet so they stay planted on the grass line.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__item {
+    --yend: calc(var(--ye) + var(--yne));
+    --ystart: calc(-1 * var(--fs-park, 0px) - 0.8 * var(--we));
+    left: calc(var(--xe) + var(--ne));
+    width: var(--we);
+    top: calc(var(--ystart) + (var(--yend) - var(--ystart)) * var(--f, 1));
+    transform-origin: 50% 100%;
+    transform:
+      translate(-50%, -50%)
+      scale(
+        calc(var(--fs-fit, 1) * (0.9 + 0.1 * var(--f, 1)) * (1 + 0.6 * var(--sq, 0))),
+        calc(var(--fs-fit, 1) * (0.9 + 0.1 * var(--f, 1)) * (1 - var(--sq, 0)))
+      );
+    will-change: top, transform;
+  }
+
+  {%- comment -%}
+    Shadows stay on the grass line and spread as their character comes down,
+    darkening on --f squared so there is none under a figure still high up.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__shadow {
+    left: calc(var(--xe) + var(--ne));
+    width: calc(var(--we) * var(--fs-fit, 1) * 0.78 * (0.5 + 0.5 * var(--f, 1)));
+    height: calc(var(--we) * var(--fs-fit, 1) * 0.15 * (0.5 + 0.5 * var(--f, 1)));
+    opacity: calc(var(--f, 1) * var(--f, 1));
+  }
+
+  {%- comment -%}
+    Stickers and clouds keep their height above the floor in proportion to the
+    shrunken cast. Badges slide up 24px as the drop begins, then drift 16px
+    further up through the rest of it (--fs-drift is the smoothed drop
+    progress). The idle orbit keeps running on the independent `translate`
+    property. Clouds drift sideways, alternating direction.
+  {%- endcomment -%}
+  #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__tag {
+    top: calc(100% - (100% - var(--y)) * var(--fs-fit, 1));
+    transform:
+      translate(-50%, calc(-50% + (1 - min(1, var(--fs-drift, 1) * 4)) * 2.4rem - var(--fs-drift, 1) * 1.6rem))
+      rotate(var(--rot, -6deg));
+  }
+
+  #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__accent {
+    top: calc(100% - (100% - var(--y)) * var(--fs-fit, 1));
+    transform: translate(calc(-50% + var(--dir, 1) * (var(--fs-drift, 1) - 0.5) * 8rem), -50%);
+  }
+
+  @media screen and (max-width: 989px) {
+    #FallingScroll-{{ section.id }}.is-pinned .falling-scroll__tag {
+      top: calc(100% - (100% - var(--tpy, var(--y))) * var(--fs-fit, 1));
     }
   }
 
@@ -521,19 +817,20 @@
 
 <div id="FallingScroll-{{ section.id }}" class="falling-scroll">
   <div class="falling-scroll__sticky">
+    {%- comment -%}
+      Subheading first, as a kicker above the h2 — a visually-preceding eyebrow
+      is the normal shape for a section label.
+    {%- endcomment -%}
+    <div class="falling-scroll__copy">
+      {%- if section.settings.subheading != blank -%}
+        <p class="falling-scroll__sub">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hxxl falling-scroll__title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+
     <div class="falling-scroll__stage">
-      {%- comment -%}
-        Subheading first, as a kicker above the h2 — a visually-preceding eyebrow
-        is the normal shape for a section label.
-      {%- endcomment -%}
-      <div class="falling-scroll__copy">
-        {%- if section.settings.subheading != blank -%}
-          <p class="falling-scroll__sub">{{ section.settings.subheading | escape }}</p>
-        {%- endif -%}
-        {%- if section.settings.heading != blank -%}
-          <h2 class="hxxl falling-scroll__title">{{ section.settings.heading | escape }}</h2>
-        {%- endif -%}
-      </div>
 
       {%- if section.settings.pile_image != blank -%}
         <img
@@ -555,14 +852,21 @@
           <span
             class="falling-scroll__tag"
             aria-hidden="true"
-            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --accent-color: {{ block.settings.color }}; --tag-fg: {{ block.settings.text_color }}; --tag-shadow: {{ block.settings.color | color_darken: 20 }}; --rot: {{ block.settings.rotate }}deg; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 2 }};"
+            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --yv: {{ block.settings.y }}; --tpx: {{ block.settings.phone_x | default: block.settings.x }}%; --tpy: {{ block.settings.phone_y | default: block.settings.y }}%; --accent-color: {{ block.settings.color }}; --tag-fg: {{ block.settings.text_color }}; --rot: {{ block.settings.rotate }}deg; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 2 }};"
             {{ block.shopify_attributes }}
-          >{{ block.settings.text | escape }}</span>
+          >
+            <span class="falling-scroll__tag-card falling-scroll__tag-card--top">{{ block.settings.text | escape }}</span>
+            {%- if block.settings.text_two != blank -%}
+              <span class="falling-scroll__tag-card falling-scroll__tag-card--bottom">{{ block.settings.text_two | escape }}</span>
+            {%- endif -%}
+            <i class="falling-scroll__spark falling-scroll__spark--a"></i>
+            <i class="falling-scroll__spark falling-scroll__spark--b"></i>
+          </span>
         {%- elsif block.type == 'accent' -%}
           <span
             class="falling-scroll__accent falling-scroll__accent--{{ block.settings.shape }}"
             aria-hidden="true"
-            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --w: {{ block.settings.size }}rem; --accent-color: {{ block.settings.color }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 2 }};"
+            style="--x: {{ block.settings.x }}%; --y: {{ block.settings.y }}%; --yv: {{ block.settings.y }}; --dir: {% cycle 1, -1 %}; --w: {{ block.settings.size }}rem; --accent-color: {{ block.settings.color }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 2 }};"
             {{ block.shopify_attributes }}
           ></span>
         {%- endif -%}
@@ -597,7 +901,7 @@
             loading="lazy"
             data-pose="{{ block.id }}"
             data-pose-name="{{ block.settings.character | default: 'item' }}"
-            style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --y: {{ block.settings.y }}%; --ynudge: {{ block.settings.y_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sy: {{ block.settings.start_y | default: block.settings.y }}%; --synudge: {{ block.settings.start_y_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --py: {{ py }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
+            style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --y: {{ block.settings.y }}%; --yv: {{ block.settings.y }}; --ynudge: {{ block.settings.y_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sy: {{ block.settings.start_y | default: block.settings.y }}%; --synudge: {{ block.settings.start_y_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --py: {{ py }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
             {{ block.shopify_attributes }}
           >
         {%- elsif block.settings.image != blank -%}
@@ -610,7 +914,7 @@
             loading="lazy"
             data-pose="{{ block.id }}"
             data-pose-name="{{ block.settings.character | default: 'item' }}"
-            style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --y: {{ block.settings.y }}%; --ynudge: {{ block.settings.y_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sy: {{ block.settings.start_y | default: block.settings.y }}%; --synudge: {{ block.settings.start_y_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --py: {{ py }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
+            style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --y: {{ block.settings.y }}%; --yv: {{ block.settings.y }}; --ynudge: {{ block.settings.y_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sy: {{ block.settings.start_y | default: block.settings.y }}%; --synudge: {{ block.settings.start_y_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --py: {{ py }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; --i: {{ forloop.index0 }}; z-index: {{ block.settings.depth | default: 10 }};"
             {{ block.shopify_attributes }}
           >
         {%- endif -%}
@@ -626,7 +930,7 @@
               class="falling-scroll__shadow"
               aria-hidden="true"
               data-pose-shadow="{{ block.id }}"
-              style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; z-index: 5;"
+              style="--x: {{ block.settings.x }}%; --nudge: {{ block.settings.x_nudge | default: 0 }}px; --y: {{ block.settings.y }}%; --yv: {{ block.settings.y }}; --ynudge: {{ block.settings.y_nudge | default: 0 }}px; --w: {{ block.settings.size }}vw; --sx: {{ block.settings.start_x | default: block.settings.x }}%; --snudge: {{ block.settings.start_x_nudge | default: 0 }}px; --sw: {{ block.settings.start_size | default: block.settings.size }}vw; --px: {{ px }}%; --pw: {{ pw }}vw; --pratio: {{ pratio }}; z-index: 5;"
             ></span>
           {%- endif -%}
         {%- endif -%}
@@ -636,14 +940,26 @@
 </div>
 
 {%- comment -%}
-  Reveal driver. The cast holds its start pose until the section is 30% visible,
-  then plays one eased tween of --p from 0 to 1 — an entrance, not a scroll
-  scrub. Scrubbing tied the motion to wheel speed, which read as the characters
-  chasing the scrollbar.
+  Scroll driver for the pinned build (see the .is-pinned rules).
 
-  --p still defaults to 1 in CSS, so no-JS and reduced-motion render the cast
-  landed. The pose editor pins --p via data-poseFreeze; the tween checks the pin
-  every frame, so the editor always wins.
+  Progress P runs 0 -> 1 from the moment the pin box is 35% of a screen short of
+  pinning until 85% of the way through the pin, so the first character is
+  already falling as the scene settles and the last has landed before the pin
+  lets go. P is scroll-driven and reverses on the way back up.
+
+  It is SMOOTHED, not read straight off the scrollbar. An earlier scrubbed
+  build mapped scroll to position 1:1 and the cast visibly chased the wheel;
+  the reference avoids that with a catch-up lag (GSAP's scrub: 2). Here the
+  displayed value eases toward the scroll target with an exponential time
+  constant (the Smoothing setting), so a flick of the wheel becomes one glide.
+
+  Each character gets its own window of P, back row first (lowest depth), and
+  inside it falls with gravity (ease-in) for 82% of the window, then squashes
+  on the feet and recovers in the last 18%. --f and --sq go to the character
+  and --f to its shadow; the CSS does the rest.
+
+  The theme editor (and so the pose editor), reduced motion and no-JS never
+  reach this: they keep the unpinned layout with the cast landed (--p: 1).
 {%- endcomment -%}
 <script>
   (function () {
@@ -651,40 +967,149 @@
     if (!root || root.dataset.fsRevealInit) return;
     root.dataset.fsRevealInit = '1';
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      root.style.setProperty('--p', '1');
-      return;
+    /* The pose editor's live phase reads this; the cast is always landed in
+       the unpinned layout now. */
+    root.__fsRevealed = true;
+    root.style.setProperty('--p', '1');
+
+    if ({{ request.design_mode | json }}) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var pin = root.querySelector('.falling-scroll__sticky');
+    var stage = root.querySelector('.falling-scroll__stage');
+    if (!pin || !stage) return;
+
+    var cast = Array.prototype.slice.call(root.querySelectorAll('.falling-scroll__item--fall'));
+    if (!cast.length) return;
+
+    /* Back row first: sort by stacking depth, keeping block order for ties. */
+    cast = cast
+      .map(function (el, i) { return { el: el, i: i, z: parseInt(el.style.zIndex, 10) || 0 }; })
+      .sort(function (a, b) { return a.z - b.z || a.i - b.i; })
+      .map(function (c) {
+        return { el: c.el, shadow: root.querySelector('[data-pose-shadow="' + c.el.dataset.pose + '"]') };
+      });
+
+    var WINDOW = 0.42;
+    var FALL = 0.82;
+    var SQUASH = 0.05;
+    var TAU = {{ section.settings.smoothing | default: 4 | divided_by: 10.0 }};
+
+    root.classList.add('is-pinned');
+
+    var copy = root.querySelector('.falling-scroll__copy');
+    var tags = Array.prototype.slice.call(root.querySelectorAll('.falling-scroll__tag'));
+    var span = 1;
+    var lead = 0;
+    var GAP = 16;
+
+    /* Fit: with everyone landed at full size, how much room is there under the
+       heading? A character scales on its feet, so its head clears the heading
+       when feet + fit * height <= room; a sticker's centre rides at fit times
+       its height above the floor, so it clears when fit * centre + half its
+       height <= room. The smallest of those is the fit. Measured with the cast
+       forced landed for one synchronous layout and restored before paint. */
+    function measure() {
+      var vh = window.innerHeight;
+      lead = vh * 0.35;
+      span = lead + (vh * {{ section.settings.pin_distance | default: 100 }}) / 100 * 0.85;
+
+      var saved = cast.map(function (c) {
+        return [c.el.style.getPropertyValue('--f'), c.el.style.getPropertyValue('--sq')];
+      });
+      var savedDrift = root.style.getPropertyValue('--fs-drift');
+      root.style.setProperty('--fs-fit', '1');
+      root.style.setProperty('--fs-drift', '1');
+      cast.forEach(function (c) {
+        c.el.style.setProperty('--f', '1');
+        c.el.style.setProperty('--sq', '0');
+      });
+
+      var pinRect = pin.getBoundingClientRect();
+      var floor = stage.getBoundingClientRect().bottom;
+      var room = floor - (copy ? copy.getBoundingClientRect().bottom : pinRect.top) - GAP;
+      var fit = 1;
+      cast.forEach(function (c) {
+        var r = c.el.getBoundingClientRect();
+        var feet = floor - r.bottom;
+        if (r.height > 0) fit = Math.min(fit, (room - feet) / r.height);
+      });
+      tags.forEach(function (t) {
+        var r = t.getBoundingClientRect();
+        var centre = floor - (r.top + r.bottom) / 2;
+        if (centre > 0) fit = Math.min(fit, (room - r.height / 2) / centre);
+      });
+      fit = Math.max(0.5, Math.min(1, fit));
+
+      cast.forEach(function (c, i) {
+        c.el.style.setProperty('--f', saved[i][0] || '1');
+        c.el.style.setProperty('--sq', saved[i][1] || '0');
+      });
+      if (savedDrift) root.style.setProperty('--fs-drift', savedDrift);
+      root.style.setProperty('--fs-fit', fit.toFixed(4));
+      root.style.setProperty('--fs-park', stage.offsetTop + 'px');
     }
 
-    root.style.setProperty('--p', '0');
+    function target() {
+      var p = (lead - root.getBoundingClientRect().top) / span;
+      return p < 0 ? 0 : p > 1 ? 1 : p;
+    }
 
-    var DURATION = {{ section.settings.reveal_duration | default: 1.2 | times: 1000 }};
+    function apply(P) {
+      var n = cast.length;
+      cast.forEach(function (c, i) {
+        var start = n > 1 ? (i * (1 - WINDOW)) / (n - 1) : 0;
+        var t = (P - start) / WINDOW;
+        t = t < 0 ? 0 : t > 1 ? 1 : t;
+        var u = t < FALL ? t / FALL : 1;
+        var f = u * u;
+        var sq = t > FALL ? Math.sin((Math.PI * (t - FALL)) / (1 - FALL)) * SQUASH : 0;
+        c.el.style.setProperty('--f', f.toFixed(4));
+        c.el.style.setProperty('--sq', sq.toFixed(4));
+        if (c.shadow) c.shadow.style.setProperty('--f', f.toFixed(4));
+      });
+      root.style.setProperty('--fs-drift', P.toFixed(4));
+    }
 
-    function tween() {
-      root.__fsRevealed = true;
-      var t0 = performance.now();
-      function step(now) {
-        if (root.dataset.poseFreeze) return;
-        var t = (now - t0) / DURATION;
-        if (t > 1) t = 1;
-        /* easeOutCubic - fast start, soft landing. */
-        var e = 1 - Math.pow(1 - t, 3);
-        root.style.setProperty('--p', e.toFixed(4));
-        if (t < 1) requestAnimationFrame(step);
+    var shown = null;
+    var last = 0;
+    var raf = 0;
+
+    function frame(now) {
+      raf = 0;
+      var goal = target();
+      if (shown === null || TAU <= 0) {
+        shown = goal;
+      } else {
+        var dt = Math.min((now - last) / 1000, 0.1);
+        shown += (goal - shown) * (1 - Math.exp(-dt / TAU));
+        if (Math.abs(goal - shown) < 0.0005) shown = goal;
       }
-      requestAnimationFrame(step);
+      last = now;
+      apply(shown);
+      if (shown !== goal) raf = requestAnimationFrame(frame);
     }
 
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (entries) {
-        if (entries[0].intersectionRatio >= 0.3) {
-          io.disconnect();
-          tween();
-        }
-      }, { threshold: [0.3] });
-      io.observe(root);
-    } else {
-      tween();
+    function kick() {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    }
+
+    measure();
+    /* First frame jumps straight to the scroll position, so a page restored
+       mid-section or past it shows the right state instead of replaying. */
+    frame(performance.now());
+
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', function () { measure(); kick(); });
+    if ('ResizeObserver' in window) {
+      var ro = new ResizeObserver(function () { measure(); kick(); });
+      ro.observe(pin);
+      if (copy) ro.observe(copy);
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { measure(); kick(); });
     }
   })();
 </script>
@@ -1173,14 +1598,24 @@
     },
     {
       "type": "range",
-      "id": "reveal_duration",
-      "label": "Reveal speed",
-      "info": "How long the cast takes to travel from its start pose to its landed pose once the section is 30% on screen.",
-      "min": 0.3,
-      "max": 3,
-      "step": 0.1,
-      "unit": "s",
-      "default": 1.2
+      "id": "pin_distance",
+      "label": "Drop scroll length",
+      "info": "How far visitors scroll while the scene stays pinned and the cast drops in.",
+      "min": 40,
+      "max": 200,
+      "step": 10,
+      "unit": "vh",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "smoothing",
+      "label": "Drop smoothing",
+      "info": "How long the cast takes to catch up with the scroll, in tenths of a second. 0 follows the scrollbar exactly.",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "default": 4
     },
     {
       "type": "checkbox",
@@ -1193,7 +1628,7 @@
       "type": "range",
       "id": "section_height",
       "label": "Section height",
-      "info": "How tall the scene is, as a share of the screen.",
+      "info": "Desktop scene height, as the share of the screen it fills on a 16:9 display. The scene keeps this shape on every desktop, so the cast always lands on the grass.",
       "min": 80,
       "max": 200,
       "step": 5,
@@ -1221,16 +1656,6 @@
       "step": 5,
       "unit": "%",
       "default": 160
-    },
-    {
-      "type": "range",
-      "id": "mobile_spread_tags",
-      "label": "Badge spread (narrow)",
-      "min": 100,
-      "max": 200,
-      "step": 5,
-      "unit": "%",
-      "default": 130
     }
   ],
   "blocks": [
@@ -1459,6 +1884,12 @@
           "info": "Leave blank to show a plain shape instead."
         },
         {
+          "type": "text",
+          "id": "text_two",
+          "label": "Label second line",
+          "info": "Smaller caps line on its own sticker under the label. Leave blank for one line."
+        },
+        {
           "type": "color",
           "id": "text_color",
           "label": "Text colour",
@@ -1523,6 +1954,27 @@
           "step": 1,
           "unit": "%",
           "default": 40
+        },
+        {
+          "type": "range",
+          "id": "phone_x",
+          "label": "Label across (phone and tablet)",
+          "info": "Labels only. The cast fills the width under 990px, so labels sit in the sky above the heads there.",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "phone_y",
+          "label": "Label down (phone and tablet)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 12
         },
         {
           "type": "range",
