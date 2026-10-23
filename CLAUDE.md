@@ -26,19 +26,30 @@ The shop has moved twice. Only the third store is alive:
 | `00d611-p1.myshopify.com` | **Frozen** for unpaid billing — "This store is currently unavailable" (checked 2026-10-16). Admin, storefront and API are all closed. See `docs/migration/ownership-transfer-runbook.md`. |
 | **`1uz1hi-01.myshopify.com`** | **Current.** Catalogue migrated 4 October 2026 (`docs/migration/`). Serves `jevikajoy.shop`. Shopify account `jevikaandjoy@gmail.com` per the migration notes (`jevikajoychatgpt@gmail.com` is the other candidate the owner named) — log the CLI in with whichever holds it. |
 
-Themes on `1uz1hi-01`, read from the storefront's `Shopify.theme` on 2026-10-16:
+`1uz1hi-01` holds **one theme only** (consolidated 2026-10-21):
 
 | Theme | ID | Role |
 |---|---|---|
-| JJW Migration | `164825399535` | **main — live to shoppers** |
-| JJW UI consistency preview | `164840702191` | unpublished — the working target |
+| JJW UI consistency preview | `164840702191` | **main — live to shoppers, and the only theme** |
 
-**Never push to `164825399535` without an explicit go-ahead in chat.** It is the live store.
+Horizon, JJW Migration and JJW Picnic hero preview were deleted. Before that, the Picnic hero
+(`sections/hero.liquid`, `assets/jjw-hero-picnic-desktop.png` / `-mobile.png`) was copied from
+JJW Migration into this theme, which already had the October UI pass (`docs/ui-consistency.md`).
 
-**The local source has not been diffed against either theme since the move.** The preview
-holds the October UI pass (`docs/ui-consistency.md`), and the Weekend Picnic hero went
-straight to live (`design.md`). Pull both into scratch folders and compare before the first
-push, or a push may silently undo work that only exists remotely.
+**Every push to `164840702191` now goes straight to shoppers. Never push without an explicit
+go-ahead in chat.** To try work safely, `shopify theme share` it into a throwaway unpublished
+theme, check that, then delete it.
+
+**Local matches live** (2026-10-21, after the headings, fonts and pinned falling-scroll
+shipped; every pushed file verified by pulling back, JSON compared by content since Shopify
+reformats it and adds a header comment). The only remote-only files are
+`assets/jjw-hero-v2-*.png` and `jjw-hero-v3-*.png`, referenced by nothing, so a full push will
+delete them. Pushing to the live theme needs `--allow-live`, or the
+CLI fails with "Failed to prompt".
+
+⚠️ **No automatic discount exists on `1uz1hi-01`** (checked 2026-10-21: 3× Wander Tee came to
+Rs. 1,797 with `total_discount: 0`), yet `bundle-banner` still promises "Three for Rs. 1,527".
+Either recreate the 15%-off-3 automatic discount in admin or clear the banner heading.
 
 **Facts below that were measured before October 2026 came from `00d611-p1`.** They describe
 this theme's code correctly, but anything about *store* state has to be re-checked on
@@ -55,7 +66,7 @@ before any Admin API work.
 ## Commands
 
 ```bash
-# Push to the preview theme (the working target)
+# Push to the theme (LIVE — needs a go-ahead in chat)
 shopify theme push --store 1uz1hi-01.myshopify.com --theme 164840702191 --path .
 
 # Push specific files only
@@ -72,7 +83,7 @@ shopify theme list --store 1uz1hi-01.myshopify.com
 shopify theme share --store 1uz1hi-01.myshopify.com --path .
 ```
 
-Preview: `https://1uz1hi-01.myshopify.com?preview_theme_id=164840702191` — it redirects to
+Preview (now the live theme itself): `https://1uz1hi-01.myshopify.com?preview_theme_id=164840702191` — it redirects to
 `jevikajoy.shop` and keeps the preview parameter.
 
 **Always use the permanent `.myshopify.com` domain with the CLI.** `jevikajoy.shop` is only the
@@ -273,6 +284,43 @@ element, so `width: auto` takes its intrinsic width and the opposing offset is i
 the picture hanging 26px off the right edge. What works is `padding` on the `<img>` itself:
 `object-fit` draws into the content box, so padding both shrinks the drawing area and keeps it
 centred. One variable drives all four sides.
+
+**`falling-scroll` has two layouts.** The unpinned one (stage `section_height`vh, cast landed)
+is what the theme editor, the pose editor, reduced motion and no-JS get, and it is what the
+stored x/y values are tuned against. The script adds `.is-pinned` for everyone else: a frame
+**exactly 100vh tall** sticks for `pin_distance`vh of scroll while each character drops in,
+back row first, smoothed toward the scroll target. Heading at the top, stage at its natural
+size anchored to the bottom, so the whole section is on screen at once like the reference.
+Where the stage is taller than the room under the heading its empty sky slides behind the
+heading; where heads or stickers would then reach the heading, `--fs-fit` (set by the script,
+floor 0.6) shrinks the cast pivoting on its feet and pulls stickers/clouds toward the floor by
+the same factor, so the cast stays on the unscaled grass. The `start_*` block settings only
+feed the pose editor's start phase now.
+
+**Every band of the stage is a fixed aspect ratio, desktop included.** Desktop used to be
+`section_height`vh tall while the ground and cast are sized by width, so the grass rose under
+the cast on any screen wider than the tuning one: at 1906×901 feet landed 130–270px under the
+grass top, Brutus in the dirt. Desktop is now `100 / (section_height × 0.5625)` (the vh it
+fills on 16:9), the y values were re-seated for it, and 750–989px keeps each character's
+desktop feet height (its ground is width-sized too) instead of the y midpoint, which floated
+the back row. The walkable grass face in `jjw-ground.png` is **21–36% of the strip's height**
+above the floor (6.3–10.9vw when width-sized); measure feet as a fraction of the strip, never
+against one line. Feet now sit at 0.24–0.32 at every width ≥750, and each desktop/tablet
+shadow sits at its own character's feet. Phones (<600, height-sized ground) were left as
+tuned; Brutus lands low there (0.04). Fits: 1.0 at 1280×1024 and 820×1180; 0.71 at
+1366×768; 0.58 at 1906×901.
+
+Its lettered accents are **two-tier stickers** (`text` + `text_two`), the same build as the
+split-content Founder / Brutus tags: `--ink` on a sheet fill, night-navy offset shadow, two
+sparks, layer 30 so they draw over the cast. On desktop they sit in the side margins the cast
+leaves (it spans ~21–82% across); under 990px the cast fills the width, so each sticker has its
+own `phone_x` / `phone_y` in the sky band above the heads. That band only exists because the
+copy sits **in flow above the stage** under 990px (both layouts) instead of over its sky — and
+in flow, pinned, it needs 9.6rem of top padding to clear the 74px header for the whole drop.
+
+**A sticky box only travels inside its parent's *content* box.** The first pinned build put
+the scroll distance in the root's `padding-bottom`, and the stage scrolled straight past with
+`position: sticky` computed and no error anywhere. The distance is a `::after` spacer now.
 
 **Never hang carousel button state solely off the `scroll` event.** One missed event leaves a
 button `disabled`, a disabled button swallows the next click, and the track is stranded at that
@@ -525,7 +573,24 @@ against the full product list instead of trusting that query.
 Templates are JSON and compose sections; `header-group.json` / `footer-group.json` wrap them.
 
 - `templates/index.json` — hero, marquee-banner, featured-collection, find-us, falling-scroll,
-  split-content, focus-carousel, rich-text, social-marquee, social-icons
+  split-content, reviews, rich-text, social-marquee, social-icons
+
+**`reviews` shows real Judge.me reviews only — never hand-written quotes.** It replaced
+`focus-carousel` on the home page (2026-10-22), whose five quotes had invented names, were
+written before the store could take a single payment, and two claimed wash durability.
+`focus-carousel.liquid` is unused now. `reviews` reads `shop.metafields.judgeme.all_reviews_count`
+/ `all_reviews_rating`; above zero it prints the rating summary and either an `@app` block
+(Judge.me's Cards/Testimonials carousel, added in the theme editor) or Judge.me's
+`featured_carousel` metafield. At zero, or with Judge.me absent, it shows a "No reviews yet"
+letter card. The live design (2026-10-22) is "JJW love letters": navy band, the cast scene in
+`assets/jjw-reviews-clubhouse.webp` (decorative, never a reviewer), and a cream letter card that
+holds either the invitation or Judge.me's rating and carousel. As of 2026-10-22 Judge.me is **not installed on `1uz1hi-01`** (no `jdgm` markup on any
+page), so the empty card is what renders.
+
+**The scroll-reveal is a CSS animation** (`slideIn` / `fadeIn`, gated on removing
+`.scroll-trigger--offscreen`). The in-app preview pane does not advance animations, so revealed
+content measures and screenshots at opacity 0.01 there. Force the end state
+(`.scroll-trigger{opacity:1;transform:none;animation:none}`) before judging what it looks like.
 - `templates/product.json` — main-product, fabric-story, split-content (reused as the feature
   panel), featured-collection (as related products)
 - `templates/collection.json` — main-collection, product-trust
@@ -684,8 +749,8 @@ Substitutes, wired through `--font-heading` / `--font-accent` / `--font-body`:
 | Role | Ours |
 |---|---|
 | Display headings | Baloo 2 (Google) |
-| Condensed caps, buttons, nav | Big Shoulders Display (Google) |
-| Body | Nunito (Google) |
+| Condensed caps, buttons, nav | Barlow Semi Condensed (Google) — was Big Shoulders Display until 2026-10-21; Barlow is wider, so check tight bars when adding text |
+| Body | Quicksand (Google) — was Nunito until 2026-10-21; Quicksand tops out at 700 |
 
 All three come from one `@import` in `assets/theme.css`; `--font-heading` /
 `--font-accent` / `--font-body` are the only things sections reference.
