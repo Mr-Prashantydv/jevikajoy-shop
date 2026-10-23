@@ -328,6 +328,10 @@
     margin-top: 1.6rem;
   }
 
+  #MainProduct-{{ section.id }} .pdp__related {
+    margin-top: 3.2rem;
+  }
+
   #MainProduct-{{ section.id }} .pdp__details {
     margin-top: 3.2rem;
     padding-top: 2.4rem;
@@ -1172,7 +1176,7 @@
       <h1 class="pdp__title">{{ product.title | default: section.settings.fallback_title }}</h1>
       {%- render 'review-stars', product: product -%}
 
-      {%- capture product_details -%}
+      {%- capture character_tabs -%}
       {%- comment -%} Character tabs — reference's pack-format tabs. {%- endcomment -%}
       {%- if tab_blocks.size > 0 -%}
         {%- liquid
@@ -1295,7 +1299,9 @@
           </div>
         {%- endfor -%}
       {%- endif -%}
+      {%- endcapture -%}
 
+      {%- capture product_details -%}
       {%- comment -%}
         Bullets before the accordions: the accordion's Description row holds the
         full prose, and this is the version a shopper reads without opening
@@ -1433,6 +1439,14 @@
             </button>
           </span>
         </form>
+
+        {%- comment -%}
+          The character's other tees sit straight under Add to Cart, ahead of the
+          reassurance below, so the next thing a shopper sees is more to buy.
+        {%- endcomment -%}
+        {%- if character_tabs != blank -%}
+          <div class="pdp__related">{{ character_tabs }}</div>
+        {%- endif -%}
 
         {%- comment -%}
           Trust badges, then the payment row, then the one-line reassurance —
