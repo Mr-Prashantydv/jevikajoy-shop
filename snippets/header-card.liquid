@@ -23,20 +23,20 @@
   assign hc_face = ''
   case hc_character
     when 'jevika'
-      assign hc_portrait = '0 95 492 600'
-      assign hc_face = '0 105 492 470'
+      assign hc_portrait = '0 80 510 620'
+      assign hc_face = '5 115 500 430'
     when 'joy'
-      assign hc_portrait = '492 95 389 600'
-      assign hc_face = '492 95 389 430'
+      assign hc_portrait = '480 80 430 620'
+      assign hc_face = '480 110 430 440'
     when 'brutus'
-      assign hc_portrait = '881 95 352 600'
-      assign hc_face = '881 95 352 445'
+      assign hc_portrait = '865 80 400 620'
+      assign hc_face = '865 100 400 430'
     when 'minku'
-      assign hc_portrait = '1233 95 389 600'
-      assign hc_face = '1233 95 389 440'
+      assign hc_portrait = '1210 80 450 620'
+      assign hc_face = '1210 115 450 440'
     when 'pinki'
-      assign hc_portrait = '1622 55 494 640'
-      assign hc_face = '1622 55 494 510'
+      assign hc_portrait = '1600 60 516 640'
+      assign hc_face = '1600 70 516 500'
   endcase
 
   if style == 'drawer'
@@ -63,10 +63,10 @@
     {%- elsif hc_portrait != blank -%}
       <div class="{{ hc_media }} hdr-portrait-media" data-nav-character="{{ hc_character }}">
         <svg class="hdr-nav-art hdr-nav-art--portrait" viewBox="{{ hc_portrait }}" aria-hidden="true" focusable="false">
-          <use href="#HeaderNavArt-{{ section_id }}"/>
+          <g clip-path="url(#HeaderNavClip-{{ section_id }}-{{ hc_character }})"><use href="#HeaderNavArt-{{ section_id }}"/></g>
         </svg>
         <svg class="hdr-nav-art hdr-nav-art--face" viewBox="{{ hc_face }}" aria-hidden="true" focusable="false">
-          <use href="#HeaderNavArt-{{ section_id }}"/>
+          <g clip-path="url(#HeaderNavClip-{{ section_id }}-{{ hc_character }})"><use href="#HeaderNavArt-{{ section_id }}"/></g>
         </svg>
       </div>
     {%- endif -%}
