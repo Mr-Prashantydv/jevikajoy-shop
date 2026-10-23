@@ -14,7 +14,7 @@
     "bundle": {
       "type": "bundle-banner",
       "settings": {
-        "heading": "15% Off Any 3 Tees",
+        "heading": "",
         "text": "Mix any characters, any sizes — the discount applies automatically at checkout.",
         "note": "Three for Rs. 1,527 instead of Rs. 1,797",
         "cta_label": "Shop All Tees",
