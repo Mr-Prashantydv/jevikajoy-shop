@@ -28,7 +28,9 @@
   }
 
   #Footer-{{ section.id }} .footer__logo img {
-    width: 32rem;
+    /* Letters + name pill, no tagline: the tagline's navy words vanish on this
+       navy footer. The art is 3:2, so narrower than the old 2:1 mark's 32rem. */
+    width: 28rem;
     max-width: 100%;
     height: auto;
   }
@@ -254,10 +256,10 @@
           }}
         {%- else -%}
           <img
-            src="{{ 'jjw-logo.png' | asset_url }}"
+            src="{{ 'jjw-logo-lockup.webp' | asset_url }}"
             alt="{{ shop.name | escape }}"
-            width="320"
-            height="52"
+            width="720"
+            height="486"
             loading="lazy"
           >
         {%- endif -%}

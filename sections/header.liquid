@@ -132,6 +132,26 @@
     object-position: left center;
   }
 
+  {%- comment -%}
+    The built-in logo is the horizontal lockup (~4:1), whose name and tagline
+    read at 7.2rem tall; it still fits the centred tablet bar. Phones size it
+    by width instead (749px block below).
+    On the homepage the bar is sticky and floats over every section, so once the
+    page scrolls it drops back to the old 5.6rem / 80px bar — the height
+    falling-scroll's heading is spaced to clear. Interior pages scroll the
+    header away, so they keep the larger size.
+  {%- endcomment -%}
+  #Header-{{ s }} .hdr-logo .hdr-logo__wide {
+    height: 7.2rem;
+    max-width: 32rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .template--index #Header-{{ s }}[data-scrolled='true'] .hdr-logo .hdr-logo__wide {
+      height: 5.6rem;
+    }
+  }
+
   #Header-{{ s }} .hdr-menu-wrap {
     position: relative;
     display: block;
@@ -1087,6 +1107,32 @@
     }
 
     {%- comment -%}
+      The wide lockup is ~4:1, so 1fr auto 1fr — which squeezes the logo into
+      whatever the wider side track leaves — would hold it to ~3rem tall. Here
+      the logo track takes everything between the burger and the two pills
+      instead (~167px at 360, ~182 at 375), centred in that space, which reads
+      ~2.5rem left of the bar's middle. It fills the width and caps at the
+      pills' 5rem, so the row stays the 74px falling-scroll is spaced to clear
+      and needs no scroll swap here.
+    {%- endcomment -%}
+    #Header-{{ s }} .hdr-grid:has(.hdr-logo__wide) {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    #Header-{{ s }} .hdr-logo:has(.hdr-logo__wide) {
+      justify-self: stretch;
+      min-width: 0;
+    }
+
+    #Header-{{ s }} .hdr-logo .hdr-logo__wide {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      max-height: 5rem;
+      object-position: center;
+    }
+
+    {%- comment -%}
       The logo drops to 5rem here but the menu blob and icon pills keep their
       desktop heights, leaving the burger half again taller than the mark.
       Everything in the row is pinned to the logo's 5rem so the three read as
@@ -1205,10 +1251,11 @@
           }}
         {%- else -%}
           <img
-            src="{{ 'jjw-logo.png' | asset_url }}"
+            class="hdr-logo__wide"
+            src="{{ 'jjw-logo-wide.webp' | asset_url }}"
             alt="{{ shop.name | escape }}"
-            width="1774"
-            height="887"
+            width="900"
+            height="220"
           >
         {%- endif -%}
       </a>
@@ -1494,6 +1541,26 @@
     var searchToggle = root.querySelector('[data-hdr-search-toggle]');
     var searchInput = root.querySelector('[data-hdr-search-input]');
     var searchResults = root.querySelector('[data-hdr-search-results]');
+
+    /* Drives the logo shrinking to 5.6rem on scroll; the CSS only acts on it on
+       the homepage, the one template where the bar is sticky. */
+    if (document.body.classList.contains('template--index')) {
+      var scrollQueued = false;
+      var syncScrolled = function () {
+        scrollQueued = false;
+        root.dataset.scrolled = window.scrollY > 40 ? 'true' : 'false';
+      };
+      window.addEventListener(
+        'scroll',
+        function () {
+          if (scrollQueued) return;
+          scrollQueued = true;
+          requestAnimationFrame(syncScrolled);
+        },
+        { passive: true }
+      );
+      syncScrolled();
+    }
 
     function lockScroll() {
       var any = root.dataset.open === 'true' || root.dataset.search === 'true';
