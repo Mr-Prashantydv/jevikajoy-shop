@@ -22,7 +22,10 @@
     align-items: flex-end;
     gap: 4rem;
     border-radius: 2rem;
-    background: var(--pink);
+    /* Sky Blue, not Heart Pink: the Star Yellow button and tag cards read
+       against it instead of fighting it, and night-navy copy stays well
+       past AA. */
+    background: var(--sky);
     color: var(--ink-deep);
   }
 
@@ -61,6 +64,7 @@
     z-index: 3;
     left: var(--tag-x, 50%);
     top: var(--tag-y, 10%);
+    --rot: var(--rot-base, -6deg);
     transform: rotate(var(--rot, -6deg));
     transform-origin: center;
     animation: jjw-tag-bounce 7s ease-in-out infinite;
@@ -134,12 +138,17 @@
   }
 
   @media screen and (max-width: 749px) {
-    #SplitContent-{{ section.id }} .sc__tag-card--name { font-size: 1.8rem; padding: 0.5rem 1.1rem 0.45rem; }
+    /* Sized to fit the photo's two clear patches on a phone: beside the man's
+       head above the dog's ears, and low on the dog clear of the man's hand. */
+    #SplitContent-{{ section.id }} .sc__tag-card--name { font-size: 1.4rem; padding: 0.35rem 0.8rem 0.3rem; }
     /* 1.2rem is the floor for any label on this site: 1.05rem was 10.5px. */
-    #SplitContent-{{ section.id }} .sc__tag-card--role { font-size: 1.2rem; padding: 0.35rem 0.9rem 0.3rem; margin-left: 1.2rem; }
+    #SplitContent-{{ section.id }} .sc__tag-card--role { font-size: 1.2rem; letter-spacing: 0.03em; padding: 0.25rem 0.6rem 0.2rem; margin: -0.3rem 0 0 0.8rem; }
     #SplitContent-{{ section.id }} .sc__spark { width: 1.1rem; height: 1.1rem; }
     #SplitContent-{{ section.id }} .sc__spark--a { top: -1.5rem; }
     #SplitContent-{{ section.id }} .sc__spark--b { bottom: -1.4rem; }
+    /* Fine nudges on top of the percentage positions. */
+    #SplitContent-{{ section.id }} .sc__tag--1 { margin-left: -1.5rem; }
+    #SplitContent-{{ section.id }} .sc__tag--2 { margin-left: 1rem; }
   }
 
   #SplitContent-{{ section.id }} .sc__badge--one {
@@ -154,14 +163,14 @@
   }
 
   @media screen and (max-width: 749px) {
+    /* On a phone each tag covers ~37% of the photo's width, so the desktop
+       positions landed on faces. Phones get their own positions (settings),
+       capped at 60% across so a ~40%-wide tag still ends on screen, and half
+       the tilt, which keeps each tag short enough to clear the dog's ears. */
     #SplitContent-{{ section.id }} .sc__tag {
-      padding: 0.6rem 1.1rem 0.5rem;
-      box-shadow: 3px 3px 0 0 var(--gold);
-      /* The tags are max-content wide and placed by a percentage tuned for
-         desktop. On a phone a tag anchored past mid-width ran 70-105px off the
-         right edge. Capping the anchor at 50% keeps the whole card on screen;
-         a 45vw tag from 50% ends at 95vw. */
-      left: clamp(1rem, var(--tag-x, 50%), 50%);
+      left: clamp(1rem, var(--tag-x-m, var(--tag-x, 50%)), 60%);
+      top: var(--tag-y-m, var(--tag-y, 10%));
+      --rot: calc(var(--rot-base, -6deg) / 2);
     }
 
     #SplitContent-{{ section.id }} .sc__tag-name { font-size: 1.7rem; }
@@ -225,7 +234,7 @@
   #SplitContent-{{ section.id }} .sc__text {
     margin-top: 3rem;
     max-width: 62rem;
-    font-size: var(--text-xl);
+    font-size: var(--text-lead);
     line-height: 1.5;
     color: var(--ink-deep);
   }
@@ -243,7 +252,13 @@
 
   @media screen and (max-width: 749px) {
     #SplitContent-{{ section.id }} {
-      padding-block: var(--section-space);
+      padding-block: calc(var(--section-space) + 1rem);
+    }
+
+    /* 1rem wider than the page gutter on every side, so the panel sits
+       further in from the screen edge on a phone. */
+    #SplitContent-{{ section.id }} > .page-width {
+      padding-inline: calc(1.5rem + 1rem);
     }
 
     #SplitContent-{{ section.id }} .sc__panel {
@@ -254,6 +269,9 @@
          0-wide parent, and the artwork and every tag inside it vanished off the
          right edge of the phone. Stretch restores the full-width column. */
       align-items: stretch;
+      /* Stacked, the 4rem side-by-side gap added to the copy's bottom padding
+         left 80px between the button and the photo. */
+      gap: 0;
     }
 
     #SplitContent-{{ section.id }} .sc__media {
@@ -265,7 +283,7 @@
 
     #SplitContent-{{ section.id }} .sc__copy {
       justify-content: center;
-      padding: 4rem 2rem;
+      padding: 4rem 2rem 2.4rem;
     }
 
     /* The desktop margin rhythm is far taller than a phone viewport. */
@@ -274,11 +292,12 @@
     }
 
     #SplitContent-{{ section.id }} .sc__text {
-      margin-top: 2.4rem;
+      margin-top: 1.4rem;
+      font-size: 1.3rem;
     }
 
     #SplitContent-{{ section.id }} .sc__btn {
-      margin-top: 3.2rem;
+      margin-top: 2.2rem;
     }
   }
 
@@ -335,6 +354,8 @@
             {%- assign tag_x = section.settings.tag_one_x -%}
             {%- assign tag_y = section.settings.tag_one_y -%}
             {%- assign tag_rot = section.settings.tag_one_rotate -%}
+            {%- assign tag_x_m = section.settings.tag_one_x_mobile -%}
+            {%- assign tag_y_m = section.settings.tag_one_y_mobile -%}
             {%- assign tag_delay = '0s' -%}
           {%- else -%}
             {%- assign tag_name = section.settings.tag_two_name -%}
@@ -342,12 +363,14 @@
             {%- assign tag_x = section.settings.tag_two_x -%}
             {%- assign tag_y = section.settings.tag_two_y -%}
             {%- assign tag_rot = section.settings.tag_two_rotate -%}
+            {%- assign tag_x_m = section.settings.tag_two_x_mobile -%}
+            {%- assign tag_y_m = section.settings.tag_two_y_mobile -%}
             {%- assign tag_delay = '0.4s' -%}
           {%- endif -%}
           {%- if tag_name != blank -%}
             <span
-              class="sc__tag"
-              style="--tag-x:{{ tag_x }}%;--tag-y:{{ tag_y }}%;--rot:{{ tag_rot }}deg;--tag-delay:{{ tag_delay }};"
+              class="sc__tag sc__tag--{{ i }}"
+              style="--tag-x:{{ tag_x }}%;--tag-y:{{ tag_y }}%;--tag-x-m:{{ tag_x_m }}%;--tag-y-m:{{ tag_y_m }}%;--rot-base:{{ tag_rot }}deg;--tag-delay:{{ tag_delay }};"
             >
               <span class="sc__tag-card sc__tag-card--name">{{ tag_name | escape }}</span>
               {%- if tag_role != blank -%}
@@ -373,7 +396,8 @@
           {%- if section.settings.button_label != blank -%}
             <div class="sc__btn btn-wrap">
               <span class="btn-shadow" aria-hidden="true"></span>
-              <a href="{{ section.settings.button_link | default: '#' }}" class="btn">
+              {%- comment -%} Never '#': an unset link used to leave a button that went nowhere. {%- endcomment -%}
+              <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="btn">
                 {{- section.settings.button_label | escape -}}
               </a>
             </div>
@@ -417,11 +441,15 @@
     { "type": "range", "id": "tag_one_x", "label": "Tag 1 across", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 52 },
     { "type": "range", "id": "tag_one_y", "label": "Tag 1 down", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 9 },
     { "type": "range", "id": "tag_one_rotate", "label": "Tag 1 tilt", "min": -15, "max": 15, "step": 1, "unit": "deg", "default": -6 },
+    { "type": "range", "id": "tag_one_x_mobile", "label": "Tag 1 across (phone)", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 60 },
+    { "type": "range", "id": "tag_one_y_mobile", "label": "Tag 1 down (phone)", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 2 },
     { "type": "text", "id": "tag_two_name", "label": "Tag 2 name", "default": "Brutus" },
     { "type": "text", "id": "tag_two_role", "label": "Tag 2 role", "default": "Chief Good Boy" },
     { "type": "range", "id": "tag_two_x", "label": "Tag 2 across", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 70 },
     { "type": "range", "id": "tag_two_y", "label": "Tag 2 down", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 47 },
     { "type": "range", "id": "tag_two_rotate", "label": "Tag 2 tilt", "min": -15, "max": 15, "step": 1, "unit": "deg", "default": 5 },
+    { "type": "range", "id": "tag_two_x_mobile", "label": "Tag 2 across (phone)", "min": 0, "max": 60, "step": 1, "unit": "%", "default": 60 },
+    { "type": "range", "id": "tag_two_y_mobile", "label": "Tag 2 down (phone)", "min": 0, "max": 90, "step": 1, "unit": "%", "default": 78 },
 
     {
       "type": "text",
@@ -444,7 +472,8 @@
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button link"
+      "label": "Button link",
+      "info": "Left empty, the button goes to the full catalogue."
     }
   ],
   "presets": [
