@@ -1,537 +1,176 @@
 {%- comment -%}
-  Weekend Picnic campaign. Desktop keeps editable copy beside the scene;
-  mobile overlays readable copy on the photograph. Shared button and
-  reveal styles come from theme.css. Merchant image controls stay available.
+  Paper Boat campaign: character-led art with editable shopping copy.
+  Use native landscape and portrait compositions so none of the five friends
+  is lost to a cover crop. Content participates in layout when copy grows.
 {%- endcomment -%}
+
+{%- liquid
+  assign desktop_image = section.settings.image
+  assign mobile_image = section.settings.mobile_image
+  assign cta_url = section.settings.button_link | default: routes.all_products_collection_url
+-%}
 
 {%- style -%}
   #Hero-{{ section.id }} {
     position: relative;
-    background: {{ section.settings.backdrop_color }};
-    /* Full-bleed at every width: the photograph continues beneath the header,
-       while the editable copy keeps its own navigation clearance. */
-    padding-top: 0;
+    isolation: isolate;
+    background: var(--cream);
+    color: var(--ink);
   }
-
-  #Hero-{{ section.id }} .hero__media {
+  #Hero-{{ section.id }} .hero__scene {
     position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-height: max(58rem, 56.28vw);
+  }
+  #Hero-{{ section.id }} .hero__art {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  #Hero-{{ section.id }} .hero__art picture { display: block; width: 100%; }
+  #Hero-{{ section.id }} .hero__image {
+    display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 1672 / 941;
-  }
-
-  #Hero-{{ section.id }} .hero__media picture {
-    position: absolute;
-    inset: 0;
-    display: block;
-  }
-
-  #Hero-{{ section.id }} .hero__image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    /* Native artwork framing keeps all three garment prints visible. */
     object-fit: contain;
-    object-position: right top;
+    object-position: center top;
   }
-
-  #Hero-{{ section.id }} .hero__layer {
+  #Hero-{{ section.id }} .hero__art::after {
+    content: '';
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
+    background: linear-gradient(90deg, rgba(255, 247, 232, 0.94), rgba(255, 247, 232, 0.72) 23%, rgba(255, 247, 232, 0) 43%);
   }
-
-  #Hero-{{ section.id }} .hero__inner {
-    width: 100%;
-    padding-top: 11.2rem;
+  #Hero-{{ section.id }} .hero__content {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+    width: 34%;
+    padding: 12rem 0 7rem clamp(2.4rem, 4.5vw, 8rem);
   }
-
-  #Hero-{{ section.id }} .hero__text {
-    max-width: min(56rem, 40vw);
-    padding-block: 4rem;
-    padding-left: clamp(2rem, 5vw, 8rem);
-  }
-
-  /* Sticker lettering. The blanket under the heading runs from cream down to
-     tan in the leaf shadows, where Adventure Blue alone falls to ~1.9:1, so
-     the letters carry their own white outline and stay legible on any patch.
-     paint-order draws the stroke under the fill, keeping the letterforms
-     full weight; sizes are in em so the outline scales with the heading. */
-  #Hero-{{ section.id }} .hero__heading {
-    color: {{ section.settings.heading_color }};
-    -webkit-text-stroke: 0.14em {{ section.settings.heading_outline }};
-    paint-order: stroke fill;
-    text-shadow: 0.08em 0.08em 0 {{ section.settings.heading_shadow }};
-    font-size: var(--hero-heading-size);
-  }
-
-  #Hero-{{ section.id }} .hero__cta {
-    margin-top: 2.4rem;
-  }
-
-  #Hero-{{ section.id }} .hero__cta .btn {
-    padding-inline: 3.6rem;
-  }
-
-  #Hero-{{ section.id }} .hero__stickers {
-    position: absolute;
-    inset: 0;
-    z-index: 100;
-    pointer-events: none;
-  }
-
-  #Hero-{{ section.id }} .hero__sticker {
-    position: absolute;
-    right: 5%;
-  }
-
-  #Hero-{{ section.id }} .hero__sticker img {
-    width: 100%;
-    height: auto;
-  }
-
-  #Hero-{{ section.id }} .hero__sticker--1 {
-    top: 35vh;
-    width: 25rem;
-    height: 25rem;
-  }
-
-  #Hero-{{ section.id }} .hero__sticker--2 {
-    top: 55vh;
-    width: 30rem;
-    height: 30rem;
-  }
-
-  /* Text stickers: tilted tags pinned over the artwork, no PNG required. */
-  #Hero-{{ section.id }} .hero__tag {
-    position: absolute;
-    z-index: 101;
-    left: var(--tag-x, 78%);
-    top: var(--tag-y, 42%);
-    display: block;
-    padding: 1.1rem 2rem 1rem;
-    border-radius: 0.4rem;
-    background: var(--tag-bg, var(--pink));
-    color: var(--tag-fg, var(--cream));
-    box-shadow: 5px 5px 0 0 var(--tag-shadow, rgba(0, 0, 0, 0.18));
-    font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 2.6rem;
-    line-height: 1.05;
-    letter-spacing: 0.04em;
+  #Hero-{{ section.id }} .hero__eyebrow {
+    margin: 0 0 1.8rem;
+    font: 700 clamp(1.1rem, 1vw, 1.5rem)/1.4 var(--font-accent);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    text-align: center;
+  }
+  #Hero-{{ section.id }} .hero__heading {
+    margin: 0;
+    color: var(--blue);
+    font: 800 clamp(4.2rem, 4.8vw, 8.4rem)/0.98 var(--font-heading);
+    letter-spacing: -0.035em;
     text-wrap: balance;
-    max-width: 22rem;
-    transform: rotate(var(--rot, -8deg));
-    transform-origin: center;
-    animation: jjw-hero-tag 7s ease-in-out infinite;
-    animation-delay: var(--tag-delay, 0s);
-    pointer-events: none;
+    overflow-wrap: break-word;
   }
-
-  @keyframes jjw-hero-tag {
-    0%   { transform: rotate(var(--rot, -8deg)) translateY(-12px) scale(0.92); }
-    5%   { transform: rotate(var(--rot, -8deg)) translateY(0) scale(1.05); }
-    9%   { transform: rotate(var(--rot, -8deg)) translateY(-7px) scale(1); }
-    13%  { transform: rotate(var(--rot, -8deg)) translateY(0) scale(1.02); }
-    17%  { transform: rotate(var(--rot, -8deg)) translateY(-3px) scale(1); }
-    21%, 100% { transform: rotate(var(--rot, -8deg)) translateY(0) scale(1); }
+  #Hero-{{ section.id }} .hero__description {
+    max-width: 30ch;
+    margin: 2rem 0 0;
+    font-size: clamp(1.4rem, 1.25vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1.6;
+    text-wrap: pretty;
   }
+  #Hero-{{ section.id }} .hero__cta { margin-top: 2.8rem; }
+  #Hero-{{ section.id }} .hero__cta .btn { gap: 1.4rem; padding-inline: 2.8rem; }
+  #Hero-{{ section.id }} .hero__cta svg { flex: none; width: 2rem; height: 2rem; }
+  #Hero-{{ section.id }} .btn-wrap:focus-within { outline: 3px solid var(--ink); outline-offset: 7px; border-radius: 1rem; }
 
+  @media screen and (min-width: 750px) and (max-width: 1100px) {
+    #Hero-{{ section.id }} .hero__scene { min-height: max(58rem, calc(56.28vw + 9rem)); }
+    #Hero-{{ section.id }} .hero__art picture { position: relative; padding-top: 9rem; }
+    #Hero-{{ section.id }} .hero__art picture::after {
+      content: ''; position: absolute; inset: auto 0 0; height: 6rem;
+      background: linear-gradient(0deg, var(--cream), rgba(255, 247, 232, 0));
+    }
+    #Hero-{{ section.id }} .hero__content { width: 35%; padding-top: 11rem; padding-bottom: 4rem; }
+    #Hero-{{ section.id }} .hero__heading { font-size: clamp(3.6rem, 4.8vw, 5.2rem); }
+    #Hero-{{ section.id }} .hero__description { font-size: 1.4rem; line-height: 1.5; }
+    #Hero-{{ section.id }} .hero__eyebrow { margin-bottom: 1.4rem; font-size: 1.1rem; }
+    #Hero-{{ section.id }} .hero__cta { margin-top: 2rem; }
+    #Hero-{{ section.id }} .hero__cta .btn { gap: 0.8rem; padding-inline: 1.8rem; font-size: 1.5rem; }
+    #Hero-{{ section.id }} .hero__art::after {
+      background: linear-gradient(180deg, var(--cream) 9rem, rgba(255, 247, 232, 0) 15rem),
+        linear-gradient(90deg, rgba(255, 247, 232, 0.96), rgba(255, 247, 232, 0.8) 22%, rgba(255, 247, 232, 0) 43%);
+    }
+  }
   @media screen and (max-width: 749px) {
-    #Hero-{{ section.id }} .hero__tag {
-      font-size: 1.5rem;
-      padding: 0.7rem 1.2rem 0.6rem;
-      max-width: 13rem;
-      box-shadow: 3px 3px 0 0 var(--tag-shadow, rgba(0, 0, 0, 0.18));
+    #Hero-{{ section.id }} .hero__scene { min-height: 177.68vw; }
+    #Hero-{{ section.id }} .hero__image { aspect-ratio: 941 / 1672; }
+    #Hero-{{ section.id }} .hero__art::after {
+      background: linear-gradient(180deg, rgba(255, 247, 232, 0) 65%, rgba(255, 247, 232, 0.25) 75%, var(--cream) 100%);
     }
-  }
-
-  @media screen and (max-width: 749px) {
-    #Hero-{{ section.id }} .hero__media {
-      height: auto;
-      aspect-ratio: auto;
-      max-height: none;
-    }
-
-    #Hero-{{ section.id }} .hero__media picture {
-      position: relative;
-      inset: auto;
-      /* Keep the complete selected portrait beneath the mobile copy. */
-      aspect-ratio: 941 / 1672;
-    }
-
-    #Hero-{{ section.id }} .hero__inner {
-      padding-top: 0;
-      padding-inline: 0;
-    }
-
-    #Hero-{{ section.id }} .hero__text {
+    #Hero-{{ section.id }} .hero__content {
+      align-self: end;
+      width: 100%;
       max-width: 48rem;
-      margin-inline: auto;
-      padding: 2.4rem;
+      margin: 118vw auto 0;
+      padding: 0 2.4rem 3.2rem;
+      text-align: center;
     }
-
-    #Hero-{{ section.id }} .hero__layer {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      align-items: flex-end;
-      background: linear-gradient(180deg, transparent 55%, rgba(255, 247, 232, 0.3) 72%, rgba(255, 247, 232, 0.96) 100%);
-    }
-
-    #Hero-{{ section.id }} .hero__cta {
-      margin-top: 1.6rem;
-    }
-
-    #Hero-{{ section.id }} .hero__heading {
-      font-size: var(--hero-heading-size);
-      line-height: 1;
-      text-wrap: balance;
-    }
-
-    #Hero-{{ section.id }} .hero__stickers {
-      display: none;
-    }
-
-    #Hero-{{ section.id }} .hero__image {
-      object-fit: contain;
-      object-position: center top;
-    }
-
-    #Hero-{{ section.id }} .hero__tag {
-      display: none;
-    }
+    #Hero-{{ section.id }} .hero__eyebrow { margin-bottom: 1rem; font-size: 1.1rem; letter-spacing: 0.1em; }
+    #Hero-{{ section.id }} .hero__heading { font-size: clamp(3.6rem, 10.3vw, 5.8rem); line-height: 1.02; }
+    #Hero-{{ section.id }} .hero__description { margin: 1.2rem auto 0; max-width: 34ch; font-size: 1.4rem; line-height: 1.5; }
+    #Hero-{{ section.id }} .hero__cta { margin-top: 1.8rem; }
+    #Hero-{{ section.id }} .hero__cta .btn { min-height: 5.2rem; padding-inline: 2.6rem; font-size: 1.6rem; }
   }
 {%- endstyle -%}
 
-{%- liquid
-  assign hero_image = section.settings.image
-  assign hero_mobile_image = section.settings.mobile_image
-  assign hero_alt = section.settings.image_alt | escape
-  assign cta_url = section.settings.button_link | default: routes.all_products_collection_url
--%}
-
-<section
-  id="Hero-{{ section.id }}"
-  class="banner-section"
->
-  {%- if section.settings.show_tags -%}
-  {%- for i in (1..2) -%}
-    {%- if i == 1 -%}
-      {%- assign tg = section.settings.tag_one_text -%}
-      {%- assign tbg = section.settings.tag_one_bg -%}
-      {%- assign tfg = section.settings.tag_one_fg -%}
-      {%- assign tx = section.settings.tag_one_x -%}
-      {%- assign ty = section.settings.tag_one_y -%}
-      {%- assign tr = section.settings.tag_one_rotate -%}
-      {%- assign td = '0s' -%}
-    {%- else -%}
-      {%- assign tg = section.settings.tag_two_text -%}
-      {%- assign tbg = section.settings.tag_two_bg -%}
-      {%- assign tfg = section.settings.tag_two_fg -%}
-      {%- assign tx = section.settings.tag_two_x -%}
-      {%- assign ty = section.settings.tag_two_y -%}
-      {%- assign tr = section.settings.tag_two_rotate -%}
-      {%- assign td = '0.5s' -%}
-    {%- endif -%}
-    {%- if tg != blank -%}
-      <span
-        class="hero__tag"
-        aria-hidden="true"
-        style="--tag-x:{{ tx }}%;--tag-y:{{ ty }}%;--rot:{{ tr }}deg;--tag-bg:{{ tbg }};--tag-fg:{{ tfg }};--tag-shadow:{{ tbg | color_darken: 18 }};--tag-delay:{{ td }};"
-      >{{ tg | escape }}</span>
-    {%- endif -%}
-  {%- endfor -%}
-  {%- endif -%}
-
-  {%- if section.settings.sticker_1 != blank or section.settings.sticker_2 != blank -%}
-    <div class="hero__stickers" aria-hidden="true">
-      {%- if section.settings.sticker_1 != blank -%}
-        <div class="hero__sticker hero__sticker--1">
-          {{ section.settings.sticker_1 | image_url: width: 500 | image_tag: alt: '', loading: 'eager', widths: '250, 500' }}
-        </div>
-      {%- endif -%}
-      {%- if section.settings.sticker_2 != blank -%}
-        <div class="hero__sticker hero__sticker--2">
-          {{ section.settings.sticker_2 | image_url: width: 600 | image_tag: alt: '', loading: 'eager', widths: '300, 600' }}
-        </div>
-      {%- endif -%}
+<section id="Hero-{{ section.id }}" class="banner-section" aria-labelledby="HeroHeading-{{ section.id }}">
+  <div class="hero__scene">
+    <div class="hero__art">
+      <picture>
+        {%- if mobile_image != blank -%}
+          <source media="(max-width: 749px)" srcset="{{ mobile_image | image_url: width: 500 }} 500w, {{ mobile_image | image_url: width: 750 }} 750w, {{ mobile_image | image_url: width: 1100 }} 1100w" sizes="100vw" width="{{ mobile_image.width }}" height="{{ mobile_image.height }}">
+        {%- elsif desktop_image == blank -%}
+          <source media="(max-width: 749px)" srcset="{{ 'jjw-hero-paper-boat-mobile.png' | asset_img_url: '500x' }} 500w, {{ 'jjw-hero-paper-boat-mobile.png' | asset_img_url: '750x' }} 750w, {{ 'jjw-hero-paper-boat-mobile.png' | asset_url }} 941w" sizes="100vw" width="941" height="1672">
+        {%- endif -%}
+        {%- if desktop_image != blank -%}
+          {{ desktop_image | image_url: width: 2400 | image_tag: class: 'hero__image', loading: 'eager', fetchpriority: 'high', widths: '750, 1100, 1500, 1800, 2400', sizes: '100vw', alt: section.settings.image_alt }}
+        {%- else -%}
+          <img class="hero__image" src="{{ 'jjw-hero-paper-boat-desktop.png' | asset_url }}" srcset="{{ 'jjw-hero-paper-boat-desktop.png' | asset_img_url: '900x' }} 900w, {{ 'jjw-hero-paper-boat-desktop.png' | asset_img_url: '1200x' }} 1200w, {{ 'jjw-hero-paper-boat-desktop.png' | asset_url }} 1672w" sizes="100vw" alt="{{ section.settings.image_alt | escape }}" width="1672" height="941" loading="eager" fetchpriority="high">
+        {%- endif -%}
+      </picture>
     </div>
-  {%- endif -%}
-
-  <div class="hero__media">
-    <picture>
-      {%- if hero_mobile_image != blank -%}
-        <source
-          media="(max-width: 749px)"
-          srcset="{{ hero_mobile_image | image_url: width: 450 }} 450w, {{ hero_mobile_image | image_url: width: 750 }} 750w, {{ hero_mobile_image | image_url: width: 1086 }} 1086w"
-          sizes="100vw"
-        >
-      {%- elsif hero_image == blank -%}
-        <source
-          media="(max-width: 749px)"
-          srcset="{{ 'jjw-hero-picnic-mobile.png' | asset_img_url: '450x' }} 450w, {{ 'jjw-hero-picnic-mobile.png' | asset_img_url: '750x' }} 750w, {{ 'jjw-hero-picnic-mobile.png' | asset_img_url: '941x' }} 941w"
-          sizes="100vw"
-        >
+    <div class="hero__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
-    {%- if hero_image != blank -%}
-      {{
-        hero_image
-        | image_url: width: 2400
-        | image_tag:
-          class: 'hero__image',
-          alt: hero_alt,
-          loading: 'eager',
-          fetchpriority: 'high',
-          sizes: '100vw',
-          widths: '600, 900, 1200, 1600, 2000, 2400'
-      }}
-    {%- else -%}
-      <img
-        class="hero__image"
-        src="{{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '1672x' }}"
-        srcset="{{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '900x' }} 900w, {{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '1200x' }} 1200w, {{ 'jjw-hero-picnic-desktop.png' | asset_img_url: '1672x' }} 1672w"
-        sizes="100vw"
-        alt="{{ hero_alt }}"
-        width="1672"
-        height="941"
-        loading="eager"
-        fetchpriority="high"
-      >
-    {%- endif -%}
-    </picture>
-
-    <div class="hero__layer">
-      <div class="hero__inner page-width">
-        <div class="hero__text">
-          {%- if section.settings.heading != blank -%}
-            {%- comment -%}
-              h1, not h2: the homepage had no h1 at all, so its hierarchy started
-              one level down and search engines had no page-level heading to read.
-              Styling is class-driven, so the tag change costs nothing visually.
-            {%- endcomment -%}
-            <h1 class="hxxl hero__heading">{{ section.settings.heading | escape }}</h1>
-          {%- endif -%}
-
-          {%- if section.settings.button_label != blank -%}
-            <div class="hero__cta">
-              <span class="btn-wrap">
-                <span class="btn-shadow" aria-hidden="true"></span>
-                <a class="btn btn--primary" href="{{ cta_url }}">
-                  {{- section.settings.button_label | escape -}}
-                </a>
-              </span>
-            </div>
-          {%- endif -%}
+      <h1 id="HeroHeading-{{ section.id }}" class="hero__heading">{{ section.settings.heading | escape }}</h1>
+      {%- if section.settings.description != blank -%}
+        <p class="hero__description">{{ section.settings.description | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <div class="hero__cta">
+          <span class="btn-wrap"><span class="btn-shadow" aria-hidden="true"></span>
+            <a class="btn btn--primary" href="{{ cta_url }}">
+              {{ section.settings.button_label | escape }}
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </span>
         </div>
-      </div>
+      {%- endif -%}
     </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Hero",
+  "name": "Paper boat hero",
   "settings": [
-    {
-      "type": "header",
-      "content": "Colour"
-    },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading",
-      "default": "#0F7DAF"
-    },
-    {
-      "type": "color",
-      "id": "heading_outline",
-      "label": "Heading outline",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "color",
-      "id": "heading_shadow",
-      "label": "Heading shadow",
-      "default": "#FFD94C"
-    },
-    {
-      "type": "color",
-      "id": "backdrop_color",
-      "label": "Backdrop behind image",
-      "default": "#FFF7E8",
-      "info": "Matches the artwork's field so any crop edge blends."
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Desktop hero image",
-      "info": "Uses the selected JJW Weekend Picnic campaign when empty."
-    },
-    {
-      "type": "image_picker",
-      "id": "mobile_image",
-      "label": "Mobile hero image",
-      "info": "Separate portrait artwork. With the default desktop artwork, uses the matching mobile campaign."
-    },
-    {
-      "type": "text",
-      "id": "image_alt",
-      "label": "Hero image alt text",
-      "default": "Yellow Tech Builder, pink Adventure and blue Giggles tees on a sunlit picnic blanket"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Tees Every Kid Can Call Their Own"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Shop the Squad"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
-    },
-    {
-      "type": "header",
-      "content": "Stickers"
-    },
-    {
-      "type": "image_picker",
-      "id": "sticker_1",
-      "label": "Sticker 1",
-      "info": "Decorative, hidden under 750px. Nothing renders when empty."
-    },
-    {
-      "type": "image_picker",
-      "id": "sticker_2",
-      "label": "Sticker 2"
-    },
-    {
-      "type": "header",
-      "content": "Floating tags"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_tags",
-      "label": "Show decorative tags",
-      "default": false,
-      "info": "Optional desktop labels. The campaign artwork is shown without tags by default."
-    },
-    {
-      "type": "paragraph",
-      "content": "Tilted labels over the artwork. Leave text blank to hide one. Position is a percentage of the hero, from its top-left."
-    },
-    {
-      "type": "text",
-      "id": "tag_one_text",
-      "label": "Tag 1 text",
-      "default": "Soft on skin"
-    },
-    {
-      "type": "color",
-      "id": "tag_one_bg",
-      "label": "Tag 1 background",
-      "default": "#E5377E"
-    },
-    {
-      "type": "color",
-      "id": "tag_one_fg",
-      "label": "Tag 1 text colour",
-      "default": "#FFF6EB"
-    },
-    {
-      "type": "range",
-      "id": "tag_one_x",
-      "label": "Tag 1 across",
-      "min": 0,
-      "max": 92,
-      "step": 1,
-      "unit": "%",
-      "default": 78
-    },
-    {
-      "type": "range",
-      "id": "tag_one_y",
-      "label": "Tag 1 down",
-      "min": 0,
-      "max": 92,
-      "step": 1,
-      "unit": "%",
-      "default": 40
-    },
-    {
-      "type": "range",
-      "id": "tag_one_rotate",
-      "label": "Tag 1 tilt",
-      "min": -20,
-      "max": 20,
-      "step": 1,
-      "unit": "deg",
-      "default": -8
-    },
-    {
-      "type": "text",
-      "id": "tag_two_text",
-      "label": "Tag 2 text",
-      "default": "Built for play"
-    },
-    {
-      "type": "color",
-      "id": "tag_two_bg",
-      "label": "Tag 2 background",
-      "default": "#59C8F6"
-    },
-    {
-      "type": "color",
-      "id": "tag_two_fg",
-      "label": "Tag 2 text colour",
-      "default": "#1A2F5E"
-    },
-    {
-      "type": "range",
-      "id": "tag_two_x",
-      "label": "Tag 2 across",
-      "min": 0,
-      "max": 92,
-      "step": 1,
-      "unit": "%",
-      "default": 74
-    },
-    {
-      "type": "range",
-      "id": "tag_two_y",
-      "label": "Tag 2 down",
-      "min": 0,
-      "max": 92,
-      "step": 1,
-      "unit": "%",
-      "default": 66
-    },
-    {
-      "type": "range",
-      "id": "tag_two_rotate",
-      "label": "Tag 2 tilt",
-      "min": -20,
-      "max": 20,
-      "step": 1,
-      "unit": "deg",
-      "default": 7
-    }
+    { "type": "header", "content": "Story artwork" },
+    { "type": "image_picker", "id": "image", "label": "Desktop hero image", "info": "Uses the JJW Paper Boat landscape when empty. Best with a 16:9 image and clear space on the left." },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile hero image", "info": "Uses the matching Paper Boat portrait with default desktop art. Best with a 9:16 portrait and clear space in the bottom third." },
+    { "type": "text", "id": "image_alt", "label": "Image description", "default": "Jevika, Joy, Brutus, Minku and Pinki sail a giant yellow paper boat through sunlit clouds" },
+    { "type": "header", "content": "Shopping message" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Character tees for ages 4–12" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Wear a little wonder." },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Their favourite characters. Soft organic cotton. A little imagination for every day." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop character tees" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
   ],
-  "presets": [
-    {
-      "name": "Hero"
-    }
-  ]
+  "presets": [{ "name": "Paper boat hero" }]
 }
 {% endschema %}

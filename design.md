@@ -1,6 +1,14 @@
 # JJW storefront design review
 
-Updated: 6 October 2026. Working project: `D:/projects/JEVIKAJOY.SHOP`.
+Updated: 24 October 2026. Working project: `D:/projects/JEVIKAJOY.SHOP`.
+
+## 24 October: local Paper Boat hero
+
+The owner rejected displayed products in the new hero and gave creative freedom to generate a new direction. The local homepage now uses the five canonical friends sailing a yellow paper boat through sunlit clouds, with a separate portrait composition. Editable copy says “Character tees for ages 4–12”, “Wear a little wonder.” and “Shop character tees”. This iteration supersedes the earlier product-display direction locally; the exact new artwork has not yet been separately approved or published live.
+
+Desktop copy uses a 34% column with a 24–80px left gutter; tablet art has 90px header clearance. Phone copy overlays the lower clouds, with 24px side gutters and 32px bottom padding; the section expands if the copy needs more room. Native image framing preserves all five friends. Eleven viewport widths from 320 to 1920px passed overflow, content containment and header-clearance checks; mobile menu and CTA navigation were verified. Theme Check reports zero errors and no hero offenses. [Assets, prompts and validation](docs/hero-paper-boat-20261024.md).
+
+The remaining entries below describe the October 6 review and historical deployments. Current theme ownership and live-push rules are in `CLAUDE.md`; no live push was made for this iteration.
 
 This is the new section-by-section decision log. The user says the shop looks good but is inconsistent and not clean, and wants to direct improvements to each section. Record those instructions here as they arrive. Specific spacing values have **not** been chosen yet.
 
