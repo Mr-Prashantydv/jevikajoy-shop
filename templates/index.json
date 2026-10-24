@@ -127,9 +127,13 @@
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "heading": "Every Hero Has a Tee",
+        "heading": "Every hero has a tee.",
         "products_to_show": 12,
-        "photographed_first": true
+        "photographed_first": true,
+        "eyebrow": "Meet the character collection",
+        "intro": "Their favourite character. Their everyday tee.",
+        "button_label": "Explore all tees",
+        "show_counter": true
       }
     },
     "find_us": {
@@ -209,22 +213,23 @@
         }
       },
       "block_order": [
-        "m_bio",
+        "m_organic",
         "m_silicone",
         "m_cpl",
         "m_seams",
+        "m_bio",
         "m_colour",
-        "m_organic",
         "m_oeko",
         "m_bis"
       ],
       "settings": {
-        "heading": "Soft from the Start. Ready to Play.",
-        "heading_highlight": "Ready to Play.",
-        "subheading": "<p>Soft organic cotton, washed before it's sewn. Made for comfortable days and everyday play.</p>",
-        "button_label": "Shop the Tees",
+        "heading": "Soft from the start. Ready for their world.",
+        "subheading": "<p>Soft organic cotton for busy little days. From the fabric to the finishing touches, comfort comes first.</p>",
+        "button_label": "Find their favourite",
         "story_label": "See how it's made",
-        "story_handle": "how-its-made"
+        "story_handle": "how-its-made",
+        "eyebrow": "Comfort, in the details",
+        "image_caption": "Softness, up close."
       }
     },
     "falling_scroll": {

@@ -2,6 +2,14 @@
 
 Updated: 24 October 2026. Working project: `D:/projects/JEVIKAJOY.SHOP`.
 
+## 24 October: quieter product and fabric compositions
+
+After reviewing the blue product heading and Navy-on-Mint fabric panel, the owner said the result still did not feel good enough. This local iteration changes the composition of those two sections. The homepage product rail has a left-aligned 34–56px Baloo 2 heading at weight 600, a small editable eyebrow, a supporting line and one text shopping link. Product cards use a quiet white frame rather than character-colour top borders and heavy hover shadows. The benefits strip above it is now 15px rather than 32.5px. The approved hero art and its overlay-free treatment stay intact.
+
+Both sections use `--blue-deep: #0C648C`, a documented 20% black shade of Adventure Blue. The former Mint panel is a cream, two-column fabric story using the existing JJW weave and collar photos, with merchant image overrides. Its eight existing benefit/certification blocks render once: four main details and four compact supporting items. The moving stickers, yellow heading highlight and decorative bursts have been removed. All copy remains editable. This is a directional local trial, not a live-theme deployment or a second storewide rollout.
+
+Checked desktop 1440px, the owner's 584px comment viewport, and phone 390px visually. Geometry checks at 320, 390, 584, 768, 1024 and 1440px found no page overflow or clipped headings/product names/detail text, and all eight details rendered without Liquid errors. The carousel advances by one card; its new visible counter now tolerates rounded scroll widths and reports its shortened final step correctly (9 of 9 at the mobile end). Theme Check: zero errors, the same five existing warnings. Screenshots and measurements use `editorial-*` in `C:/Users/krish/.codex/visualizations/2026/10/24/01a16ce0-396f-7010-ad67-f9e94e181d2b/`.
+
 ## 24 October: extend the trial across the storefront
 
 The owner clarified that the colour, type, copy and background upgrade applies to the whole website. The shared system now reaches collection listings and directory, product purchase panels and accordions, predictive/full search, cart drawer and page, contact, generic pages, policies, 404 and the footer. Warm White frames shopping interfaces; white cards hold product information; Navy carries controls and labels; Charcoal carries prose; Sunshine Gold remains the purchase action. Character colours stay in artwork, category panels and card edges. Soft Gray separators have a synced CSS/schema/current/runtime setting. Garment swatches and the approved Paper Boat hero are unchanged.

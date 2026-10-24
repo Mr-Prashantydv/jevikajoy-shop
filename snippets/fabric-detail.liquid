@@ -1,0 +1,26 @@
+{%- liquid
+  case block.settings.fill
+    when 'yellow'
+      assign fill = 'var(--yellow)'
+    when 'sky'
+      assign fill = 'var(--sky)'
+    when 'candy'
+      assign fill = 'var(--candy)'
+    when 'lavender'
+      assign fill = 'var(--lavender)'
+    else
+      assign fill = 'var(--gold)'
+  endcase
+  assign mark_alt = block.settings.label | append: ' ' | append: block.settings.caption | strip
+-%}
+<li class="find-us__item" style="--fill: {{ fill }};" {{ block.shopify_attributes }}>
+  {%- if block.settings.logo != blank -%}
+    {{ block.settings.logo | image_url: width: 400 | image_tag: class: 'find-us__mark', loading: 'lazy', alt: mark_alt }}
+  {%- else -%}
+    {%- if block.settings.icon != 'none' -%}<span class="find-us__icon" aria-hidden="true">{%- render 'jjw-icon', name: block.settings.icon -%}</span>{%- endif -%}
+    <span class="find-us__words">
+      {%- if block.settings.label != blank -%}<span class="find-us__big">{{ block.settings.label | escape }}</span>{%- endif -%}
+      {%- if block.settings.caption != blank -%}<span class="find-us__small">{{ block.settings.caption | escape }}</span>{%- endif -%}
+    </span>
+  {%- endif -%}
+</li>
