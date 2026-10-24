@@ -670,12 +670,12 @@
   }
   @media screen and (max-width: 599px) {
     #Header-{{ s }} .hdr-character-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
-    #Header-{{ s }} .hdr-drawer-card > a { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr); align-items: center; gap: 0.8rem; padding: 0.8rem; }
-    #Header-{{ s }} .hdr-drawer-card-media { width: 5.6rem; margin: 0; }
+    #Header-{{ s }} .hdr-drawer-card > a { display: grid; grid-template-columns: clamp(4.2rem, 12vw, 5.6rem) minmax(0, 1fr); align-items: center; gap: 0.6rem; padding: 0.8rem; }
+    #Header-{{ s }} .hdr-drawer-card-media { width: 100%; margin: 0; }
     #Header-{{ s }} .hdr-drawer-card-media.hdr-portrait-media { aspect-ratio: 1; }
     #Header-{{ s }} .hdr-nav-art--portrait { display: none; }
     #Header-{{ s }} .hdr-nav-art--face { display: block; }
-    #Header-{{ s }} .hdr-drawer-card-label { flex-wrap: wrap; margin: 0; font-size: 1.8rem; gap: 0.2rem; }
+    #Header-{{ s }} .hdr-drawer-card-label { display: grid; grid-template-columns: minmax(0, 1fr) auto; margin: 0; font-size: 1.8rem; gap: 0.2rem; }
     #Header-{{ s }} .hdr-drawer-card-label svg { width: 1.5rem; height: 1.5rem; }
     #Header-{{ s }} .hdr-menu-heading { font-size: 3.4rem; }
     #Header-{{ s }} .hdr-nav-link, #Header-{{ s }} .hdr-nav-group > summary { font-size: 2rem; }

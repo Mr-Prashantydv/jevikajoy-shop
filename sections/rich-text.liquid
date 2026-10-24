@@ -1,12 +1,12 @@
 {%- style -%}
   #RichText-{{ section.id }} {
-    height: 18.3rem;
+    min-height: 18.3rem;
     background: var(--cream);
     overflow: visible;
   }
 
   #RichText-{{ section.id }} .rich-text__inner {
-    padding-top: 4rem;
+    padding-block: 4rem;
   }
 
   #RichText-{{ section.id }} .rich-text__content {
@@ -45,7 +45,7 @@
 
   @media screen and (max-width: 749px) {
     #RichText-{{ section.id }} .rich-text__inner {
-      padding-top: 3rem;
+      padding-block: 3rem;
     }
   }
 {%- endstyle -%}
