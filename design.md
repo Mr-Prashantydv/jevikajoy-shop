@@ -175,3 +175,34 @@ D008 correction on 6 October: the earlier mobile layout intentionally stacked ed
 - Root HTML/JSON downloads, numeric filenames and zero-byte files are debugging clutter. Four root text files are cookie jars; treat them as private scratch data during any future cleanup. Values are not included here.
 - `README.md` still describes Dawn. `AGENTS.md` includes old store/theme commands and conflicting historical facts. The preserved design document also contains an outdated gutter example. Verify current targets before future uploads.
 - The working tree contains substantial pre-existing edits. A future implementation must reconcile remote merchant settings with scoped changes; this review did not clean up files or upload the checkout.
+
+## Cart and checkout coordination — 24 October 2026
+
+The cart now uses the shared Baloo 2 / Quicksand / Barlow typography, warm-white canvas,
+character-coloured item-card borders, and a cream order summary with navy offset shadow
+and the existing gold clipped button. Desktop places items beside the summary; below
+990px the summary follows the items. The empty state uses a compact cream panel and bag
+icon. New customer-facing copy is editable through the cart section's settings.
+
+The existing cart POST form, quantity updates, remove links, and discount arithmetic are
+preserved. No shipping threshold or discount promise was added. At 320px, summary type
+and spacing are reduced so the currency and amount remain on one line.
+
+Checkout branding is separately saved in the **unpublished** configuration
+`JJW brand consistency — October 2026`, profile `7453704431` on `1uz1hi-01`:
+warm-white main/header (`#F8F8F6`), cream summary (`#FFF7E8`), navy accents (`#1A2F5E`),
+gold button (`#F6A313`), centered 220px `jjw-logo-wide.webp`, Fredoka headings and Quicksand
+body. Fredoka is the available rounded display substitute for Baloo 2. The earlier solid
+sky-blue checkout summary is superseded. These settings are admin-side, not theme CSS.
+
+Validation: desktop at 1536px and mobile at 390px/320px; populated and empty carts;
+increase/decrease and keyboard quantity edits; removal and decrement-to-zero; two different
+variants passed to hosted checkout with the correct Rs. 1,198 subtotal; expanded mobile
+checkout summary; no horizontal overflow. Temporary cart items were removed. No order or
+payment was submitted. Draft checkout visuals were checked separately from the real cart
+handoff because the branding draft is not published. Active-theme-only Theme Check reports
+zero errors and no cart offenses (five unrelated warnings in theme layout/product); an
+unfiltered check also crawls old `_probe` themes and produces misleading locale errors.
+
+The cart change is local development work only. No live theme push or checkout publication
+was performed. Review the scoped cart diff and checkout profile before a separate release.

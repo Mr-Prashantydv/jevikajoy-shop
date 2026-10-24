@@ -1,15 +1,14 @@
 {%- comment -%}
   Cart — line items, quantities, totals and checkout, plus an empty state.
-  Mirrors the reference cart's shape: items block, then a footer bar, with a
-  product carousel underneath supplied by a separate section.
+  Character-accented item cards and a compact order summary use the shared
+  storefront tokens and button geometry. Recommendations remain a separate section.
 
   Commerce notes:
   - The whole thing is one <form action="{{ routes.cart_url }}" method="post">
     so quantity edits submit via `updates[]` and checkout via name="checkout".
     That means it works with JS disabled; the JS below only removes the need to
     press "Update".
-  - Products currently have no images, so every thumbnail falls back to a
-    character-coloured block rather than a broken <img>.
+  - Products without images fall back to their character colour and title.
 {%- endcomment -%}
 
 {%- style -%}
@@ -28,7 +27,7 @@
     line-height: 1.08;
     letter-spacing: 0.06rem;
     color: var(--heading);
-    margin: 0 0 3.2rem;
+    margin: 0;
   }
 
   /* ---------- Empty state ---------- */
@@ -39,7 +38,9 @@
     align-items: center;
     text-align: center;
     gap: 2rem;
-    padding-block: 2.4rem 4rem;
+    padding: 3.2rem 2rem;
+    background: var(--cream);
+    border-radius: var(--card-radius);
   }
 
   #MainCart-{{ section.id }} .cart__empty-text {
@@ -54,20 +55,21 @@
 
   #MainCart-{{ section.id }} .cart__items {
     width: 100%;
-    border-collapse: collapse;
-    background: var(--white);
-    border-radius: var(--card-radius);
-    padding-inline: 2rem;
+    display: grid;
+    gap: 1.6rem;
+    min-width: 0;
   }
 
   #MainCart-{{ section.id }} .cart__row {
     display: grid;
-    grid-template-columns: 12rem 1fr auto;
-    gap: 2.4rem;
+    grid-template-columns: 12rem minmax(0, 1fr) auto;
+    gap: 2rem;
     align-items: center;
-    padding-block: 2.4rem;
-    border-block-end: 1px solid rgba(26, 47, 94, 0.16);
-    border-block-end: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+    padding: 2rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-inline-start: 6px solid var(--item-bg, var(--sky));
+    border-radius: var(--card-radius);
   }
 
   #MainCart-{{ section.id }} .cart__media {
@@ -207,9 +209,14 @@
   #MainCart-{{ section.id }} .cart__footer {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: stretch;
     gap: 1.6rem;
-    padding-block: 3.2rem 0;
+    padding: 2.8rem;
+    background: var(--cream);
+    border: 1px solid var(--ink);
+    border-radius: var(--card-radius);
+    box-shadow: 5px 5px 0 var(--ink-deep);
+    min-width: 0;
   }
 
   {%- comment -%}
@@ -219,8 +226,7 @@
   {%- endcomment -%}
   #MainCart-{{ section.id }} .cart__sums {
     display: grid;
-    grid-template-columns: auto auto;
-    justify-content: end;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
     row-gap: 0.8rem;
   }
@@ -276,7 +282,8 @@
     margin: 0;
     font-size: 1.5rem;
     color: var(--ink-soft);
-    text-align: right;
+    line-height: 1.5;
+    text-align: left;
   }
 
   #MainCart-{{ section.id }} .cart__actions {
@@ -304,10 +311,113 @@
     background: none;
   }
 
+  #MainCart-{{ section.id }} .cart__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 3.2rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__eyebrow {
+    margin: 0 0 0.8rem;
+    color: var(--ink);
+  }
+
+  #MainCart-{{ section.id }} .cart__intro {
+    margin: 1rem 0 0;
+    font-size: var(--text-base);
+    color: var(--body-ink);
+    line-height: 1.5;
+  }
+
+  #MainCart-{{ section.id }} .cart__continue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: var(--touch-target);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--ink);
+    text-underline-offset: 0.4rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(30rem, 36rem);
+    gap: 3.2rem;
+    align-items: start;
+    padding-inline-end: 0.6rem;
+  }
+
+  #MainCart-{{ section.id }} .cart__summary-heading {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 2.8rem;
+    line-height: 1.15;
+    font-weight: 800;
+    color: var(--ink);
+  }
+
+  #MainCart-{{ section.id }} .cart__summary-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.6rem;
+    border-bottom: 2px solid var(--sky);
+  }
+
+  #MainCart-{{ section.id }} .cart__count {
+    display: grid;
+    place-items: center;
+    min-width: 3.6rem;
+    height: 3.6rem;
+    padding-inline: 0.8rem;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  #MainCart-{{ section.id }} .cart__actions .btn-wrap,
+  #MainCart-{{ section.id }} .cart__actions .btn { width: 100%; }
+  #MainCart-{{ section.id }} .cart__actions .btn { gap: 1rem; }
+  #MainCart-{{ section.id }} .cart__summary-foot {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--body-ink);
+  }
+  #MainCart-{{ section.id }} .cart__empty-icon {
+    width: 7.2rem;
+    height: 7.2rem;
+    padding: 1.6rem;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: var(--ink);
+  }
+  #MainCart-{{ section.id }} .cart__details { min-width: 0; overflow-wrap: anywhere; }
+
+  @media screen and (max-width: 989px) {
+    #MainCart-{{ section.id }} .cart__layout { grid-template-columns: minmax(0, 1fr); }
+    #MainCart-{{ section.id }} .cart__footer { max-width: none; }
+  }
+
   @media screen and (max-width: 749px) {
+    #MainCart-{{ section.id }} .cart__header { align-items: flex-start; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; }
+    #MainCart-{{ section.id }} .cart__inner { padding-block: 2.8rem 4rem; }
+    #MainCart-{{ section.id }} .cart__layout { gap: 2rem; }
+    #MainCart-{{ section.id }} .cart__footer { padding: 2rem; }
+    #MainCart-{{ section.id }} .cart__summary-heading { font-size: 2.4rem; }
+    #MainCart-{{ section.id }} .cart__subtotal { font-size: clamp(2.2rem, 6vw, 2.6rem); }
+    #MainCart-{{ section.id }} .cart__subtotal-label { font-size: 1.5rem; }
+    #MainCart-{{ section.id }} .cart__sums > div > span:first-child { padding-inline-end: 1.2rem; }
+    #MainCart-{{ section.id }} .cart__sums > div > span:last-child { white-space: nowrap; }
     #MainCart-{{ section.id }} .cart__row {
-      grid-template-columns: 8rem 1fr;
+      grid-template-columns: 8rem minmax(0, 1fr);
       gap: 1.6rem;
+      padding: 1.6rem;
     }
 
     #MainCart-{{ section.id }} .cart__media {
@@ -320,10 +430,12 @@
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.2rem;
     }
 
     #MainCart-{{ section.id }} .cart__name {
-      font-size: 2rem;
+      font-size: 1.8rem;
     }
 
     #MainCart-{{ section.id }} .cart__footer {
@@ -346,10 +458,20 @@
 
 <section id="MainCart-{{ section.id }}">
   <div class="page-width cart__inner">
-    <h1 class="cart__heading">{{ section.settings.heading | escape }}</h1>
+    <div class="cart__header">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="accent-caps cart__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
+        <h1 class="cart__heading">{{ section.settings.heading | escape }}</h1>
+        {%- if cart.item_count > 0 and section.settings.intro != blank -%}<p class="cart__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
+      </div>
+      {%- if cart.item_count > 0 -%}
+        <a class="cart__continue" href="{{ routes.all_products_collection_url }}"><span aria-hidden="true">&larr;</span>{{ section.settings.continue_label | escape }}</a>
+      {%- endif -%}
+    </div>
 
     {%- if cart.item_count == 0 -%}
       <div class="cart__empty">
+        <svg class="cart__empty-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 10h18l2 18H5L7 10Z"/><path d="M11 12V8a5 5 0 0 1 10 0v4" stroke-linecap="round"/></svg>
         <p class="cart__empty-text">{{ section.settings.empty_text | escape }}</p>
         <div class="btn-wrap">
           <span class="btn-shadow" aria-hidden="true"></span>
@@ -359,7 +481,7 @@
         </div>
       </div>
     {%- else -%}
-      <form action="{{ routes.cart_url }}" method="post" novalidate data-cart-form>
+      <form class="cart__layout" action="{{ routes.cart_url }}" method="post" novalidate data-cart-form>
         <div class="cart__items">
           {%- for line in cart.items -%}
             {%- capture pair -%}{%- render 'character-pair', product: line.product -%}{%- endcapture -%}
@@ -377,7 +499,7 @@
                 {%- endif -%}
               </div>
 
-              <div>
+              <div class="cart__details">
                 <a class="cart__name" href="{{ line.url }}">{{ line.product.title | escape }}</a>
                 {%- unless line.product.has_only_default_variant -%}
                   <p class="cart__variant">{{ line.variant.title | escape }}</p>
@@ -426,7 +548,11 @@
           {%- endfor -%}
         </div>
 
-        <div class="cart__footer">
+        <div class="cart__footer" role="region" aria-labelledby="CartSummary-{{ section.id }}">
+          <div class="cart__summary-top">
+            <h2 id="CartSummary-{{ section.id }}" class="cart__summary-heading">{{ section.settings.summary_heading | escape }}</h2>
+            <span class="cart__count" aria-label="{{ section.settings.count_label | escape }}">{{ cart.item_count }}</span>
+          </div>
           {%- comment -%}
             Same three rows as the cart drawer. cart.total_price is already net of
             discounts, so it is never labelled Subtotal above a discount row: full
@@ -476,9 +602,11 @@
               <span class="btn-shadow" aria-hidden="true"></span>
               <button type="submit" name="checkout" class="btn btn--primary">
                 {{ section.settings.checkout_label | escape }}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
               </button>
             </div>
           </div>
+          {%- if section.settings.summary_note != blank -%}<p class="cart__summary-foot">{{ section.settings.summary_note | escape }}</p>{%- endif -%}
         </div>
       </form>
     {%- endif -%}
@@ -522,6 +650,12 @@
   "tag": "section",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Your Cart" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A little joy, ready to go" },
+    { "type": "text", "id": "intro", "label": "Introduction", "default": "Their favourite characters. Their next everyday adventure." },
+    { "type": "text", "id": "continue_label", "label": "Continue shopping link", "default": "Keep exploring" },
+    { "type": "text", "id": "summary_heading", "label": "Summary heading", "default": "Order summary" },
+    { "type": "text", "id": "count_label", "label": "Item count accessible label", "default": "Items in your cart" },
+    { "type": "text", "id": "summary_note", "label": "Summary note", "default": "Choose delivery and payment in the next step." },
     { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
     { "type": "text", "id": "total_label", "label": "Total label", "info": "Shown under the discount line when one applies.", "default": "Total" },
     { "type": "text", "id": "discount_label", "label": "Discount label", "info": "Used only when a discount has no title of its own.", "default": "Discount" },
