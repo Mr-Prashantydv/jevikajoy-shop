@@ -75,89 +75,6 @@
         "empty_text": "Nothing here yet — check back soon"
       }
     },
-    "trust": {
-      "type": "product-trust",
-      "blocks": {
-        "b1": {
-          "type": "badge",
-          "settings": {
-            "label": "Bio Washed",
-            "tone": "pink"
-          }
-        },
-        "b2": {
-          "type": "badge",
-          "settings": {
-            "label": "Silicone Soft",
-            "tone": "blue"
-          }
-        },
-        "b3": {
-          "type": "badge",
-          "settings": {
-            "label": "Pre-Shrunk",
-            "tone": "gold"
-          }
-        },
-        "b4": {
-          "type": "badge",
-          "settings": {
-            "label": "Taped Seams",
-            "tone": "purple"
-          }
-        },
-        "b5": {
-          "type": "badge",
-          "settings": {
-            "label": "Flatlock Seams",
-            "tone": "green"
-          }
-        },
-        "b6": {
-          "type": "badge",
-          "settings": {
-            "label": "Colour Tested",
-            "tone": "blue"
-          }
-        },
-        "b7": {
-          "type": "badge",
-          "settings": {
-            "label": "Organic Cotton",
-            "tone": "pink"
-          }
-        },
-        "b8": {
-          "type": "badge",
-          "settings": {
-            "label": "OEKO-TEX Inks",
-            "tone": "gold"
-          }
-        },
-        "b9": {
-          "type": "badge",
-          "settings": {
-            "label": "BIS Certified",
-            "tone": "purple"
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3",
-        "b4",
-        "b5",
-        "b6",
-        "b7",
-        "b8",
-        "b9"
-      ],
-      "settings": {
-        "heading": "Skin Kind, Play Proof",
-        "reassurance": "Nine things built into every JJW tee."
-      }
-    },
     "character_intro": {
       "type": "character-collection-intro",
       "blocks": {
@@ -229,7 +146,6 @@
   },
   "order": [
     "character_intro",
-    "main",
-    "trust"
+    "main"
   ]
 }
