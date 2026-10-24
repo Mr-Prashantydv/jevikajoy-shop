@@ -1,0 +1,235 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "pill_all": {
+          "type": "filter",
+          "settings": {
+            "label": "All Tees"
+          }
+        },
+        "pill_jevika": {
+          "type": "filter",
+          "settings": {
+            "label": "Jevika",
+            "collection": "jevika"
+          }
+        },
+        "pill_joy": {
+          "type": "filter",
+          "settings": {
+            "label": "Joy",
+            "collection": "joy"
+          }
+        },
+        "pill_brutus": {
+          "type": "filter",
+          "settings": {
+            "label": "Brutus",
+            "collection": "brutus"
+          }
+        },
+        "pill_minku": {
+          "type": "filter",
+          "settings": {
+            "label": "Minku",
+            "collection": "minku"
+          }
+        },
+        "pill_pinki": {
+          "type": "filter",
+          "settings": {
+            "label": "Pinki",
+            "collection": "pinki"
+          }
+        },
+        "pill_boys": {
+          "type": "filter",
+          "settings": {
+            "label": "Boys",
+            "collection": "boys"
+          }
+        },
+        "pill_girls": {
+          "type": "filter",
+          "settings": {
+            "label": "Girls",
+            "collection": "girls"
+          }
+        }
+      },
+      "block_order": [
+        "pill_all",
+        "pill_jevika",
+        "pill_joy",
+        "pill_brutus",
+        "pill_minku",
+        "pill_pinki",
+        "pill_boys",
+        "pill_girls"
+      ],
+      "settings": {
+        "fallback_title": "The Full Squad",
+        "show_price": true,
+        "empty_text": "Nothing here yet — check back soon"
+      }
+    },
+    "trust": {
+      "type": "product-trust",
+      "blocks": {
+        "b1": {
+          "type": "badge",
+          "settings": {
+            "label": "Bio Washed",
+            "tone": "pink"
+          }
+        },
+        "b2": {
+          "type": "badge",
+          "settings": {
+            "label": "Silicone Soft",
+            "tone": "blue"
+          }
+        },
+        "b3": {
+          "type": "badge",
+          "settings": {
+            "label": "Pre-Shrunk",
+            "tone": "gold"
+          }
+        },
+        "b4": {
+          "type": "badge",
+          "settings": {
+            "label": "Taped Seams",
+            "tone": "purple"
+          }
+        },
+        "b5": {
+          "type": "badge",
+          "settings": {
+            "label": "Flatlock Seams",
+            "tone": "green"
+          }
+        },
+        "b6": {
+          "type": "badge",
+          "settings": {
+            "label": "Colour Tested",
+            "tone": "blue"
+          }
+        },
+        "b7": {
+          "type": "badge",
+          "settings": {
+            "label": "Organic Cotton",
+            "tone": "pink"
+          }
+        },
+        "b8": {
+          "type": "badge",
+          "settings": {
+            "label": "OEKO-TEX Inks",
+            "tone": "gold"
+          }
+        },
+        "b9": {
+          "type": "badge",
+          "settings": {
+            "label": "BIS Certified",
+            "tone": "purple"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9"
+      ],
+      "settings": {
+        "heading": "Skin Kind, Play Proof",
+        "reassurance": "Nine things built into every JJW tee."
+      }
+    },
+    "character_intro": {
+      "type": "character-collection-intro",
+      "blocks": {
+        "jevika": {
+          "type": "character",
+          "settings": {
+            "handle": "jevika",
+            "eyebrow": "Meet Jevika",
+            "heading": "A little wonder. A big adventure.",
+            "description": "<p>Red bows, bright questions and a day full of possibilities. Follow Jevika from the school gate to the next little discovery.</p>",
+            "motto": "Wonder comes along",
+            "cta": "Shop Jevika"
+          }
+        },
+        "joy": {
+          "type": "character",
+          "settings": {
+            "handle": "joy",
+            "eyebrow": "Meet Joy",
+            "heading": "Big ideas. Everyday adventures.",
+            "description": "<p>Always halfway through the next idea. Join Joy for building, street games and the adventures that happen between school and dinner.</p>",
+            "motto": "Ready. Set. Create.",
+            "cta": "Shop Joy"
+          }
+        },
+        "brutus": {
+          "type": "character",
+          "settings": {
+            "handle": "brutus",
+            "eyebrow": "Meet Brutus",
+            "heading": "Better with a best friend.",
+            "description": "<p>Brutus is the boxer dog by Joy’s side. For park mornings, long walks and the friend who makes every adventure better.</p>",
+            "motto": "Adventure buddies",
+            "cta": "Shop Brutus"
+          }
+        },
+        "minku": {
+          "type": "character",
+          "settings": {
+            "handle": "minku",
+            "eyebrow": "Meet Minku",
+            "heading": "A little monkey business.",
+            "description": "<p>Meet Minku, the monkey with a playful streak. For monkey bars, big giggles and days that take a wonderfully unexpected turn.</p>",
+            "motto": "Wild at heart",
+            "cta": "Shop Minku"
+          }
+        },
+        "pinki": {
+          "type": "character",
+          "settings": {
+            "handle": "pinki",
+            "eyebrow": "Meet Pinki",
+            "heading": "Small questions. Big discoveries.",
+            "description": "<p>Round glasses. A curious squirrel. Pinki asks why, then asks again. Come along for pocketfuls of pebbles and one more discovery.</p>",
+            "motto": "Stay curious",
+            "cta": "Shop Pinki"
+          }
+        }
+      },
+      "block_order": [
+        "jevika",
+        "joy",
+        "brutus",
+        "minku",
+        "pinki"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "character_intro",
+    "main",
+    "trust"
+  ]
+}
