@@ -13,13 +13,13 @@
 
 {%- style -%}
   #Collections-{{ section.id }} {
-    background: var(--cream);
-    padding-block: 6rem 8rem;
+    background: var(--warm-white);
+    padding-block: 4rem 6rem;
   }
 
   #Collections-{{ section.id }} .cl__head {
     text-align: center;
-    margin-bottom: 4.4rem;
+    margin-bottom: 3.2rem;
   }
 
   #Collections-{{ section.id }} .cl__kicker {
@@ -34,6 +34,7 @@
 
   #Collections-{{ section.id }} .cl__title {
     color: var(--heading);
+    font-size: var(--page-heading-size);
   }
 
   #Collections-{{ section.id }} .cl__text {
@@ -41,7 +42,7 @@
     margin: 1.8rem auto 0;
     font-size: 1.9rem;
     line-height: 1.6;
-    color: var(--ink-soft);
+    color: var(--body-ink);
   }
 
   /* Richtext brings its own <p> with 1em margins; the wrapper owns spacing. */
@@ -64,8 +65,9 @@
     height: 100%;
     border-radius: 2.4rem;
     overflow: hidden;
-    background: var(--card-bg, var(--blue-bg));
+    background: var(--white);
     transition: transform 0.3s var(--ease);
+    border: 1px solid var(--line);
   }
 
   #Collections-{{ section.id }} .cl__media {
@@ -74,6 +76,7 @@
     aspect-ratio: 4 / 3;
     width: 100%;
     padding: 2rem;
+    background: var(--card-bg, var(--sky));
   }
 
   #Collections-{{ section.id }} .cl__media img {
@@ -91,18 +94,18 @@
   }
 
   #Collections-{{ section.id }} .cl__label {
-    padding: 0 2rem 2.6rem;
-    text-align: center;
+    padding: 2rem;
+    text-align: left;
   }
 
   #Collections-{{ section.id }} .cl__name {
     margin: 0;
-    font-family: var(--font-accent);
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 2.7rem;
+    font-size: 2.8rem;
     line-height: 1.2;
-    letter-spacing: 0.135rem;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     text-wrap: balance;
     color: var(--ink);
   }
@@ -114,8 +117,9 @@
     font-size: 1.6rem;
     letter-spacing: 0.05rem;
     text-transform: none;
-    color: var(--ink);
-    opacity: 0.75;
+    color: var(--body-ink);
+    opacity: 1;
+    font-weight: 500;
   }
 
   #Collections-{{ section.id }} .cl__empty {
@@ -166,7 +170,7 @@
     }
 
     #Collections-{{ section.id }} .cl__label {
-      padding: 0 1rem 1.8rem;
+      padding: 1.4rem 1rem 1.8rem;
     }
   }
 {%- endstyle -%}

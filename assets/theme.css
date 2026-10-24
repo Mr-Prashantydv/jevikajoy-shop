@@ -29,7 +29,8 @@
   /* Canvas + ink */
   --cream: #fff7e8; /* Indoor background */
   --white: #ffffff; /* Pure White — cards on the cream canvas */
-  --warm-white: #f8f8f6; /* Warm White */
+  --warm-white: #f8f8f6; /* Warm White — shopping canvas */
+  --line: #d9d9d9; /* Soft Gray — card separators */
   --ink: #1a2f5e; /* Navy Blue */
   --body-ink: #333333; /* Charcoal — ordinary copy on light surfaces */
   --heading: #0f7daf; /* Adventure Blue — big headings on cream; 4.31:1, large text only */
@@ -88,6 +89,8 @@
      beside the reference, so section and hero headings share its full scale. */
   --heading-size: clamp(3.6rem, 6vw, 10.6rem);
   --hero-heading-size: clamp(3.6rem, 6vw, 10.6rem);
+  --page-heading-size: clamp(3.2rem, 4vw, 5.6rem);
+  --section-heading-size: clamp(3rem, 3.5vw, 4.8rem);
   --product-title-size: clamp(3.2rem, 4vw, 5.2rem);
   --heading-small-size: clamp(2.4rem, 2.4vw, 3.2rem);
   --control-text-size: 1.6rem;
@@ -96,7 +99,7 @@
   /* Shape + motion */
   --radius: 1.6rem;
   --card-radius: 2rem;
-  --card-title-size: clamp(1.9rem, 2.3vw, 2.8rem);
+  --card-title-size: clamp(1.6rem, 1.5vw, 2.2rem);
   --page-gutter: clamp(1.5rem, 2vw, 2.4rem);
   --section-space: clamp(4rem, 6vw, 8rem);
   --touch-target: 4.4rem;
@@ -105,9 +108,8 @@
 }
 
 @supports (font-size: 1cqi) {
-  /* 1.9rem floor: Barlow is wider than Big Shoulders, and at 2.2rem the
-     longest names ("Tech Builder Tee") wrapped in 157px phone cards. */
-  :root { --card-title-size: clamp(1.9rem, 8cqi, 2.8rem); }
+  /* Product names scale with their card, with a readable 16px phone floor. */
+  :root { --card-title-size: clamp(1.6rem, 6cqi, 2.2rem); }
 }
 
 @media screen and (max-width: 749px) {
@@ -366,15 +368,16 @@ a {
   text-transform: none;
   text-align: center;
   color: var(--ink);
-  background: var(--blue-bg);
+  background: var(--white);
   border-radius: 0.8rem;
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
+  box-shadow: inset 0 0 0 1px var(--ink-soft);
 }
 
 .jjw-pill[aria-current='page'] {
-  background: var(--ink);
-  color: var(--cream);
-  box-shadow: 2px 2px 0 0 var(--ink-deep);
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
 }
 
 .jjw-pill:hover {
@@ -383,8 +386,8 @@ a {
 }
 
 .jjw-pill[aria-current='page']:hover {
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--gold);
+  color: var(--ink);
 }
 
 @media screen and (max-width: 749px) {
@@ -435,13 +438,17 @@ a {
   container-type: inline-size;
   border-radius: var(--card-radius);
   overflow: hidden;
-  background: var(--card-bg);
+  background: var(--white);
   transition: transform 0.3s var(--ease);
+  border: 1px solid var(--line);
+  border-top: 0.5rem solid var(--card-bg);
 }
 
 .jjw-card__media {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1;
   width: 100%;
+  background: var(--white);
+  padding: 0.8rem;
 }
 
 .jjw-card__media img {
@@ -482,23 +489,27 @@ a {
    card width. Keep the licensed condensed face and the character fills. */
 .jjw-card__title {
   margin: 0;
-  padding: 0 1.6rem 2.4rem;
-  font-family: var(--font-accent);
-  font-weight: 900;
+  padding: 1.2rem 1.6rem 0;
+  font-family: var(--font-body);
+  font-weight: 700;
   font-size: var(--card-title-size);
-  line-height: 1.15;
+  line-height: 1.3;
   letter-spacing: 0;
-  text-align: center;
-  text-wrap: balance;
+  text-align: left;
+  text-wrap: pretty;
   color: var(--ink);
 }
 
 .jjw-card__price {
   display: block;
   margin-top: 0.4rem;
-  font-size: 1.8rem;
-  letter-spacing: 0.1rem;
-  color: var(--ink);
+  font-size: var(--text-base);
+  letter-spacing: 0;
+  color: var(--body-ink);
+  margin: 0.7rem 0 0;
+  padding: 0 1.6rem 1.6rem;
+  font-family: var(--font-body);
+  font-weight: 500;
 }
 
 .jjw-card[data-pair='pink'] { --card-bg: var(--pink-bg); --card-fg: var(--pink); }
@@ -520,9 +531,11 @@ a {
   }
 
   .jjw-card__title {
-    padding: 0 1rem 1.6rem;
-    /* Size comes from the clamp now; only the padding changes on phones. */
+    padding: 1rem 1rem 0;
+    min-height: 3.2em;
   }
+
+  .jjw-card__price { padding-inline: 1rem; }
 }
 
 /* --- Judge.me star badge ------------------------------------------------
@@ -595,7 +608,7 @@ a {
   /* Ordinary prose is body copy, not a promotional subheading. */
   font-size: var(--text-base);
   line-height: 1.7;
-  color: var(--ink-soft);
+  color: var(--body-ink);
 }
 
 .rte > :first-child {
@@ -715,7 +728,7 @@ a {
 #MainContent .shopify-policy__container {
   max-width: 100rem;
   margin-inline: auto;
-  padding: 6rem 2.16rem 8rem;
+  padding: 4rem var(--page-gutter) 6rem;
 }
 
 #MainContent .shopify-policy__title {
@@ -726,17 +739,18 @@ a {
 #MainContent .shopify-policy__title h1 {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: var(--heading-size);
+  font-size: var(--page-heading-size);
   line-height: 1.08;
   letter-spacing: 0.01em;
   text-wrap: balance;
-  color: var(--ink);
+  color: var(--heading);
 }
 
 #MainContent .shopify-policy__body {
   padding: 4.8rem 4.8rem 5.2rem;
   border-radius: 2.4rem;
   background: var(--white);
+  border: 1px solid var(--line);
 }
 
 @media screen and (max-width: 749px) {
@@ -749,7 +763,8 @@ a {
   }
 
   #MainContent .shopify-policy__title h1 {
-    font-size: var(--heading-size);
+    font-size: var(--page-heading-size);
+    color: var(--heading);
   }
 
   #MainContent .shopify-policy__body {
@@ -882,15 +897,15 @@ select:focus-visible,
 textarea:focus-visible,
 details:focus-visible,
 [tabindex]:focus-visible {
-  outline: 3px solid var(--cream);
+  outline: 2px solid var(--cream);
   outline-offset: 0;
-  box-shadow: 0 0 0 6px var(--ink);
+  box-shadow: 0 0 0 4px var(--ink);
 }
 
 /* A clipped blob also clips its own outline; show keyboard focus on its wrap. */
 .btn-wrap:has(.btn:focus-visible) {
-  outline: 3px solid var(--cream);
+  outline: 2px solid var(--cream);
   outline-offset: 0;
-  box-shadow: 0 0 0 6px var(--ink);
+  box-shadow: 0 0 0 4px var(--ink);
   border-radius: var(--radius);
 }

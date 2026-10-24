@@ -68,7 +68,7 @@
   #MainProduct-{{ section.id }} {
     --char-bg: var(--{{ pair }}-bg);
     --char-fg: var(--{{ pair }});
-    background: var(--cream);
+    background: var(--warm-white);
     padding-block: 4rem 6rem;
   }
 
@@ -76,7 +76,7 @@
     /* Reference at 1440: media 765px, info 576px, 50px gap — 1.33 : 1. */
     display: grid;
     grid-template-columns: minmax(0, 1.33fr) minmax(0, 1fr);
-    gap: 5rem;
+    gap: 3.2rem;
     align-items: start;
   }
 
@@ -105,8 +105,8 @@
     max-width: 18rem;
     padding: 1.2rem 1.6rem;
     border-radius: 0.8rem;
-    background: var(--char-fg);
-    color: var(--cream);
+    background: var(--char-bg);
+    color: var(--ink);
     font-family: var(--font-accent);
     font-weight: 800;
     font-size: 1.8rem;
@@ -195,15 +195,19 @@
     min-width: 0;
     position: sticky;
     top: 3rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--card-radius);
+    padding: clamp(1.6rem, 2vw, 2.8rem);
   }
 
   #MainProduct-{{ section.id }} .pdp__title {
     /* Product title role: prominent, but not campaign-display size. */
-    font-family: var(--font-accent);
-    font-weight: 900;
+    font-family: var(--font-heading);
+    font-weight: 800;
     font-size: var(--product-title-size);
     line-height: 1.1;
-    letter-spacing: 0.06rem;
+    letter-spacing: 0;
     /* Big-heading blue like every other page title; 32px+ at 900 is large text, 4.31:1 passes. */
     color: var(--heading);
     margin: 0 0 1.5rem;
@@ -241,23 +245,24 @@
     white-space: nowrap;
     min-height: var(--touch-target);
     padding: 1rem 1.5rem;
-    border-radius: 0.5rem;
-    font-family: var(--font-accent);
+    border-radius: 0.8rem;
+    font-family: var(--font-body);
     font-weight: 700;
-    font-size: 1.62rem;
+    font-size: var(--control-text-size);
     line-height: 1.3;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    background: var(--blue-bg);
+    letter-spacing: 0;
+    text-transform: none;
+    background: var(--white);
     color: var(--ink);
     cursor: pointer;
     transition: background 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    box-shadow: inset 0 0 0 1px var(--ink-soft);
   }
 
   #MainProduct-{{ section.id }} .pdp__tab[aria-selected='true'] {
-    background: var(--ink);
-    color: var(--cream);
-    box-shadow: 4px 4px 0 0 var(--ink-deep);
+    background: var(--gold);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 2px var(--ink);
   }
 
   #MainProduct-{{ section.id }} .pdp__tab-panel {
@@ -284,15 +289,15 @@
        whole thumb collapses to its 2px border. */
     display: block;
     aspect-ratio: 1 / 1;
-    border: 2px solid var(--blue);
+    border: 1px solid var(--line);
     border-radius: 1rem;
     overflow: hidden;
-    background: var(--card-bg, var(--blue-bg));
+    background: var(--white);
   }
 
   /* The product being viewed — reference outlines its own card in the grid. */
   #MainProduct-{{ section.id }} .pdp__card[aria-current='page'] .pdp__card-thumb {
-    border: 3px solid var(--pink);
+    border: 3px solid var(--gold);
   }
 
   #MainProduct-{{ section.id }} .pdp__card-thumb img {
@@ -325,9 +330,9 @@
   #MainProduct-{{ section.id }} .pdp__card-label {
     display: block;
     margin-top: 0.8rem;
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
-    font-size: var(--text-base);
+    font-size: 1.4rem;
     line-height: 1.25;
     color: var(--ink);
   }
@@ -357,10 +362,10 @@
     align-items: baseline;
     gap: 1.2rem;
     margin-top: 2.4rem;
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 2.4rem;
-    letter-spacing: 0.1rem;
+    letter-spacing: 0;
     color: var(--ink);
   }
 
@@ -419,24 +424,25 @@
     min-width: 6.4rem;
     min-height: var(--touch-target);
     padding: 1rem;
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
-    font-size: 1.8rem;
+    font-size: var(--control-text-size);
     line-height: 1.2;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     text-align: center;
     cursor: pointer;
-    background: var(--blue-bg);
+    background: var(--white);
     color: var(--ink);
-    border-radius: 0.5rem;
+    border-radius: 0.8rem;
     transition: background 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+    box-shadow: inset 0 0 0 1px var(--ink-soft);
   }
 
   #MainProduct-{{ section.id }} input:checked + .pdp__pill {
     background: var(--ink);
     color: var(--cream);
-    box-shadow: 4px 4px 0 0 var(--ink-deep);
+    box-shadow: none;
   }
 
   /* Colour swatches */
@@ -502,6 +508,7 @@
     padding: 2rem;
     border-radius: 1.6rem;
     background: var(--white);
+    border: 1px solid var(--line);
   }
 
   #MainProduct-{{ section.id }} .sg__heading {
@@ -680,7 +687,7 @@
     margin: 2rem 0 0;
     padding: 1.6rem;
     border-radius: 1.6rem;
-    background: var(--white);
+    background: var(--warm-white);
     list-style: none;
   }
 
@@ -867,8 +874,8 @@
       bottom: 0;
       z-index: 9;
       padding: 1rem 1.5rem calc(1rem + env(safe-area-inset-bottom, 0px));
-      background: var(--cream);
-      border-top: 2px solid var(--sky);
+      background: var(--white);
+      border-top: 1px solid var(--line);
       /* The bar is the last thing between a shopper and the button, so it gets
          a real edge rather than floating: on a cream page a shadow alone is
          almost invisible and the bar reads as part of the content. */
@@ -904,11 +911,11 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-family: var(--font-accent);
+      font-family: var(--font-body);
       font-weight: 700;
       font-size: 1.5rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      letter-spacing: 0;
+      text-transform: none;
       color: var(--ink);
     }
 

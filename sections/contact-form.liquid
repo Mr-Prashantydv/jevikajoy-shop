@@ -13,7 +13,7 @@
 
 {%- style -%}
   #Contact-{{ section.id }} {
-    background: var(--cream);
+    background: var(--warm-white);
     padding-block: 0 8rem;
   }
 
@@ -28,6 +28,7 @@
     padding: 4rem;
     border-radius: 2.4rem;
     background: var(--white);
+    border: 1px solid var(--line);
   }
 
   #Contact-{{ section.id }} .ct__heading {
@@ -41,7 +42,7 @@
     margin: 0 0 2.8rem;
     font-size: var(--text-base);
     line-height: 1.6;
-    color: var(--ink-soft);
+    color: var(--body-ink);
   }
 
   /* Richtext brings its own <p> with 1em margins; the wrapper owns spacing. */
@@ -64,11 +65,11 @@
   #Contact-{{ section.id }} .ct__label {
     display: block;
     margin-bottom: 0.6rem;
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
-    font-size: 1.6rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-size: var(--text-base);
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink);
   }
 
@@ -76,11 +77,11 @@
   #Contact-{{ section.id }} .ct__textarea {
     width: 100%;
     padding: 1.4rem 1.6rem;
-    border: 2px solid var(--sky);
+    border: 1px solid var(--ink-soft);
     border-radius: 1.2rem;
     background: var(--white);
     font-family: var(--font-body);
-    font-size: 1.7rem;
+    font-size: var(--text-base);
     line-height: 1.4;
     color: var(--ink);
     transition: border-color 0.2s var(--ease);
@@ -91,8 +92,6 @@
     outline: none;
     border-color: var(--blue);
   }
-
-  #Contact-{{ section.id }} .ct__input:focus-visible,
 
   #Contact-{{ section.id }} .ct__textarea {
     min-height: 14rem;

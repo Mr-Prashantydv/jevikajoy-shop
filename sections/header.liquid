@@ -39,7 +39,7 @@
   }
 
   body:not(.template--index) #Header-{{ s }} .hdr-bar {
-    background: var(--cream);
+    background: var(--warm-white);
   }
 
   #Header-{{ s }} {
@@ -75,7 +75,7 @@
     left: 0;
     right: 0;
     z-index: 60;
-    background: var(--cream);
+    background: var(--warm-white);
   }
 
   #Header-{{ s }}[data-open='false'] .hdr-mega,
@@ -250,7 +250,7 @@
     width: 4.8rem;
     flex: none;
     color: var(--ink);
-    background: var(--cream);
+    background: var(--warm-white);
     border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
     border-radius: 1.2rem;
     transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
@@ -296,7 +296,7 @@
     --shopify-account-avatar-size: 3.2rem;
     --shopify-account-color-accent: var(--blue);
     --shopify-account-color-accent-text: var(--white);
-    --shopify-account-color-background: var(--cream);
+    --shopify-account-color-background: var(--warm-white);
     --shopify-account-color-background-subdued: var(--warm-white);
     --shopify-account-color-border: var(--sky);
     --shopify-account-color-card-background: var(--white);
@@ -428,7 +428,7 @@
     max-height: calc(100dvh - var(--hdr-bar-height, 9.6rem));
     overflow-y: auto;
     overscroll-behavior: contain;
-    background: var(--cream);
+    background: var(--white);
     border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
     border-bottom: 3px solid var(--ink);
     border-radius: 0 0 2.8rem 2.8rem;
@@ -439,7 +439,7 @@
     z-index: 15;
     overflow-y: auto;
     overscroll-behavior: contain;
-    background: var(--cream);
+    background: var(--white);
     padding-bottom: max(2.4rem, env(safe-area-inset-bottom));
     border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
   }
@@ -484,7 +484,7 @@
     padding: 1rem 1.8rem;
     border: 2px solid var(--ink);
     border-radius: 1.2rem;
-    background: var(--yellow);
+    background: var(--gold);
     box-shadow: 4px 4px 0 var(--ink-deep);
     color: var(--ink);
     font-family: var(--font-accent);
@@ -572,11 +572,12 @@
   #Header-{{ s }} .hdr-card,
   #Header-{{ s }} .hdr-drawer-card {
     min-width: 0;
-    background: var(--mc-bg, var(--sky));
-    border: 2px solid var(--ink);
+    background: var(--white);
+    border: 1px solid var(--line);
     border-radius: 1.8rem;
-    box-shadow: 4px 5px 0 var(--ink-deep);
+    box-shadow: 0 2px 0 var(--line);
     transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+    border-top: 4px solid var(--mc-bg, var(--sky));
   }
   #Header-{{ s }} .hdr-card > a,
   #Header-{{ s }} .hdr-drawer-card > a {
@@ -606,9 +607,9 @@
     gap: 0.6rem;
     margin-top: auto;
     color: var(--ink);
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-size: clamp(1.8rem, 1.7vw, 2.5rem);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.2;
     overflow-wrap: anywhere;
   }
@@ -639,7 +640,7 @@
     outline-offset: 4px;
   }
   #Header-{{ s }} .hdr-menu-text { font: 700 1.7rem var(--font-accent); text-transform: uppercase; letter-spacing: 0.04em; }
-  #Header-{{ s }}[data-scrolled='true'] .hdr-bar { background: var(--cream); }
+  #Header-{{ s }}[data-scrolled='true'] .hdr-bar { background: var(--warm-white); }
   #Header-{{ s }} .hdr-search { padding-top: calc(var(--hdr-bar-height, 9.6rem) + 1.6rem); }
   @supports not (clip-path: url(#jjw-blob)) {
     #Header-{{ s }} .hdr-menu { border-radius: 1rem; }
@@ -718,6 +719,10 @@
     max-width: 92rem;
   }
 
+  #Header-{{ s }} .hdr-search {
+    background: var(--warm-white);
+  }
+
   {%- comment -%}
     Field box: label stacked over the input, with the clear and submit
     controls sharing the same border. Not .btn — the reference keeps the field
@@ -729,7 +734,7 @@
     gap: 0.8rem;
     padding: 0.8rem 1.2rem 0.8rem 1.6rem;
     background: var(--white);
-    border: 2px solid var(--sky);
+    border: 1px solid var(--ink-soft);
     border-radius: 0.8rem;
   }
 
@@ -814,7 +819,7 @@
 
   #Header-{{ s }} .hdr-search-clear:hover,
   #Header-{{ s }} .hdr-search-go:hover {
-    color: var(--pink);
+    color: var(--ink);
   }
 
   {%- comment -%}
@@ -835,6 +840,18 @@
     grid-template-columns: 1fr 1.6fr;
     gap: 0 4rem;
     padding: 2.4rem 2.4rem 0.8rem;
+  }
+
+  #Header-{{ s }} .psearch-col:only-child {
+    grid-column: 1 / -1;
+  }
+
+  @media screen and (min-width: 750px) {
+    #Header-{{ s }} .psearch-col:only-child .psearch-list[aria-labelledby='PsearchProducts'] {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 2.4rem;
+    }
   }
 
   #Header-{{ s }} .psearch-head {
@@ -862,12 +879,12 @@
     align-items: center;
     gap: 1.6rem;
     padding-block: 1rem;
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 1.7rem;
     line-height: 1.2;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink);
   }
 
@@ -1437,7 +1454,7 @@
     <style>
       #shopify-section-{{ s }} { position: relative; height: auto; }
       #Header-{{ s }} .hdr-menu-wrap { display: none; }
-      #Header-{{ s }} .hdr-nojs { padding: 2rem var(--page-gutter); background: var(--cream); }
+      #Header-{{ s }} .hdr-nojs { padding: 2rem var(--page-gutter); background: var(--warm-white); }
     </style>
     <nav class="hdr-nojs" aria-label="{{ section.settings.menu_button_label | escape }}">
       <a class="hdr-shop-all" href="{{ routes.all_products_collection_url }}">{{ section.settings.shop_all_label | escape }}</a>

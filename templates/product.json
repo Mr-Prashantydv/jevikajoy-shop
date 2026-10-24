@@ -244,7 +244,7 @@
         "s7"
       ],
       "settings": {
-        "heading": "Built Like Premium Basics",
+        "heading": "Softness in every detail",
         "intro": "<p>Washed soft, shrunk before it's sewn, and taped where it takes the most pull</p>",
         "story_label": "See how it's made",
         "story_handle": "how-its-made"
@@ -263,8 +263,9 @@
     "related": {
       "type": "featured-collection",
       "settings": {
-        "heading": "More From the Squad",
-        "products_to_show": 12
+        "heading": "More characters to love",
+        "products_to_show": 12,
+        "photographed_first": true
       }
     },
     "bundle": {

@@ -1,8 +1,6 @@
 {%- comment -%}
-  Footer — ported from the React Footer component (src/components/site/footer.tsx).
-  12-column grid: logo, nav link columns, newsletter, icon row, credits.
-  The React `showIcons` prop is the `show_icons` setting; when off the grid keeps
-  the same 40px-tall spacer cell the React code renders in its place.
+  Shared footer: compact logo, shopping and merchant menus, published policies,
+  and newsletter. Empty icon blocks take no space.
 {%- endcomment -%}
 
 {%- style -%}
@@ -13,14 +11,14 @@
   }
 
   #Footer-{{ section.id }} .footer__inner {
-    padding-top: 2.25rem;
-    padding-bottom: 2.5rem;
+    padding-top: 4.8rem;
+    padding-bottom: 4rem;
   }
 
   #Footer-{{ section.id }} .footer__grid {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 2vw;
+    gap: 3.2rem;
   }
 
   #Footer-{{ section.id }} .footer__logo {
@@ -30,7 +28,7 @@
   #Footer-{{ section.id }} .footer__logo img {
     /* Letters + name pill, no tagline: the tagline's navy words vanish on this
        navy footer. The art is 3:2, so narrower than the old 2:1 mark's 32rem. */
-    width: 28rem;
+    width: 18rem;
     max-width: 100%;
     height: auto;
   }
@@ -38,17 +36,18 @@
   #Footer-{{ section.id }} .footer__spacer {
     grid-column: span 9;
     height: 5.2rem;
+    display: none;
   }
 
   #Footer-{{ section.id }} .footer__nav {
-    grid-column: span 6;
+    grid-column: span 4;
     display: flex;
     flex-wrap: wrap;
-    gap: 2vw;
+    gap: 1.2rem 2.4rem;
   }
 
   #Footer-{{ section.id }} .footer__menu {
-    flex: 1 1 20rem;
+    flex: 1 1 14rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -69,9 +68,12 @@
     padding: 1.1rem 0;
     font-family: var(--font-body);
     font-size: var(--control-text-size);
+    font-weight: 600;
     line-height: 1.4;
     color: var(--cream);
     transition: color 0.2s var(--ease);
+    text-transform: none;
+    letter-spacing: 0;
   }
 
   #Footer-{{ section.id }} .footer__link:hover {
@@ -79,14 +81,18 @@
   }
 
   #Footer-{{ section.id }} .footer__newsletter {
-    grid-column: span 6;
+    grid-column: span 5;
   }
 
   #Footer-{{ section.id }} .footer__heading {
     margin: 0;
-    font-size: var(--heading-small-size);
+    font-size: 3rem;
     line-height: 1.2;
     color: var(--cream);
+    font-family: var(--font-heading);
+    font-weight: 800;
+    text-transform: none;
+    letter-spacing: 0;
   }
 
   /* Newsletter description is ordinary body copy. */
@@ -113,10 +119,13 @@
   #Footer-{{ section.id }} .footer__field {
     position: relative;
     display: flex;
-    height: 4.5rem;
+    height: 5.2rem;
     align-items: center;
     border-bottom: 2px solid color-mix(in srgb, var(--cream) 50%, transparent);
     transition: border-color 0.2s var(--ease);
+    background: var(--white);
+    border: 2px solid var(--white);
+    border-radius: 1.2rem;
   }
 
   #Footer-{{ section.id }} .footer__field:focus-within {
@@ -126,37 +135,42 @@
   #Footer-{{ section.id }} .footer__input {
     width: 100%;
     flex: 1 1 auto;
-    padding: 1.5rem 9.8rem 1.5rem 1.5rem;
+    padding: 1.2rem 5.6rem 1.2rem 1.4rem;
     border: 0;
     background: transparent;
     font-family: var(--font-body);
     font-size: 1.6rem;
     line-height: 1;
-    color: var(--cream);
+    color: var(--ink);
+    border-radius: 1rem;
   }
 
   #Footer-{{ section.id }} .footer__input::placeholder {
-    color: color-mix(in srgb, var(--cream) 75%, transparent);
+    color: var(--ink-soft);
   }
 
   #Footer-{{ section.id }} .footer__submit {
     position: absolute;
     top: 50%;
-    right: 0;
+    right: 0.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
     /* The icon is 24px wide; the button needs to be a finger wide. */
     min-width: 4.4rem;
-    height: 4.5rem;
+    height: 4.4rem;
     padding: 0;
-    color: var(--cream);
+    color: var(--ink);
     transform: translateY(-50%);
     transition: transform 0.2s var(--ease);
+    width: 4.4rem;
+    background: var(--gold);
+    border-radius: 0.8rem;
   }
 
   #Footer-{{ section.id }} .footer__submit:hover {
-    transform: translate(4px, -50%);
+    transform: translateY(-50%);
+    background: var(--yellow);
   }
 
   #Footer-{{ section.id }} .footer__submit svg {
@@ -184,6 +198,7 @@
   #Footer-{{ section.id }} .footer__icons-empty {
     grid-column: span 6;
     height: 4rem;
+    display: none;
   }
 
   #Footer-{{ section.id }} .footer__credits {
@@ -208,6 +223,12 @@
 
   #Footer-{{ section.id }} a.footer__credit:hover {
     text-decoration: underline;
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1099px) {
+    #Footer-{{ section.id }} .footer__logo { grid-column: span 2; }
+    #Footer-{{ section.id }} .footer__nav { grid-column: span 4; }
+    #Footer-{{ section.id }} .footer__newsletter { grid-column: span 6; }
   }
 
   @media screen and (max-width: 749px) {
@@ -265,9 +286,16 @@
         {%- endif -%}
       </div>
 
-      <div class="footer__spacer" aria-hidden="true"></div>
-
-      <nav class="footer__nav" aria-label="Footer">
+      <nav class="footer__nav" aria-label="{{ section.settings.nav_label | escape }}">
+        {%- if section.settings.show_quick_links -%}
+          <ul class="footer__menu">
+            <li class="footer__item"><a class="footer__link" href="{{ routes.all_products_collection_url }}">{{ section.settings.shop_label | escape }}</a></li>
+            <li class="footer__item"><a class="footer__link" href="{{ routes.collections_url }}">{{ section.settings.characters_label | escape }}</a></li>
+            {%- if pages.contact != blank -%}
+              <li class="footer__item"><a class="footer__link" href="{{ pages.contact.url }}">{{ section.settings.contact_label | escape }}</a></li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'menu' and block.settings.menu != blank -%}
             <ul class="footer__menu" {{ block.shopify_attributes }}>
@@ -279,6 +307,15 @@
             </ul>
           {%- endif -%}
         {%- endfor -%}
+        {%- if section.settings.show_policies and shop.policies.size > 0 -%}
+          <ul class="footer__menu">
+            {%- for policy in shop.policies -%}
+              {%- if policy.body != blank -%}
+                <li class="footer__item"><a class="footer__link" href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
       </nav>
 
       <div class="footer__newsletter">
@@ -313,7 +350,7 @@
               placeholder="{{ section.settings.newsletter_placeholder | escape }}"
               aria-label="{{ section.settings.newsletter_placeholder | escape }}"
             >
-            <button class="footer__submit" type="submit" aria-label="Subscribe">
+            <button class="footer__submit" type="submit" aria-label="{{ section.settings.subscribe_label | escape }}">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10" aria-hidden="true" focusable="false">
                 <path
                   fill="currentColor"
@@ -391,6 +428,13 @@
 {
   "name": "Footer",
   "settings": [
+    { "type": "text", "id": "nav_label", "label": "Navigation accessible label", "default": "Footer" },
+    { "type": "checkbox", "id": "show_quick_links", "label": "Show shopping links", "default": true },
+    { "type": "text", "id": "shop_label", "label": "Shop link", "default": "Shop all tees" },
+    { "type": "text", "id": "characters_label", "label": "Collections link", "default": "Meet the characters" },
+    { "type": "text", "id": "contact_label", "label": "Contact link", "default": "Get in touch" },
+    { "type": "checkbox", "id": "show_policies", "label": "Show published policies", "default": true },
+    { "type": "text", "id": "subscribe_label", "label": "Subscribe button accessible label", "default": "Subscribe" },
     {
       "type": "image_picker",
       "id": "logo",

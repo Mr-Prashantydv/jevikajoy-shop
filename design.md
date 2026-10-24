@@ -2,6 +2,18 @@
 
 Updated: 24 October 2026. Working project: `D:/projects/JEVIKAJOY.SHOP`.
 
+## 24 October: extend the trial across the storefront
+
+The owner clarified that the colour, type, copy and background upgrade applies to the whole website. The shared system now reaches collection listings and directory, product purchase panels and accordions, predictive/full search, cart drawer and page, contact, generic pages, policies, 404 and the footer. Warm White frames shopping interfaces; white cards hold product information; Navy carries controls and labels; Charcoal carries prose; Sunshine Gold remains the purchase action. Character colours stay in artwork, category panels and card edges. Soft Gray separators have a synced CSS/schema/current/runtime setting. Garment swatches and the approved Paper Boat hero are unchanged.
+
+Product names and prices use Quicksand, major titles retain Baloo 2, and condensed uppercase is reserved for short controls and eyebrows. Page headings cap at 56px and supporting headings at 48px; the homepage keeps its campaign scale. Product/cart recommendations put photographed items first. Search, empty-cart and recommendation copy is shorter and editable. The optional product-trust section now uses legible benefit tiles; it is not currently included in the product template.
+
+The footer now puts the logo, navigation and newsletter in one desktop row, supplies optional shopping/contact links and published policies, and uses a white email field with a Gold submit button. Menu character cards use white surfaces with identity-colour edges. Search has an opaque Warm White background; when only products match, they use the full result panel. Contact inputs remain 52px tall on focus after removing a stray textarea selector. Keyboard focus retains a contrasting two-colour ring with a slimmer 2px edge.
+
+Verified locally at desktop 1440px and mobile 390px: homepage, collection directory/listings, product, search suggestions/results, populated and empty cart, menus, footer, contact and privacy-policy layouts. Product colour/size changes, size-guide opening/closing, cart add/remove and search submit/Escape passed; the test cart was restored to empty. Twenty-nine extra page/width measurements across 320–1920px found no horizontal overflow or broken loaded images, including no-photo products, empty search and 404. Contact forms and newsletter were not submitted. Theme Check: zero errors and five existing warnings; `git diff --check` passed. Evidence is in the same visualizations folder below as `storewide-*`.
+
+This remains a local development preview, with no live-theme push. Shopify-hosted checkout/accounts and admin-owned product/policy text are outside this theme styling pass. The separate character-collection work is preserved; its template files are not part of this commit.
+
 ## 24 October: local brand colour and copy trial
 
 The owner supplied `JJW_Brand_Reference(1).pdf` and asked to try the proposed colour/copy direction. Shopping actions now use Sunshine Gold with Night Navy text; Adventure Blue remains the heading colour on light surfaces, and the mint fabric panel's heading is Navy for contrast. The featured-product band uses Warm White, white cards, and a 6px character-colour top edge. Character-fill tokens remain unchanged. Charcoal body copy and Sunshine Gold action settings are synchronised across CSS, schema, saved settings and runtime overrides; ordinary body copy is 16px. Quicksand, Baloo 2 and Barlow remain the existing fonts.

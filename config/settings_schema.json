@@ -58,6 +58,13 @@
       },
       {
         "type": "color",
+        "id": "color_border",
+        "label": "Card borders",
+        "default": "#D9D9D9",
+        "info": "Soft Gray separators on white and warm-white surfaces."
+      },
+      {
+        "type": "color",
         "id": "color_action",
         "label": "Shopping buttons",
         "default": "#F6A313",

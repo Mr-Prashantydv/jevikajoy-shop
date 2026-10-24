@@ -1,233 +1,94 @@
 {%- comment -%}
-  Product trust — badge row for below the product info, plus a reassurance line.
-  Layout modelled on the reference PDP badge strip; all copy comes from blocks.
-
-  Badges have no images on this store yet, so the media slot degrades to a
-  filled circle in the block's tone rather than a broken <img>.
+  Readable benefit tiles. All claims and colours remain editable in the existing blocks.
 {%- endcomment -%}
-
 {%- style -%}
-  #ProductTrust-{{ section.id }} {
-    background: var(--cream);
-  }
-
-  #ProductTrust-{{ section.id }} .pt__inner {
-    padding-block: var(--section-space);
-  }
-
+  #ProductTrust-{{ section.id }} { background: var(--cream); }
+  #ProductTrust-{{ section.id }} .pt__inner { padding-block: var(--section-space); }
   #ProductTrust-{{ section.id }} .pt__heading {
-    margin-bottom: 1rem;
+    margin: 0 auto 1.2rem;
+    max-width: 80rem;
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: var(--heading-size);
-    line-height: 1.08;
-    letter-spacing: 0.06rem;
+    font-size: var(--section-heading-size);
+    line-height: 1.12;
     text-align: center;
     color: var(--ink);
   }
-
+  #ProductTrust-{{ section.id }} .pt__strip {
+    max-width: 72rem;
+    margin: 0 auto 3.2rem;
+    font-size: var(--text-lead);
+    line-height: 1.6;
+    text-align: center;
+    color: var(--body-ink);
+  }
   #ProductTrust-{{ section.id }} .pt__list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 2rem;
-    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.6rem;
+    max-width: 100rem;
+    margin: 0 auto;
     padding: 0;
     list-style: none;
   }
-
-  {%- comment -%}
-    Reference badge is a flat 105x105 SVG image with its wording baked in.
-    The house rule is that image-borne text becomes real type, so ours is a
-    live SVG: the label is set twice on two arcs (over the top, under the
-    bottom) via textPath, so it stays editable, translatable and selectable.
-  {%- endcomment -%}
   #ProductTrust-{{ section.id }} .pt__badge {
-    width: 10.5rem;
-    height: 10.5rem;
-  }
-
-  #ProductTrust-{{ section.id }} .pt__art {
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-
-  #ProductTrust-{{ section.id }} .pt__disc {
-    fill: var(--tone-bg, var(--pink-bg));
-  }
-
-  {%- comment -%}
-    Ink on every tint. The matching solid fails badly on its own pastel —
-    Heart Pink on pink-bg is 2.6:1 — and this type is only 9px.
-  {%- endcomment -%}
-  {%- comment -%}
-    Font-size is pinned by the band, not the width: the arcs sit at r37 and
-    r46.5, so ~12px is all that fits between them inside the r52.5 disc.
-    Filling more of the arc therefore has to come from tracking.
-  {%- endcomment -%}
-  #ProductTrust-{{ section.id }} .pt__arc {
-    fill: var(--ink);
-    font-family: var(--font-accent);
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 1.6rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 1.6rem;
+    font-size: var(--text-base);
     font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 1.8px;
-  }
-
-  #ProductTrust-{{ section.id }} .pt__glyph {
-    fill: none;
-    stroke: var(--ink);
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  #ProductTrust-{{ section.id }} .pt__art image {
-    /* Merchant-supplied icon replaces the drawn glyph. */
-    clip-path: inset(0 round 50%);
-  }
-
-  #ProductTrust-{{ section.id }} .pt__strip {
-    margin: 1rem 0 2.8rem;
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: var(--text-lead);
-    line-height: 1.5;
-    letter-spacing: 0;
-    text-transform: none;
-    text-align: center;
+    line-height: 1.4;
     color: var(--ink);
   }
-
-  #ProductTrust-{{ section.id }} [data-tone='pink'] {
-    --tone-bg: var(--pink-bg);
-    --tone-fg: var(--pink);
+  #ProductTrust-{{ section.id }} .pt__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 4.4rem;
+    height: 4.4rem;
+    border-radius: 50%;
+    background: var(--tone-bg, var(--sky));
   }
-  #ProductTrust-{{ section.id }} [data-tone='blue'] {
-    --tone-bg: var(--blue-bg);
-    --tone-fg: var(--blue);
-  }
-  #ProductTrust-{{ section.id }} [data-tone='gold'] {
-    --tone-bg: var(--gold-bg);
-    --tone-fg: var(--gold);
-  }
-  #ProductTrust-{{ section.id }} [data-tone='green'] {
-    --tone-bg: var(--green-bg);
-    --tone-fg: var(--green);
-  }
-  #ProductTrust-{{ section.id }} [data-tone='purple'] {
-    --tone-bg: var(--purple-bg);
-    --tone-fg: var(--purple);
-  }
-
-  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    #ProductTrust-{{ section.id }} .pt__art {
-      transition: transform 0.4s var(--ease);
-    }
-
-    #ProductTrust-{{ section.id }} .pt__badge:hover .pt__art {
-      transform: rotate(8deg);
-    }
-  }
-
+  #ProductTrust-{{ section.id }} .pt__icon img,
+  #ProductTrust-{{ section.id }} .pt__icon svg { width: 2.8rem; height: 2.8rem; object-fit: contain; }
+  #ProductTrust-{{ section.id }} [data-tone='pink'] { --tone-bg: var(--pink-bg); }
+  #ProductTrust-{{ section.id }} [data-tone='blue'] { --tone-bg: var(--blue-bg); }
+  #ProductTrust-{{ section.id }} [data-tone='gold'] { --tone-bg: var(--gold-bg); }
+  #ProductTrust-{{ section.id }} [data-tone='green'] { --tone-bg: var(--green-bg); }
+  #ProductTrust-{{ section.id }} [data-tone='purple'] { --tone-bg: var(--purple-bg); }
   @media screen and (max-width: 749px) {
-    #ProductTrust-{{ section.id }} .pt__inner {
-      padding-block: 3rem 3.6rem;
-    }
-
-    #ProductTrust-{{ section.id }} .pt__heading {
-      font-size: var(--heading-size);
-    }
-
-    #ProductTrust-{{ section.id }} .pt__list {
-      gap: 1.6rem;
-    }
-
-    #ProductTrust-{{ section.id }} .pt__strip {
-      font-size: var(--text-lead);
-    }
-
-    /* Reference phone layout wraps the row 5 + 4. */
-    #ProductTrust-{{ section.id }} .pt__badge {
-      width: 9rem;
-      height: 9rem;
-    }
+    #ProductTrust-{{ section.id }} .pt__inner { padding-block: 4rem; }
+    #ProductTrust-{{ section.id }} .pt__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    #ProductTrust-{{ section.id }} .pt__badge { flex-direction: column; text-align: center; padding: 1.6rem 1rem; gap: 1rem; }
   }
 {%- endstyle -%}
-
 <section id="ProductTrust-{{ section.id }}">
   <div class="page-width pt__inner">
     {%- if section.settings.heading != blank -%}
       <h2 class="pt__heading scroll-trigger animate--fade-in">{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
-
-    {%- if section.blocks.size > 0 -%}
     {%- if section.settings.reassurance != blank -%}
       <p class="pt__strip scroll-trigger animate--fade-in">{{ section.settings.reassurance | escape }}</p>
     {%- endif -%}
+    {%- if section.blocks.size > 0 -%}
       <ul class="pt__list">
         {%- for block in section.blocks -%}
-          {%- liquid
-            assign uid = section.id | append: '-' | append: forloop.index
-            assign label = block.settings.label | default: ''
-          -%}
-          <li
-            class="pt__badge scroll-trigger animate--fade-in"
-            data-tone="{{ block.settings.tone | escape }}"
-            style="--animation-order: {{ forloop.index0 }};"
-            {{ block.shopify_attributes }}
-          >
-            <svg
-              class="pt__art"
-              viewBox="0 0 105 105"
-              {% if label != blank %}role="img" aria-label="{{ label | escape }}"{% else %}aria-hidden="true" focusable="false"{% endif %}
-            >
-              <defs>
-                {%- comment -%}
-                  Both arcs are drawn left-to-right. Sweep 1 rides over the
-                  top so glyphs sit outside the baseline; sweep 0 rides under
-                  the bottom so they sit inside. Radii differ (37 vs 46.5) to
-                  keep both bands the same distance from the disc edge.
-                {%- endcomment -%}
-                <path id="ptTop-{{ uid }}" fill="none" d="M 15.5,52.5 a 37,37 0 0,1 74,0"/>
-                <path id="ptBot-{{ uid }}" fill="none" d="M 6,52.5 a 46.5,46.5 0 0,0 93,0"/>
-              </defs>
-
-              <circle class="pt__disc" cx="52.5" cy="52.5" r="52.5"/>
-
-              {%- comment -%}
-                No textLength here: Chrome ignores it on a textPath while
-                Firefox honours it, so setting it makes the badge render
-                differently per browser. Tracking in CSS is applied by both.
-                Arc lengths are fixed by the radii above — pi*37 = 116 and
-                pi*46.5 = 146 — and the longest label stays well inside.
-              {%- endcomment -%}
-              {%- if label != blank -%}
-                <text class="pt__arc">
-                  <textPath href="#ptTop-{{ uid }}" startOffset="50%" text-anchor="middle">{{ label | upcase | escape }}</textPath>
-                </text>
-                <text class="pt__arc">
-                  <textPath href="#ptBot-{{ uid }}" startOffset="50%" text-anchor="middle">{{ label | upcase | escape }}</textPath>
-                </text>
-              {%- endif -%}
-
+          <li class="pt__badge scroll-trigger animate--fade-in" data-tone="{{ block.settings.tone | escape }}" style="--animation-order: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
+            <span class="pt__icon" aria-hidden="true">
               {%- if block.settings.image != blank -%}
-                <image
-                  href="{{ block.settings.image | image_url: width: 120 }}"
-                  x="34.5" y="34.5" width="36" height="36"
-                  preserveAspectRatio="xMidYMid meet"
-                />
+                {{ block.settings.image | image_url: width: 88 | image_tag: loading: 'lazy', width: 44, height: 44, alt: '' }}
               {%- else -%}
-                <path class="pt__glyph" d="m44 53 6 6 12-13"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m6 12 4 4 8-9"/></svg>
               {%- endif -%}
-            </svg>
+            </span>
+            <span>{{ block.settings.label | escape }}</span>
           </li>
         {%- endfor -%}
       </ul>
     {%- endif -%}
-
   </div>
 </section>
 
@@ -259,7 +120,7 @@
           "type": "image_picker",
           "id": "image",
           "label": "Badge image",
-          "info": "Optional. Without one, a coloured circle is shown instead."
+          "info": "Optional icon. Defaults to a check on a coloured circle."
         },
         {
           "type": "text",

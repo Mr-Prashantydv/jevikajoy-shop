@@ -7,8 +7,9 @@
     "recommendations": {
       "type": "featured-collection",
       "settings": {
-        "heading": "Add Another Hero",
-        "products_to_show": 12
+        "heading": "Find their next favourite",
+        "products_to_show": 12,
+        "photographed_first": true
       }
     },
     "bundle": {

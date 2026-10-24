@@ -3,9 +3,9 @@
     "main": {
       "type": "main-search",
       "settings": {
-        "heading": "Find Your Tee",
-        "results_heading": "Search Results",
-        "placeholder": "Try a character, colour or age",
+        "heading": "Find their next favourite",
+        "results_heading": "Search results",
+        "placeholder": "Search tees or characters",
         "clear_text": "Clear all filters"
       }
     }

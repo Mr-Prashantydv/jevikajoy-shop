@@ -42,9 +42,9 @@
   </div>
   <h3 class="jjw-card__title">
     {{- product.title | escape -}}
-    {%- unless show_price == false -%}
-      <span class="jjw-card__price">{{ product.price | money }}</span>
-    {%- endunless -%}
-    {%- render 'review-stars', product: product -%}
   </h3>
+  {%- unless show_price == false -%}
+    <span class="jjw-card__price">{{ product.price | money }}</span>
+  {%- endunless -%}
+  {%- render 'review-stars', product: product -%}
 </a>

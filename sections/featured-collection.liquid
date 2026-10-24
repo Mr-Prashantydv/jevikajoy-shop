@@ -65,6 +65,9 @@
   #FeaturedCollection-{{ section.id }} .fc__heading {
     margin-bottom: 2.5rem;
     text-align: center;
+    {% unless template.name == 'index' %}
+      font-size: var(--section-heading-size);
+    {% endunless %}
     color: var(--heading);
   }
 

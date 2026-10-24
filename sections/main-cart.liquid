@@ -14,7 +14,7 @@
 
 {%- style -%}
   #MainCart-{{ section.id }} {
-    background: var(--cream);
+    background: var(--warm-white);
   }
 
   #MainCart-{{ section.id }} .cart__inner {
@@ -24,10 +24,10 @@
   #MainCart-{{ section.id }} .cart__heading {
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: var(--heading-size);
+    font-size: var(--page-heading-size);
     line-height: 1.08;
     letter-spacing: 0.06rem;
-    color: var(--ink);
+    color: var(--heading);
     margin: 0 0 3.2rem;
   }
 
@@ -39,7 +39,7 @@
     align-items: center;
     text-align: center;
     gap: 2rem;
-    padding-block: 4rem 6rem;
+    padding-block: 2.4rem 4rem;
   }
 
   #MainCart-{{ section.id }} .cart__empty-text {
@@ -55,6 +55,9 @@
   #MainCart-{{ section.id }} .cart__items {
     width: 100%;
     border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--card-radius);
+    padding-inline: 2rem;
   }
 
   #MainCart-{{ section.id }} .cart__row {
@@ -95,10 +98,10 @@
   }
 
   #MainCart-{{ section.id }} .cart__name {
-    font-family: var(--font-accent);
-    font-weight: 900;
-    font-size: 2.6rem;
-    line-height: 1.1;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 2.2rem;
+    line-height: 1.3;
     color: var(--ink);
     text-decoration: none;
     display: block;
@@ -112,10 +115,10 @@
 
   #MainCart-{{ section.id }} .cart__unit {
     margin: 0.4rem 0 0;
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 1.7rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     color: var(--ink);
   }
 
@@ -129,9 +132,10 @@
   #MainCart-{{ section.id }} .cart__qty {
     display: inline-flex;
     align-items: center;
-    border: 2px solid var(--ink);
-    border-radius: 999px;
+    border: 1px solid var(--ink-soft);
+    border-radius: 0.8rem;
     overflow: hidden;
+    background: var(--white);
   }
 
   #MainCart-{{ section.id }} .cart__qty button {
@@ -167,10 +171,11 @@
   }
 
   #MainCart-{{ section.id }} .cart__line-total {
-    font-family: var(--font-accent);
-    font-weight: 900;
+    font-family: var(--font-body);
+    font-weight: 700;
     font-size: 2rem;
     color: var(--ink);
+    letter-spacing: 0;
   }
 
   #MainCart-{{ section.id }} .cart__line-was {
@@ -184,17 +189,17 @@
     display: inline-flex;
     align-items: center;
     min-height: var(--touch-target);
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
-    font-size: 1.3rem;
+    font-size: var(--text-sm);
     letter-spacing: 0.06em;
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--ink-soft);
     text-decoration: underline;
   }
 
   #MainCart-{{ section.id }} .cart__remove:hover {
-    color: var(--pink);
+    color: var(--ink);
   }
 
   /* ---------- Footer / totals ---------- */
@@ -247,10 +252,11 @@
   }
 
   #MainCart-{{ section.id }} .cart__subtotal {
-    font-family: var(--font-accent);
-    font-weight: 900;
+    font-family: var(--font-body);
+    font-weight: 700;
     font-size: 3rem;
     color: var(--ink);
+    letter-spacing: 0;
   }
 
   #MainCart-{{ section.id }} .cart__saved + .cart__subtotal > span {
@@ -524,10 +530,10 @@
     { "type": "text", "id": "remove_label", "label": "Remove link", "default": "Remove" },
     { "type": "text", "id": "footer_note", "label": "Note under subtotal", "default": "Taxes and shipping calculated at checkout." },
     { "type": "header", "content": "Empty state" },
-    { "type": "text", "id": "empty_text", "label": "Empty message", "default": "Nothing here yet. Pick a hero and their tee comes with them." },
+    { "type": "text", "id": "empty_text", "label": "Empty message", "default": "A little adventure starts with a favourite tee. Find theirs and add it here." },
     { "type": "text", "id": "empty_cta", "label": "Empty button", "default": "Shop All Tees" },
     { "type": "header", "content": "Spacing" },
-    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
     { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 }
   ]
 }

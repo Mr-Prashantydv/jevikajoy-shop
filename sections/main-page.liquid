@@ -13,8 +13,8 @@
 
 {%- style -%}
   #MainPage-{{ section.id }} {
-    background: var(--cream);
-    padding-block: 6rem 8rem;
+    background: var(--warm-white);
+    padding-block: 4rem 6rem;
   }
 
   #MainPage-{{ section.id }} .page__head {
@@ -37,11 +37,12 @@
     margin-bottom: 1.2rem;
     font-size: 2rem;
     line-height: 1;
-    color: var(--blue);
+    color: var(--body-ink);
   }
 
   #MainPage-{{ section.id }} .page__title {
     color: var(--heading);
+    font-size: var(--page-heading-size);
   }
 
   #MainPage-{{ section.id }} .page__card {
@@ -50,6 +51,7 @@
     padding: 4.8rem 4.8rem 5.2rem;
     border-radius: 2.4rem;
     background: var(--white);
+    border: 1px solid var(--line);
   }
 
   /* Prose itself is .rte in theme.css, shared with Shopify's own /policies

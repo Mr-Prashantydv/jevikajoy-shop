@@ -44,7 +44,7 @@
 
 {%- style -%}
   #MainSearch-{{ section.id }} {
-    background: var(--cream);
+    background: var(--warm-white);
     padding-block: 4rem 8rem;
   }
 
@@ -53,6 +53,7 @@
     /* .hxxl tracks 0.01em, which is 0.86px here; reference is a flat 0.6px. */
     letter-spacing: 0.06rem;
     color: var(--heading);
+    font-size: var(--page-heading-size);
   }
 
   /* --- Search field ------------------------------------------------------ */
@@ -61,7 +62,7 @@
     display: flex;
     gap: 1rem;
     max-width: 64rem;
-    margin: 3.2rem auto 0;
+    margin: 2rem auto 0;
   }
 
   #MainSearch-{{ section.id }} .ms__input {
@@ -70,10 +71,10 @@
     min-height: 5.4rem;
     padding: 1rem 2rem;
     font-family: var(--font-body);
-    font-size: 1.8rem;
+    font-size: var(--text-base);
     color: var(--ink);
     background: var(--white);
-    border: 2px solid var(--sky);
+    border: 1px solid var(--ink-soft);
     border-radius: 0.8rem;
     -webkit-appearance: none;
     appearance: none;
@@ -92,7 +93,7 @@
   /* --- Filters ----------------------------------------------------------- */
 
   #MainSearch-{{ section.id }} .ms__filters {
-    margin: 4rem 0 0;
+    margin: 2.4rem 0 0;
     padding: 0;
     border: 0;
   }
@@ -111,7 +112,7 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     text-align: center;
-    color: var(--ink-soft);
+    color: var(--body-ink);
   }
 
   {%- comment -%}
@@ -122,10 +123,10 @@
   #MainSearch-{{ section.id }} .ms__filter .jjw-pill {
     min-height: 4.4rem;
     padding-inline: 1.6rem;
-    font-size: 1.9rem;
-    letter-spacing: 0.08em;
+    font-size: var(--control-text-size);
+    letter-spacing: 0;
     background: var(--white);
-    box-shadow: inset 0 0 0 2px var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink-soft);
     color: var(--ink);
   }
 
@@ -208,20 +209,20 @@
   }
 
   #MainSearch-{{ section.id }} .ms__count {
-    margin: 4rem 0 0;
-    font-family: var(--font-accent);
-    font-weight: 700;
-    font-size: 2.4rem;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
+    margin: 2.4rem 0 0;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--text-base);
+    letter-spacing: 0;
+    text-transform: none;
     text-align: center;
-    color: var(--ink-soft);
+    color: var(--body-ink);
   }
 
   /* --- Results ----------------------------------------------------------- */
 
   #MainSearch-{{ section.id }} .ms__grid {
-    margin-top: 4rem;
+    margin-top: 2.4rem;
   }
 
   #MainSearch-{{ section.id }} .ms__other {
@@ -238,11 +239,11 @@
   #MainSearch-{{ section.id }} .ms__other a {
     display: block;
     padding-block: 2rem;
-    font-family: var(--font-accent);
+    font-family: var(--font-body);
     font-weight: 700;
-    font-size: 2.4rem;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
+    font-size: 2rem;
+    letter-spacing: 0;
+    text-transform: none;
     color: var(--ink);
   }
 
@@ -291,7 +292,7 @@
     }
 
     #MainSearch-{{ section.id }} .ms__grid {
-      margin-top: 3rem;
+      margin-top: 2.4rem;
     }
   }
 {%- endstyle -%}
@@ -512,13 +513,13 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Find Your Tee"
+      "default": "Find their next favourite"
     },
     {
       "type": "text",
       "id": "results_heading",
       "label": "Heading with results",
-      "default": "Search Results"
+      "default": "Search results"
     },
     {
       "type": "text",
