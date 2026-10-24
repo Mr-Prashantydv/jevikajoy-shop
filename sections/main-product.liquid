@@ -209,11 +209,6 @@
     margin: 0 0 1.5rem;
   }
 
-  /* Mobile-order duplicate of the h1 — shown only when the grid stacks. */
-  #MainProduct-{{ section.id }} .pdp__title--mob {
-    display: none;
-  }
-
   /* Carousel dots, built by JS; desktop never shows them. */
   #MainProduct-{{ section.id }} .pdp__dots {
     display: none;
@@ -221,21 +216,35 @@
 
   /* --- Category tabs — reference .product-variant-tabs ------------------- */
 
+  /* One swipeable row, never wrapped. The bottom/right padding keeps the
+     selected tab's 4px offset shadow inside the scroll box, which clips. */
   #MainProduct-{{ section.id }} .pdp__tabs {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 1.5rem;
-    margin: 0 0 2rem;
+    margin: 0 0 1.6rem;
+    padding: 0 0.4rem 0.4rem 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  #MainProduct-{{ section.id }} .pdp__tabs::-webkit-scrollbar {
+    display: none;
   }
 
   #MainProduct-{{ section.id }} .pdp__tab {
     position: relative;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    white-space: nowrap;
     min-height: var(--touch-target);
     padding: 1rem 1.5rem;
     border-radius: 0.5rem;
     font-family: var(--font-accent);
     font-weight: 700;
-    font-size: 1.8rem;
+    font-size: 1.62rem;
     line-height: 1.3;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -347,6 +356,7 @@
     display: flex;
     align-items: baseline;
     gap: 1.2rem;
+    margin-top: 2.4rem;
     font-family: var(--font-accent);
     font-weight: 700;
     font-size: 2.4rem;
@@ -762,16 +772,6 @@
       font-size: 3.2rem;
     }
 
-    /* Title order swap: mobile node in, desktop node out. */
-    #MainProduct-{{ section.id }} .pdp__title--mob {
-      display: block;
-      margin: 0 0 0.5rem;
-    }
-
-    #MainProduct-{{ section.id }} .pdp__info > .pdp__title {
-      display: none;
-    }
-
     /* Gallery becomes a scroll-snap carousel, one image per swipe. */
     #MainProduct-{{ section.id }} .pdp__gallery {
       display: flex;
@@ -933,12 +933,6 @@
 
 <section id="MainProduct-{{ section.id }}">
   <div class="page-width pdp__grid">
-    {%- comment -%}
-      Reference mobile order is title, then carousel. Two h1 nodes exist but a
-      breakpoint always display:nones one of them, so assistive tech only ever
-      sees a single h1.
-    {%- endcomment -%}
-    <h1 class="pdp__title pdp__title--mob">{{ product.title | default: section.settings.fallback_title }}</h1>
 
     {%- comment -%} ---- Media ---- {%- endcomment -%}
     <div class="pdp__media scroll-trigger animate--fade-in">
@@ -1322,15 +1316,6 @@
 
       {%- comment -%} ---- Purchase ---- {%- endcomment -%}
       <div class="pdp__buy">
-        <div class="pdp__price">
-          <span data-pdp-price>{{ current_variant.price | default: product.price | money }}</span>
-          <s class="pdp__compare" data-pdp-compare>
-            {%- if current_variant.compare_at_price > current_variant.price -%}
-              {{- current_variant.compare_at_price | money -}}
-            {%- endif -%}
-          </s>
-        </div>
-
         {%- if product.variants.size > 0 -%}
           <script type="application/json" data-pdp-variants>
             [
@@ -1352,6 +1337,12 @@
           {%- endcomment -%}
           <div data-pdp-picker>
             {%- unless product.has_only_default_variant -%}
+            {%- comment -%}
+              Colour first, then everything else (size): two passes over the
+              options. data-option-index stays the option's own position, which
+              is what variant.options is ordered by.
+            {%- endcomment -%}
+            {%- for pass in (1..2) -%}
             {%- for option in product.options_with_values -%}
               {%- assign option_name = option.name | downcase -%}
               {%- if option_name == 'color' or option_name == 'colour' -%}
@@ -1359,11 +1350,14 @@
               {%- else -%}
                 {%- assign is_colour = false -%}
               {%- endif -%}
+              {%- if pass == 1 and is_colour == false -%}{%- continue -%}{%- endif -%}
+              {%- if pass == 2 and is_colour -%}{%- continue -%}{%- endif -%}
+              {%- assign option_index = option.position | minus: 1 -%}
 
-              <fieldset class="pdp__group" data-option-index="{{ forloop.index0 }}">
+              <fieldset class="pdp__group" data-option-index="{{ option_index }}">
                 <legend class="visually-hidden">{{ option.name | escape }}</legend>
                 <span class="pdp__group-name accent-caps" aria-hidden="true">
-                  {{- option.name | escape }} <b data-selected-for="{{ forloop.index0 }}">{{ option.selected_value | escape }}</b>
+                  {{- option.name | escape }} <b data-selected-for="{{ option_index }}">{{ option.selected_value | escape }}</b>
                 </span>
                 <div class="pdp__values">
                   {%- for value in option.values -%}
@@ -1409,9 +1403,20 @@
                 {%- endunless -%}
               </fieldset>
             {%- endfor -%}
+            {%- endfor -%}
             {%- endunless -%}
           </div>
         {%- endif -%}
+
+        {%- comment -%} Price sits last, right above Add to Cart. {%- endcomment -%}
+        <div class="pdp__price">
+          <span data-pdp-price>{{ current_variant.price | default: product.price | money }}</span>
+          <s class="pdp__compare" data-pdp-compare>
+            {%- if current_variant.compare_at_price > current_variant.price -%}
+              {{- current_variant.compare_at_price | money -}}
+            {%- endif -%}
+          </s>
+        </div>
 
         <form
           id="{{ atc_form_id }}"
@@ -1609,8 +1614,72 @@
       root.querySelectorAll('[data-pdp-panel]').forEach(function (p) {
         p.hidden = p.dataset.pdpPanel !== tab.dataset.pdpTab;
       });
+      revealTab(tab);
     }
+    // The row scrolls sideways; keep the active tab in view without scrolling
+    // the page (scrollIntoView would). No `behavior` option, so reduced motion holds.
+    function revealTab(tab) {
+      var row = tab.parentElement;
+      if (!row || row.scrollWidth <= row.clientWidth) return;
+      var left = tab.offsetLeft - row.offsetLeft;
+      if (left < row.scrollLeft) row.scrollLeft = left;
+      else if (left + tab.offsetWidth > row.scrollLeft + row.clientWidth) row.scrollLeft = left + tab.offsetWidth - row.clientWidth + 4;
+    }
+    // Auto-scroll the tab row one tab per second where it overflows (phones),
+    // wrapping to the start. Only the row slides; the selected tab is the
+    // shopper's choice and never changes on its own. Holds while hovered,
+    // focused, just touched or off screen; off entirely for reduced motion.
+    (function () {
+      var row = tabs.length ? tabs[0].parentElement : null;
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!row || reduced) return;
+      var hovering = false;
+      var focused = false;
+      var visible = !('IntersectionObserver' in window);
+      var heldUntil = 0;
+      function hold() {
+        heldUntil = Date.now() + 5000;
+      }
+      row.addEventListener('pointerenter', function (event) {
+        if (event.pointerType === 'mouse') hovering = true;
+      });
+      row.addEventListener('pointerleave', function () {
+        hovering = false;
+      });
+      row.addEventListener('focusin', function () {
+        focused = true;
+      });
+      row.addEventListener('focusout', function () {
+        focused = false;
+      });
+      row.addEventListener('touchstart', hold, { passive: true });
+      row.addEventListener('click', hold);
+      if (!visible) {
+        new IntersectionObserver(function (entries) {
+          visible = entries[0].isIntersecting;
+        }).observe(row);
+      }
+      setInterval(function () {
+        var max = row.scrollWidth - row.clientWidth;
+        if (max <= 1 || hovering || focused || !visible || document.hidden || Date.now() < heldUntil) return;
+        if (row.scrollLeft >= max - 1) {
+          row.scrollLeft = 0;
+          return;
+        }
+        // Next tab whose left edge is past the current scroll position.
+        for (var i = 0; i < tabs.length; i++) {
+          var left = tabs[i].offsetLeft - row.offsetLeft;
+          if (left > row.scrollLeft + 1) {
+            row.scrollLeft = Math.min(left, max);
+            return;
+          }
+        }
+        row.scrollLeft = 0;
+      }, 1000);
+    })();
+
     tabs.forEach(function (tab) {
+      if (tab.getAttribute('aria-selected') === 'true') revealTab(tab);
       tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
       tab.addEventListener('click', function () {
         selectTab(tab);
@@ -1706,11 +1775,15 @@
       unavailable: {{ section.settings.unavailable_label | default: 'Unavailable' | json }}
     };
 
+    // Indexed by each group's option position, not page order: colour is drawn
+    // before size, while variant.options keeps Shopify's order.
     function selection() {
-      return Array.prototype.map.call(picker.querySelectorAll('[data-option-index]'), function (group) {
+      var chosen = [];
+      picker.querySelectorAll('[data-option-index]').forEach(function (group) {
         var checked = group.querySelector('input:checked');
-        return checked ? checked.value : null;
+        chosen[parseInt(group.dataset.optionIndex, 10)] = checked ? checked.value : null;
       });
+      return chosen;
     }
 
     function matches(chosen) {

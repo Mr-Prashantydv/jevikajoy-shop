@@ -308,6 +308,12 @@
     #FabricStory-{{ section.id }} .fs__spec:nth-child(n + 3) {
       border-block-start: 2px solid var(--sky);
     }
+
+    /* An odd count leaves the last spec alone on its row with a blank, unruled
+       cell beside it. Let it take the full row instead. */
+    #FabricStory-{{ section.id }} .fs__spec:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
   }
 
   @media screen and (max-width: 749px) {
