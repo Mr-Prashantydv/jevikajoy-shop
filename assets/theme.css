@@ -24,20 +24,20 @@
 :root {
   /* Values come from the JJW brand sheet (WhatsApp, 30 Jul 2026) — the only
      colour authority. Reference sites contribute layout and structure, never
-     colour. The *-bg pastels are our tints of the brand anchors; the sheet
-     defines no tint ramp. */
+     colour. Character fills use the named sheet colours, without invented tints. */
 
   /* Canvas + ink */
   --cream: #fff7e8; /* Indoor background */
   --white: #ffffff; /* Pure White — cards on the cream canvas */
   --warm-white: #f8f8f6; /* Warm White */
   --ink: #1a2f5e; /* Navy Blue */
+  --body-ink: #333333; /* Charcoal — ordinary copy on light surfaces */
   --heading: #0f7daf; /* Adventure Blue — big headings on cream; 4.31:1, large text only */
   --ink-soft: rgba(26, 47, 94, 0.75);
   --ink-deep: #10244a; /* Night navy — shadow layer under every button */
 
   /* Accents */
-  --pink: #ff4f8b; /* Heart Pink — emphasis, buttons */
+  --pink: #ff4f8b; /* Heart Pink — character accents and emphasis */
   --pink-deep: #10244a; /* sheet has no pink shadow; reference shadows all buttons navy */
   --blue: #0f7daf; /* Adventure Blue */
   --sky: #59c8f6; /* Sky Blue */
@@ -74,7 +74,7 @@
        lead  intro paragraphs, pull quotes, contact details
        xl    the larger editorial statement (20–24px) */
   --text-sm: 1.5rem;
-  --text-base: 1.4rem;
+  --text-base: 1.6rem;
   --text-lead: clamp(1.8rem, 1.5vw, 2rem);
   --text-xl: clamp(2rem, 1.8vw, 2.4rem);
 
@@ -142,7 +142,7 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: 1.5;
-  color: var(--ink-soft);
+  color: var(--body-ink);
   background: var(--cream);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -297,11 +297,9 @@ a {
   line-height: 1.2;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: var(--btn-bg, var(--pink));
-  /* Night navy, not cream: pink+cream is 2.92:1 and the clamp floor (16px bold)
-     is below the 18.66px large-text cutoff, so this needs 4.5:1. Night navy on
-     Heart Pink is 4.91:1 — passes at every step of the clamp. Any override that
-     swaps --btn-bg for a dark fill must swap --btn-fg back to cream. */
+  background: var(--btn-bg, var(--gold));
+  /* Navy text keeps the gold action readable at ordinary button sizes.
+     A dark button fill must also switch --btn-fg to cream. */
   color: var(--btn-fg, var(--ink-deep));
   clip-path: url(#jjw-blob);
   -webkit-clip-path: url(#jjw-blob);
@@ -313,7 +311,7 @@ a {
 }
 
 .btn--primary {
-  --btn-bg: var(--pink);
+  --btn-bg: var(--gold);
   --btn-fg: var(--ink-deep);
 }
 

@@ -1,7 +1,7 @@
 {%- comment -%}
   Featured collection — converted from the React FeaturedCollection component
   (src/components/site/featured-collection.tsx). Horizontal snap carousel of
-  product cards, each on its own colour pair, with a page counter and arrows.
+  white product cards with character-colour edges, a page counter and arrows.
 
   Colours use the shared character mapping. A valid custom.card_color
   metafield remains a merchant override, never a random loop-index colour.
@@ -46,15 +46,20 @@
   endif
 
   assign palette = 'pink,blue,gold,green,purple' | split: ','
+  assign passes = 1
+  if section.settings.photographed_first
+    assign passes = 2
+  endif
+  assign rendered_count = 0
 -%}
 
 {%- style -%}
   #FeaturedCollection-{{ section.id }} {
-    background: var(--cream);
+    background: var(--warm-white);
   }
 
   #FeaturedCollection-{{ section.id }} .fc__inner {
-    padding-block: 2.86rem 5.5rem;
+    padding-block: 4rem 5.5rem;
   }
 
   #FeaturedCollection-{{ section.id }} .fc__heading {
@@ -74,7 +79,8 @@
     padding: 1.6rem var(--page-gutter) 1rem;
     list-style: none;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
     scroll-padding-inline: var(--page-gutter);
     -webkit-overflow-scrolling: touch;
   }
@@ -85,40 +91,33 @@
     scroll-snap-align: start;
   }
 
+  #FeaturedCollection-{{ section.id }} .fc__item:last-child {
+    scroll-snap-align: end;
+  }
+
   #FeaturedCollection-{{ section.id }} .fc__card {
     display: flex;
     flex-direction: column;
     height: 100%;
     container-type: inline-size;
-    /* The colour field wraps the whole card, image and text, as in the reference.
-       The media only rounds its top corners so the two read as one surface. */
-    background: var(--card-bg, var(--pink-bg));
+    /* White keeps the garment in focus; the top edge identifies its character. */
+    background: var(--white);
+    border: 1px solid rgba(26, 47, 94, 0.12);
+    border-top: 0.6rem solid var(--card-bg, var(--blue-bg));
     border-radius: var(--card-radius);
     overflow: hidden;
   }
 
   {%- comment -%}
-    Square box, and the artwork inset 2.6rem inside it on all four sides.
-
-    It used to be 7/6 with no inset. The packshots are square, so contain
-    fitted them by height: the artwork sat flush against the top and bottom
-    while the sides picked up 26px of incidental letterboxing. That gap was an
-    accident of the ratio mismatch, not a frame — which is why only two sides
-    had it.
-
-    The inset lives on .fc__img, not as padding here. Padding would do nothing:
-    an absolutely positioned child resolves inset against its containing
-    block's *padding box*, which already includes the padding, so the image
-    would still have reached the card's edges. Squaring the box and insetting
-    the image is what makes all four gaps equal for a square shot.
+    A square frame with an equal inset. Padding belongs on .fc__img itself:
+    absolutely positioned images ignore padding on their containing block.
   {%- endcomment -%}
   #FeaturedCollection-{{ section.id }} .fc__media {
-    --media-inset: 2.6rem;
+    --media-inset: 1.2rem;
     position: relative;
     overflow: hidden;
-    border-radius: 2rem 2rem 0 0;
     aspect-ratio: 1 / 1;
-    background: var(--card-bg, var(--pink-bg));
+    background: var(--white);
   }
 
   {%- comment -%}
@@ -154,10 +153,8 @@
     }
 
     #FeaturedCollection-{{ section.id }} .fc__card:hover {
-      transform: translateY(-8px) rotate(3deg);
-      /* Night navy, as every other offset shadow in the theme. The card's own
-         solid used to read against a pale tint; against the saturated fill it
-         is nearly the same hue and the lift disappeared. */
+      transform: translateY(-4px);
+      /* Shared Night Navy shadow, independent of the character accent. */
       box-shadow: 6px 6px 0 var(--ink-deep);
     }
   }
@@ -171,57 +168,47 @@
   }
 
   {%- comment -%}
-    Reserve two title lines plus price and padding, so adjacent cards align
-    without the old 219px label slab. Scale the reserve with the card title.
+    Keep names and prices separate. Phones reserve two title lines below so
+    neighbouring prices align even when a name wraps.
   {%- endcomment -%}
   #FeaturedCollection-{{ section.id }} .fc__label {
     display: grid;
-    place-items: center;
-    min-height: calc(var(--card-title-size) * 2.3 + 6rem);
-    padding: 1.6rem 1.6rem 2rem;
+    align-content: start;
+    gap: 0.7rem;
+    padding: 1.2rem 2rem 2rem;
   }
 
-  /* Matches .jjw-card__title in theme.css - see the note there. This was the
-     outlier: the display face at a flat 4rem, against condensed on every other
-     card in the theme. */
+  /* Product names use the body face; condensed type is reserved for controls. */
   #FeaturedCollection-{{ section.id }} .fc__title {
-    font-family: var(--font-accent);
-    font-weight: 900;
-    font-size: var(--card-title-size);
-    line-height: 1.15;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 6cqi, 2.2rem);
+    line-height: 1.3;
     letter-spacing: 0;
-    text-align: center;
-    text-wrap: balance;
-    {%- comment -%}
-      Navy, not the card's own solid. The card fills are brand-sheet colours
-      now rather than pale tints, so Heart Pink type on a Candy Pink card
-      measured about 1:1 — the title vanished. Same rule the collection grid
-      already follows: the colour coding lives in the fill, the type stays
-      readable. --card-fg still drives the hover shadow, where contrast is
-      not a concern.
-    {%- endcomment -%}
+    text-align: left;
     color: var(--ink);
+  }
+
+  #FeaturedCollection-{{ section.id }} .fc__price {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--body-ink);
   }
 
   #FeaturedCollection-{{ section.id }} [data-pair='pink'] {
     --card-bg: var(--pink-bg);
-    --card-fg: var(--pink);
   }
   #FeaturedCollection-{{ section.id }} [data-pair='blue'] {
     --card-bg: var(--blue-bg);
-    --card-fg: var(--blue);
   }
   #FeaturedCollection-{{ section.id }} [data-pair='gold'] {
     --card-bg: var(--gold-bg);
-    --card-fg: var(--gold);
   }
   #FeaturedCollection-{{ section.id }} [data-pair='green'] {
     --card-bg: var(--green-bg);
-    --card-fg: var(--green);
   }
   #FeaturedCollection-{{ section.id }} [data-pair='purple'] {
     --card-bg: var(--purple-bg);
-    --card-fg: var(--purple);
   }
 
   #FeaturedCollection-{{ section.id }} .fc__controls {
@@ -296,16 +283,26 @@
 
     /* Tighter image and text padding on half-width phone cards. */
     #FeaturedCollection-{{ section.id }} .fc__media {
-      --media-inset: 1.6rem;
+      --media-inset: 0.8rem;
     }
 
     #FeaturedCollection-{{ section.id }} .fc__label {
       padding: 1.2rem 1rem 1.6rem;
     }
 
+    #FeaturedCollection-{{ section.id }} .fc__title {
+      min-height: 2.6em;
+    }
+
     #FeaturedCollection-{{ section.id }} .fc__arrow {
       width: var(--touch-target);
       height: var(--touch-target);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #FeaturedCollection-{{ section.id }} .fc__track {
+      scroll-behavior: auto;
     }
   }
 {%- endstyle -%}
@@ -321,9 +318,17 @@
     {%- if collection != blank and collection.products.size > 0 -%}
       <div class="fc__viewport scroll-trigger animate--slide-in">
         <ul class="fc__track no-scrollbar" data-fc-track>
-          {%- for product in collection.products limit: section.settings.products_to_show -%}
+          {%- for pass in (1..passes) -%}
+          {%- for product in collection.products -%}
+            {%- if rendered_count >= section.settings.products_to_show -%}
+              {%- break -%}
+            {%- endif -%}
             {%- if product.id == exclude_id -%}
               {%- continue -%}
+            {%- endif -%}
+            {%- if section.settings.photographed_first -%}
+              {%- if pass == 1 and product.featured_image == blank -%}{%- continue -%}{%- endif -%}
+              {%- if pass == 2 and product.featured_image != blank -%}{%- continue -%}{%- endif -%}
             {%- endif -%}
             {%- capture pair -%}{%- render 'character-pair', product: product, prefer: collection.handle -%}{%- endcapture -%}
             {%- assign pair = pair | strip -%}
@@ -335,7 +340,7 @@
             <li
               class="fc__item scroll-trigger animate--slide-in"
               data-pair="{{ pair | escape }}"
-              style="--animation-order: {{ forloop.index0 }};"
+              style="--animation-order: {{ rendered_count }};"
             >
               <a class="fc__card" href="{{ product.url }}">
                 <div class="fc__media">
@@ -367,14 +372,15 @@
                   {%- endif -%}
                 </div>
                 <div class="fc__label">
-                  <h3 class="fc__title">{{ product.title | escape }}
-                    {%- if section.settings.show_price -%}
-                      <span class="jjw-card__price">{{ product.price | money }}</span>
-                    {%- endif -%}
-                  </h3>
+                  <h3 class="fc__title">{{ product.title | escape }}</h3>
+                  {%- if section.settings.show_price -%}
+                    <span class="fc__price">{{ product.price | money }}</span>
+                  {%- endif -%}
                 </div>
               </a>
             </li>
+            {%- assign rendered_count = rendered_count | plus: 1 -%}
+          {%- endfor -%}
           {%- endfor -%}
         </ul>
 
@@ -410,7 +416,7 @@
       <div class="page-width fc__cta scroll-trigger animate--slide-in">
         <span class="btn-wrap">
           <span class="btn-shadow" aria-hidden="true"></span>
-          <a class="btn btn--secondary" href="{{ section.settings.button_link | default: collection.url }}">
+          <a class="btn btn--primary" href="{{ section.settings.button_link | default: collection.url }}">
             {{- section.settings.button_label | escape -}}
           </a>
         </span>
@@ -429,7 +435,6 @@
     if (!track) return;
     var count = root.querySelector('[data-fc-count]');
     var sep = {{ section.settings.count_separator | default: 'of' | json }};
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Card width + the real gap, so the mobile 12px gap steps correctly too.
     function step() {
@@ -448,7 +453,7 @@
     }
 
     function scrollByPage(dir) {
-      track.scrollBy({ left: dir * (step() || track.clientWidth), behavior: reduced ? 'auto' : 'smooth' });
+      track.scrollBy({ left: dir * (step() || track.clientWidth) });
     }
 
     track.addEventListener('scroll', update, { passive: true });
@@ -484,6 +489,13 @@
       "max": 24,
       "step": 1,
       "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "photographed_first",
+      "label": "Show photographed products first",
+      "info": "Keeps collection order within each group. Products without photos remain available afterwards.",
+      "default": false
     },
     {
       "type": "text",

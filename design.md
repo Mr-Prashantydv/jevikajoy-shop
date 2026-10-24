@@ -2,9 +2,21 @@
 
 Updated: 24 October 2026. Working project: `D:/projects/JEVIKAJOY.SHOP`.
 
+## 24 October: local brand colour and copy trial
+
+The owner supplied `JJW_Brand_Reference(1).pdf` and asked to try the proposed colour/copy direction. Shopping actions now use Sunshine Gold with Night Navy text; Adventure Blue remains the heading colour on light surfaces, and the mint fabric panel's heading is Navy for contrast. The featured-product band uses Warm White, white cards, and a 6px character-colour top edge. Character-fill tokens remain unchanged. Charcoal body copy and Sunshine Gold action settings are synchronised across CSS, schema, saved settings and runtime overrides; ordinary body copy is 16px. Quicksand, Baloo 2 and Barlow remain the existing fonts.
+
+Hero artwork, framing and the requested absence of overlay gradients are preserved. Its description now reads “Original character tees in soft organic cotton, made for everyday adventures.” The fabric section has shorter copy and a Navy-on-Mint heading (7.34:1, previously 2.59:1 in blue). The founder section's “Our Story” expands editable text about the animation studio and original characters; it can still link to a merchant-selected story page. There is currently no published About page in the store's page sitemap, so it no longer sends a story click to the catalogue.
+
+Featured cards use larger photos (12px inset, 8px on phones), left-aligned Quicksand names and separate 16px prices. The homepage enables a new photographed-first setting: the five photographed tees precede the five honest placeholders, with all ten products retained and no duplicates. Other section instances preserve collection order by default. Carousel snapping uses proximity and an end snap on the last card; motion follows CSS and reduced-motion preferences.
+
+Verified on the local development server at 1440×900 and 390×844, with additional geometry checks at 320, 360, 768, 1024 and 1920px: no horizontal overflow, clipped card labels or escaped hero CTA. Desktop carousel arrows move by one card and the last card reaches the track's end. Story opening and keyboard closing work, and the mobile menu retains aligned character cards. Adventure Tee's desktop/mobile controls also fit after the shared typography/button changes. Theme Check in the isolated active-theme copy: zero errors, five existing warnings (the changed layout has only its two pre-existing external-font warnings). No live push made.
+
+Screenshots and responsive measurements: `C:/Users/krish/.codex/visualizations/2026/10/24/01a16ce0-396f-7010-ad67-f9e94e181d2b/brand-trial-*`. This is a reviewable local trial; collection-page changes are being handled in the separate chat requested by the owner.
+
 ## 24 October: local Paper Boat hero
 
-The owner rejected displayed products in the new hero and gave creative freedom to generate a new direction. The local homepage now uses the five canonical friends sailing a yellow paper boat through sunlit clouds, with a separate portrait composition. Editable copy says “Character tees for ages 4–12”, “Wear a little wonder.” and “Shop character tees”. This iteration supersedes the earlier product-display direction locally; the exact new artwork has not yet been separately approved or published live.
+The owner rejected displayed products in the new hero and gave creative freedom to generate a new direction. The local homepage now uses the five canonical friends sailing a yellow paper boat through sunlit clouds, with a separate portrait composition. Editable copy says “Character tees for ages 4–12”, “Wear a little wonder.” and “Shop character tees”. The owner liked this artwork and requested removal of its CSS overlay gradients, which is complete. This iteration supersedes the earlier product-display direction locally and has not been published live.
 
 Desktop copy uses a 34% column with a 24–80px left gutter; tablet art has 90px header clearance. Phone copy overlays the lower clouds, with 24px side gutters and 32px bottom padding; the section expands if the copy needs more room. Native image framing preserves all five friends. Eleven viewport widths from 320 to 1920px passed overflow, content containment and header-clearance checks; mobile menu and CTA navigation were verified. Theme Check reports zero errors and no hero offenses. [Assets, prompts and validation](docs/hero-paper-boat-20261024.md).
 

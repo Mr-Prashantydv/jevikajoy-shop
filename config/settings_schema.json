@@ -47,7 +47,21 @@
         "id": "color_ink",
         "label": "Ink",
         "default": "#1A2F5E",
-        "info": "Body text, and text on the coloured character cards."
+        "info": "Navigation, labels and text on coloured surfaces."
+      },
+      {
+        "type": "color",
+        "id": "color_body",
+        "label": "Body text",
+        "default": "#333333",
+        "info": "Ordinary copy on light backgrounds."
+      },
+      {
+        "type": "color",
+        "id": "color_action",
+        "label": "Shopping buttons",
+        "default": "#F6A313",
+        "info": "Sunshine Gold, with navy text."
       },
       {
         "type": "color",
@@ -61,7 +75,7 @@
         "id": "color_accent",
         "label": "Accent",
         "default": "#FF4F8B",
-        "info": "Primary buttons and emphasis."
+        "info": "Heart Pink accents and emphasis."
       },
       {
         "type": "color",

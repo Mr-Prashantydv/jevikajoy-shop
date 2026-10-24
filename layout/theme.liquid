@@ -47,6 +47,8 @@
       :root {
         --cream: {{ settings.color_canvas }};
         --ink: {{ settings.color_ink }};
+        --body-ink: {{ settings.color_body | default: '#333333' }};
+        --gold: {{ settings.color_action | default: '#F6A313' }};
         --heading: {{ settings.color_heading }};
         --ink-soft: {{ settings.color_ink | color_modify: 'alpha', 0.75 }};
         --pink: {{ settings.color_accent }};

@@ -62,8 +62,8 @@
   #Hero-{{ section.id }} .hero__description {
     max-width: 30ch;
     margin: 2rem 0 0;
-    font-size: clamp(1.4rem, 1.25vw, 1.9rem);
-    font-weight: 600;
+    font-size: clamp(1.6rem, 1.25vw, 1.9rem);
+    font-weight: 500;
     line-height: 1.6;
     text-wrap: pretty;
   }
@@ -77,7 +77,7 @@
     #Hero-{{ section.id }} .hero__art picture { position: relative; padding-top: 9rem; }
     #Hero-{{ section.id }} .hero__content { width: 35%; padding-top: 11rem; padding-bottom: 4rem; }
     #Hero-{{ section.id }} .hero__heading { font-size: clamp(3.6rem, 4.8vw, 5.2rem); }
-    #Hero-{{ section.id }} .hero__description { font-size: 1.4rem; line-height: 1.5; }
+    #Hero-{{ section.id }} .hero__description { font-size: var(--text-base); line-height: 1.5; }
     #Hero-{{ section.id }} .hero__eyebrow { margin-bottom: 1.4rem; font-size: 1.1rem; }
     #Hero-{{ section.id }} .hero__cta { margin-top: 2rem; }
     #Hero-{{ section.id }} .hero__cta .btn { gap: 0.8rem; padding-inline: 1.8rem; font-size: 1.5rem; }
@@ -95,7 +95,7 @@
     }
     #Hero-{{ section.id }} .hero__eyebrow { margin-bottom: 1rem; font-size: 1.1rem; letter-spacing: 0.1em; }
     #Hero-{{ section.id }} .hero__heading { font-size: clamp(3.6rem, 10.3vw, 5.8rem); line-height: 1.02; }
-    #Hero-{{ section.id }} .hero__description { margin: 1.2rem auto 0; max-width: 34ch; font-size: 1.4rem; line-height: 1.5; }
+    #Hero-{{ section.id }} .hero__description { margin: 1.2rem auto 0; max-width: 34ch; font-size: var(--text-base); line-height: 1.5; }
     #Hero-{{ section.id }} .hero__cta { margin-top: 1.8rem; }
     #Hero-{{ section.id }} .hero__cta .btn { min-height: 5.2rem; padding-inline: 2.6rem; font-size: 1.6rem; }
   }
@@ -150,7 +150,7 @@
     { "type": "header", "content": "Shopping message" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Character tees for ages 4–12" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Wear a little wonder." },
-    { "type": "textarea", "id": "description", "label": "Description", "default": "Their favourite characters. Soft organic cotton. A little imagination for every day." },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Original character tees in soft organic cotton, made for everyday adventures." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop character tees" },
     { "type": "url", "id": "button_link", "label": "Button link" }
   ],

@@ -245,9 +245,41 @@
 
   #SplitContent-{{ section.id }} .sc__btn {
     margin-top: 4rem;
-    --btn-bg: var(--yellow);
-    --btn-fg: var(--ink-deep);
-    --btn-shadow-color: var(--gold);
+  }
+
+  #SplitContent-{{ section.id }} .sc__story summary {
+    width: fit-content;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  #SplitContent-{{ section.id }} .sc__story summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #SplitContent-{{ section.id }} .sc__story summary:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 8px;
+  }
+
+  #SplitContent-{{ section.id }} .sc__story-icon {
+    margin-left: 1.2rem;
+    transition: transform 0.2s var(--ease);
+  }
+
+  #SplitContent-{{ section.id }} .sc__story[open] .sc__story-icon {
+    transform: rotate(180deg);
+  }
+
+  #SplitContent-{{ section.id }} .sc__story-body {
+    margin-top: 2.4rem;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  #SplitContent-{{ section.id }} .sc__story-body p + p {
+    margin-top: 1.2rem;
   }
 
   @media screen and (max-width: 749px) {
@@ -293,7 +325,7 @@
 
     #SplitContent-{{ section.id }} .sc__text {
       margin-top: 1.4rem;
-      font-size: 1.3rem;
+      font-size: var(--text-base);
     }
 
     #SplitContent-{{ section.id }} .sc__btn {
@@ -394,13 +426,25 @@
           {%- endif -%}
 
           {%- if section.settings.button_label != blank -%}
-            <div class="sc__btn btn-wrap">
-              <span class="btn-shadow" aria-hidden="true"></span>
-              {%- comment -%} Never '#': an unset link used to leave a button that went nowhere. {%- endcomment -%}
-              <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="btn">
-                {{- section.settings.button_label | escape -}}
-              </a>
-            </div>
+            {%- if section.settings.button_link != blank -%}
+              <div class="sc__btn btn-wrap">
+                <span class="btn-shadow" aria-hidden="true"></span>
+                <a href="{{ section.settings.button_link }}" class="btn btn--secondary">
+                  {{- section.settings.button_label | escape -}}
+                </a>
+              </div>
+            {%- elsif section.settings.story_body != blank -%}
+              <details class="sc__story">
+                <summary class="sc__btn btn-wrap">
+                  <span class="btn-shadow" aria-hidden="true"></span>
+                  <span class="btn btn--secondary">
+                    {{- section.settings.button_label | escape -}}
+                    <svg class="sc__story-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="m4 6 5 5 5-5" stroke="currentColor" stroke-width="2"/></svg>
+                  </span>
+                </summary>
+                <div class="sc__story-body">{{ section.settings.story_body }}</div>
+              </details>
+            {%- endif -%}
           {%- endif -%}
         </div>
       </div>
@@ -461,19 +505,26 @@
       "type": "richtext",
       "id": "body",
       "label": "Body",
-      "default": "<p>We couldn't find premium tees that gave kids their own original heroes instead of borrowed ones, so we made them. Five friends, five values, and no compromise on safety, craft or story.</p>"
+      "default": "<p>We make original characters for kids to grow up with—and soft cotton tees to take them along.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "story_body",
+      "label": "Expanded story",
+      "info": "Shown below the button when no separate story page is linked.",
+      "default": "<p>Our characters begin in our animation studio. Their stories carry on in everyday play, on tees children can make their own.</p><p>Jevika, Joy, Brutus, Minku and Pinki each bring a different personality to the squad. There's room for curious thinkers, bold explorers and every kind of kid.</p>"
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Button label",
-      "default": "Learn More"
+      "default": "Our Story"
     },
     {
       "type": "url",
       "id": "button_link",
       "label": "Button link",
-      "info": "Left empty, the button goes to the full catalogue."
+      "info": "Link to a story page, or leave empty to open the expanded story here."
     }
   ],
   "presets": [
