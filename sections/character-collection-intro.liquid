@@ -1,8 +1,14 @@
+{%- comment -%}
+  Alternate collection preview. The twelve-column composition and scoped
+  shopping styles belong to this template only; shared theme files stay owned
+  by the concurrent design pass. Original character poses remain unmodified.
+{%- endcomment -%}
 {%- liquid
   assign character = nil
   for block in section.blocks
     if block.settings.handle == collection.handle
       assign character = block
+      assign character_number = forloop.index
       break
     endif
   endfor
@@ -10,109 +16,161 @@
 -%}
 {%- if character != nil -%}
 {%- style -%}
-  #CharacterIntro-{{ section.id }} { background: var(--cream); padding: 2.4rem 0 0; color: var(--ink); }
-  #CharacterIntro-{{ section.id }} .ci__scene { display:grid; grid-template-columns: 1.2fr 1fr; align-items:center; max-width:120rem; margin:auto; min-height:32rem; gap:4rem; position:relative; }
-  #CharacterIntro-{{ section.id }} .ci__copy { padding:2.4rem 0 3.2rem; position:relative; z-index:1; }
-  #CharacterIntro-{{ section.id }} .ci__eyebrow { display:flex; align-items:center; gap:1rem; font-size:1.3rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 1.2rem; }
-  #CharacterIntro-{{ section.id }} .ci__eyebrow::before { content:''; width:3.2rem; height:0.4rem; background:var(--gold); border-radius:1rem; }
-  #CharacterIntro-{{ section.id }} h1 { font-family:var(--font-heading); font-weight:800; color:var(--blue); font-size:clamp(4rem,4vw,5.6rem); line-height:1; letter-spacing:-0.02em; margin:0; max-width:16ch; }
-  #CharacterIntro-{{ section.id }} .ci__description { font-size:1.7rem; line-height:1.6; max-width:52ch; margin:1.6rem 0; }
-  #CharacterIntro-{{ section.id }} .ci__description p { margin:0; }
-  #CharacterIntro-{{ section.id }} .ci__shop { display:inline-flex; align-items:center; justify-content:space-between; gap:3.2rem; min-height:4.8rem; padding:1rem 2rem; background:var(--gold); color:var(--ink); border:1px solid var(--ink); border-radius:1rem; box-shadow:3px 3px 0 var(--ink); font-weight:700; font-size:1.5rem; }
-  #CharacterIntro-{{ section.id }} .ci__shop:focus-visible { outline:3px solid var(--blue); outline-offset:5px; }
-  #CharacterIntro-{{ section.id }} .ci__art { height:32rem; position:relative; display:grid; place-items:center; align-self:end; isolation:isolate; }
-  #CharacterIntro-{{ section.id }} .ci__art::before { content:''; position:absolute; width:29rem; height:26rem; bottom:0; background:var(--blue); border-radius:14rem 14rem 2rem 2rem; z-index:-2; }
-  #CharacterIntro-{{ section.id }} .ci__art::after { content:''; position:absolute; width:27rem; height:25rem; bottom:1rem; border:2px dashed var(--gold); border-radius:14rem 14rem 2rem 2rem; z-index:-1; }
-  #CharacterIntro-{{ section.id }} .ci__portrait { width:100%; height:32rem; min-height:0; object-fit:contain; position:absolute; inset:0; z-index:1; }
-  #CharacterIntro-{{ section.id }} .ci__stamp { position:absolute; bottom:3rem; right:0; z-index:2; max-width:15rem; padding:1rem 1.4rem; background:var(--white); color:var(--ink); border:2px solid var(--ink); box-shadow:4px 4px 0 var(--gold); border-radius:0.8rem; transform:rotate(6deg); font-family:var(--font-accent); font-weight:700; font-size:1.9rem; line-height:1.15; }
-  #CharacterIntro-{{ section.id }} .ci__motif { position:absolute; top:2rem; left:2rem; width:7rem; height:7rem; color:var(--gold); transform:rotate(-12deg); z-index:2; }
-  #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__art { grid-column:1; grid-row:1; }
-  #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__copy { grid-column:2; }
-  #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__scene { grid-template-columns:0.8fr 1.2fr; }
-  #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__art::before { border-radius:2rem; transform:skew(-8deg); }
-  #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__art::after { border-radius:2rem; transform:skew(-8deg); }
-  #CharacterIntro-{{ section.id }}[data-character='brutus'] .ci__art::before { background:var(--gold); border-radius:50% 50% 3rem 3rem; }
-  #CharacterIntro-{{ section.id }}[data-character='brutus'] .ci__art::after { border-color:var(--blue); }
-  #CharacterIntro-{{ section.id }}[data-character='brutus'] .ci__portrait { padding:1rem 0; }
-  #CharacterIntro-{{ section.id }}[data-character='minku'] .ci__art::before { border-radius:4rem 12rem 4rem 12rem; transform:rotate(-6deg); }
-  #CharacterIntro-{{ section.id }}[data-character='minku'] .ci__art::after { border-radius:4rem 12rem 4rem 12rem; transform:rotate(7deg); }
-  #CharacterIntro-{{ section.id }}[data-character='minku'] .ci__stamp { transform:rotate(-6deg); right:1rem; }
-  #CharacterIntro-{{ section.id }}[data-character='pinki'] .ci__art::before { border-radius:50%; width:28rem; height:28rem; }
-  #CharacterIntro-{{ section.id }}[data-character='pinki'] .ci__art::after { border-radius:50%; width:30rem; height:30rem; bottom:-1rem; }
-  /* Only the collection section in this alternate template is affected. */
-  #MainCollection-{{ main_id }} .mc__intro { display:none; }
-  #MainCollection-{{ main_id }} { scroll-margin-top:2rem; }
+  #CharacterIntro-{{ section.id }},
+  #MainCollection-{{ main_id }}[id] {
+    --collection-font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: var(--collection-font);
+    color: var(--ink);
+    background: var(--warm-white);
+  }
+  #CharacterIntro-{{ section.id }} .ci__container,
+  #MainCollection-{{ main_id }}[id] > .page-width {
+    width: calc(100% - 8rem);
+    max-width: 128rem;
+    margin-inline: auto;
+    padding: 0;
+  }
+  #CharacterIntro-{{ section.id }} .ci__meta {
+    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+    padding: 2rem 0; border-bottom: 1px solid var(--ink);
+    font-size: 1.1rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  #CharacterIntro-{{ section.id }} .ci__series { display: flex; gap: 2.4rem; align-items: center; }
+  #CharacterIntro-{{ section.id }} .ci__number { font-variant-numeric: tabular-nums; }
+  #CharacterIntro-{{ section.id }} .ci__back { display: inline-flex; align-items: center; gap: 1.2rem; min-height: 4.4rem; margin-block: -1.2rem; text-transform: none; letter-spacing: 0; font-size: 1.3rem; }
+  #CharacterIntro-{{ section.id }} .ci__scene { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 2.4rem; padding: 3.2rem 0; }
+  #CharacterIntro-{{ section.id }} .ci__copy { grid-column: 1 / 8; display: flex; flex-direction: column; align-items: flex-start; padding: 0.8rem 0 0; }
+  #CharacterIntro-{{ section.id }} h1 { font-family: var(--collection-font); font-size: clamp(7.2rem,9.2vw,13.2rem); font-weight: 700; line-height: 0.87; letter-spacing: -0.065em; text-transform: uppercase; color: var(--blue); margin: 0 0 3.2rem -0.04em; }
+  #CharacterIntro-{{ section.id }} .ci__heading { font-family: var(--collection-font); font-size: clamp(2rem,2vw,2.8rem); font-weight: 500; line-height: 1.15; letter-spacing: -0.035em; margin: auto 0 1.2rem; max-width: 26ch; }
+  #CharacterIntro-{{ section.id }} .ci__description { font-size: 1.5rem; font-weight: 400; line-height: 1.6; max-width: 47ch; margin: 0 0 2rem; }
+  #CharacterIntro-{{ section.id }} .ci__description p { margin: 0; }
+  #CharacterIntro-{{ section.id }} .ci__shop { display: inline-flex; min-height: 4.8rem; align-items: center; justify-content: space-between; gap: 3.2rem; padding: 0 1.6rem; background: var(--gold); color: var(--ink); border: 0; border-radius: 0; font-size: 1.4rem; font-weight: 500; }
+  #CharacterIntro-{{ section.id }} .ci__shop:hover { background: var(--ink); color: var(--white); }
+  #CharacterIntro-{{ section.id }} a:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+  #CharacterIntro-{{ section.id }} .ci__art { grid-column: 8 / 13; margin: 0; min-width: 0; }
+  #CharacterIntro-{{ section.id }} .ci__stage { position: relative; height: 32rem; background: var(--cream); overflow: hidden; }
+  #CharacterIntro-{{ section.id }} .ci__stage::before { content: ''; position: absolute; inset: 0 0 0 38%; background: var(--gold); }
+  #CharacterIntro-{{ section.id }} .ci__portrait { position: absolute; inset: 1.2rem 0 0; width: 100%; height: calc(100% - 1.2rem); object-fit: contain; }
+  #CharacterIntro-{{ section.id }} .ci__caption { display: flex; align-items: baseline; justify-content: space-between; gap: 1.6rem; padding-top: 1.2rem; font-size: 1.1rem; line-height: 1.4; letter-spacing: 0.06em; text-transform: uppercase; }
+  #CharacterIntro-{{ section.id }} .ci__caption span:last-child { white-space: nowrap; }
+  #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__portrait,
+  #CharacterIntro-{{ section.id }}[data-character='jevika'] .ci__portrait { height: 44rem; }
+  #CharacterIntro-{{ section.id }}[data-character='jevika'] .ci__stage::before { inset: 40% 0 0; background: var(--blue); }
+  #CharacterIntro-{{ section.id }}[data-character='brutus'] .ci__stage::before { inset: 0 0 0 50%; }
+  #CharacterIntro-{{ section.id }}[data-character='minku'] .ci__stage::before { inset: 0 50% 0 0; background: var(--blue); }
+  #CharacterIntro-{{ section.id }}[data-character='pinki'] .ci__stage::before { inset: 50% 0 0; }
+
+  /* Editorial shopping grid, scoped to the alternate template's section. */
+  #MainCollection-{{ main_id }}[id] { padding-top: 0; scroll-margin-top: 2rem; }
+  #MainCollection-{{ main_id }}[id] .mc__intro { display: none; }
+  #MainCollection-{{ main_id }}[id] .mc__pills { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 3.2rem; justify-content: flex-start; padding: 0; margin: 0; border-block: 1px solid var(--ink); scrollbar-width: thin; }
+  #MainCollection-{{ main_id }}[id] .mc__pills li { flex: 0 0 auto; }
+  #MainCollection-{{ main_id }}[id] .mc__pills .jjw-pill { min-height: 5.6rem; padding: 0 0.2rem; border-radius: 0; background: transparent; color: var(--ink); box-shadow: none; font-family: var(--collection-font); font-size: 1.4rem; font-weight: 400; letter-spacing: 0; border-bottom: 3px solid transparent; }
+  #MainCollection-{{ main_id }}[id] .mc__pills .jjw-pill[aria-current='page'] { border-bottom-color: var(--gold); font-weight: 700; background: transparent; box-shadow: none; }
+  #MainCollection-{{ main_id }}[id] .mc__pills .jjw-pill:hover { border-bottom-color: var(--blue); }
+  #MainCollection-{{ main_id }}[id] .mc__face { display: none; }
+  #MainCollection-{{ main_id }}[id] .mc__toolbar { margin-top: 1.6rem; padding-bottom: 0; border: 0; }
+  #MainCollection-{{ main_id }}[id] .mc__count-line { font-family: var(--collection-font); font-size: 1.3rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink); }
+  #MainCollection-{{ main_id }}[id] .mc__sort-label { font-family: var(--collection-font); font-size: 1.2rem; letter-spacing: 0; text-transform: none; font-weight: 400; }
+  #MainCollection-{{ main_id }}[id] .mc__sort-select { font-family: var(--collection-font); font-size: 1.3rem; border-radius: 0; border: 0; border-bottom: 1px solid var(--ink); background-color: transparent; min-height: 4.4rem; }
+  #MainCollection-{{ main_id }}[id] .mc__filter-values .jjw-pill { font-family: var(--collection-font); border-radius: 0; font-size: 1.3rem; letter-spacing: 0; }
+  #MainCollection-{{ main_id }}[id] .mc__grid { gap: 3.2rem 2.4rem; margin-top: 1.6rem; }
+  #MainCollection-{{ main_id }}[id] .mc__card { border: 0; border-radius: 0; background: transparent; transform: none; }
+  #MainCollection-{{ main_id }}[id] .mc__media { background: var(--cream); overflow: hidden; }
+  #MainCollection-{{ main_id }}[id] .mc__info { display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-rows: auto auto 1fr; align-items: start; column-gap: 0.8rem; padding: 1.6rem 0 0; border: 0; }
+  #MainCollection-{{ main_id }}[id] .mc__character { display: none; }
+  #MainCollection-{{ main_id }}[id] .mc__title { font-family: var(--collection-font); font-size: 1.7rem; font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; text-wrap: pretty; }
+  #MainCollection-{{ main_id }}[id] .mc__price { font-family: var(--collection-font); font-size: 1.3rem; font-weight: 400; letter-spacing: 0; color: var(--ink); margin: 0.2rem 0 0; }
+  #MainCollection-{{ main_id }}[id] .mc__colours { grid-column: 1 / -1; margin: 1.2rem 0; gap: 0.7rem; }
+  #MainCollection-{{ main_id }}[id] .mc__colours .mc__swatch { width: 1.3rem; height: 1.3rem; }
+  #MainCollection-{{ main_id }}[id] .mc__choose { grid-column: 1 / -1; align-self: end; margin: 0; padding: 0; min-height: 4.4rem; background: transparent; color: var(--ink); border-radius: 0; border-top: 1px solid var(--line, #D9D9D9); font-family: var(--collection-font); font-size: 1.3rem; font-weight: 500; }
+  #MainCollection-{{ main_id }}[id] .mc__card a:hover .mc__choose { color: var(--blue); border-top-color: var(--blue); }
   @media(min-width:990px) {
-    #MainCollection-{{ main_id }}[id] .mc__grid--single { grid-template-columns:minmax(0,90rem); }
-    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__card a { display:grid; grid-template-columns:1fr 1fr; }
-    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__info { padding:3.2rem; justify-content:center; border-top:0; border-left:4px solid var(--card-bg); }
-    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__title { font-size:3.2rem; }
-    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__choose { margin-top:2.4rem; }
-    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__colours { margin-top:2rem; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single { grid-template-columns: minmax(0,1fr); }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__card a { display: grid; grid-template-columns: repeat(12,minmax(0,1fr)); gap: 2.4rem; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__media { grid-column: 1 / 7; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__info { grid-column: 8 / 13; display: flex; flex-direction: column; align-items: stretch; justify-content: center; padding: 0; border: 0; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__title { font-size: 3.2rem; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__price { font-size: 1.6rem; margin-top: 1.2rem; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__colours { margin-block: 2.4rem; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single .mc__choose { width: 100%; align-self: auto; }
+  }
+  @media(max-width:989px) and (min-width:750px) {
+    #CharacterIntro-{{ section.id }} h1 { font-size: 8rem; }
+    #CharacterIntro-{{ section.id }} .ci__stage { height: 30rem; }
+    #MainCollection-{{ main_id }}[id] .mc__info { grid-template-columns: 1fr; }
   }
   @media(max-width:749px) {
-    #CharacterIntro-{{ section.id }} { padding-top:1.6rem; overflow:hidden; }
-    #CharacterIntro-{{ section.id }} .ci__scene,
-    #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__scene { grid-template-columns:minmax(0,1fr) 12rem; gap:0.8rem; min-height:26rem; }
-    #CharacterIntro-{{ section.id }} .ci__copy { padding:0.8rem 0 2rem; }
-    #CharacterIntro-{{ section.id }} h1 { font-size:3.6rem; }
-    #CharacterIntro-{{ section.id }} .ci__eyebrow { font-size:1.05rem; letter-spacing:0.06em; gap:0.6rem; margin-bottom:1rem; }
-    #CharacterIntro-{{ section.id }} .ci__eyebrow::before { width:1.6rem; }
-    #CharacterIntro-{{ section.id }} .ci__description { font-size:1.4rem; line-height:1.5; margin:1.2rem 0; }
-    #CharacterIntro-{{ section.id }} .ci__shop { font-size:1.3rem; gap:1.2rem; padding:0.8rem 1.2rem; min-height:4.4rem; }
-    #CharacterIntro-{{ section.id }} .ci__art,
-    #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__art { height:24rem; align-self:center; grid-column:2; grid-row:1; }
-    #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__copy { grid-column:1; }
-    #CharacterIntro-{{ section.id }} .ci__art::before { width:13rem; height:18rem; bottom:2rem; }
-    #CharacterIntro-{{ section.id }} .ci__art::after { width:11rem; height:16rem; bottom:3rem; }
-    #CharacterIntro-{{ section.id }}[data-character='pinki'] .ci__art::before { width:14rem; height:14rem; bottom:4rem; }
-    #CharacterIntro-{{ section.id }}[data-character='pinki'] .ci__art::after { width:15rem; height:15rem; bottom:3.5rem; }
-    #CharacterIntro-{{ section.id }} .ci__portrait { width:100%; max-width:100%; height:23rem; inset:0; }
-    #CharacterIntro-{{ section.id }} .ci__stamp { font-size:1.2rem; max-width:10rem; padding:0.6rem; bottom:0.6rem; right:0; }
-    #CharacterIntro-{{ section.id }} .ci__motif { width:3.5rem; height:3.5rem; top:0; left:0; }
+    #CharacterIntro-{{ section.id }} .ci__container,
+    #MainCollection-{{ main_id }}[id] > .page-width { width: calc(100% - 3.2rem); }
+    #CharacterIntro-{{ section.id }} .ci__meta { padding-block: 1.2rem; font-size: 0.9rem; gap: 1rem; }
+    #CharacterIntro-{{ section.id }} .ci__series { gap: 1rem; }
+    #CharacterIntro-{{ section.id }} .ci__back { font-size: 1.1rem; gap: 0.6rem; }
+    #CharacterIntro-{{ section.id }} .ci__scene { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1.6rem; padding: 2.4rem 0; }
+    #CharacterIntro-{{ section.id }} .ci__copy { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: minmax(0,1fr) 13rem; gap: 0 1.6rem; padding: 0; }
+    #CharacterIntro-{{ section.id }} h1 { grid-column: 1 / -1; font-size: clamp(6.6rem,18vw,10rem); margin: 0 0 2.4rem -0.04em; }
+    #CharacterIntro-{{ section.id }} .ci__heading { grid-column: 1; font-size: 2.1rem; line-height: 1.15; margin: 0 0 1.2rem; }
+    #CharacterIntro-{{ section.id }} .ci__description { grid-column: 1; font-size: 1.3rem; line-height: 1.5; margin-bottom: 1.6rem; }
+    #CharacterIntro-{{ section.id }} .ci__shop { grid-column: 1; font-size: 1.2rem; padding-inline: 1.2rem; gap: 1rem; min-height: 4.4rem; justify-self: start; }
+    #CharacterIntro-{{ section.id }} .ci__art { grid-column: 1 / -1; grid-row: 1; pointer-events: none; align-self: end; margin: 8rem 0 0 auto; width: 13rem; }
+    #CharacterIntro-{{ section.id }} .ci__stage { height: 18rem; }
+    #CharacterIntro-{{ section.id }} .ci__portrait { inset: 0; width: 100%; height: 100%; }
+    #CharacterIntro-{{ section.id }}[data-character='joy'] .ci__portrait,
+    #CharacterIntro-{{ section.id }}[data-character='jevika'] .ci__portrait { height: 22rem; }
+    #CharacterIntro-{{ section.id }} .ci__caption { font-size: 0.9rem; letter-spacing: 0; padding-top: 0.8rem; }
+    #CharacterIntro-{{ section.id }} .ci__caption span:last-child { display: none; }
+    #MainCollection-{{ main_id }}[id] .mc__pills { gap: 2.4rem; }
+    #MainCollection-{{ main_id }}[id] .mc__pills .jjw-pill { min-height: 4.8rem; font-size: 1.3rem; }
+    #MainCollection-{{ main_id }}[id] .mc__grid { gap: 2.4rem 1.2rem; }
+    #MainCollection-{{ main_id }}[id] .mc__info { display: flex; padding-top: 1.2rem; }
+    #MainCollection-{{ main_id }}[id] .mc__title { font-size: 1.5rem; font-weight: 500; }
+    #MainCollection-{{ main_id }}[id] .mc__price { font-size: 1.2rem; margin-top: 0.6rem; }
+    #MainCollection-{{ main_id }}[id] .mc__choose { width: 100%; align-self: stretch; font-size: 1.2rem; margin-top: auto; }
+    #MainCollection-{{ main_id }}[id] .mc__grid--single { grid-template-columns: minmax(0,1fr); }
   }
 {%- endstyle -%}
 <section id="CharacterIntro-{{ section.id }}" data-character="{{ collection.handle }}">
-  <div class="page-width">
+  <div class="ci__container">
+    <div class="ci__meta">
+      <div class="ci__series"><span class="ci__number">{{ character_number | prepend: '0' }}</span><span>{{ section.settings.series_label | escape }}</span></div>
+      <a class="ci__back" href="{{ routes.all_products_collection_url }}"><span aria-hidden="true">&#8592;</span>{{ section.settings.back_label | escape }}</a>
+    </div>
     <div class="ci__scene" {{ character.shopify_attributes }}>
       <div class="ci__copy">
-        <p class="ci__eyebrow">{{ character.settings.eyebrow | escape }}</p>
-        <h1>{{ character.settings.heading | escape }}</h1>
+        <h1>{{ collection.title | escape }}</h1>
+        <h2 class="ci__heading">{{ character.settings.heading | escape }}</h2>
         <div class="ci__description">{{ character.settings.description }}</div>
-        <a class="ci__shop" href="#MainCollection-{{ main_id }}">{{ character.settings.cta | escape }} <span aria-hidden="true">&#8595;</span></a>
+        <a class="ci__shop" href="#MainCollection-{{ main_id }}">{{ character.settings.cta | escape }}<span aria-hidden="true">&#8599;</span></a>
       </div>
-      <div class="ci__art" aria-hidden="true">
-        <svg class="ci__motif" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-          {%- case collection.handle -%}
-            {%- when 'joy' -%}<path d="M47 5 15 45h24l-6 30 32-43H42z"/>
-            {%- when 'brutus' -%}<path d="M40 69S4 47 9 25c4-17 25-17 31-2 6-15 27-15 31 2 5 22-31 44-31 44Z"/>
-            {%- when 'minku' -%}<path d="M10 67c0-40 60 5 60-35S10 4 19 26s46 3 39-11" stroke-dasharray="5 7"/>
-            {%- when 'pinki' -%}<circle cx="40" cy="40" r="30"/><path d="m52 24-8 20-20 12 8-20Z M40 4v8m0 56v8M4 40h8m56 0h8"/>
-            {%- else -%}<path d="m40 6 9 23 25 3-19 17 6 25-21-13-21 13 6-25L6 32l25-3Z"/>
-          {%- endcase -%}
-        </svg>
-        {%- assign pose = 'jjw-pose-' | append: collection.handle | append: '.png' -%}
-        <img class="ci__portrait" src="{{ pose | asset_url }}" width="400" height="500" alt="" fetchpriority="high">
-        <span class="ci__stamp">{{ character.settings.motto | escape }}</span>
-      </div>
+      <figure class="ci__art">
+        <div class="ci__stage">
+          {%- assign pose = 'jjw-pose-' | append: collection.handle | append: '.png' -%}
+          <img class="ci__portrait" src="{{ pose | asset_url }}" width="400" height="500" alt="" fetchpriority="high">
+        </div>
+        <figcaption class="ci__caption"><span>{{ character.settings.motto | escape }}</span><span>{{ collection.all_products_count }} {% if collection.all_products_count == 1 %}{{ section.settings.count_singular | escape }}{% else %}{{ section.settings.count_plural | escape }}{% endif %}</span></figcaption>
+      </figure>
     </div>
   </div>
 </section>
 <script>
 (function () {
   function init() {
-  // Retain the local alternate template while browsing, filtering and sorting.
-  var root = document.getElementById('MainCollection-{{ main_id }}');
-  if (!root) return;
-  root.querySelectorAll('a[href]').forEach(function (link) {
-    var url = new URL(link.href, location.href);
-    if (url.origin === location.origin && url.pathname.indexOf('/collections/') === 0) {
-      url.searchParams.set('view', 'character'); link.href = url.pathname + url.search + url.hash;
-    }
-  });
-  root.querySelectorAll('form').forEach(function (form) {
-    var input = document.createElement('input'); input.type = 'hidden'; input.name = 'view'; input.value = 'character'; form.appendChild(input);
-  });
+    var root = document.getElementById('MainCollection-{{ main_id }}');
+    if (!root || root.dataset.characterPreview) return;
+    root.dataset.characterPreview = '1';
+    root.querySelectorAll('a[href]').forEach(function (link) {
+      var url = new URL(link.href, location.href);
+      if (url.origin === location.origin && url.pathname.indexOf('/collections/') === 0) {
+        url.searchParams.set('view', 'character');
+        link.href = url.pathname + url.search + url.hash;
+      }
+    });
+    root.querySelectorAll('form').forEach(function (form) {
+      if (form.querySelector('[name="view"]')) return;
+      var input = document.createElement('input');
+      input.type = 'hidden'; input.name = 'view'; input.value = 'character';
+      form.appendChild(input);
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
@@ -124,14 +182,18 @@
   "name": "Character introduction",
   "tag": "section",
   "max_blocks": 5,
-  "settings": [],
+  "settings": [
+    {"type":"text","id":"series_label","label":"Series label","default":"The character collection"},
+    {"type":"text","id":"back_label","label":"Back link","default":"All tees"},
+    {"type":"text","id":"count_singular","label":"One product label","default":"tee"},
+    {"type":"text","id":"count_plural","label":"Multiple products label","default":"tees"}
+  ],
   "blocks": [{
     "type": "character", "name": "Character", "settings": [
       {"type":"text","id":"handle","label":"Collection handle"},
-      {"type":"text","id":"eyebrow","label":"Eyebrow"},
-      {"type":"text","id":"heading","label":"Heading"},
+      {"type":"text","id":"heading","label":"Introduction heading"},
       {"type":"richtext","id":"description","label":"Introduction"},
-      {"type":"text","id":"motto","label":"Character sticker"},
+      {"type":"text","id":"motto","label":"Artwork caption"},
       {"type":"text","id":"cta","label":"Shopping link"}
     ]
   }],

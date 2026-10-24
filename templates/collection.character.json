@@ -75,89 +75,6 @@
         "empty_text": "Nothing here yet — check back soon"
       }
     },
-    "trust": {
-      "type": "product-trust",
-      "blocks": {
-        "b1": {
-          "type": "badge",
-          "settings": {
-            "label": "Bio Washed",
-            "tone": "pink"
-          }
-        },
-        "b2": {
-          "type": "badge",
-          "settings": {
-            "label": "Silicone Soft",
-            "tone": "blue"
-          }
-        },
-        "b3": {
-          "type": "badge",
-          "settings": {
-            "label": "Pre-Shrunk",
-            "tone": "gold"
-          }
-        },
-        "b4": {
-          "type": "badge",
-          "settings": {
-            "label": "Taped Seams",
-            "tone": "purple"
-          }
-        },
-        "b5": {
-          "type": "badge",
-          "settings": {
-            "label": "Flatlock Seams",
-            "tone": "green"
-          }
-        },
-        "b6": {
-          "type": "badge",
-          "settings": {
-            "label": "Colour Tested",
-            "tone": "blue"
-          }
-        },
-        "b7": {
-          "type": "badge",
-          "settings": {
-            "label": "Organic Cotton",
-            "tone": "pink"
-          }
-        },
-        "b8": {
-          "type": "badge",
-          "settings": {
-            "label": "OEKO-TEX Inks",
-            "tone": "gold"
-          }
-        },
-        "b9": {
-          "type": "badge",
-          "settings": {
-            "label": "BIS Certified",
-            "tone": "purple"
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3",
-        "b4",
-        "b5",
-        "b6",
-        "b7",
-        "b8",
-        "b9"
-      ],
-      "settings": {
-        "heading": "Skin Kind, Play Proof",
-        "reassurance": "Nine things built into every JJW tee."
-      }
-    },
     "character_intro": {
       "type": "character-collection-intro",
       "blocks": {
@@ -165,9 +82,8 @@
           "type": "character",
           "settings": {
             "handle": "jevika",
-            "eyebrow": "Meet Jevika",
-            "heading": "A little wonder. A big adventure.",
-            "description": "<p>Red bows, bright questions and a day full of possibilities. Follow Jevika from the school gate to the next little discovery.</p>",
+            "heading": "A world of possibility.",
+            "description": "<p>Bright questions, red bows and a little adventure in every day. Meet Jevika, and find the tee that goes along.</p>",
             "motto": "Wonder comes along",
             "cta": "Shop Jevika"
           }
@@ -176,10 +92,9 @@
           "type": "character",
           "settings": {
             "handle": "joy",
-            "eyebrow": "Meet Joy",
-            "heading": "Big ideas. Everyday adventures.",
-            "description": "<p>Always halfway through the next idea. Join Joy for building, street games and the adventures that happen between school and dinner.</p>",
-            "motto": "Ready. Set. Create.",
+            "heading": "Made for what’s next.",
+            "description": "<p>Building something. Starting a game. Chasing the next idea. Joy brings a little adventure to the everyday.</p>",
+            "motto": "Ready for the next idea",
             "cta": "Shop Joy"
           }
         },
@@ -187,10 +102,9 @@
           "type": "character",
           "settings": {
             "handle": "brutus",
-            "eyebrow": "Meet Brutus",
-            "heading": "Better with a best friend.",
-            "description": "<p>Brutus is the boxer dog by Joy’s side. For park mornings, long walks and the friend who makes every adventure better.</p>",
-            "motto": "Adventure buddies",
+            "heading": "Good days. Great company.",
+            "description": "<p>Meet Brutus, the boxer dog always by Joy’s side. For park mornings, long walks and adventures shared with a best friend.</p>",
+            "motto": "Better together",
             "cta": "Shop Brutus"
           }
         },
@@ -198,9 +112,8 @@
           "type": "character",
           "settings": {
             "handle": "minku",
-            "eyebrow": "Meet Minku",
-            "heading": "A little monkey business.",
-            "description": "<p>Meet Minku, the monkey with a playful streak. For monkey bars, big giggles and days that take a wonderfully unexpected turn.</p>",
+            "heading": "Play has no plan.",
+            "description": "<p>Monkey bars, big giggles and unexpected turns. Meet Minku, the little monkey who brings his own kind of fun.</p>",
             "motto": "Wild at heart",
             "cta": "Shop Minku"
           }
@@ -209,9 +122,8 @@
           "type": "character",
           "settings": {
             "handle": "pinki",
-            "eyebrow": "Meet Pinki",
-            "heading": "Small questions. Big discoveries.",
-            "description": "<p>Round glasses. A curious squirrel. Pinki asks why, then asks again. Come along for pocketfuls of pebbles and one more discovery.</p>",
+            "heading": "Keep asking why.",
+            "description": "<p>Round glasses. Endless questions. Meet Pinki, the curious squirrel who finds a new discovery around every corner.</p>",
             "motto": "Stay curious",
             "cta": "Shop Pinki"
           }
@@ -229,7 +141,6 @@
   },
   "order": [
     "character_intro",
-    "main",
-    "trust"
+    "main"
   ]
 }
