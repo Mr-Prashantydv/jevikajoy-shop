@@ -1,226 +1,491 @@
 {%- comment -%}
-  A still fabric story with the existing JJW weave and collar photographs.
-  The first four merchant blocks are the main details; remaining blocks form
-  a compact supporting row. Each claim is rendered once, without a marquee.
-  Colours are sheet anchors; --blue-deep is Adventure Blue shaded by 20%.
+  Find us — modelled on partakefoods.com's "11,000+ Retailers" band.
+  Cream page, Mint Green rounded card, big --ink heading with a Star Yellow
+  marker on one phrase, a marquee of trust stickers, Star Yellow blob button.
+  Marquee mechanics, button and scroll reveal all come from theme.css.
+
+  Measured on the reference (1440 / 375 wide): card radius 40 / 20px,
+  marquee row 180 / 100px with marks 140 / 60px tall, 40 / 20px apart, 24s loop.
+
+  Each block is a sticker in the house build: sheet fill, --ink type, die-cut
+  white edge, night-navy offset shadow, alternating tilt. Text is always --ink,
+  never tinted with its own fill (CLAUDE.md contrast note); the lowest pair,
+  ink on Candy Pink, is 4.60:1. Mint is not offered as a fill because the card
+  already is mint.
+
+  When an official mark is uploaded the sticker shows it as issued on a white
+  face, never recoloured: certification marks (BIS, OEKO-TEX) must appear as
+  the certifier supplies them.
 {%- endcomment -%}
 
 {%- style -%}
   #FindUs-{{ section.id }} {
     background: var(--cream);
-    padding: clamp(4rem, 6vw, 8rem) 0;
-    scroll-margin-top: 11rem;
   }
-  #FindUs-{{ section.id }} .page-width { padding-inline: clamp(2rem, 4vw, 6.4rem); }
+
   #FindUs-{{ section.id }} .find-us__card {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(3.2rem, 6vw, 8rem);
+    position: relative;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    overflow: hidden;
+    border-radius: 4rem;
+    background: var(--mint);
+    padding-block: calc(var(--section-space) + 2.8rem) var(--section-space);
+    text-align: center;
   }
-  #FindUs-{{ section.id }} .find-us__visual { min-width: 0; margin: 0; }
-  #FindUs-{{ section.id }} .find-us__photos { position: relative; padding-right: 2.4rem; padding-bottom: 2.4rem; }
-  #FindUs-{{ section.id }} .find-us__photo {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 1.2rem;
+
+  #FindUs-{{ section.id }} .find-us__heading {
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 110rem;
+    padding-inline: 1.5rem;
+    color: var(--ink);
   }
-  #FindUs-{{ section.id }} .find-us__detail-photo {
+
+  /* Highlighter stroke behind one phrase. clone repeats it on every line
+     the phrase wraps onto instead of drawing one strip across the break. */
+  #FindUs-{{ section.id }} .find-us__mark {
+    padding-inline: 0.12em;
+    white-space: nowrap;
+    background: linear-gradient(
+      transparent 56%,
+      var(--yellow) 56%,
+      var(--yellow) 90%,
+      transparent 90%
+    );
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  #FindUs-{{ section.id }} .find-us__nb {
+    white-space: nowrap;
+  }
+
+  #FindUs-{{ section.id }} .find-us__sub {
+    margin-top: 1.8rem;
+    max-width: 62rem;
+    padding-inline: 2rem;
+    font-family: var(--font-body);
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  #FindUs-{{ section.id }} .find-us__sub :where(p) {
+    margin: 0;
+  }
+
+  /* Spark marks either side of the heading, the same three-stroke burst the
+     stickers elsewhere carry. Decorative only. */
+  #FindUs-{{ section.id }} .find-us__burst {
     position: absolute;
-    width: 40%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    right: 0;
-    bottom: 0;
-    object-fit: cover;
-    border: 0.8rem solid var(--cream);
-    border-radius: 1.2rem;
+    top: calc(var(--section-space) + 1rem);
+    width: 7rem;
+    height: 7rem;
+    color: var(--ink);
+    pointer-events: none;
   }
-  #FindUs-{{ section.id }} .find-us__caption {
+
+  #FindUs-{{ section.id }} .find-us__burst--l {
+    left: 5%;
+    transform: rotate(-12deg);
+  }
+
+  #FindUs-{{ section.id }} .find-us__burst--r {
+    right: 5%;
+    transform: scaleX(-1) rotate(-12deg);
+  }
+
+  /* Faded edges so stickers slide in and out of the card rather than being
+     cut off flat at its padding. */
+  #FindUs-{{ section.id }} .find-us__marquee {
+    margin-top: 2.4rem;
+    width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  #FindUs-{{ section.id }} .marquee__group {
+    gap: 4.8rem;
+    padding-right: 4.8rem;
+  }
+
+  /* Vertical room for the tilt, the die-cut edge and the offset shadow. */
+  #FindUs-{{ section.id }} .find-us__item {
+    flex-shrink: 0;
+    padding: 3rem 1.2rem 3.4rem 0.6rem;
+  }
+
+  #FindUs-{{ section.id }} .find-us__sticker {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-top: 0.8rem;
-    color: var(--body-ink);
-    font: 500 1.4rem/1.5 var(--font-body);
+    gap: 1.8rem;
+    box-sizing: border-box;
+    height: 12rem;
+    padding: 1.6rem 3.2rem 1.6rem 1.6rem;
+    border-radius: 2.4rem;
+    background: var(--fill, var(--white));
+    color: var(--ink);
+    text-align: left;
+    box-shadow:
+      0 0 0 0.5rem var(--white),
+      0.9rem 0.9rem 0 0.5rem var(--ink-deep);
+    transform: rotate(var(--tilt, -3deg));
+    transition: transform 0.25s var(--ease-out-slow, ease);
   }
-  #FindUs-{{ section.id }} .find-us__caption::before { content: ''; width: 2.4rem; height: 2px; background: var(--gold); }
-  #FindUs-{{ section.id }} .find-us__eyebrow {
-    margin: 0 0 1.4rem;
-    color: var(--body-ink);
-    font: 700 1.2rem/1.4 var(--font-body);
-    letter-spacing: 0.12em;
+
+  #FindUs-{{ section.id }} .find-us__item:nth-child(even) .find-us__sticker {
+    --tilt: 2.5deg;
+  }
+
+  #FindUs-{{ section.id }} .find-us__item:hover .find-us__sticker {
+    transform: rotate(0deg) scale(1.05);
+  }
+
+  #FindUs-{{ section.id }} .find-us__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 8.8rem;
+    height: 8.8rem;
+    border-radius: 50%;
+    background: var(--white);
+  }
+
+  #FindUs-{{ section.id }} .find-us__sticker--white .find-us__icon {
+    background: var(--cream);
+  }
+
+  #FindUs-{{ section.id }} .find-us__icon svg {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  #FindUs-{{ section.id }} .find-us__words {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+  }
+
+  #FindUs-{{ section.id }} .find-us__big {
+    font-family: var(--font-heading);
+    font-size: 4.8rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  #FindUs-{{ section.id }} .find-us__small {
+    margin-top: 0.4rem;
+    font-family: var(--font-accent);
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-  #FindUs-{{ section.id }} .find-us__heading {
-    max-width: 17ch;
-    margin: 0;
-    color: var(--blue-deep);
-    font: 600 clamp(3.4rem, 4.2vw, 5.6rem)/1.08 var(--font-heading);
-    letter-spacing: -0.025em;
-    text-wrap: balance;
+
+  /* An official mark replaces the icon and words, on a white face. */
+  #FindUs-{{ section.id }} .find-us__sticker--mark {
+    --fill: var(--white);
+    padding: 1.4rem 2.4rem;
   }
-  #FindUs-{{ section.id }} .find-us__sub {
-    max-width: 46ch;
-    margin-top: 1.8rem;
-    color: var(--body-ink);
-    font: 500 var(--text-base)/1.65 var(--font-body);
+
+  #FindUs-{{ section.id }} .find-us__sticker--mark img {
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: 26rem;
+    object-fit: contain;
   }
-  #FindUs-{{ section.id }} .find-us__sub p { margin: 0; }
-  #FindUs-{{ section.id }} .find-us__details {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.4rem 2rem;
-    margin: 2.8rem 0;
-    padding: 2.8rem 0 0;
-    list-style: none;
-    border-top: 1px solid var(--line);
-  }
-  #FindUs-{{ section.id }} .find-us__item { display: flex; align-items: flex-start; gap: 1.2rem; min-width: 0; }
-  #FindUs-{{ section.id }} .find-us__icon {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 3.8rem;
-    height: 3.8rem;
-    color: var(--blue-deep);
-    background: var(--white);
-    border-radius: 50%;
-    border-bottom: 3px solid var(--fill, var(--gold));
-  }
-  #FindUs-{{ section.id }} .find-us__icon svg { width: 2.2rem; height: 2.2rem; }
-  #FindUs-{{ section.id }} .find-us__words { display: grid; gap: 0.4rem; min-width: 0; }
-  #FindUs-{{ section.id }} .find-us__big { color: var(--body-ink); font: 700 1.6rem/1.3 var(--font-body); }
-  #FindUs-{{ section.id }} .find-us__small { color: var(--body-ink); font: 500 1.3rem/1.5 var(--font-body); }
-  #FindUs-{{ section.id }} .find-us__mark { display: block; width: auto; max-width: 100%; height: 5.6rem; object-fit: contain; background: var(--white); }
-  #FindUs-{{ section.id }} .find-us__button { display: flex; flex-wrap: wrap; align-items: center; gap: 2rem; margin-top: 2.8rem; }
-  #FindUs-{{ section.id }} .find-us__story { display: inline-flex; align-items: center; min-height: 4.4rem; color: var(--blue-deep); font: 700 1.5rem/1.4 var(--font-body); text-decoration: underline; text-underline-offset: 0.5rem; }
-  #FindUs-{{ section.id }} .find-us__standards {
+
+  #FindUs-{{ section.id }} .find-us__button {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2rem 3.2rem;
-    margin: 4rem 0 0;
-    padding: 2.4rem 0 0;
-    list-style: none;
-    border-top: 1px solid var(--line);
+    align-items: center;
+    justify-content: center;
+    gap: 1.6rem 3.2rem;
+    margin-top: 2.4rem;
   }
-  #FindUs-{{ section.id }} .find-us__standards .find-us__item { align-items: center; }
-  #FindUs-{{ section.id }} .find-us__standards .find-us__icon { background: transparent; border: 0; width: 2.4rem; }
-  #FindUs-{{ section.id }} .find-us__standards .find-us__big { font-size: 1.4rem; }
-  #FindUs-{{ section.id }} .find-us__standards .find-us__small { font-size: 1.2rem; }
+
+  #FindUs-{{ section.id }} .find-us__button .btn--primary {
+    --btn-bg: var(--gold);
+    --btn-fg: var(--ink-deep);
+  }
+
+  #FindUs-{{ section.id }} .find-us__story {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 4.4rem;
+    font-family: var(--font-accent);
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 0.25rem;
+    text-underline-offset: 0.5rem;
+  }
+
+  #FindUs-{{ section.id }} .find-us__story:hover {
+    text-decoration-color: var(--yellow);
+  }
+
   @media screen and (max-width: 989px) {
-    #FindUs-{{ section.id }} .find-us__card { gap: 3.2rem; }
-    #FindUs-{{ section.id }} .find-us__details { gap: 1.8rem 1.2rem; }
-    #FindUs-{{ section.id }} .find-us__item { gap: 0.8rem; }
+    #FindUs-{{ section.id }} .find-us__burst {
+      width: 4.8rem;
+      height: 4.8rem;
+      top: 2rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__burst--l {
+      left: 3%;
+    }
+
+    #FindUs-{{ section.id }} .find-us__burst--r {
+      right: 3%;
+    }
   }
+
   @media screen and (max-width: 749px) {
-    #FindUs-{{ section.id }} .find-us__card { grid-template-columns: minmax(0, 1fr); gap: 2.8rem; }
-    #FindUs-{{ section.id }} .find-us__photos { padding-right: 1.6rem; padding-bottom: 1.6rem; }
-    #FindUs-{{ section.id }} .find-us__photo { aspect-ratio: 1.35 / 1; }
-    #FindUs-{{ section.id }} .find-us__detail-photo { width: 35%; border-width: 0.6rem; }
-    #FindUs-{{ section.id }} .find-us__heading { max-width: 18ch; }
-    #FindUs-{{ section.id }} .find-us__details { margin-block: 2.4rem; padding-top: 2.4rem; }
-    #FindUs-{{ section.id }} .find-us__standards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.8rem 1.2rem; margin-top: 3.2rem; }
-  }
-  @media screen and (max-width: 359px) {
-    #FindUs-{{ section.id }} .find-us__details .find-us__item { flex-direction: column; }
+    #FindUs-{{ section.id }} .find-us__card {
+      border-radius: 2rem;
+      padding-block: 6.4rem 4rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__burst {
+      width: 4rem;
+      height: 4rem;
+      top: 1.4rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__sub {
+      margin-top: 1.4rem;
+      font-size: 1.6rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__marquee {
+      margin-top: 1.2rem;
+    }
+
+    #FindUs-{{ section.id }} .marquee__group {
+      gap: 2.6rem;
+      padding-right: 2.6rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__item {
+      padding: 2rem 0.8rem 2.4rem 0.4rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__sticker {
+      gap: 1rem;
+      height: 7.2rem;
+      padding: 1rem 1.8rem 1rem 1rem;
+      border-radius: 1.6rem;
+      box-shadow:
+        0 0 0 0.35rem var(--white),
+        0.6rem 0.6rem 0 0.35rem var(--ink-deep);
+    }
+
+    #FindUs-{{ section.id }} .find-us__icon {
+      width: 5.2rem;
+      height: 5.2rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__icon svg {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__big {
+      font-size: 2.8rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__small {
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+    }
+
+    #FindUs-{{ section.id }} .find-us__sticker--mark {
+      padding: 0.8rem 1.4rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__sticker--mark img {
+      max-width: 16rem;
+    }
+
+    #FindUs-{{ section.id }} .find-us__button {
+      margin-top: 1.6rem;
+    }
   }
 {%- endstyle -%}
 
-{%- capture detail_items -%}
-  {%- for block in section.blocks limit: 4 -%}
-    {%- render 'fabric-detail', block: block -%}
-  {%- endfor -%}
-{%- endcapture -%}
+{%- liquid
+  assign heading = section.settings.heading | escape
+  assign highlight = section.settings.heading_highlight | escape
+
+  comment
+    Keep hyphenated words whole: browsers break after a hard hyphen, which
+    split Pre-Shrunk across two lines at 1440px. Done before the highlight
+    so the marker markup is never split on its spaces.
+  endcomment
+  assign words = heading | split: ' '
+  assign heading = ''
+  for word in words
+    assign piece = word
+    if word contains '-'
+      assign piece = '<span class="find-us__nb">' | append: word | append: '</span>'
+    endif
+    unless forloop.first
+      assign heading = heading | append: ' '
+    endunless
+    assign heading = heading | append: piece
+  endfor
+
+  if highlight != blank and heading contains highlight
+    assign marked = '<span class="find-us__mark">' | append: highlight | append: '</span>'
+    assign heading = heading | replace_first: highlight, marked
+  endif
+-%}
+
 <section id="FindUs-{{ section.id }}">
   <div class="page-width">
     <div class="find-us__card">
-      <figure class="find-us__visual scroll-trigger animate--slide-in">
-        <div class="find-us__photos">
-          {%- if section.settings.image != blank -%}
-            {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'find-us__photo', widths: '400, 600, 800, 1200', sizes: '(max-width: 749px) 90vw, 45vw', loading: 'lazy', alt: section.settings.image_alt }}
-          {%- else -%}
-            <img class="find-us__photo" src="{{ 'jjw-fabric-weave.jpg' | asset_url }}" width="1000" height="1000" loading="lazy" alt="{{ section.settings.image_alt | escape }}">
+      {%- if section.settings.show_bursts -%}
+        {%- capture burst -%}
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" aria-hidden="true" focusable="false">
+            <path d="M24 6v10M8 16l7.5 6.5M40 16l-7.5 6.5"/>
+          </svg>
+        {%- endcapture -%}
+        <span class="find-us__burst find-us__burst--l">{{ burst }}</span>
+        <span class="find-us__burst find-us__burst--r">{{ burst }}</span>
+      {%- endif -%}
+
+      {%- if heading != blank -%}
+        <h2 class="hxxl find-us__heading scroll-trigger animate--slide-in">
+          {{ heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <div class="find-us__sub scroll-trigger animate--slide-in" style="--animation-order: 1;">
+          {{ section.settings.subheading }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="find-us__marquee">
+          <div class="marquee">
+            <div class="marquee__track">
+              {%- comment -%}
+                Six copies: the shared -50% keyframe needs an even number of
+                groups, and half the track must outrun a wide card even with
+                only three stickers. Copies after the first are hidden from
+                assistive tech so each claim is announced once.
+              {%- endcomment -%}
+              {%- for copy in (1..6) -%}
+                <div
+                  class="marquee__group"
+                  {% unless forloop.first %}
+                    aria-hidden="true"
+                  {% endunless %}
+                >
+                  {%- for block in section.blocks -%}
+                    {%- liquid
+                      case block.settings.fill
+                        when 'yellow'
+                          assign fill = 'var(--yellow)'
+                        when 'sky'
+                          assign fill = 'var(--sky)'
+                        when 'candy'
+                          assign fill = 'var(--candy)'
+                        when 'lavender'
+                          assign fill = 'var(--lavender)'
+                        else
+                          assign fill = 'var(--white)'
+                      endcase
+                      assign alt = block.settings.label | append: ' ' | append: block.settings.caption | strip
+                    -%}
+                    <div class="find-us__item" {{ block.shopify_attributes }}>
+                      {%- if block.settings.logo != blank -%}
+                        <div class="find-us__sticker find-us__sticker--mark">
+                          {{
+                            block.settings.logo
+                            | image_url: width: 600
+                            | image_tag:
+                              loading: 'lazy',
+                              widths: '150, 300, 450, 600',
+                              sizes: '(max-width: 749px) 160px, 260px',
+                              alt: alt
+                          }}
+                        </div>
+                      {%- else -%}
+                        <div
+                          class="find-us__sticker{% if block.settings.fill == 'white' %} find-us__sticker--white{% endif %}"
+                          style="--fill: {{ fill }};"
+                        >
+                          {%- if block.settings.icon != 'none' -%}
+                            <span class="find-us__icon" aria-hidden="true">
+                              {%- render 'jjw-icon', name: block.settings.icon -%}
+                            </span>
+                          {%- endif -%}
+                          <span class="find-us__words">
+                            {%- if block.settings.label != blank -%}
+                              <span class="find-us__big">{{ block.settings.label }}</span>
+                            {%- endif -%}
+                            {%- if block.settings.caption != blank -%}
+                              <span class="find-us__small">{{ block.settings.caption }}</span>
+                            {%- endif -%}
+                          </span>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%}
+        The story link appears only once a page with that handle exists, so
+        the band never links to a 404 while the page is still being set up.
+      {%- endcomment -%}
+      {%- liquid
+        assign story_page = blank
+        if section.settings.story_handle != blank and section.settings.story_label != blank
+          assign story_page = pages[section.settings.story_handle]
+        endif
+      -%}
+      {%- if section.settings.button_label != blank or story_page.id != blank -%}
+        <div class="find-us__button scroll-trigger animate--slide-in" style="--animation-order: 2;">
+          {%- if section.settings.button_label != blank -%}
+            <div class="btn-wrap">
+              <span class="btn-shadow" aria-hidden="true"></span>
+              <a class="btn btn--primary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+                {{ section.settings.button_label }}
+              </a>
+            </div>
           {%- endif -%}
-          {%- if section.settings.detail_image != blank -%}
-            {{ section.settings.detail_image | image_url: width: 500 | image_tag: class: 'find-us__detail-photo', widths: '200, 350, 500', sizes: '(max-width: 749px) 32vw, 18vw', loading: 'lazy', alt: section.settings.detail_alt }}
-          {%- else -%}
-            <img class="find-us__detail-photo" src="{{ 'jjw-fabric-collar.jpg' | asset_url }}" width="1000" height="1000" loading="lazy" alt="{{ section.settings.detail_alt | escape }}">
+          {%- if story_page.id != blank -%}
+            <a class="find-us__story" href="{{ story_page.url }}">{{ section.settings.story_label }}</a>
           {%- endif -%}
         </div>
-        {%- if section.settings.image_caption != blank -%}<figcaption class="find-us__caption">{{ section.settings.image_caption | escape }}</figcaption>{%- endif -%}
-      </figure>
-      <div class="find-us__copy scroll-trigger animate--slide-in">
-        {%- if section.settings.eyebrow != blank -%}<p class="find-us__eyebrow">{{ section.settings.eyebrow | escape }}</p>{%- endif -%}
-        {%- if section.settings.heading != blank -%}<h2 class="find-us__heading">{{ section.settings.heading | escape }}</h2>{%- endif -%}
-        {%- if section.settings.subheading != blank -%}<div class="find-us__sub">{{ section.settings.subheading }}</div>{%- endif -%}
-        {%- if section.blocks.size > 0 -%}<ul class="find-us__details">{{ detail_items }}</ul>{%- endif -%}
-        {%- liquid
-          assign story_page = blank
-          if section.settings.story_handle != blank and section.settings.story_label != blank
-            assign story_page = pages[section.settings.story_handle]
-          endif
-        -%}
-        {%- if section.settings.button_label != blank or story_page.id != blank -%}
-          <div class="find-us__button">
-            {%- if section.settings.button_label != blank -%}
-              <span class="btn-wrap"><span class="btn-shadow" aria-hidden="true"></span><a class="btn btn--primary" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a></span>
-            {%- endif -%}
-            {%- if story_page.id != blank -%}<a class="find-us__story" href="{{ story_page.url }}">{{ section.settings.story_label | escape }}</a>{%- endif -%}
-          </div>
-        {%- endif -%}
-      </div>
+      {%- endif -%}
     </div>
-    {%- if section.blocks.size > 4 -%}
-      <ul class="find-us__standards">
-        {%- for block in section.blocks offset: 4 -%}{%- render 'fabric-detail', block: block -%}{%- endfor -%}
-      </ul>
-    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Fabric story panel",
+  "name": "Find us",
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Made for everyday adventures"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Fabric photograph"
-    },
-    {
-      "type": "text",
-      "id": "image_alt",
-      "label": "Fabric image description",
-      "default": "Close-up of soft cotton jersey"
-    },
-    {
-      "type": "image_picker",
-      "id": "detail_image",
-      "label": "Construction detail photograph"
-    },
-    {
-      "type": "text",
-      "id": "detail_alt",
-      "label": "Detail image description",
-      "default": "Close-up of the ribbed cotton collar"
-    },
-    {
-      "type": "text",
-      "id": "image_caption",
-      "label": "Photo caption",
-      "default": "Softness, up close."
-    },
     {
       "type": "text",
       "id": "heading",
@@ -228,9 +493,22 @@
       "default": "Made to a Standard You Can Check"
     },
     {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Highlighted phrase",
+      "info": "Part of the heading to underline in yellow. Must match the heading exactly.",
+      "default": "You Can Check"
+    },
+    {
       "type": "richtext",
       "id": "subheading",
       "label": "Supporting line"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bursts",
+      "label": "Show spark marks beside the heading",
+      "default": true
     },
     {
       "type": "text",
@@ -261,7 +539,7 @@
   "blocks": [
     {
       "type": "logo",
-      "name": "Fabric detail",
+      "name": "Trust sticker",
       "settings": [
         {
           "type": "text",
@@ -279,89 +557,38 @@
           "label": "Icon",
           "default": "shield",
           "options": [
-            {
-              "value": "shield",
-              "label": "Shield"
-            },
-            {
-              "value": "drop",
-              "label": "Drop"
-            },
-            {
-              "value": "leaf",
-              "label": "Leaf"
-            },
-            {
-              "value": "star",
-              "label": "Star"
-            },
-            {
-              "value": "heart",
-              "label": "Heart"
-            },
-            {
-              "value": "smile",
-              "label": "Smile"
-            },
-            {
-              "value": "wash",
-              "label": "Washing machine"
-            },
-            {
-              "value": "cloud",
-              "label": "Cloud (soft)"
-            },
-            {
-              "value": "needle",
-              "label": "Needle and thread"
-            },
-            {
-              "value": "scissors",
-              "label": "Scissors"
-            },
-            {
-              "value": "sparkle",
-              "label": "Sparkle"
-            },
-            {
-              "value": "none",
-              "label": "None"
-            }
+            { "value": "shield", "label": "Shield" },
+            { "value": "drop", "label": "Drop" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "smile", "label": "Smile" },
+            { "value": "wash", "label": "Washing machine" },
+            { "value": "cloud", "label": "Cloud (soft)" },
+            { "value": "needle", "label": "Needle and thread" },
+            { "value": "scissors", "label": "Scissors" },
+            { "value": "sparkle", "label": "Sparkle" },
+            { "value": "none", "label": "None" }
           ]
         },
         {
           "type": "select",
           "id": "fill",
-          "label": "Icon accent colour",
+          "label": "Sticker colour",
           "default": "white",
           "options": [
-            {
-              "value": "white",
-              "label": "Pure White"
-            },
-            {
-              "value": "yellow",
-              "label": "Star Yellow"
-            },
-            {
-              "value": "sky",
-              "label": "Sky Blue"
-            },
-            {
-              "value": "candy",
-              "label": "Candy Pink"
-            },
-            {
-              "value": "lavender",
-              "label": "Lavender"
-            }
+            { "value": "white", "label": "Pure White" },
+            { "value": "yellow", "label": "Star Yellow" },
+            { "value": "sky", "label": "Sky Blue" },
+            { "value": "candy", "label": "Candy Pink" },
+            { "value": "lavender", "label": "Lavender" }
           ]
         },
         {
           "type": "image_picker",
           "id": "logo",
           "label": "Official mark",
-          "info": "Optional. Upload a mark exactly as issued; it replaces the icon and text on a white surface."
+          "info": "Optional. Upload the mark exactly as issued by the certifier; it replaces the icon and text on a white sticker."
         }
       ]
     }
@@ -371,42 +598,10 @@
     {
       "name": "Find us",
       "blocks": [
-        {
-          "type": "logo",
-          "settings": {
-            "label": "BIS",
-            "caption": "Certified",
-            "icon": "shield",
-            "fill": "yellow"
-          }
-        },
-        {
-          "type": "logo",
-          "settings": {
-            "label": "OEKO-TEX",
-            "caption": "Certified inks",
-            "icon": "drop",
-            "fill": "sky"
-          }
-        },
-        {
-          "type": "logo",
-          "settings": {
-            "label": "100%",
-            "caption": "Organic cotton",
-            "icon": "leaf",
-            "fill": "white"
-          }
-        },
-        {
-          "type": "logo",
-          "settings": {
-            "label": "Ages 4-12",
-            "caption": "Sized by age",
-            "icon": "smile",
-            "fill": "lavender"
-          }
-        }
+        { "type": "logo", "settings": { "label": "BIS", "caption": "Certified", "icon": "shield", "fill": "yellow" } },
+        { "type": "logo", "settings": { "label": "OEKO-TEX", "caption": "Certified inks", "icon": "drop", "fill": "sky" } },
+        { "type": "logo", "settings": { "label": "100%", "caption": "Organic cotton", "icon": "leaf", "fill": "white" } },
+        { "type": "logo", "settings": { "label": "Ages 4-12", "caption": "Sized by age", "icon": "smile", "fill": "lavender" } }
       ]
     }
   ]

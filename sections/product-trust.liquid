@@ -1,77 +1,82 @@
 {%- comment -%}
-  Readable benefit tiles. All claims and colours remain editable in the existing blocks.
+  Compact reassurance below the collection catalogue. Each existing claim is
+  rendered once; no feature-card grid, photography or duplicated marquee.
 {%- endcomment -%}
 {%- style -%}
   #ProductTrust-{{ section.id }} { background: var(--cream); }
-  #ProductTrust-{{ section.id }} .pt__inner { padding-block: var(--section-space); }
+  #ProductTrust-{{ section.id }} .pt__inner {
+    display: flex;
+    align-items: center;
+    gap: 3.2rem;
+    padding-block: 2.8rem;
+  }
+  #ProductTrust-{{ section.id }} .pt__intro { flex: 0 0 30rem; }
   #ProductTrust-{{ section.id }} .pt__heading {
-    margin: 0 auto 1.2rem;
-    max-width: 80rem;
+    margin: 0 0 0.6rem;
     font-family: var(--font-heading);
-    font-weight: 800;
-    font-size: var(--section-heading-size);
-    line-height: 1.12;
-    text-align: center;
+    font-weight: 700;
+    font-size: var(--heading-small-size);
+    line-height: 1.2;
     color: var(--ink);
   }
   #ProductTrust-{{ section.id }} .pt__strip {
-    max-width: 72rem;
-    margin: 0 auto 3.2rem;
-    font-size: var(--text-lead);
-    line-height: 1.6;
-    text-align: center;
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.5;
     color: var(--body-ink);
   }
   #ProductTrust-{{ section.id }} .pt__list {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.6rem;
-    max-width: 100rem;
-    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem 2rem;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
   #ProductTrust-{{ section.id }} .pt__badge {
     display: flex;
     align-items: center;
-    gap: 1.4rem;
-    padding: 1.6rem;
-    background: var(--white);
-    border: 1px solid var(--line);
-    border-radius: 1.6rem;
-    font-size: var(--text-base);
-    font-weight: 700;
+    gap: 0.7rem;
+    min-width: 0;
+    max-width: 100%;
+    font-size: var(--text-sm);
+    font-weight: 600;
     line-height: 1.4;
     color: var(--ink);
   }
   #ProductTrust-{{ section.id }} .pt__icon {
     display: grid;
     place-items: center;
-    flex: 0 0 4.4rem;
-    height: 4.4rem;
+    flex: 0 0 2rem;
+    height: 2rem;
     border-radius: 50%;
     background: var(--tone-bg, var(--sky));
   }
   #ProductTrust-{{ section.id }} .pt__icon img,
-  #ProductTrust-{{ section.id }} .pt__icon svg { width: 2.8rem; height: 2.8rem; object-fit: contain; }
+  #ProductTrust-{{ section.id }} .pt__icon svg { width: 1.4rem; height: 1.4rem; object-fit: contain; }
   #ProductTrust-{{ section.id }} [data-tone='pink'] { --tone-bg: var(--pink-bg); }
   #ProductTrust-{{ section.id }} [data-tone='blue'] { --tone-bg: var(--blue-bg); }
   #ProductTrust-{{ section.id }} [data-tone='gold'] { --tone-bg: var(--gold-bg); }
   #ProductTrust-{{ section.id }} [data-tone='green'] { --tone-bg: var(--green-bg); }
   #ProductTrust-{{ section.id }} [data-tone='purple'] { --tone-bg: var(--purple-bg); }
-  @media screen and (max-width: 749px) {
-    #ProductTrust-{{ section.id }} .pt__inner { padding-block: 4rem; }
-    #ProductTrust-{{ section.id }} .pt__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-    #ProductTrust-{{ section.id }} .pt__badge { flex-direction: column; text-align: center; padding: 1.6rem 1rem; gap: 1rem; }
+  @media screen and (max-width: 989px) {
+    #ProductTrust-{{ section.id }} .pt__inner { align-items: flex-start; flex-direction: column; gap: 1.8rem; padding-block: 2.4rem; }
+    #ProductTrust-{{ section.id }} .pt__intro { flex: none; }
+    #ProductTrust-{{ section.id }} .pt__list { gap: 1rem 1.6rem; }
+    #ProductTrust-{{ section.id }} .pt__heading { font-size: 2.4rem; }
   }
 {%- endstyle -%}
 <section id="ProductTrust-{{ section.id }}">
   <div class="page-width pt__inner">
+    {%- if section.settings.heading != blank or section.settings.reassurance != blank -%}
+    <div class="pt__intro">
     {%- if section.settings.heading != blank -%}
       <h2 class="pt__heading scroll-trigger animate--fade-in">{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
     {%- if section.settings.reassurance != blank -%}
       <p class="pt__strip scroll-trigger animate--fade-in">{{ section.settings.reassurance | escape }}</p>
+    {%- endif -%}
+    </div>
     {%- endif -%}
     {%- if section.blocks.size > 0 -%}
       <ul class="pt__list">

@@ -7,19 +7,21 @@
 {%- style -%}
   #MarqueeBanner-{{ section.id }} {
     background: var(--yellow);
-    padding-block: 1.1rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.8rem;
   }
 
   #MarqueeBanner-{{ section.id }} .marquee-banner__text {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 3.25rem;
     line-height: 1.2;
     color: var(--ink);
   }
 
   @media screen and (max-width: 749px) {
     #MarqueeBanner-{{ section.id }} {
-      padding-block: 1rem;
+      padding-top: 0.3rem;
+      padding-bottom: 0.6rem;
     }
   }
 {%- endstyle -%}

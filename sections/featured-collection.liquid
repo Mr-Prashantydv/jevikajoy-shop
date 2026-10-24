@@ -65,37 +65,8 @@
   #FeaturedCollection-{{ section.id }} .fc__heading {
     margin-bottom: 2.5rem;
     text-align: center;
-    {% unless template.name == 'index' %}
-      font-size: var(--section-heading-size);
-    {% endunless %}
+    font-size: var(--section-heading-size);
     color: var(--heading);
-  }
-
-  #FeaturedCollection-{{ section.id }} .fc__eyebrow {
-    margin: 0 0 1rem;
-    color: var(--body-ink);
-    font: 700 1.2rem/1.4 var(--font-body);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  #FeaturedCollection-{{ section.id }} .fc__intro {
-    max-width: 34rem;
-    margin: 0;
-    color: var(--body-ink);
-    font: 500 var(--text-base)/1.6 var(--font-body);
-  }
-
-  #FeaturedCollection-{{ section.id }} .fc__shop-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 1.6rem;
-    min-height: var(--touch-target);
-    margin-top: 0.8rem;
-    color: var(--blue-deep);
-    font: 700 var(--text-base)/1.3 var(--font-body);
-    text-decoration: underline;
-    text-underline-offset: 0.5rem;
   }
 
   #FeaturedCollection-{{ section.id }} .fc__viewport {
@@ -104,6 +75,7 @@
 
   #FeaturedCollection-{{ section.id }} .fc__track {
     display: flex;
+    flex-wrap: nowrap;
     gap: 2.4rem;
     margin: 0;
     padding: 1.6rem var(--page-gutter) 1rem;
@@ -212,7 +184,7 @@
   #FeaturedCollection-{{ section.id }} .fc__title {
     font-family: var(--font-body);
     font-weight: 700;
-    font-size: clamp(1.6rem, 6cqi, 2.2rem);
+    font-size: var(--card-title-size);
     line-height: 1.3;
     letter-spacing: 0;
     text-align: left;
@@ -308,10 +280,10 @@
     }
 
     #FeaturedCollection-{{ section.id }} .fc__item {
-      width: calc((100vw - 4.2rem) / 2);
+      width: min(30rem, 82vw);
     }
 
-    /* Tighter image and text padding on half-width phone cards. */
+    /* One full phone card with a peek at the next product. */
     #FeaturedCollection-{{ section.id }} .fc__media {
       --media-inset: 0.8rem;
     }
@@ -335,102 +307,13 @@
       scroll-behavior: auto;
     }
   }
-
-  {% if template.name == 'index' %}
-    /* A quieter storefront edit; recommendation instances keep their layout. */
-    #FeaturedCollection-{{ section.id }} {
-      --fc-gutter: clamp(2rem, 4vw, 6.4rem);
-      background: var(--warm-white);
-      scroll-margin-top: 11rem;
-    }
-    #FeaturedCollection-{{ section.id }} .fc__inner { padding-block: 6.4rem 4rem; }
-    #FeaturedCollection-{{ section.id }} .fc__head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 3.2rem;
-      padding-inline: var(--fc-gutter);
-      margin-bottom: 2.8rem;
-    }
-    #FeaturedCollection-{{ section.id }} .fc__heading {
-      max-width: 17ch;
-      margin: 0;
-      text-align: left;
-      color: var(--blue-deep);
-      font-size: clamp(3.4rem, 4.2vw, 5.6rem);
-      font-weight: 600;
-      line-height: 1.08;
-      letter-spacing: -0.025em;
-    }
-    #FeaturedCollection-{{ section.id }} .fc__track {
-      padding-inline: var(--fc-gutter);
-      scroll-padding-inline: var(--fc-gutter);
-      padding-top: 0.8rem;
-      gap: 2rem;
-    }
-    #FeaturedCollection-{{ section.id }} .fc__card {
-      border: 1px solid var(--line);
-      border-radius: 1.2rem;
-    }
-    #FeaturedCollection-{{ section.id }} .fc__media { --media-inset: 0.8rem; }
-    #FeaturedCollection-{{ section.id }} .fc__card:hover { box-shadow: none; }
-    #FeaturedCollection-{{ section.id }} .fc__controls {
-      justify-content: flex-end;
-      gap: 1.2rem;
-      padding-inline: var(--fc-gutter);
-      margin-top: 1.2rem;
-    }
-    #FeaturedCollection-{{ section.id }} .fc__arrow {
-      width: var(--touch-target);
-      height: var(--touch-target);
-      background: transparent;
-      color: var(--blue-deep);
-      border: 1px solid var(--line);
-    }
-    #FeaturedCollection-{{ section.id }} .fc__count {
-      order: -1;
-      margin-right: auto;
-      font-family: var(--font-body);
-      font-size: 1.3rem;
-      letter-spacing: 0;
-      text-transform: none;
-    }
-    @media screen and (max-width: 749px) {
-      #FeaturedCollection-{{ section.id }} .fc__inner { padding-block: 4rem 3.2rem; }
-      #FeaturedCollection-{{ section.id }} .fc__head {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 1.6rem;
-        margin-bottom: 1.6rem;
-      }
-      #FeaturedCollection-{{ section.id }} .fc__heading { max-width: 18ch; }
-      #FeaturedCollection-{{ section.id }} .fc__intro { max-width: 40ch; }
-      #FeaturedCollection-{{ section.id }} .fc__track { gap: 1.2rem; }
-      #FeaturedCollection-{{ section.id }} .fc__item { width: calc((100vw - var(--fc-gutter) - var(--fc-gutter) - 1.2rem) / 2); }
-    }
-  {% endif %}
 {%- endstyle -%}
 
 <section id="FeaturedCollection-{{ section.id }}">
   <div class="fc__inner">
-    <div class="page-width fc__head">
-      <div>
-        {%- if section.settings.eyebrow != blank -%}
-          <p class="fc__eyebrow">{{ section.settings.eyebrow | escape }}</p>
-        {%- endif -%}
-        {%- if section.settings.heading != blank -%}
-          <h2 class="hxxl fc__heading scroll-trigger animate--slide-in">{{ section.settings.heading | escape }}</h2>
-        {%- endif -%}
-      </div>
-      {%- if section.settings.intro != blank or template.name == 'index' -%}
-        <div class="fc__aside">
-          {%- if section.settings.intro != blank -%}<p class="fc__intro">{{ section.settings.intro | escape }}</p>{%- endif -%}
-          {%- if template.name == 'index' and section.settings.button_label != blank -%}
-            <a class="fc__shop-link" href="{{ section.settings.button_link | default: collection.url }}">
-              {{ section.settings.button_label | escape }} <span aria-hidden="true">↗</span>
-            </a>
-          {%- endif -%}
-        </div>
+    <div class="page-width">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="hxxl fc__heading scroll-trigger animate--slide-in">{{ section.settings.heading | escape }}</h2>
       {%- endif -%}
     </div>
 
@@ -472,7 +355,7 @@
                         alt: '',
                         class: 'fc__img fc__img--back',
                         widths: '300, 400, 600, 800, 1000',
-                        sizes: '(max-width: 749px) 45vw, 36rem'
+                        sizes: '(max-width: 749px) min(300px, 82vw), 360px'
                     }}
                   {%- endif -%}
                   {%- if product.featured_image != blank -%}
@@ -484,7 +367,7 @@
                         alt: product.title,
                         class: 'fc__img fc__img--front',
                         widths: '300, 400, 600, 800, 1000',
-                        sizes: '(max-width: 749px) 45vw, 36rem'
+                        sizes: '(max-width: 749px) min(300px, 82vw), 360px'
                     }}
                   {%- else -%}
                     {%- render 'product-photo-pending' -%}
@@ -531,7 +414,7 @@
       </div>
     {%- endif -%}
 
-    {%- if section.settings.button_label != blank and template.name != 'index' -%}
+    {%- if section.settings.button_label != blank -%}
       <div class="page-width fc__cta scroll-trigger animate--slide-in">
         <span class="btn-wrap">
           <span class="btn-shadow" aria-hidden="true"></span>
@@ -567,10 +450,9 @@
       if (!count) return;
       var s = step() || track.clientWidth || 1;
       var maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
-      // scrollWidth is rounded, while card widths may be fractional. Allow a
-      // pixel of rounding and count the shorter final step as the last page.
       var total = Math.max(1, Math.ceil(Math.max(0, maxScroll - 1) / s) + 1);
-      var page = track.scrollLeft >= maxScroll - 1 ? total : Math.max(1, Math.min(total, Math.round(track.scrollLeft / s) + 1));
+      var page = track.scrollLeft >= maxScroll - 1 ? total :
+        Math.max(1, Math.min(total, Math.round(track.scrollLeft / s) + 1));
       count.textContent = page + ' ' + sep + ' ' + total;
     }
 
@@ -592,16 +474,6 @@
 {
   "name": "Featured collection",
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow"
-    },
-    {
-      "type": "text",
-      "id": "intro",
-      "label": "Supporting line"
-    },
     {
       "type": "collection",
       "id": "collection",
