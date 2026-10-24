@@ -1,18 +1,9 @@
 {%- comment -%}
-  Main collection — character filter pills, heading, and the product grid.
-
-  Measured against the reference collection page at 1440:
-    pills   27px condensed caps, ls 1.35px, 54px tall, 10px gap, centred
-    heading 86.4px display, line-height 1, ls 0.6px, centred  (= .hxxl)
-    card    276x569, 20px radius, pastel fill
-    media   276x345 (4:5), object-fit: contain so the square shot floats
-    title   27px condensed caps, ls 1.35px, centred
-
-  Colour roles are JJW's: each card takes the pair of the product's
-  "character:" tag, exactly as the PDP gallery and cart thumbnails do.
-
-  Reality this is built for: most products still have no images, so the media
-  slot degrades to the character colour block rather than a broken <img>.
+  Collection shopping layout: compact character navigation, native Shopify
+  filters and sorting, and white product cards on the warm-white canvas.
+  Default picks lead with photographed products within each paginated page;
+  an explicit sort retains Shopify's order. Character colour is an accent,
+  garment swatches come from product options, and missing photos stay honest.
 {%- endcomment -%}
 
 {%- liquid
@@ -43,18 +34,18 @@
 
   comment
     Clearing filters must not also throw away the shopper's sort order. Keep
-    sort_by only when it is not already the collection's default.
+    every explicit sort_by because our unsorted view leads with photography.
   endcomment
   assign clear_url = collection.url
-  if collection.sort_by != blank and collection.sort_by != collection.default_sort_by
+  if collection.sort_by != blank
     assign clear_url = collection.url | append: '?sort_by=' | append: collection.sort_by
   endif
 -%}
 
 {%- style -%}
   #MainCollection-{{ section.id }} {
-    background: var(--cream);
-    padding-block: 4rem 8rem;
+    background: var(--warm-white);
+    padding-block: 2.4rem 6rem;
   }
 
   /* --- Filter pills -----------------------------------------------------
@@ -62,13 +53,14 @@
      below the row is this section's own. */
 
   #MainCollection-{{ section.id }} .mc__pills {
-    margin-bottom: 3.2rem;
+    margin-bottom: 2rem;
   }
 
   /* --- Heading ---------------------------------------------------------- */
 
   #MainCollection-{{ section.id }} .mc__heading {
-    text-align: center;
+    font-size: clamp(3.4rem, 4vw, 5.6rem);
+    text-align: left;
     /* .hxxl tracks 0.01em, which is 0.86px here; reference is a flat 0.6px. */
     letter-spacing: 0.06rem;
     color: var(--heading);
@@ -76,14 +68,14 @@
 
   #MainCollection-{{ section.id }} .mc__sub {
     max-width: 65ch;
-    margin: 1.6rem auto 0;
+    margin: 0.8rem 0 0;
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: var(--text-lead);
+    font-size: 1.8rem;
     line-height: 1.5;
     letter-spacing: 0;
     text-transform: none;
-    text-align: center;
+    text-align: left;
     color: var(--ink);
   }
 
@@ -98,14 +90,15 @@
   #MainCollection-{{ section.id }} .mc__toolbar {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 2.4rem 3rem;
-    align-items: end;
-    margin-top: 4.8rem;
-    padding-bottom: 2.4rem;
-    border-bottom: 2px solid var(--sky);
+    gap: 1.6rem;
+    align-items: center;
+    margin-top: 1.6rem;
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid var(--blue);
   }
 
   #MainCollection-{{ section.id }} .mc__filters {
+    grid-column: 1 / -1;
     display: flex;
     flex-wrap: wrap;
     gap: 2.4rem 3.2rem;
@@ -293,7 +286,7 @@
   }
 
   #MainCollection-{{ section.id }} .mc__count-line {
-    margin: 2.4rem 0 0;
+    margin: 0;
     font-family: var(--font-accent);
     font-weight: 700;
     font-size: 1.8rem;
@@ -339,13 +332,12 @@
 
   /* --- Grid ------------------------------------------------------------- */
 
-  /* 3.2rem, not the 6rem this had before the toolbar existed — the count line
-     now sits directly above and owns most of that gap. */
+  /* Square images retain the full existing artwork without cropping. */
   #MainCollection-{{ section.id }} .mc__grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 3rem 2.4rem;
-    margin: 3.2rem 0 0;
+    margin: 2rem 0 0;
     padding: 0;
     list-style: none;
   }
@@ -359,7 +351,8 @@
     height: 100%;
     border-radius: var(--card-radius);
     overflow: hidden;
-    background: var(--card-bg);
+    background: var(--white);
+    border: 1px solid #D9D9D9;
     transition: transform 0.3s var(--ease);
   }
 
@@ -370,11 +363,11 @@
   }
 
   {%- comment -%}
-    4:5 media box with contain, so a square packshot floats on the card's own
-    colour the way the reference's product boxes do — never cropped.
+    Square media with contain preserves the complete product photograph.
   {%- endcomment -%}
   #MainCollection-{{ section.id }} .mc__media {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1;
+    background: var(--warm-white);
     width: 100%;
   }
 
@@ -385,21 +378,19 @@
   }
 
   {%- comment -%}
-    Reference tints the title with each card's own solid, which on its pale
-    yellow measures about 1.5:1. Navy is a brand colour and clears every tint,
-    so the colour coding lives in the fill and the type stays readable.
+    Navy text on white; character colour is confined to the divider and dot.
   {%- endcomment -%}
   /* Matches .jjw-card__title in theme.css - see the note there. */
   #MainCollection-{{ section.id }} .mc__title {
     margin: 0;
-    padding: 0 1.6rem 2.4rem;
+    padding: 0;
     font-family: var(--font-accent);
-    font-weight: 900;
-    font-size: var(--card-title-size);
+    font-weight: 700;
+    font-size: 2.3rem;
     line-height: 1.15;
     letter-spacing: 0;
-    text-align: center;
-    text-wrap: balance;
+    text-align: left;
+    text-wrap: pretty;
     color: var(--ink);
   }
 
@@ -407,8 +398,9 @@
     display: block;
     margin-top: 0.4rem;
     font-size: 1.8rem;
-    letter-spacing: 0.1rem;
-    color: var(--ink);
+    letter-spacing: 0;
+    font-family: var(--font-body);
+    font-weight: 700;
   }
 
   #MainCollection-{{ section.id }} [data-pair='pink'] { --card-bg: var(--pink-bg); --card-fg: var(--pink); }
@@ -444,34 +436,34 @@
 
   @media screen and (max-width: 749px) {
     #MainCollection-{{ section.id }} {
-      padding-block: 2rem 5rem;
+      padding-block: 1.6rem 4rem;
     }
 
     #MainCollection-{{ section.id }} .mc__pills {
-      margin-bottom: 2.4rem;
+      margin-bottom: 1.6rem;
     }
 
     #MainCollection-{{ section.id }} .mc__sub {
-      font-size: var(--text-lead);
+      font-size: 1.6rem;
     }
 
     #MainCollection-{{ section.id }} .mc__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.6rem;
-      margin-top: 2.4rem;
+      gap: 1.6rem 1.2rem;
+      margin-top: 1.6rem;
     }
 
     #MainCollection-{{ section.id }} .mc__title {
-      padding: 0 1rem 1.6rem;
+      padding: 0;
+      font-size: 1.9rem;
     }
 
-    /* One column: at 390px the sort control and a filter row cannot share a
-       line without the select collapsing under its own label. */
+    /* Count and sort share a row; available filter groups span both columns. */
     #MainCollection-{{ section.id }} .mc__toolbar {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2rem;
-      align-items: stretch;
-      margin-top: 3.2rem;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 1.2rem;
+      align-items: center;
+      margin-top: 2rem;
     }
 
     #MainCollection-{{ section.id }} .mc__filters {
@@ -506,51 +498,80 @@
       min-width: 0;
     }
   }
+
+  /* Collection-local styling keeps shared homepage tokens and cards untouched. */
+  #MainCollection-{{ section.id }} .mc__intro { margin-bottom: 2rem; }
+  #MainCollection-{{ section.id }} .mc__pills { gap: 0.8rem; justify-content: flex-start; max-width: none; margin: 0; }
+  #MainCollection-{{ section.id }} .mc__face { width: 3.6rem; height: 3.6rem; object-fit: contain; margin-right: 0.6rem; }
+  #MainCollection-{{ section.id }} .mc__character { display: flex; align-items: center; gap: 0.6rem; color: var(--ink); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.8rem; }
+  #MainCollection-{{ section.id }} .mc__character::before { content: ''; width: 0.8rem; height: 0.8rem; border-radius: 50%; background: var(--card-bg); }
+
+  #MainCollection-{{ section.id }} .mc__pills .jjw-pill {
+    min-height: 5.2rem; background: var(--white); color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--blue); padding-inline: 1.6rem;
+  }
+  #MainCollection-{{ section.id }} .mc__pills .jjw-pill[aria-current='page'] {
+    background: var(--gold); color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink);
+  }
+  #MainCollection-{{ section.id }} .mc__pills .jjw-pill:hover { background: var(--sky); }
+  #MainCollection-{{ section.id }} .mc__card a:focus-visible { outline: 3px solid var(--blue); outline-offset: -4px; }
+  #MainCollection-{{ section.id }} .mc__info { padding: 1.6rem; display: flex; flex-direction: column; flex: 1; border-top: 4px solid var(--card-bg); }
+  #MainCollection-{{ section.id }} .mc__colours { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-block: 1.2rem; }
+  #MainCollection-{{ section.id }} .mc__colours .mc__swatch { width: 1.8rem; height: 1.8rem; margin: 0; }
+  #MainCollection-{{ section.id }} .mc__choose {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;
+    margin-top: auto; min-height: 4.4rem; padding: 0.8rem 1.2rem; border-radius: 0.8rem;
+    background: var(--gold); color: var(--ink); font-family: var(--font-accent); font-size: 1.8rem; font-weight: 700;
+  }
+  #MainCollection-{{ section.id }} .mc__grid--single { grid-template-columns: minmax(0, 36rem); justify-content: center; }
+  @media screen and (max-width: 749px) {
+    #MainCollection-{{ section.id }} .mc__heading { font-size: 3.4rem; }
+    #MainCollection-{{ section.id }} .mc__pills { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding: 0.2rem 0.2rem 0.8rem; }
+    #MainCollection-{{ section.id }} .mc__pills li { flex: 0 0 auto; }
+    #MainCollection-{{ section.id }} .mc__sort { gap: 0.6rem; justify-content: flex-end; }
+    #MainCollection-{{ section.id }} .mc__sort-select { width: 100%; max-width: 22rem; font-size: 1.4rem; padding-left: 1rem; }
+    #MainCollection-{{ section.id }} .mc__sort-label { font-size: 1.3rem; }
+    #MainCollection-{{ section.id }} .mc__count-line { font-size: 1.4rem; white-space: nowrap; }
+    #MainCollection-{{ section.id }} .mc__info { padding: 1.2rem 1rem; }
+    #MainCollection-{{ section.id }} .mc__price { font-size: 1.5rem; }
+    #MainCollection-{{ section.id }} .mc__choose { font-size: 1.6rem; padding-inline: 0.8rem; }
+    #MainCollection-{{ section.id }} .mc__grid--single { grid-template-columns: minmax(0, 32rem); }
+  }
 {%- endstyle -%}
 
 <section id="MainCollection-{{ section.id }}">
   <div class="page-width">
-    {%- if pill_blocks.size > 0 -%}
+    <div class="mc__intro">
+      <h1 class="hxxl mc__heading">
+        {%- if collection.handle == 'all' -%}{{ section.settings.all_title | escape }}{%- else -%}{{ collection.title | default: section.settings.fallback_title | escape }}{%- endif -%}
+      </h1>
+      {%- assign blurb = collection.description | default: section.settings.fallback_description -%}
+      {%- if blurb != blank -%}<div class="mc__sub">{{ blurb }}</div>{%- endif -%}
+    </div>
+    <nav aria-label="{{ section.settings.navigation_label | escape }}">
       <ul class="jjw-pills mc__pills">
+        <li><a class="jjw-pill" href="{{ routes.all_products_collection_url }}"{% if collection.handle == 'all' %} aria-current="page"{% endif %}>{{ section.settings.all_link_label | escape }}</a></li>
         {%- for block in pill_blocks -%}
           {%- liquid
             assign pill_target = block.settings.collection
-            assign pill_label = block.settings.label | default: pill_target.title
-            comment
-              The All Tees pill deliberately has no collection set, so testing
-              pill_target alone meant it could never read as current — even
-              standing on /collections/all, which is exactly where it links.
-            endcomment
-            assign is_here = false
-            if pill_target != blank and pill_target.handle == collection.handle
-              assign is_here = true
-            elsif pill_target == blank and collection.handle == 'all'
-              assign is_here = true
+            if pill_target == blank or pill_target.all_products_count == 0 or pill_target.handle == 'all'
+              continue
             endif
+            assign pill_label = block.settings.label | default: pill_target.title
+            assign cast_handles = 'jevika,joy,brutus,minku,pinki' | split: ','
           -%}
-          {%- if pill_label != blank -%}
-            <li {{ block.shopify_attributes }}>
-              <a
-                class="jjw-pill"
-                href="{% if pill_target != blank %}{{ pill_target.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
-                {% if is_here %}aria-current="page"{% endif %}
-              >
-                {{- pill_label | escape -}}
-              </a>
-            </li>
-          {%- endif -%}
+          <li {{ block.shopify_attributes }}>
+            <a class="jjw-pill" href="{{ pill_target.url }}"{% if pill_target.handle == collection.handle %} aria-current="page"{% endif %}>
+              {%- if cast_handles contains pill_target.handle -%}
+                {%- assign face_asset = pill_target.handle | append: '-face.png' -%}
+                <img class="mc__face" src="{{ face_asset | asset_url }}" width="36" height="36" alt="">
+              {%- endif -%}
+              {{- pill_label | escape -}}
+            </a>
+          </li>
         {%- endfor -%}
       </ul>
-    {%- endif -%}
-
-    <h1 class="hxxl mc__heading scroll-trigger animate--fade-in">
-      {{- collection.title | default: section.settings.fallback_title | escape -}}
-    </h1>
-
-    {%- assign blurb = collection.description | default: section.settings.fallback_description -%}
-    {%- if blurb != blank -%}
-      <div class="mc__sub scroll-trigger animate--fade-in">{{ blurb }}</div>
-    {%- endif -%}
+    </nav>
 
     {%- comment -%}
       Toolbar. Only `list` filters are drawn — a price range needs two number
@@ -559,9 +580,7 @@
       never offered a narrowing that returns an empty grid; an active value is
       kept regardless, or the pill you just clicked would vanish under you.
     {%- endcomment -%}
-    {%- if collection.filters.size > 0 or collection.sort_options.size > 0 -%}
-      <div class="mc__toolbar">
-        <div class="mc__filters">
+    {%- capture filter_markup -%}
           {%- for filter in collection.filters -%}
             {%- liquid
               if filter.type != 'list' or filter.values.size == 0
@@ -596,6 +615,9 @@
                 endif
               endfor
               if renderable == 0
+                continue
+              endif
+              if filter.param_name == 'filter.v.availability' and renderable == 1 and filter.active_values.size == 0
                 continue
               endif
             -%}
@@ -658,9 +680,11 @@
               </ul>
             </div>
           {%- endfor -%}
-        </div>
-
-        {%- if collection.sort_options.size > 0 -%}
+      {%- endcapture -%}
+      <div class="mc__toolbar">
+        {%- if filter_markup != blank -%}<div class="mc__filters">{{ filter_markup }}</div>{%- endif -%}
+        <p class="mc__count-line">{{ collection.products_count }} {% if collection.products_count == 1 %}{{ section.settings.count_singular }}{% else %}{{ section.settings.count_plural }}{% endif %}</p>
+        {%- if collection.sort_options.size > 0 and collection.all_products_count > 1 -%}
           {%- assign sort_now = collection.sort_by | default: collection.default_sort_by -%}
           <form class="mc__sort" method="get" action="{{ collection.url }}">
             {%- comment -%}
@@ -678,10 +702,11 @@
               {{- section.settings.sort_label | escape -}}
             </label>
             <select class="mc__sort-select" name="sort_by" id="Sort-{{ section.id }}">
+              <option value=""{% if collection.sort_by == blank %} selected{% endif %}>{{ section.settings.recommended_label | escape }}</option>
               {%- for option in collection.sort_options -%}
                 <option
                   value="{{ option.value }}"
-                  {% if option.value == sort_now %}
+                  {% if collection.sort_by != blank and option.value == sort_now %}
                     selected
                   {% endif %}
                 >
@@ -698,7 +723,6 @@
           </form>
         {%- endif -%}
       </div>
-    {%- endif -%}
 
     {%- if active_count > 0 -%}
       <ul class="mc__active" aria-label="{{ section.settings.active_label | escape }}">
@@ -727,22 +751,16 @@
 
     {%- paginate collection.products by section.settings.per_page -%}
     {%- if collection.products.size > 0 -%}
-      <p class="mc__count-line">
-        {{- collection.products_count }}
-        {% if collection.products_count == 1 %}
-          {{- section.settings.count_singular -}}
-        {% else %}
-          {{- section.settings.count_plural -}}
-        {% endif -%}
-      </p>
-      <ul class="mc__grid">
+      <ul class="mc__grid{% if collection.products_count == 1 %} mc__grid--single{% endif %}">
+        {%- assign photographed_cards = '' -%}
+        {%- assign pending_cards = '' -%}
         {%- for product in collection.products -%}
+          {%- capture product_card -%}
           {%- capture pair -%}{%- render 'character-pair', product: product, prefer: collection.handle -%}{%- endcapture -%}
           {%- assign pair = pair | strip -%}
           <li
-            class="mc__card scroll-trigger animate--slide-in"
+            class="mc__card"
             data-pair="{{ pair }}"
-            style="--animation-order: {{ forloop.index0 }};"
           >
             <a href="{{ product.url }}">
               <div class="mc__media">
@@ -760,16 +778,52 @@
                   {%- render 'product-photo-pending' -%}
                 {%- endif -%}
               </div>
-              <h3 class="mc__title">
-                {{- product.title | escape -}}
+              <div class="mc__info">
+                {%- liquid
+                  assign card_character = ''
+                  for tag in product.tags
+                    assign tag_prefix = tag | slice: 0, 10
+                    if tag_prefix == 'character:'
+                      assign tag_name = tag | remove_first: 'character:'
+                      assign tag_handle = tag_name | handle
+                      if card_character == blank or tag_handle == collection.handle
+                        assign card_character = tag_name
+                      endif
+                    endif
+                  endfor
+                -%}
+                {%- if card_character != blank -%}<span class="mc__character">{{ card_character | escape }}</span>{%- endif -%}
+                <h3 class="mc__title">{{ product.title | escape }}</h3>
                 {%- if section.settings.show_price -%}
-                  <span class="mc__price">{{ product.price | money }}</span>
+                  <span class="mc__price">{% if product.price_varies %}{{ section.settings.from_label | escape }} {% endif %}{{ product.price | money }}</span>
                 {%- endif -%}
                 {%- render 'review-stars', product: product -%}
-              </h3>
+                {%- for option in product.options_with_values -%}
+                  {%- assign option_key = option.name | downcase -%}
+                  {%- if option_key == 'color' or option_key == 'colour' -%}
+                    <div class="mc__colours">
+                      <span class="visually-hidden">{{ option.name | escape }}:</span>
+                      {%- for value in option.values -%}
+                        <span class="mc__swatch" data-swatch="{{ value | handle }}" title="{{ value | escape }}"><span class="visually-hidden">{{ value | escape }}{% unless forloop.last %}, {% endunless %}</span></span>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+                <span class="mc__choose">{{ section.settings.choose_label | escape }} <span aria-hidden="true">&#8594;</span></span>
+              </div>
             </a>
           </li>
+          {%- endcapture -%}
+          {%- if collection.sort_by != blank -%}
+            {{ product_card }}
+          {%- elsif product.featured_media != blank -%}
+            {%- assign photographed_cards = photographed_cards | append: product_card -%}
+          {%- else -%}
+            {%- assign pending_cards = pending_cards | append: product_card -%}
+          {%- endif -%}
         {%- endfor -%}
+        {%- comment -%}Default picks lead with real photography within each page; explicit Shopify sort orders remain untouched.{%- endcomment -%}
+        {%- if collection.sort_by == blank -%}{{ photographed_cards }}{{ pending_cards }}{%- endif -%}
       </ul>
 
       {%- if paginate.pages > 1 -%}
@@ -836,6 +890,14 @@
     var root = document.getElementById('MainCollection-{{ section.id }}');
     if (!root || root.dataset.sortInit) return;
     root.dataset.sortInit = '1';
+
+    // Keep the selected character visible in the phone's horizontal navigation.
+    var navigation = root.querySelector('.mc__pills');
+    var current = navigation && navigation.querySelector('[aria-current="page"]');
+    if (current && navigation.scrollWidth > navigation.clientWidth) {
+      navigation.scrollLeft = current.getBoundingClientRect().left - navigation.getBoundingClientRect().left
+        + navigation.scrollLeft - (navigation.clientWidth - current.offsetWidth) / 2;
+    }
 
     /* The form is a real GET submit and works without this — the script only
        removes the extra click. The <noscript> button is what carries it when
@@ -926,6 +988,12 @@
   "tag": "section",
   "max_blocks": 12,
   "settings": [
+    { "type": "text", "id": "navigation_label", "label": "Collection navigation label", "default": "Shop by character" },
+    { "type": "text", "id": "all_link_label", "label": "All products link", "default": "All Tees" },
+    { "type": "text", "id": "recommended_label", "label": "Default sort label", "default": "Featured picks" },
+    { "type": "text", "id": "all_title", "label": "All products heading", "default": "All Character Tees" },
+    { "type": "text", "id": "choose_label", "label": "Product link label", "default": "Choose options" },
+    { "type": "text", "id": "from_label", "label": "Variable price prefix", "default": "From" },
     {
       "type": "text",
       "id": "fallback_title",
@@ -1052,7 +1120,7 @@
   "blocks": [
     {
       "type": "filter",
-      "name": "Filter pill",
+      "name": "Collection link",
       "settings": [
         {
           "type": "text",
@@ -1064,7 +1132,7 @@
           "type": "collection",
           "id": "collection",
           "label": "Collection",
-          "info": "Leave blank to link to all products."
+          "info": "Missing or empty collections are hidden. All Tees is included automatically."
         }
       ]
     }

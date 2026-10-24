@@ -1,10 +1,9 @@
 {%- comment -%}
   /collections — the collection index.
 
-  Two of the store's nine collections are Shopify's own samples (`frontpage`
-  and `baby-and-toddler-apparel-example-products`), both empty. An index that
-  lists every collection therefore ships two dead tiles on day one, so empty
-  collections are skipped rather than rendered and hidden.
+  Exclude Shopify's internal/sample collections (`frontpage` and
+  `baby-and-toddler-apparel-example-products`) even when they hold products.
+  Missing or empty collections are also omitted from shopper navigation.
 
   Colour: the five character handles take their brand pair, and anything else
   cycles the same five fills by position, so a new collection is never given a
@@ -227,7 +226,7 @@
       {%- endfor -%}
 
       {%- for collection in collections -%}
-        {%- if collection.all_products_count == 0 -%}
+        {%- if collection.all_products_count == 0 or collection.handle == 'frontpage' or collection.handle == 'baby-and-toddler-apparel-example-products' -%}
           {%- continue -%}
         {%- endif -%}
         {%- if cast contains collection.handle -%}
